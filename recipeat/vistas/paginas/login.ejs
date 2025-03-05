@@ -1,12 +1,21 @@
-<h1>Acceso al sistema</h1>
-
+<h1>Iniciar sesión</h1>
 <form action="/usuarios/login" method="POST">
 <fieldset>
 	<% if (locals.error) { %>
 		<p><strong><%= locals.error %></strong></p>
 	<% } %>
 	<legend>Usuario y contraseña</legend>
-	<div><label>Nombre:</label> <input type="text" name="username" /></div>
-	<div><label>Contraseña:</label> <input type="password" name="password" /></div>
-	<button type="submit">Enviar</button>
+
+	<div>
+		<input type="text" name="username" id="username" required 
+			   placeholder="nombre de usuario" 
+			   value="<%= locals.username ? locals.username : '' %>">
+	</div>
+	<div>
+		<input type="password" name="password" id="password" required 
+			   placeholder="contraseña">
+	</div>
+	<button type="submit">Iniciar sesión</button>
+	<p>¿No tienes cuenta?</p>
+	<p><a href="/usuarios/register">Crea tu cuenta</a></p>
 </fieldset>

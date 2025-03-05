@@ -59,3 +59,24 @@ export function doLogout(req, res, next) {
         })
     })
 }
+
+//!2 nuevas funciones (register)
+
+//* *ver interfaz de registro
+export function viewRegister(req, res)
+{
+    let contenido = 'paginas/register';
+    if (req.session != null && req.session.login) {
+        contenido = 'paginas/home'
+    }
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
+}
+
+//* *recopilar datos del usuario
+export function doRegister(req, res)
+{
+
+}
