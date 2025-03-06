@@ -3,6 +3,7 @@ import { viewRecetas, createReceta, doCreateReceta, updateReceta, deleteReceta }
 
 const recetasRouter = express.Router();
 
+//Ruta para ver la lista de recetas
 recetasRouter.get('/listaRecetas', viewRecetas);
 
 // Ruta para crear una receta (vista)
