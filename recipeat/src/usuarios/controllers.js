@@ -83,9 +83,10 @@ export function doRegister(req, res)
      body('email').escape();
      body('password').escape();
  
-     const username = req.body.username.trim();
-     const email = req.body.email.trim();
-     const password = req.body.password.trim();
+     //*3 parametros que se piden al usuario
+     const username = req.body.username.trim(); //*nombre de usuario
+     const email = req.body.email.trim();       //*correo electronico
+     const password = req.body.password.trim(); //*password
  
      // Validar que los campos no estén vacíos
      if (!username || !email || !password) {
@@ -110,10 +111,11 @@ export function doRegister(req, res)
          }
  
          // Crear un nuevo usuario
-         const nuevoUsuario = new Usuario(username, password, username, email, "U", null);
+         const nuevoUsuario = new Usuario(username, password, username, email, "U", null);  //!rol de usuario(U) por defecto
          nuevoUsuario.password = password; // Esto hashea la contraseña
-         nuevoUsuario.persist();
+         nuevoUsuario.persist();    //*insertar usuario en la base de datos
   
+         //*redireccionar al usuario a la pagina login
          return res.render('pagina', {
              contenido: 'paginas/login',
              session: req.session

@@ -35,7 +35,7 @@ export class Usuario {
             const password = usuario.#password;
             const nombre = usuario.nombre;
             const rol = usuario.rol;
-            const email = usuario.email;
+            const email = usuario.email;    //!insertar email del usuario a registrar
             const datos = {username, password, nombre, rol, email};
             result = this.#insertStmt.run(datos);
 
@@ -82,13 +82,13 @@ export class Usuario {
     #password;
     rol;
     nombre;
-    email;
+    email;  //!email del usuario a registrar
 
     constructor(username, password, nombre, email, rol = RolesEnum.USUARIO, id = null) {
         this.#username = username;
         this.#password = password;
         this.nombre = nombre;
-        this.email = email;
+        this.email = email; //!email del usuario a registrar
         this.rol = rol;
         this.#id = id;
     }
