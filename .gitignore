@@ -130,6 +130,4 @@ dist
 .pnp.*
 
 #ficheros .db
-.aw_sw.db
-.aw_sw.db-shm
-.aw_sw.db.wal
+/recipeat/data

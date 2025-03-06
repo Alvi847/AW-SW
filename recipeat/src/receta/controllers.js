@@ -1,4 +1,4 @@
-import { Receta } from './Receta.js';
+import { Receta, CreadaPor } from './Receta.js';
 import { body } from 'express-validator';
 
 // Ver las recetas (página de inicio de recetas)
@@ -36,7 +36,11 @@ export function doCreateReceta(req, res) {
     console.log("Datos recibidos: ", nuevaReceta);
     // Insertar la receta en la base de datos
     try {
-        Receta.insertReceta(nuevaReceta);
+        let receta = Receta.insertReceta(nuevaReceta);
+
+        //Relacionar la receta creada con el usuario que la crea EN UNA TABLA APARTE
+        CreadaPor.relacionaConUsuario(receta.id, req.session.user);
+
         // Redirigir o devolver un mensaje de éxito
         res.redirect('/listaRecetas');
     }

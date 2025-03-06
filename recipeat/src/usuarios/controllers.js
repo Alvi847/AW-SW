@@ -23,6 +23,7 @@ export function doLogin(req, res) {
         const usuario = Usuario.login(username, password);
         req.session.login = true;
         req.session.nombre = usuario.nombre;
+        req.session.user = username;
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
 
         return res.render('pagina', {
