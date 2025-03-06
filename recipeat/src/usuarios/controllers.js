@@ -120,7 +120,6 @@ export function doRegister(req, res)
          });
  
      } catch (e) {
-        console.log(e)
          return res.render('pagina', {
              contenido: 'paginas/register',
              error: 'Error al registrar el usuario'
