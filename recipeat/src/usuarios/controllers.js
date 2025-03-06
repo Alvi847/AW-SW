@@ -1,5 +1,5 @@
 import { body } from 'express-validator';
-import { Usuario, RolesEnum } from './Usuario.js';
+import { Usuario, RolesEnum, UsuarioNoEncontrado} from './Usuario.js';
 
 export function viewLogin(req, res) {
     let contenido = 'paginas/login';
@@ -78,5 +78,52 @@ export function viewRegister(req, res)
 //* *recopilar datos del usuario
 export function doRegister(req, res)
 {
-
+     // Sanitizar los datos de entrada
+     body('username').escape();
+     body('email').escape();
+     body('password').escape();
+ 
+     const username = req.body.username.trim();
+     const email = req.body.email.trim();
+     const password = req.body.password.trim();
+ 
+     // Validar que los campos no estén vacíos
+     if (!username || !email || !password) {
+         return res.render('pagina', {
+             contenido: 'paginas/register',
+             error: 'Todos los campos son obligatorios'
+         });
+     }
+ 
+     try {
+         // Verificar si el usuario ya existe
+         try {
+             Usuario.getUsuarioByUsername(username);
+             return res.render('pagina', {
+                 contenido: 'paginas/register',
+                 error: 'El usuario ya existe'
+             });
+         } catch (e) {
+             if (!(e instanceof UsuarioNoEncontrado)) {
+                 throw e; // Si es otro error, lo lanzamos
+             }
+         }
+ 
+         // Crear un nuevo usuario
+         const nuevoUsuario = new Usuario(username, password, email, "U", null);
+         nuevoUsuario.password = password; // Esto hashea la contraseña
+         nuevoUsuario.persist();
+  
+         return res.render('pagina', {
+             contenido: 'paginas/login',
+             session: req.session
+         });
+ 
+     } catch (e) {
+        console.log(e)
+         return res.render('pagina', {
+             contenido: 'paginas/register',
+             error: 'Error al registrar el usuario'
+         });
+     }
 }
