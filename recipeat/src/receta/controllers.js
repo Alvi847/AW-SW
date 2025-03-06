@@ -13,8 +13,6 @@ export function viewRecetas(req, res) {
     });
 }
 
-
-
 // Crear una receta (mostrar el formulario de creación)
 export function createReceta(req, res) {
 
