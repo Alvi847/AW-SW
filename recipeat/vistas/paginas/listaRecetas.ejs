@@ -1,11 +1,21 @@
+<div class="buscador">
+    <input type="text" placeholder="Buscar" id="buscadorRecetas">
+</div>
+
 <div class="recetas-container">
     <% recetas.forEach((r) => { %>
-        <a href="/receta/verReceta?id=<%= r.id %>" class="receta-card">
-            <img src="/images/<%= r.foto %>" alt="<%= r.nombre %>">
-            <div class="receta-info">
-                <h3><%= r.nombre %></h3>
-                <p><%= r.descripcion %></p>
-            </div>
-        </a>
+        <div class="receta-card">
+            <a href="/receta/verReceta?id=<%= r.id %>">
+                <div class="receta-content">
+                    <div class="receta-imagen">
+                        <img src="/images/<%= r.foto %>" alt="<%= r.nombre %>">
+                    </div>
+                    <div class="receta-info">
+                        <h3><%= r.nombre %></h3>
+                        <p><%= r.descripcion %></p>
+                    </div>
+                </div>
+            </a>
+        </div>
     <% }) %>
 </div>

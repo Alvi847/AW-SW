@@ -1,18 +1,23 @@
+<% /** Muestra las operaciones de las recetas si el usuario esta logueado */ 
+function mostrarOpsRecetas(session){
+	if (session != null && session.login){ 
+		return `<ul>
+					<li><a href="/receta/createReceta">Añadir</a></li>	
+					<li><a href="/receta/updateReceta">Modificar</a></li>
+					<li><a href="/receta/removeReceta">Eliminar</a></li>
+				</ul>`;
+}
+}
+%>
+
 <nav id="sidebarIzq">
 	<h3>Navegación</h3>
 	<ul>
 		<li><a href="/">Inicio</a></li>
-		<li><a href="/contenido/normal">Ver contenido</a></li>
+		<li><a href="/contenido/normal">Cómo funciona</a></li>
 		<li><a href="/contenido/admin">Administrar</a></li>
 
 		<li><a href="/receta/listaRecetas">Recetas</a></li>
-
-		<% /** Muestra las operaciones de las recetas si el usuario esta logueado */ 
-			function mostrarOpsRecetas(session){
-				if (session != null && session.login){ 
-					return `<li><a href="/receta/anadirReceta">Añadir receta</a></li>`;
-			}
-		}
-		%>
+		<%- mostrarOpsRecetas(session)%>
 	</ul>
 </nav>

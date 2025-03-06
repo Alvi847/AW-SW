@@ -3,6 +3,7 @@ import { viewRecetas, createReceta, doCreateReceta, updateReceta, deleteReceta }
 
 const recetasRouter = express.Router();
 
+//Ruta para ver la lista de recetas
 recetasRouter.get('/listaRecetas', viewRecetas);
 
 // Ruta para crear una receta (vista)
@@ -12,12 +13,12 @@ recetasRouter.get('/createReceta', createReceta);
 recetasRouter.post('/anadirReceta', doCreateReceta);
 
 // Ruta para actualizar una receta (vista)
-recetasRouter.get('/update/:id', updateReceta);
+recetasRouter.get('/updateReceta', updateReceta);
 
 // Ruta para procesar la actualización de una receta
-recetasRouter.post('/update/:id', updateReceta);
+recetasRouter.post('/updateReceta', updateReceta);
 
 // Ruta para eliminar una receta
-recetasRouter.get('/delete/:id', deleteReceta);
+recetasRouter.get('/removeReceta', deleteReceta);
 
 export default recetasRouter;

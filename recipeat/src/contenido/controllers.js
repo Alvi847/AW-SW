@@ -1,8 +1,7 @@
+//!como funciona (NAV)
 export function viewContenidoNormal(req, res) {
-    let contenido = 'paginas/noPermisos';
-    if (req.session != null && req.session.nombre != null) {
-        contenido = 'paginas/normal';
-    }
+    let contenido = 'paginas/normal';
+
     res.render('pagina', {
         contenido,
         session: req.session
