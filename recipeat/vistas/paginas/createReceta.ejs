@@ -1,0 +1,19 @@
+<h1>CREAR RECETA</h1>
+<form action="/receta/anadirReceta" method="POST">
+<fieldset>
+	<legend>Añadir receta</legend>
+	<% if (locals.error) { %>
+		<p><strong><%= locals.error %></strong></p>
+	<% } %>
+	<div>
+		<input type="text" name="nombre" id="nombre" required 
+			   placeholder="nombre de receta" 
+			   value="<%= locals.nombre ? locals.nombre : '' %>">
+	</div>
+	<div>
+		<input type="text" name="descripcion" id="descripcion" required 
+			   placeholder="descripción"
+			   value="<%= locals.descripcion ? locals.descripcion : '' %>">
+	</div>
+	<button type="submit">Subir receta</button>
+</fieldset>

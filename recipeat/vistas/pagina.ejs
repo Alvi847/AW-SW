@@ -8,7 +8,7 @@
 
  <div id="contenedor">
   <%- include('./partials/cabecera.ejs', { session: locals.session }) %>
-  <%- include('./partials/sidebarIzq.ejs') %>
+  <%- include('./partials/sidebarIzq.ejs', { session: locals.session, error: locals.error }) %>
 
   <main>
     <article>

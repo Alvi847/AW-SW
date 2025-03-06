@@ -1,13 +1,13 @@
 import express from 'express';
-import { createReceta, updateReceta, deleteReceta } from './controllers.js';
+import { createReceta, doCreateReceta, updateReceta, deleteReceta } from './controllers.js';
 
 const recetasRouter = express.Router();
 
 // Ruta para crear una receta (vista)
-recetasRouter.get('/añadirReceta', createReceta);
+recetasRouter.get('/createReceta', createReceta);
 
 // Ruta para agregar una receta
-recetasRouter.post('/añadirReceta', doCreateReceta);
+recetasRouter.post('/anadirReceta', doCreateReceta);
 
 // Ruta para actualizar una receta (vista)
 recetasRouter.get('/update/:id', updateReceta);
