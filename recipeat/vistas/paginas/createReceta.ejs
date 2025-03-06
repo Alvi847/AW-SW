@@ -1,0 +1,16 @@
+<h1>INICIA 	SESIÓN</h1>
+<form action="/receta/anadirReceta" method="POST">
+<fieldset>
+	<legend>Añadir receta</legend>
+
+	<div>
+		<input type="text" name="nombre" id="nombre" required 
+			   placeholder="nombre de receta" 
+			   value="<%= locals.nombre ? locals.nombre : '' %>">
+	</div>
+	<div>
+		<input type="text" name="desc" id="descripcion" required 
+			   placeholder="descripción">
+	</div>
+	<button type="submit">Subir receta</button>
+</fieldset>

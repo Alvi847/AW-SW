@@ -4,7 +4,7 @@ import { body } from 'express-validator';
 // Ver las recetas (página de inicio de recetas)
 export function viewRecetas(req, res) {
     let contenido = 'paginas/listaRecetas'; 
-    if (req.session != null && req.session.login) {
+    if (req.session == null || !req.session.login) {
         contenido = 'paginas/home';
     }
     res.render('pagina', {
@@ -17,8 +17,9 @@ export function viewRecetas(req, res) {
 
 // Crear una receta (mostrar el formulario de creación)
 export function createReceta(req, res) {
-    let contenido = 'paginas/añadirReceta'; // Suponiendo que tienes una vista para crear recetas
-    if (req.session != null && req.session.login) {
+
+    let contenido = 'paginas/createReceta'; // Suponiendo que tienes una vista para crear recetas
+    if (req.session == null || !req.session.login) {
         contenido = 'paginas/home';
     }
     res.render('pagina', {
@@ -31,7 +32,7 @@ export function createReceta(req, res) {
 export function doCreateReceta(req, res) {
     const { nombre, descripcion, likes } = req.body;
     const nuevaReceta = new Receta(nombre, descripcion, likes);
-    
+
     // Insertar la receta en la base de datos
     Receta.insertReceta(nuevaReceta);
 
@@ -39,7 +40,7 @@ export function doCreateReceta(req, res) {
     res.redirect('/listaRecetas');
 }
 
-// Actualizar una receta (mostrar el formulario para editar)
+/*// Actualizar una receta (mostrar el formulario para editar)
 export function updateReceta(req, res) {
     const id = req.params.id;
     const receta = Receta.getRecetaById(id);  // Método para obtener una receta por ID
@@ -48,7 +49,7 @@ export function updateReceta(req, res) {
         receta,
         session: req.session
     });
-}
+}*/
 
 // Procesar la actualización de la receta
 export function updateReceta(req, res) {

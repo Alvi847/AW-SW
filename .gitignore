@@ -128,3 +128,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+#ficheros .db
+.aw_sw.db
+.aw_sw.db-shm
+.aw_sw.db.wal

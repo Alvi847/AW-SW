@@ -22,10 +22,15 @@ export class Receta{
 
      // Insertar una nueva receta
      static insertReceta(receta) {
+
+        if(receta.nombre == null)
+            console.log("nombre");
+        if(receta.descripcion == null)
+            console.log("desc");
+
         const result = this.#insertStmt.run({
             nombre: receta.nombre,
-            descripcion: receta.descripcion,
-            likes: receta.likes
+            descripcion: receta.descripcion
         });
 
         return new Receta(receta.nombre, receta.descripcion, receta.likes, result.lastInsertRowid);
