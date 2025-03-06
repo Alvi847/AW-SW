@@ -1,7 +1,9 @@
 import express from 'express';
-import { createReceta, doCreateReceta, updateReceta, deleteReceta } from './controllers.js';
+import { viewRecetas, createReceta, doCreateReceta, updateReceta, deleteReceta } from './controllers.js';
 
 const recetasRouter = express.Router();
+
+recetasRouter.get('/listaRecetas', viewRecetas);
 
 // Ruta para crear una receta (vista)
 recetasRouter.get('/createReceta', createReceta);

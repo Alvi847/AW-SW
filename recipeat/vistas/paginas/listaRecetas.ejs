@@ -1,0 +1,11 @@
+<div class="recetas-container">
+    <% recetas.forEach((r) => { %>
+        <a href="/receta/verReceta?id=<%= r.id %>" class="receta-card">
+            <img src="/images/<%= r.foto %>" alt="<%= r.nombre %>">
+            <div class="receta-info">
+                <h3><%= r.nombre %></h3>
+                <p><%= r.descripcion %></p>
+            </div>
+        </a>
+    <% }) %>
+</div>

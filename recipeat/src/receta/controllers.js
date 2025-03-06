@@ -1,15 +1,15 @@
-import { Receta, CreadaPor } from './Receta.js';
+import { Receta/*, CreadaPor*/ } from './Receta.js';
 import { body } from 'express-validator';
 
 // Ver las recetas (página de inicio de recetas)
 export function viewRecetas(req, res) {
-    let contenido = 'paginas/listaRecetas';
-    if (req.session == null || !req.session.login) {
-        contenido = 'paginas/home';
-    }
+    let contenido = 'paginas/listaRecetas'; 
+    
+    const recetas= Receta.getAllRecetas();
     res.render('pagina', {
         contenido,
-        session: req.session
+        session: req.session,
+        recetas
     });
 }
 

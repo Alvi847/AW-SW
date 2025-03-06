@@ -20,8 +20,10 @@ export class Receta {
 
     // Obtener todas las recetas
     static getAllRecetas() {
+       
         const recetas = this.#getAllStmt.all();
-        return recetas.map(({ id, nombre, descripcion, likes }) => new Receta(nombre, descripcion, likes, id));
+        //return recetas.map(({ id, nombre, descripcion, likes }) => new Receta(nombre, descripcion, likes, id));
+        return recetas;
     }
 
     // Insertar una nueva receta
@@ -94,7 +96,7 @@ export class Receta {
     }
 }
 
-export class CreadaPor {
+/*export class CreadaPor {
     static #creadaPorStmt = null;
     static #getAllStmt = null;
     static #getIntervalStmt = null;
@@ -132,8 +134,8 @@ export class ErrorInsert extends Error {
      * @param {string} receta 
      * @param {ErrorOptions} [options]
      */
-    constructor(receta, options) {
+   /* constructor(receta, options) {
         super(`No se ha podido crear la receta ${receta}`, options);
         this.name = 'ErrorInsert';
     }
-}
+}*/
