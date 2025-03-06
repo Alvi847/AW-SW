@@ -39,7 +39,7 @@ export function doCreateReceta(req, res) {
         let receta = Receta.insertReceta(nuevaReceta);
 
         //Relacionar la receta creada con el usuario que la crea EN UNA TABLA APARTE
-        CreadaPor.relacionaConUsuario(receta.id, req.session.user);
+        CreadaPor.relacionaConUsuario(receta.id, req.session.username);
 
         // Redirigir o devolver un mensaje de éxito
         res.redirect('/listaRecetas');
