@@ -53,8 +53,9 @@ export class Usuario {
         const username = usuario.#username;
         const password = usuario.#password;
         const nombre = usuario.nombre;
+        const email = usuario.email;
         const rol = usuario.rol;
-        const datos = {username, password, nombre, rol};
+        const datos = {username, password, nombre, rol, email}; //!actualizar correo electronico
 
         const result = this.#updateStmt.run(datos);
         if (result.changes === 0) throw new UsuarioNoEncontrado(username);

@@ -80,16 +80,18 @@ export function doRegister(req, res)
 {
      // Sanitizar los datos de entrada
      body('username').escape();
+     body("nombre").escape();
      body('email').escape();
      body('password').escape();
  
      //*3 parametros que se piden al usuario
      const username = req.body.username.trim(); //*nombre de usuario
+     const nombre = req.body.nombre.trim();     //*nombre
      const email = req.body.email.trim();       //*correo electronico
      const password = req.body.password.trim(); //*password
  
      // Validar que los campos no estén vacíos
-     if (!username || !email || !password) {
+     if (!username || !email || !password || !nombre) {
          return res.render('pagina', {
              contenido: 'paginas/register',
              error: 'Todos los campos son obligatorios'
@@ -111,7 +113,7 @@ export function doRegister(req, res)
          }
  
          // Crear un nuevo usuario
-         const nuevoUsuario = new Usuario(username, password, username, email, "U", null);  //!rol de usuario(U) por defecto
+         const nuevoUsuario = new Usuario(username, password, nombre, email, "U", null);  //!rol de usuario(U) por defecto
          nuevoUsuario.password = password; // Esto hashea la contraseña
          nuevoUsuario.persist();    //*insertar usuario en la base de datos
   
