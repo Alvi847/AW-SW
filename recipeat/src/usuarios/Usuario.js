@@ -36,7 +36,6 @@ export class Usuario {
             const nombre = usuario.nombre;
             const rol = usuario.rol;
             const datos = {username, password, nombre, rol};
-
             result = this.#insertStmt.run(datos);
 
             usuario.#id = result.lastInsertRowid;
