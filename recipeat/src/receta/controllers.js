@@ -3,7 +3,7 @@ import { body } from 'express-validator';
 
 // Ver las recetas (página de inicio de recetas)
 export function viewRecetas(req, res) {
-    let contenido = 'paginas/listaRecetas'; 
+    let contenido = 'paginas/listaRecetas';
     if (req.session == null || !req.session.login) {
         contenido = 'paginas/home';
     }
@@ -30,14 +30,25 @@ export function createReceta(req, res) {
 
 // Agregar una nueva receta (procesar el formulario)
 export function doCreateReceta(req, res) {
-    const { nombre, descripcion, likes } = req.body;
-    const nuevaReceta = new Receta(nombre, descripcion, likes);
+    const { nombre, descripcion} = req.body;
+    const nuevaReceta = new Receta(nombre, descripcion);
 
+    console.log("Datos recibidos: ", nuevaReceta);
     // Insertar la receta en la base de datos
-    Receta.insertReceta(nuevaReceta);
-
-    // Redirigir o devolver un mensaje de éxito
-    res.redirect('/listaRecetas');
+    try {
+        Receta.insertReceta(nuevaReceta);
+        // Redirigir o devolver un mensaje de éxito
+        res.redirect('/listaRecetas');
+    }
+    catch (e) {
+        console.log(e);
+        let contenido = 'paginas/createReceta';
+        res.render('pagina', {
+            contenido,
+            session: req.session,
+            error: 'No se ha podido crear la receta'
+        });
+    }
 }
 
 /*// Actualizar una receta (mostrar el formulario para editar)
@@ -57,7 +68,7 @@ export function updateReceta(req, res) {
     const { nombre, descripcion, likes } = req.body;
 
     const recetaExistente = new Receta(nombre, descripcion, likes, id);
-    Receta.updateReceta(recetaExistente); 
+    Receta.updateReceta(recetaExistente);
 
     res.redirect('/listaRecetas');
 }

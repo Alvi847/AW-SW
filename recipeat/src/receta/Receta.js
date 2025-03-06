@@ -1,4 +1,4 @@
-export class Receta{
+export class Receta {
 
     static #getAllStmt = null;
     static #insertStmt = null;
@@ -9,7 +9,7 @@ export class Receta{
         if (this.#getAllStmt !== null) return;
 
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas');
-        this.#insertStmt = db.prepare('INSERT INTO Recetas (nombre, descripcion, likes) VALUES (@nombre, @descripcion, @likes)');
+        this.#insertStmt = db.prepare('INSERT INTO Recetas (nombre, descripcion) VALUES (@nombre, @descripcion)');
         this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, likes = @likes WHERE id = @id');
         this.#deleteStmt = db.prepare('DELETE FROM Recetas WHERE id = @id');
     }
@@ -20,18 +20,21 @@ export class Receta{
         return recetas.map(({ id, nombre, descripcion, likes }) => new Receta(nombre, descripcion, likes, id));
     }
 
-     // Insertar una nueva receta
-     static insertReceta(receta) {
-
-        if(receta.nombre == null)
-            console.log("nombre");
-        if(receta.descripcion == null)
-            console.log("desc");
-
-        const result = this.#insertStmt.run({
-            nombre: receta.nombre,
-            descripcion: receta.descripcion
-        });
+    // Insertar una nueva receta
+    static insertReceta(receta) {
+        try {
+            const result = this.#insertStmt.run({
+                nombre: receta.nombre,
+                descripcion: receta.descripcion
+            });
+        }
+        catch (e) {
+            if (this.#insertStmt == null)
+                console.log("insert result null");
+            else
+                console.log(this.#insertStmt);
+            throw new ErrorInsert(receta.nombre, { cause: e });
+        }
 
         return new Receta(receta.nombre, receta.descripcion, receta.likes, result.lastInsertRowid);
     }
@@ -62,11 +65,23 @@ export class Receta{
     constructor(nombre, descripcion, likes, id = null) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.likes = likes; 
+        this.likes = likes;
         this.#id = id;
     }
 
     get id() {
         return this.#id;
+    }
+}
+
+export class ErrorInsert extends Error {
+    /**
+     * 
+     * @param {string} receta 
+     * @param {ErrorOptions} [options]
+     */
+    constructor(receta, options) {
+        super(`No se ha podido crear la receta ${receta}`, options);
+        this.name = 'ErrorInsert';
     }
 }
