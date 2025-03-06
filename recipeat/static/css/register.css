@@ -1,0 +1,19 @@
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    margin: 20px 0; /* Espaciado arriba y abajo */
+}
+
+.separator hr {
+    flex: 1;
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 0 10px;
+}
+
+.separator span {
+    font-weight: bold;
+    white-space: nowrap;
+}

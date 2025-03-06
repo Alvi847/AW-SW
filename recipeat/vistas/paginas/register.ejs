@@ -1,14 +1,21 @@
-<h1>CREAR CUENTA</h1>
-
-<form action="/usuarios/register" method="POST">
-<fieldset>
-	<% if (locals.error) { %>
-		<p><strong><%= locals.error %></strong></p>
-	<% } %>
-	<legend>Datos del usuario</legend>
-	<div><label>Nombre:</label> <input type="text" name="username" /></div>
-    <div><label>Apellidos:</label> <input type="text" name="username" /></div>
-    <div><label>Dirección de correo:</label> <input type="text" name="username" /></div>    
-	<div><label>Contraseña:</label> <input type="password" name="password" /></div>
-	<button type="submit">Crear Cuenta</button>
-</fieldset>
+	<h1>CREAR CUENTA</h1>	
+	<form action="/usuarios/register" method="POST">
+	<fieldset>
+		<% if (locals.error) { %>
+			<p><strong><%= locals.error %></strong></p>
+		<% } %>
+		<legend>Datos del usuario</legend>
+		<div><label>Nombre:</label> <input type="text" name="username" /></div>
+		<div><label>Apellidos:</label> <input type="text" name="username" /></div>
+		<div><label>Email:</label> <input type="text" name="email" /></div>    
+		<div><label>Contraseña:</label> <input type="password" name="password" /></div>
+		<button type="submit">Crear Cuenta</button>
+		<div class="separator">
+			<hr>
+			<span>Ya tengo una cuenta</span>
+			<hr>
+		</div>
+		<a href="/usuarios/login">
+			<button type="button">Iniciar sesión</button>	<!--si pulsamos el boton,el usuario vuelve a visualizar el formulario de login-->
+		</a>		
+	</fieldset>
