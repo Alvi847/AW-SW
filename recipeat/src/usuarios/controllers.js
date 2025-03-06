@@ -110,7 +110,7 @@ export function doRegister(req, res)
          }
  
          // Crear un nuevo usuario
-         const nuevoUsuario = new Usuario(username, password, email, "U", null);
+         const nuevoUsuario = new Usuario(username, password, username, email, "U", null);
          nuevoUsuario.password = password; // Esto hashea la contraseña
          nuevoUsuario.persist();
   

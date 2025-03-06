@@ -15,17 +15,17 @@ export class Usuario {
         if (this.#getByUsernameStmt !== null) return;
 
         this.#getByUsernameStmt = db.prepare('SELECT * FROM Usuarios WHERE username = @username');
-        this.#insertStmt = db.prepare('INSERT INTO Usuarios(username, password, nombre, rol) VALUES (@username, @password, @nombre, @rol)');
-        this.#updateStmt = db.prepare('UPDATE Usuarios SET username = @username, password = @password, rol = @rol, nombre = @nombre WHERE id = @id');
+        this.#insertStmt = db.prepare('INSERT INTO Usuarios(username, password, nombre, rol, email) VALUES (@username, @password, @nombre, @rol, @email)');
+        this.#updateStmt = db.prepare('UPDATE Usuarios SET username = @username, password = @password, rol = @rol, nombre = @nombre, email = @email WHERE id = @id');
     }
 
     static getUsuarioByUsername(username) {
         const usuario = this.#getByUsernameStmt.get({ username });
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
 
-        const { password, rol, nombre, id } = usuario;
+        const { password, rol, nombre, email, id } = usuario;
 
-        return new Usuario(username, password, nombre, rol, id);
+        return new Usuario(username, password, nombre, email, rol, id);
     }
 
     static #insert(usuario) {
@@ -35,7 +35,8 @@ export class Usuario {
             const password = usuario.#password;
             const nombre = usuario.nombre;
             const rol = usuario.rol;
-            const datos = {username, password, nombre, rol};
+            const email = usuario.email;
+            const datos = {username, password, nombre, rol, email};
             result = this.#insertStmt.run(datos);
 
             usuario.#id = result.lastInsertRowid;
@@ -81,11 +82,13 @@ export class Usuario {
     #password;
     rol;
     nombre;
+    email;
 
-    constructor(username, password, nombre, rol = RolesEnum.USUARIO, id = null) {
+    constructor(username, password, nombre, email, rol = RolesEnum.USUARIO, id = null) {
         this.#username = username;
         this.#password = password;
         this.nombre = nombre;
+        this.email = email;
         this.rol = rol;
         this.#id = id;
     }
