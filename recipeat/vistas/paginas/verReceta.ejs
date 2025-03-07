@@ -1,11 +1,10 @@
-<h1>Detalle de la Receta</h1>
+<h1><%=receta.nombre%></h1>
 
 <div class="receta-detalle">
     <div class="receta-imagen">
         <img src="/images/<%= receta.foto %>" alt="<%= receta.nombre %>">
     </div>
     <div class="receta-info">
-        <h2><%= receta.nombre %></h2>
         <p><%= receta.descripcion %></p>
     </div>
 </div>

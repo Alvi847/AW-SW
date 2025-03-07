@@ -15,10 +15,20 @@ export function viewRecetas(req, res) {
 
 // Ver una receta
 export function viewReceta(req, res) {
-    const id = req.params.id;
-    const receta = Receta.getRecetaById(id); // Método para obtener una receta por ID
+    const id = req.params.id; // Ahora toma el id correctamente desde la URL
+    console.log(id)
+    const receta = Receta.getRecetaById(id); // Método para obtener la receta por ID
+
+    if (!receta) {
+        return res.render('pagina', {
+            contenido: 'paginas/error',
+            error: 'Receta no encontrada',
+            session: req.session
+        });
+    }
+
     res.render('pagina', {
-        contenido: 'paginas/verReceta', // Vista para ver una receta
+        contenido: 'paginas/verReceta',
         receta,
         session: req.session
     });

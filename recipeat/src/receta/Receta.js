@@ -22,7 +22,7 @@ export class Receta {
 
     // Obtener una receta por ID
     static getRecetaById(id) {
-        const receta = this.#getAllStmt.get({ id });
+        const receta = this.#getByIdStmt.get({ id });
         if (receta === undefined) throw new Error(`No se encontró la receta con ID ${id}`);
         return new Receta(receta.nombre, receta.descripcion, receta.likes, receta.id);
     }

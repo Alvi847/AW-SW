@@ -5,7 +5,7 @@
 <div class="recetas-container">
     <% recetas.forEach((r) => { %>
         <div class="receta-card">
-            <a href="/receta/verReceta?id=<%= r.id %>">
+            <a href="/receta/verReceta/<%= r.id %>">
                 <div class="receta-content">
                     <div class="receta-imagen">
                         <img src="/images/<%= r.foto %>" alt="<%= r.nombre %>">

@@ -7,7 +7,7 @@ const recetasRouter = express.Router();
 recetasRouter.get('/listaRecetas', viewRecetas);
 
 //Ruta para ver una receta
-recetasRouter.get('/verReceta', viewReceta);
+recetasRouter.get('/verReceta/:id', viewReceta);
 
 // Ruta para crear una receta (vista)
 recetasRouter.get('/createReceta', createReceta);
