@@ -1,0 +1,24 @@
+<h1>Actualizar Receta</h1>
+
+<form action="/receta/updateReceta/<%= receta.id %>" method="POST">
+    <fieldset>
+        <legend>Editar Receta</legend>
+
+        <% if (locals.error) { %>
+            <p><strong><%= locals.error %></strong></p>
+        <% } %>
+
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input type="text" name="nombre" id="nombre" required 
+                   value="<%= receta.nombre %>">
+        </div>
+
+        <div>
+            <label for="descripcion">Descripción:</label>
+            <textarea name="descripcion" id="descripcion" required><%= receta.descripcion %></textarea>
+        </div>
+
+        <button type="submit">Guardar Cambios</button>
+    </fieldset>
+</form>

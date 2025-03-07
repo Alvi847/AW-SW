@@ -78,6 +78,18 @@ export function updateReceta(req, res) {
     });
 }*/
 
+// Mostrar el formulario de actualización con los datos actuales
+export function viewUpdateReceta(req, res) {
+    const id = req.params.id;
+    const receta = Receta.getRecetaById(id); // Obtener la receta por ID
+
+    res.render('pagina', {
+        contenido: 'paginas/updateReceta', // Renderiza la vista
+        receta,
+        session: req.session
+    });
+}
+
 // Procesar la actualización de la receta
 export function updateReceta(req, res) {
     const id = req.params.id;
@@ -94,5 +106,12 @@ export function deleteReceta(req, res) {
     const id = req.params.id;
     Receta.deleteReceta(id); // Elimina la receta por ID
 
-    res.redirect('/listaRecetas'); // Redirige a la página de recetas
+    res.redirect('/receta/listaRecetas'); // Redirige a la página de recetas
+}
+
+export function likeReceta(req, res) {
+    const id = req.params.id;
+    Receta.addLikeReceta(id);
+
+    res.redirect('/receta/listaRecetas');
 }
