@@ -20,7 +20,7 @@
         <% } %>
 
             <!-- Mostrar Modificar y Borrar solo si el usuario actual es el creador -->
-        <% if (session.username && session.username === receta.user) { %>
+        <% if (session.username && (session.username === receta.user || session.esAdmin)) { %>
                 <a href="/receta/modificar/<%= receta.id %>">✏️</a> <!-- TODO hacer la modificación-->
                 <a href="/receta/removeReceta/<%= receta.id %>">🗑️</a>
         <% } %>
