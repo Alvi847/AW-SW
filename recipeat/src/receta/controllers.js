@@ -13,10 +13,23 @@ export function viewRecetas(req, res) {
     });
 }
 
+// Ver una receta
+export function viewReceta(req, res) {
+    const id = req.params.id;
+    const receta = Receta.getRecetaById(id); // Método para obtener una receta por ID
+    res.render('pagina', {
+        contenido: 'paginas/verReceta', // Vista para ver una receta
+        receta,
+        session: req.session
+    });
+}
+
+
+
 // Crear una receta (mostrar el formulario de creación)
 export function createReceta(req, res) {
 
-    let contenido = 'paginas/createReceta'; // Suponiendo que tienes una vista para crear recetas
+    let contenido = 'paginas/createReceta'; 
     if (req.session == null || !req.session.login) {
         contenido = 'paginas/home';
     }
@@ -37,7 +50,7 @@ export function doCreateReceta(req, res) {
         let receta = Receta.insertReceta(nuevaReceta);
 
         //Relacionar la receta creada con el usuario que la crea EN UNA TABLA APARTE
-        CreadaPor.relacionaConUsuario(receta.id, req.session.username);
+        //CreadaPor.relacionaConUsuario(receta.id, req.session.username);
 
         // Redirigir o devolver un mensaje de éxito
         res.redirect('/listaRecetas');

@@ -6,6 +6,7 @@ export class Receta {
     static #deleteStmt = null;
     static #addLikeStmt = null;
     static #removeLikeStmt = null;
+    static #getByIdStmt = null;
 
     static initStatements(db) {
         if (this.#getAllStmt !== null) return;
@@ -16,6 +17,14 @@ export class Receta {
         this.#deleteStmt = db.prepare('DELETE FROM Recetas WHERE id = @id');
         this.#addLikeStmt = db.prepare('UPDATE Recetas SET likes = likes + 1 WHERE id = @id;');
         this.#removeLikeStmt = db.prepare('UPDATE Recetas SET likes = likes - 1 WHERE id = @id;');
+        this.#getByIdStmt = db.prepare('SELECT * FROM Recetas WHERE id = @id');
+    }
+
+    // Obtener una receta por ID
+    static getRecetaById(id) {
+        const receta = this.#getAllStmt.get({ id });
+        if (receta === undefined) throw new Error(`No se encontró la receta con ID ${id}`);
+        return new Receta(receta.nombre, receta.descripcion, receta.likes, receta.id);
     }
 
     // Obtener todas las recetas
