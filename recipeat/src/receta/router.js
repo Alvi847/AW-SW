@@ -1,5 +1,5 @@
 import express from 'express';
-import {viewReceta, viewRecetas, createReceta, doCreateReceta, updateReceta, deleteReceta } from './controllers.js';
+import {viewReceta, viewRecetas, createReceta, doCreateReceta, updateReceta, deleteReceta, likeReceta } from './controllers.js';
 
 const recetasRouter = express.Router();
 
@@ -15,6 +15,7 @@ recetasRouter.get('/createReceta', createReceta);
 // Ruta para agregar una receta
 //recetasRouter.post('/anadirReceta', doCreateReceta);
 recetasRouter.post('/createReceta', doCreateReceta);
+
 // Ruta para actualizar una receta (vista)
 recetasRouter.get('/updateReceta', updateReceta);
 
@@ -22,6 +23,9 @@ recetasRouter.get('/updateReceta', updateReceta);
 recetasRouter.post('/updateReceta', updateReceta);
 
 // Ruta para eliminar una receta
-recetasRouter.get('/removeReceta', deleteReceta);
+recetasRouter.get('/removeReceta/:id', deleteReceta);
+
+// Ruta para cuando se da like a una receta
+recetasRouter.get('/like/:id', likeReceta);
 
 export default recetasRouter;

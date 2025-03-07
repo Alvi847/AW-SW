@@ -5,6 +5,25 @@
         <img src="/images/<%= receta.foto %>" alt="<%= receta.nombre %>">
     </div>
     <div class="receta-info">
+        <% if (receta.user) { %>
+            <p>Creada por <%= receta.user %></p>
+        <% } else { %>
+            <p>Creada por admin</p>
+        <% } %>
         <p><%= receta.descripcion %></p>
+    </div>
+
+    <div class="receta-botones">
+    <p>Likes: <%= receta.likes %>  
+        <% if (session.username) { %>
+        <a href="/receta/like/<%= receta.id %>">❤️</a>
+        <% } %>
+
+            <!-- Mostrar Modificar y Borrar solo si el usuario actual es el creador -->
+        <% if (session.username && session.username === receta.user) { %>
+                <a href="/receta/modificar/<%= receta.id %>">✏️</a> <!-- TODO hacer la modificación-->
+                <a href="/receta/removeReceta/<%= receta.id %>">🗑️</a>
+        <% } %>
+    </p>
     </div>
 </div>

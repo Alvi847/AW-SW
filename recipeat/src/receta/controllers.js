@@ -1,4 +1,4 @@
-import { Receta/*, CreadaPor*/ } from './Receta.js';
+import { Receta } from './Receta.js';
 import { body } from 'express-validator';
 
 // Ver las recetas (página de inicio de recetas)
@@ -17,7 +17,6 @@ export function viewRecetas(req, res) {
 export function viewReceta(req, res) {
     const id = req.params.id; // Ahora toma el id correctamente desde la URL
     const receta = Receta.getRecetaById(id); // Método para obtener la receta por ID
-    
     res.render('pagina', {
         contenido: 'paginas/verReceta',
         receta,
@@ -43,18 +42,15 @@ export function createReceta(req, res) {
 // Agregar una nueva receta (procesar el formulario)
 export function doCreateReceta(req, res) {
     const { nombre, descripcion} = req.body;
-    const nuevaReceta = new Receta(nombre, descripcion);
+    const nuevaReceta = new Receta(nombre, descripcion, null, null, req.session.username);
 
     console.log("Datos recibidos: ", nuevaReceta);
     // Insertar la receta en la base de datos
     try {
         let receta = Receta.insertReceta(nuevaReceta);
 
-        //Relacionar la receta creada con el usuario que la crea EN UNA TABLA APARTE
-        //CreadaPor.relacionaConUsuario(receta.id, req.session.username);
-
         // Redirigir o devolver un mensaje de éxito
-        res.redirect('/listaRecetas');
+        res.redirect('/receta/listaRecetas');
     }
     catch (e) {
         console.log(e);
@@ -86,7 +82,7 @@ export function updateReceta(req, res) {
     const recetaExistente = new Receta(nombre, descripcion, likes, id);
     Receta.updateReceta(recetaExistente);
 
-    res.redirect('/listaRecetas');
+    res.redirect('/receta/listaRecetas');
 }
 
 // Eliminar una receta
@@ -94,5 +90,12 @@ export function deleteReceta(req, res) {
     const id = req.params.id;
     Receta.deleteReceta(id); // Elimina la receta por ID
 
-    res.redirect('/listaRecetas'); // Redirige a la página de recetas
+    res.redirect('/receta/listaRecetas'); // Redirige a la página de recetas
+}
+
+export function likeReceta(req, res) {
+    const id = req.params.id;
+    Receta.addLikeReceta(id);
+
+    res.redirect('/receta/listaRecetas');
 }

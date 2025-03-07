@@ -12,7 +12,7 @@ export class Receta {
         if (this.#getAllStmt !== null) return;
 
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas');
-        this.#insertStmt = db.prepare('INSERT INTO Recetas (nombre, descripcion) VALUES (@nombre, @descripcion)');
+        this.#insertStmt = db.prepare('INSERT INTO Recetas (nombre, descripcion, user) VALUES (@nombre, @descripcion, @user)');
         this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, likes = @likes WHERE id = @id');
         this.#deleteStmt = db.prepare('DELETE FROM Recetas WHERE id = @id');
         this.#addLikeStmt = db.prepare('UPDATE Recetas SET likes = likes + 1 WHERE id = @id;');
@@ -24,7 +24,7 @@ export class Receta {
     static getRecetaById(id) {
         const receta = this.#getByIdStmt.get({ id });
         if (receta === undefined) throw new Error(`No se encontró la receta con ID ${id}`);
-        return new Receta(receta.nombre, receta.descripcion, receta.likes, receta.id);
+        return new Receta(receta.nombre, receta.descripcion, receta.likes, receta.id, receta.user);
     }
 
     // Obtener todas las recetas
@@ -41,7 +41,8 @@ export class Receta {
         try {
             result = this.#insertStmt.run({
                 nombre: receta.nombre,
-                descripcion: receta.descripcion
+                descripcion: receta.descripcion,
+                user: receta.user
             });
         }
         catch (e) {
@@ -57,16 +58,16 @@ export class Receta {
     }
 
     //Añade un like a la receta
-    static addLikeReceta(receta){
+    static addLikeReceta(id){
         this.#addLikeStmt.run({
-            id: receta.id
+            id
         });
     }
 
     //Elimina un like a la receta
     static removeLikeReceta(receta){
         this.#removeLikeStmt.run({
-            id: receta.id
+            id
         });
     }
 
@@ -88,16 +89,18 @@ export class Receta {
         if (result.changes === 0) throw new Error(`No se encontró la receta con ID ${id}`);
     }
 
-    #id;
-    descripcion;
-    nombre;
-    likes;
+    #id; // El id de la receta
+    descripcion; // La descripción de la receta
+    nombre; // El nombre de la receta
+    likes;  // El numero de likes que tiene la receta
+    user; // El usuario que crea la receta
 
-    constructor(nombre, descripcion, likes = null, id = null) {
+    constructor(nombre, descripcion, likes = null, id = null, user) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.likes = likes;
         this.#id = id;
+        this.user = user
     }
 
     get id() {
