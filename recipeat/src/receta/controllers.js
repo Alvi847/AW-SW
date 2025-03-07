@@ -94,8 +94,8 @@ export function deleteReceta(req, res) {
 }
 
 export function likeReceta(req, res) {
-    const id = req.params.id;
-    Receta.addLikeReceta(id);
+    const id = parseInt(req.params.id, 10); // 🔹 Convertir a número
 
-    res.redirect('/receta/listaRecetas');
+    Receta.addLikeReceta(id); // Añadir like
+    res.redirect(`/receta/verReceta/${id}`); // 🔹 Redirigir a la misma receta
 }
