@@ -91,6 +91,9 @@ export function doRegister(req, res)
      const email = req.body.email.trim();       //*correo electronico
      const password = req.body.password.trim(); //*password
  
+    //! Expresión regular para validar formato de correo electrónico
+    const emailRegex = /^[^\s@]+@(gmail\.com|hotmail\.com|yahoo\.com|gmail\.es|yahoo\.es|hotmail\.es)$/;
+
      // Validar que los campos no estén vacíos
      if (!username || !email || !password || !nombre) {
          return res.render('pagina', {
@@ -98,6 +101,14 @@ export function doRegister(req, res)
              error: 'Todos los campos son obligatorios'
          });
      }
+
+    // Validar que el email tenga un formato válido
+    if (!emailRegex.test(email)) {
+        return res.render('pagina', {
+            contenido: 'paginas/register',
+            error: 'El correo electrónico no tiene un formato válido'
+        });
+    }
  
      try {
          // Verificar si el usuario ya existe
