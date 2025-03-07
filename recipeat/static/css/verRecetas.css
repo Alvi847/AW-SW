@@ -30,6 +30,11 @@
     transition: transform 0.3s ease-in-out;
 }
 
+.receta-card a {
+    text-decoration: none; /* Elimina el subrayado */
+    color: inherit; /* Mantiene el color del texto */
+}
+
 .receta-card:hover {
     transform: scale(1.02);
 }
