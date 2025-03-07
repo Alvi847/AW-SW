@@ -118,7 +118,10 @@ export function deleteReceta(req, res) {
 
 export function likeReceta(req, res) {
     const id = req.params.id;
-    Receta.addLikeReceta(id);
+    const user = req.session.username;
+    Receta.processLike(id, user);
+    const id_num = parseInt(id, 10); // 🔹 Convertir a número
 
-    res.redirect('/receta/listaRecetas');
+
+    res.redirect(`/receta/verReceta/${id_num}`);
 }

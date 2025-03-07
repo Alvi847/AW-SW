@@ -132,3 +132,4 @@ dist
 #ficheros .db
 /recipeat/data
 
+recipeat/data/aw_sw.db

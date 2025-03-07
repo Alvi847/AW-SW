@@ -57,15 +57,27 @@ export class Receta {
         return new Receta(receta.nombre, receta.descripcion, receta.likes, result.lastInsertRowid);
     }
 
-    //Añade un like a la receta
-    static addLikeReceta(id){
+    // Añade un like a la receta
+    static addLikeReceta(id, user){
+        Like.addLike(id, user);
+
         this.#addLikeStmt.run({
             id
         });
     }
 
-    //Elimina un like a la receta. En desuso hasta que podamos llevar la cuenta de quién da like a qué recetas
-    static removeLikeReceta(id){
+    // Mira si el usuario ya ha dado like o no a la receta para decidir si se ha de eliminar o de añadir el like
+    static processLike(id, user){
+        if(Like.usuarioYaHaDadoLike(id, user))
+            this.removeLikeReceta(id, user);
+        else
+            this.addLikeReceta(id, user);
+    }
+
+    // Elimina un like a la receta. En desuso hasta que podamos llevar la cuenta de quién da like a qué recetas
+    static removeLikeReceta(id, user){
+        Like.retiraLike(id, user);
+
         this.#removeLikeStmt.run({
             id
         });
@@ -87,6 +99,7 @@ export class Receta {
      static deleteReceta(id) {
         const result = this.#deleteStmt.run({ id });
         if (result.changes === 0) throw new Error(`No se encontró la receta con ID ${id}`);
+        Like.retiraTodosLikes(id);
     }
 
     #id; // El id de la receta
@@ -108,46 +121,51 @@ export class Receta {
     }
 }
 
-/*export class CreadaPor {
-    static #creadaPorStmt = null;
-    static #getAllStmt = null;
-    static #getIntervalStmt = null;
+export class Like {
+
+    static #getLikeStmt = null;
+    static #insertLikeStmt = null;
+    static #removeLikeStmt = null
+    static #removeAllStmt = null;
 
     static initStatements(db) {
-        if (this.#getAllStmt !== null) return;
+        if (this.#getLikeStmt !== null) return;
 
-        this.#getAllStmt = db.prepare('SELECT * FROM Recetas');
-        this.#getIntervalStmt = db.prepare('SELECT * FROM Recetas LIMIT @limite OFFSET @offset');
-        this.#creadaPorStmt = db.prepare('INSERT INTO CreadaPor (id_receta, user) VALUES (@id_receta, @id_usuario)');
+        this.#getLikeStmt = db.prepare('SELECT * FROM Likes WHERE id_receta = @id_receta AND user = @username');
+        this.#insertLikeStmt = db.prepare('INSERT INTO Likes (id_receta, user) VALUES (@id_receta, @username)');
+        this.#removeLikeStmt = db.prepare('DELETE FROM Likes WHERE id_receta = @id_receta AND user = @username;');
+        this.#removeAllStmt = db.prepare('DELETE FROM Likes WHERE id_receta = @id_receta');
     }
 
-    static relacionaConUsuario(id_receta, id_usuario){
-        let result;
-        try {
-            result = this.#creadaPorStmt.run({
-                id_receta: id_receta,
-                id_usuario: id_usuario
-            });
-        }
-        catch (e) {
-            console.log("ERROR al relacionar la receta y el usuario");
-            if (this.#creadaPorStmt == null)
-                console.log("Error al hacer link con el usuario");
-            else
-                console.log(this.#creadaPorStmt);
-            throw new ErrorInsert(id_receta, { cause: e });
-        }
+    static addLike(id_receta, username){
+        this.#insertLikeStmt.run({
+            id_receta,
+            username
+        });
+    }
+    
+    static usuarioYaHaDadoLike(id_receta, username){
+        const result = this.#getLikeStmt.get({
+            id_receta,
+            username
+        });
+
+        if(result)
+            return true;
+        else
+            return false;
+    }
+
+    static retiraLike(id_receta, username) {
+        this.#removeLikeStmt.run({
+            id_receta,
+            username
+        });
+    }
+
+    static retiraTodosLikes(id_receta) {
+        this.#removeAllStmt.run({
+            id_receta,
+        });
     }
 }
-
-export class ErrorInsert extends Error {
-    /**
-     * 
-     * @param {string} receta 
-     * @param {ErrorOptions} [options]
-     */
-   /* constructor(receta, options) {
-        super(`No se ha podido crear la receta ${receta}`, options);
-        this.name = 'ErrorInsert';
-    }
-}*/
