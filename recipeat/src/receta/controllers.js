@@ -3,9 +3,9 @@ import { body } from 'express-validator';
 
 // Ver las recetas (página de inicio de recetas)
 export function viewRecetas(req, res) {
-    let contenido = 'paginas/listaRecetas'; 
-    
-    const recetas= Receta.getAllRecetas();
+    let contenido = 'paginas/listaRecetas';
+
+    const recetas = Receta.getAllRecetas();
     res.render('pagina', {
         contenido,
         session: req.session,
@@ -16,7 +16,8 @@ export function viewRecetas(req, res) {
 // Ver una receta
 export function viewReceta(req, res) {
     const id = req.params.id; // Ahora toma el id correctamente desde la URL
-    const receta = Receta.getRecetaById(id); // Método para obtener la receta por ID
+    const user = req.session.username // El usuario que quiere ver la receta (usado para ver si le ha dado like o no)
+    const receta = Receta.getRecetaById(id, user); // Método para obtener la receta por ID
     res.render('pagina', {
         contenido: 'paginas/verReceta',
         receta,
@@ -29,7 +30,7 @@ export function viewReceta(req, res) {
 // Crear una receta (mostrar el formulario de creación)
 export function createReceta(req, res) {
 
-    let contenido = 'paginas/createReceta'; 
+    let contenido = 'paginas/createReceta';
     if (req.session == null || !req.session.login) {
         contenido = 'paginas/home';
     }
@@ -41,7 +42,7 @@ export function createReceta(req, res) {
 
 // Agregar una nueva receta (procesar el formulario)
 export function doCreateReceta(req, res) {
-    const { nombre, descripcion} = req.body;
+    const { nombre, descripcion } = req.body;
     const nuevaReceta = new Receta(nombre, descripcion, null, null, req.session.username);
 
     console.log("Datos recibidos: ", nuevaReceta);
@@ -101,27 +102,42 @@ export function updateReceta(req, res) {
 
 // Eliminar una receta
 export function deleteReceta(req, res) {
-    const id = req.params.id;
-    Receta.deleteReceta(id); // Elimina la receta por ID
+    const { id } = req.body;
+    const user = req.session.username;
 
-    res.redirect('/receta/listaRecetas'); // Redirige a la página de recetas
+    if (id && user != null) {
+        const receta = Receta.getRecetaById(id, null);
+        if (user === receta.user) {
 
+            Receta.deleteReceta(id); // Elimina la receta por ID
+            res.redirect('/receta/listaRecetas'); // Redirige a la página de recetas
+        }
+        else
+            res.status(403)
+    }
+    else
+        res.status(400);
 }
-
-/*export function likeReceta(req, res) {
-    const id = parseInt(req.params.id, 10); //* Convertir a número
-
-    Receta.addLikeReceta(id); // Añadir like
-    res.redirect(`/receta/verReceta/${id}`); //* Redirigir a la misma receta
-
-}*/
 
 export function likeReceta(req, res) {
-    const id = req.params.id;
-    const user = req.session.username;
-    Receta.processLike(id, user);
-    const id_num = parseInt(id, 10); // 🔹 Convertir a número
+    const { id } = req.body;
+    const user = req.session.username
 
+    if (id && user != null ) {
+        const id_num = parseInt(id, 10); // 🔹 Convertir a número
 
-    res.redirect(`/receta/verReceta/${id_num}`);
+        try{
+            const receta = Receta.getRecetaById(id_num, user);
+            Receta.processLike(id_num, user);
+            res.redirect(`/receta/verReceta/${id_num}`);
+        }
+        catch(e){
+            res.status(500).send();
+        }
+    }
+    else if (!id)
+        res.status(400).send();
+    else
+        res.status(403).send();
 }
+

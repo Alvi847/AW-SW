@@ -6,3 +6,4 @@ export function inicializaModelos(db) {
     Receta.initStatements(db);
     Like.initStatements(db);
 }
+
