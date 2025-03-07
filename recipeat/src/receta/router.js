@@ -13,7 +13,6 @@ recetasRouter.get('/verReceta/:id', viewReceta);
 recetasRouter.get('/createReceta', createReceta);
 
 // Ruta para agregar una receta
-//recetasRouter.post('/anadirReceta', doCreateReceta);
 recetasRouter.post('/createReceta', doCreateReceta);
 
 // Ruta para actualizar una receta (vista)
