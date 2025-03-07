@@ -16,7 +16,7 @@
     <div class="receta-botones">
     <p>Likes: <%= receta.likes %>  
         <% if (session.username) { %>
-            <button id="likeButton" class="btn" onclick="toggleLike(event)">
+            <button id="likeButton" onclick="toggleLike()">
                 <%= receta.user_liked ? '💔 Dislike' : '❤️ Like' %>
             </button>
         <% } %>
@@ -24,31 +24,55 @@
             <!-- Mostrar Modificar y Borrar solo si el usuario actual es el creador -->
         <% if (session.username && (session.username === receta.user || session.esAdmin)) { %>
                 <a href="/receta/modificar/<%= receta.id %>">✏️</a> <!-- TODO hacer la modificación-->
-                <a href="/receta/removeReceta/<%= receta.id %>">🗑️</a>
+                <button id="eliminaButton" onclick="eliminaReceta()">🗑️</button>
         <% } %>
     </p>
     </div>
 </div>
 
 <script>
-    function toggleLike(event) {
-        event.preventDefault(); // Evitar el comportamiento por defecto del botón
+    function toggleLike() {
+        const id_receta = "<%= receta.id %>"; // Obtener el ID de la receta
+        const user = "<%= session.username %>"; // Obtener el username
 
-        const recetaId = '<%= receta.id %>'; // Obtener el ID de la receta
+        enviaLike(id_receta, user);
 
-        updateLike(recetaId);
-
-        function updateLike(id) {
+        function enviaLike(id, user) {
             fetch(`/receta/like`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({id: id}),
+                body: JSON.stringify({id: id, user: user}),
+            })
+            .then(data => {
+                // Cambiamos el texto del botón de like
+                document.getElementById("likeCount").textContent = data.likes;
+                if(data.user_liked)
+                    document.getElementById("likeButton").textContent = '💔 Dislike';
+                else
+                    document.getElementById("likeButton").textContent = '❤️ Like';
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+        }
+    }
+
+    function eliminaReceta() {
+        const id_receta = "<%= receta.id %>"; // Obtener el ID de la receta
+        const user = "<%= session.username %>"; // Obtener el username
+
+        enviaEliminar(id_receta, user);
+
+        function enviaEliminar(id, user) {
+            fetch(`/receta/removeReceta`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({id: id, user: user}),
+            })
         }
     }
 </script>

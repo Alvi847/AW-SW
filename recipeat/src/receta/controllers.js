@@ -88,25 +88,43 @@ export function updateReceta(req, res) {
 
 // Eliminar una receta
 export function deleteReceta(req, res) {
-    const id = req.body;
-    Receta.deleteReceta(id); // Elimina la receta por ID
+    const { id, user } = req.body;
 
-    res.redirect('/receta/listaRecetas'); // Redirige a la página de recetas
+    if (id && user != null && user === req.session.username) {
+        const receta = Receta.getRecetaById(id, user);
+        if (user === receta.user) {
+
+            Receta.deleteReceta(id); // Elimina la receta por ID
+            res.redirect('/receta/listaRecetas'); // Redirige a la página de recetas
+        }
+        else
+            res.status(403)
+    }
+    else
+        res.status(400);
 }
 
 export function likeReceta(req, res) {
-    const { id_receta } = req.body;
-    if (id_receta) {
-        const id_num = parseInt(id_receta, 10); // 🔹 Convertir a número
-        const user = req.session.username
 
-        if (user != null) {
-            Receta.processLike(id_num, user);
-            res.redirect(`/receta/verReceta/${id_num}`); // 🔹 Redirigir a la misma receta
+    console.log("Cuerpo de la petición ", req.body);
+
+    const { id, user } = req.body;
+    console.log("Like de ", user, " a la receta ", id);
+
+    if (id && user != null && user === req.session.username) {
+        const id_num = parseInt(id, 10); // 🔹 Convertir a número
+
+        Receta.processLike(id_num, user);
+        const receta = Receta.getRecetaById(id, user);
+        if (receta) {
+            res.status(200).json({
+                likes: receta.likes,
+                user_liked: receta.user_liked
+            });
         }
-        else
-            return res.status(403).json({ error: 'No autorizado' });
     }
+    else if (!id)
+        return res.status(400);
     else
-        return res.status(400).json({ error: 'Número de likes no válido' });
+        return res.status(403);
 }
