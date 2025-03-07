@@ -87,15 +87,18 @@ export function updateReceta(req, res) {
 
 // Eliminar una receta
 export function deleteReceta(req, res) {
-    const id = req.params.id;
+    const id = req.body;
     Receta.deleteReceta(id); // Elimina la receta por ID
 
     res.redirect('/receta/listaRecetas'); // Redirige a la página de recetas
 }
 
 export function likeReceta(req, res) {
-    const id = parseInt(req.params.id, 10); //* Convertir a número
+    const id = req.body;
+    const user = req.session.username
 
-    Receta.addLikeReceta(id); // Añadir like
-    res.redirect(`/receta/verReceta/${id}`); //* Redirigir a la misma receta
+    if(user && id)
+        Receta.processLike(id, user);
+
+    res.redirect('/receta/listaRecetas');
 }

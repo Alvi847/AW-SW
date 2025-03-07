@@ -22,9 +22,9 @@ recetasRouter.get('/updateReceta', updateReceta);
 recetasRouter.post('/updateReceta', updateReceta);
 
 // Ruta para eliminar una receta
-recetasRouter.get('/removeReceta/:id', deleteReceta);
+recetasRouter.post('/removeReceta', deleteReceta);
 
 // Ruta para cuando se da like a una receta
-recetasRouter.get('/like/:id', likeReceta);
+recetasRouter.post('/like', likeReceta);
 
 export default recetasRouter;
