@@ -1,4 +1,6 @@
-<h1><%=receta.nombre%></h1>
+<h1>
+    <%=receta.nombre%>
+</h1>
 
 <div class="receta-detalle">
     <div class="receta-imagen">
@@ -6,73 +8,37 @@
     </div>
     <div class="receta-info">
         <% if (receta.user) { %>
-            <p>Creada por <%= receta.user %></p>
-        <% } else { %>
-            <p>Creada por admin</p>
-        <% } %>
-        <p><%= receta.descripcion %></p>
+            <p>Creada por <%= receta.user %>
+            </p>
+            <% } else { %>
+                <p>Creada por admin</p>
+                <% } %>
+                    <p>
+                        <%= receta.descripcion %>
+                    </p>
     </div>
 
     <div class="receta-botones">
-    <p>Likes: <%= receta.likes %>  
-        <% if (session.username) { %>
-            <button id="likeButton" onclick="toggleLike()">
-                <%= receta.user_liked ? '💔 Dislike' : '❤️ Like' %>
-            </button>
-        <% } %>
+        <p>Likes: <span id="likeCount">
+                <%= receta.likes %>
+            </span>
+            <% if (session.username) { %>
+                <form id="likeForm" action="/receta/like" method="POST">
+                    <input type="hidden" name="id" value="<%= receta.id %>">
+                    <button type="submit" id="likeButton">
+                        <%= receta.user_liked ? '💔' : '❤️' %>
+                    </button>
+                </form>
+                <% } %>
 
-            <!-- Mostrar Modificar y Borrar solo si el usuario actual es el creador -->
-        <% if (session.username && (session.username === receta.user || session.esAdmin)) { %>
-                <a href="/receta/modificar/<%= receta.id %>">✏️</a> <!-- TODO hacer la modificación-->
-                <button id="eliminaButton" onclick="eliminaReceta()">🗑️</button>
-        <% } %>
-    </p>
+                    <!-- Mostrar Modificar y Borrar solo si el usuario actual es el creador -->
+                    <% if (session.username && (session.username===receta.user || session.esAdmin)) { %>
+                        <a href="/receta/modificar/<%= receta.id %>">✏️</a> <!-- TODO hacer la modificación-->
+                        <form id="deleteForm" action="/receta/removeReceta" method="POST">
+                            <input type="hidden" name="id" value="<%= receta.id %>">
+                            <button type="submit" id="deleteButton">🗑️</button>
+                        </form>
+                        <% } %>
+        </p>
     </div>
 </div>
-
-<script>
-    function toggleLike() {
-        const id_receta = "<%= receta.id %>"; // Obtener el ID de la receta
-        const user = "<%= session.username %>"; // Obtener el username
-
-        enviaLike(id_receta, user);
-
-        function enviaLike(id, user) {
-            fetch(`/receta/like`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({id: id, user: user}),
-            })
-            .then(data => {
-                // Cambiamos el texto del botón de like
-                document.getElementById("likeCount").textContent = data.likes;
-                if(data.user_liked)
-                    document.getElementById("likeButton").textContent = '💔 Dislike';
-                else
-                    document.getElementById("likeButton").textContent = '❤️ Like';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-    }
-
-    function eliminaReceta() {
-        const id_receta = "<%= receta.id %>"; // Obtener el ID de la receta
-        const user = "<%= session.username %>"; // Obtener el username
-
-        enviaEliminar(id_receta, user);
-
-        function enviaEliminar(id, user) {
-            fetch(`/receta/removeReceta`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({id: id, user: user}),
-            })
-        }
-    }
-</script>

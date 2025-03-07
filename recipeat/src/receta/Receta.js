@@ -26,7 +26,9 @@ export class Receta {
         if (receta === undefined) 
             throw new Error(`No se encontró la receta con ID ${id}`);
         else{ 
-            let user_liked = Like.usuarioYaHaDadoLike(id, user);
+            let user_liked = null;
+            if(user)
+                user_liked = Like.usuarioYaHaDadoLike(id, user);
             return new Receta(receta.nombre, receta.descripcion, receta.likes, receta.id, receta.user, user_liked);
         }
     }

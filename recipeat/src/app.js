@@ -17,7 +17,6 @@ export const app = express();
 app.set('view engine', 'ejs');
 app.set('views', config.vistas);
 
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(session(config.session));
 
