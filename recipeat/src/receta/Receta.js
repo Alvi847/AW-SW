@@ -58,16 +58,16 @@ export class Receta {
     }
 
     //Añade un like a la receta
-    static addLikeReceta(receta){
+    static addLikeReceta(id){
         this.#addLikeStmt.run({
-            id: receta.id
+            id
         });
     }
 
-    //Elimina un like a la receta
-    static removeLikeReceta(receta){
+    //Elimina un like a la receta. En desuso hasta que podamos llevar la cuenta de quién da like a qué recetas
+    static removeLikeReceta(id){
         this.#removeLikeStmt.run({
-            id: receta.id
+            id
         });
     }
 
