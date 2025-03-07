@@ -64,17 +64,6 @@ export function doCreateReceta(req, res) {
     }
 }
 
-/*// Actualizar una receta (mostrar el formulario para editar)
-export function updateReceta(req, res) {
-    const id = req.params.id;
-    const receta = Receta.getRecetaById(id);  // Método para obtener una receta por ID
-    res.render('pagina', {
-        contenido: 'paginas/updateReceta', // Vista para editar la receta
-        receta,
-        session: req.session
-    });
-}*/
-
 // Mostrar el formulario de actualización con los datos actuales
 export function viewUpdateReceta(req, res) {
     const id = req.params.id;
