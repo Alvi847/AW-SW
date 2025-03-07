@@ -32,7 +32,7 @@
                 <% } %>
                     <!-- Mostrar Modificar y Borrar solo si el usuario actual es el creador -->
                     <% if (session.username && (session.username===receta.user || session.esAdmin)) { %>
-                        <a href="/receta/modificar/<%= receta.id %>">✏️</a> <!-- TODO hacer la modificación-->
+                        <a href="/receta/updateReceta/<%= receta.id %>">✏️</a> <!-- TODO hacer la modificación-->
                         <form id="deleteForm" action="/receta/removeReceta" method="POST">
                             <input type="hidden" name="id" value="<%= receta.id %>">
                             <button type="submit" id="deleteButton">🗑️</button>
