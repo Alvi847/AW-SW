@@ -106,13 +106,13 @@ export function deleteReceta(req, res) {
 
 }
 
-export function likeReceta(req, res) {
+/*export function likeReceta(req, res) {
     const id = parseInt(req.params.id, 10); //* Convertir a número
 
     Receta.addLikeReceta(id); // Añadir like
     res.redirect(`/receta/verReceta/${id}`); //* Redirigir a la misma receta
 
-}
+}*/
 
 export function likeReceta(req, res) {
     const id = req.params.id;
