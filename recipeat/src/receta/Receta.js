@@ -21,10 +21,14 @@ export class Receta {
     }
 
     // Obtener una receta por ID
-    static getRecetaById(id) {
+    static getRecetaById(id, user) {
         const receta = this.#getByIdStmt.get({ id });
-        if (receta === undefined) throw new Error(`No se encontró la receta con ID ${id}`);
-        return new Receta(receta.nombre, receta.descripcion, receta.likes, receta.id, receta.user);
+        if (receta === undefined) 
+            throw new Error(`No se encontró la receta con ID ${id}`);
+        else{ 
+            let user_liked = Like.usuarioYaHaDadoLike(id, user);
+            return new Receta(receta.nombre, receta.descripcion, receta.likes, receta.id, receta.user, user_liked);
+        }
     }
 
     // Obtener todas las recetas
@@ -106,13 +110,15 @@ export class Receta {
     nombre; // El nombre de la receta
     likes;  // El numero de likes que tiene la receta
     user; // El usuario que crea la receta
+    user_liked; // El usuario (el que hace la petición) ha dado like
 
-    constructor(nombre, descripcion, likes = null, id = null, user) {
+    constructor(nombre, descripcion, likes = null, id = null, user, user_liked = false) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.likes = likes;
         this.#id = id;
         this.user = user
+        this.user_liked = user_liked;
     }
 
     get id() {
