@@ -74,7 +74,7 @@ export class Receta {
             this.addLikeReceta(id, user);
     }
 
-    // Elimina un like a la receta. En desuso hasta que podamos llevar la cuenta de quién da like a qué recetas
+    // Elimina un like a la receta.
     static removeLikeReceta(id, user){
         Like.retiraLike(id, user);
 
