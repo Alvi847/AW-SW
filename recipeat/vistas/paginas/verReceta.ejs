@@ -33,35 +33,18 @@
 <script>
     function toggleLike(event) {
         event.preventDefault(); // Evitar el comportamiento por defecto del botón
-        
-        const button = event.target;
+
         const recetaId = '<%= receta.id %>'; // Obtener el ID de la receta
-        const likeCountElement = document.getElementById('likeCount');
 
-        // Comprobar si el usuario ya dio like (esto dependerá de cómo guardes esa información)
-        const isLiked = '<%= receta.user_liked %>'
-        
-        // Alternar el estado del like
-        if (isLiked) {
-            button.textContent = '❤️ Like';
-            updateLike(recetaId, 'remove'); 
-        } else {
-            button.textContent = '💔 Dislike'; 
-            updateLike(recetaId, 'add');
-        }
+        updateLike(recetaId);
 
-        function updateLike(id, action) {
-            fetch(`/receta/like/${id}`, {
+        function updateLike(id) {
+            fetch(`/receta/like`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id_receta: id, user: user, action: action }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Actualiza el contador de likes
-                likeCountElement.textContent = data.likes;
+                body: JSON.stringify({id: id}),
             })
             .catch(error => {
                 console.error('Error:', error);

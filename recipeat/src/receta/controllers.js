@@ -3,9 +3,9 @@ import { body } from 'express-validator';
 
 // Ver las recetas (página de inicio de recetas)
 export function viewRecetas(req, res) {
-    let contenido = 'paginas/listaRecetas'; 
-    
-    const recetas= Receta.getAllRecetas();
+    let contenido = 'paginas/listaRecetas';
+
+    const recetas = Receta.getAllRecetas();
     res.render('pagina', {
         contenido,
         session: req.session,
@@ -16,7 +16,8 @@ export function viewRecetas(req, res) {
 // Ver una receta
 export function viewReceta(req, res) {
     const id = req.params.id; // Ahora toma el id correctamente desde la URL
-    const receta = Receta.getRecetaById(id); // Método para obtener la receta por ID
+    const user = req.session.username // El usuario que quiere ver la receta (usado para ver si le ha dado like o no)
+    const receta = Receta.getRecetaById(id, user); // Método para obtener la receta por ID
     res.render('pagina', {
         contenido: 'paginas/verReceta',
         receta,
@@ -29,7 +30,7 @@ export function viewReceta(req, res) {
 // Crear una receta (mostrar el formulario de creación)
 export function createReceta(req, res) {
 
-    let contenido = 'paginas/createReceta'; 
+    let contenido = 'paginas/createReceta';
     if (req.session == null || !req.session.login) {
         contenido = 'paginas/home';
     }
@@ -41,7 +42,7 @@ export function createReceta(req, res) {
 
 // Agregar una nueva receta (procesar el formulario)
 export function doCreateReceta(req, res) {
-    const { nombre, descripcion} = req.body;
+    const { nombre, descripcion } = req.body;
     const nuevaReceta = new Receta(nombre, descripcion, null, null, req.session.username);
 
     console.log("Datos recibidos: ", nuevaReceta);
@@ -94,11 +95,18 @@ export function deleteReceta(req, res) {
 }
 
 export function likeReceta(req, res) {
-    const id = req.body;
-    const user = req.session.username
+    const { id_receta } = req.body;
+    if (id_receta) {
+        const id_num = parseInt(id_receta, 10); // 🔹 Convertir a número
+        const user = req.session.username
 
-    if(user && id)
-        Receta.processLike(id, user);
-
-    res.redirect('/receta/listaRecetas');
+        if (user != null) {
+            Receta.processLike(id_num, user);
+            res.redirect(`/receta/verReceta/${id_num}`); // 🔹 Redirigir a la misma receta
+        }
+        else
+            return res.status(403).json({ error: 'No autorizado' });
+    }
+    else
+        return res.status(400).json({ error: 'Número de likes no válido' });
 }
