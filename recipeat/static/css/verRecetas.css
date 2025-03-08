@@ -22,17 +22,18 @@
     width: 80%;
     padding: 12px 40px; /* Dejar espacio para el icono */
     font-size: 16px;
+    font-family:Arial, Helvetica, sans-serif;   /*fuente mas usada por las paginas*/ 
     border: 2px solid #ddd;
     border-radius: 25px;
     outline: none;
     transition: all 0.3s ease-in-out;
-    box-shadow: 2px 2px 10px rgba(62, 62, 62, 0.4); /*sombra al buscador*/
+    box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.3); /*sombra al buscador*/
 }
 
 /* Efecto cuando el usuario hace clic en el input */
 .buscador input:focus {
     border-color: #000000;
-    box-shadow: 2px 2px 15px rgba(62, 62, 62, 0.4);
+    box-shadow: 7px 7px 8px rgba(0, 0, 0, 0.8);
 }
 
 .buscador input::placeholder {
