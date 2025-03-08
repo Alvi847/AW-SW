@@ -3,6 +3,9 @@
 </div>
 
 <div class="recetas-container">
+    <p id="mensajeNoEncontrado" style="display: none; text-align: center; font-size: 18px; color: red;">
+        No se ha encontrado ninguna receta
+    </p>
     <% recetas.forEach((r) => { %>
         <div class="receta-card">
             <a href="/receta/verReceta/<%= r.id %>">
@@ -19,3 +22,36 @@
         </div>
     <% }) %>
 </div>
+
+<!--script para el buscador de recetas-->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const buscador = document.getElementById("buscadorRecetas");
+        const recetas = document.querySelectorAll(".receta-card");
+        const mensajeNoEncontrado = document.getElementById("mensajeNoEncontrado");
+    
+        buscador.addEventListener("input", function () {
+            const filtro = buscador.value.toLowerCase();
+            let hayCoincidencias = false;
+    
+            recetas.forEach((receta) => {
+                const nombreReceta = receta.querySelector("h3").innerText.toLowerCase();
+    
+                if (nombreReceta.includes(filtro)) {
+                    receta.style.display = "block"; 
+                    hayCoincidencias = true;
+                } else {
+                    receta.style.display = "none"; 
+                }
+            });
+    
+            // Mostrar mensaje si no hay coincidencias
+            if (hayCoincidencias) {
+                mensajeNoEncontrado.style.display = "none"; 
+            } else {
+                mensajeNoEncontrado.style.display = "block"; 
+            }
+        });
+    });
+    </script>
+    
