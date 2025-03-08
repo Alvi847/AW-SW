@@ -103,3 +103,13 @@ label {
 button {
 	margin-left: 100px;
 } 
+
+.logo {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* Efecto al pasar el mouse */
+.logo:hover {
+    transform: scale(1.1); /* 🔹 Aumenta el tamaño del logo en un 10% */
+    box-shadow: 1px 2px 15px rgba(255, 255, 255, 0.8); /* 🔹 Agrega sombra */
+}
