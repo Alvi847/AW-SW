@@ -44,7 +44,6 @@ export class Receta {
     static getAllRecetas() {
        
         const recetas = this.#getAllStmt.all();
-        //return recetas.map(({ id, nombre, descripcion, likes }) => new Receta(nombre, descripcion, likes, id));
         return recetas;
     }
 
