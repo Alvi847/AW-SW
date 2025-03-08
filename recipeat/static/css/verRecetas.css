@@ -1,15 +1,43 @@
 /* Estilos para el buscador */
 .buscador {
-    text-align: center;
-    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px; /*Aumenta la separación entre el buscador y las recetas */
 }
 
+/* Ajustar las propiedades del icono */
+.icono-busqueda {
+    position: absolute;
+    left: 21px; /* Ajusta la posición del icono */
+    width: 20px; /* Tamaño adecuado del icono */
+    height: 20px;
+    color: #7c7b7b; /* Color gris para el icono */
+}
+
+/* Ajustar el input para que no se solape con el icono */
 .buscador input {
     width: 80%;
-    padding: 10px;
+    padding: 12px 40px; /* Dejar espacio para el icono */
     font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 2px 2px 10px rgba(62, 62, 62, 0.4); /*sombra al buscador*/
+}
+
+/* Efecto cuando el usuario hace clic en el input */
+.buscador input:focus {
+    border-color: #000000;
+    box-shadow: 2px 2px 15px rgba(62, 62, 62, 0.4);
+}
+
+.buscador input::placeholder {
+    color: #aaa;
+    font-style: italic;
 }
 
 /* Estilos del contenedor de recetas */
@@ -22,12 +50,14 @@
 
 /* Estilos para cada tarjeta de receta */
 .receta-card {
-    width: 80%;
-    border-radius: 15px;
+    width: 90%; /*largo de la caja de la receta*/
+    border-radius: 17px;    /*curvatura de los bordes*/
     overflow: hidden;
     background-color: white;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
+    box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.5), /* Sombra más oscura */
+                -6px -6px 15px rgba(255, 255, 255, 0.6); /* Efecto de relieve */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    padding: 15px;
 }
 
 .receta-card a {
@@ -35,8 +65,11 @@
     color: inherit; /* Mantiene el color del texto */
 }
 
+/* Aumentar la sombra cuando el usuario pasa el mouse */
 .receta-card:hover {
-    transform: scale(1.02);
+    transform: scale(1.03);
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3), /* Sombra más grande y oscura */
+                -8px -8px 20px rgba(255, 255, 255, 0.7);
 }
 
 /* Contenido de la receta en flexbox */
