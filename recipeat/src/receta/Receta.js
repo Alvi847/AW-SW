@@ -11,12 +11,19 @@ export class Receta {
     static initStatements(db) {
         if (this.#getAllStmt !== null) return;
 
+         //*seleccionar todas las recetas de la tabla
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas');
+        //*insertar nueva receta
         this.#insertStmt = db.prepare('INSERT INTO Recetas (nombre, descripcion, user) VALUES (@nombre, @descripcion, @user)');
+        //*modificar receta del usuario 
         this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, likes = @likes WHERE id = @id');
+        //*eliminar recetas del usuario
         this.#deleteStmt = db.prepare('DELETE FROM Recetas WHERE id = @id');
+        //*actualizar likes de la receta
         this.#addLikeStmt = db.prepare('UPDATE Recetas SET likes = likes + 1 WHERE id = @id;');
+        //*eliminar like del usuario sobre una receta 
         this.#removeLikeStmt = db.prepare('UPDATE Recetas SET likes = likes - 1 WHERE id = @id;');
+        //*seleccionar la receta por id (unica)
         this.#getByIdStmt = db.prepare('SELECT * FROM Recetas WHERE id = @id');
     }
 
