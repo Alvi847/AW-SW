@@ -120,11 +120,28 @@ button {
 }
 
 .icono-login svg {
-    width: 30px; /*Ajusta el tamaño del icono */
+    width: 27px; /*Ajusta el tamaño del icono */
     height: 30px;
     transition: transform 0.2s ease-in-out;
 }
 
 .icono-login svg:hover{
+    filter: drop-shadow(0px 0px 1px rgba(255, 255, 255, 0.5)); /*Sombra blanca sutil */
+}
+
+.icono-logout {
+    position: absolute;
+    top: 50%;
+    right: 30px; /*Ajusta la posición desde el borde derecho */
+    transform: translateY(+80%); /*Centra verticalmente */
+}
+
+.icono-logout svg {
+    width: 30px; /*Ajusta el tamaño del icono */
+    height: 30px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.icono-logout svg:hover{
     filter: drop-shadow(0px 0px 1px rgba(255, 255, 255, 0.5)); /*Sombra blanca sutil */
 }
