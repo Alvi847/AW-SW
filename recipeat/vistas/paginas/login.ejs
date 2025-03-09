@@ -1,21 +1,51 @@
-<h1>INICIA 	SESIÓN</h1>
-<form action="/usuarios/login" method="POST">
-<fieldset>
-	<% if (locals.error) { %>
-		<p><strong><%= locals.error %></strong></p>
-	<% } %>
-	<legend>Usuario y contraseña</legend>
+<div class="wrapper">
+	<div class="form-wrapper">
+		<form action="/usuarios/login" method="POST">
+			<h1>INICIAR SESIÓN</h1>
+			<div class="input-box">
+				<input type="text" name="username" id="username" required
+				placeholder="nombre de usuario"
+				value="<%= locals.username ? locals.username : '' %>">
+				<i class='bx bxs-user-pin'></i>		<!--icono usuario-->		
+			</div>
+			<div class="input-box">
+				<input type="password"  name="password" id="password" required
+				placeholder="contraseña">	
+				<i class='bx bxs-lock-alt'></i>	<!--icono passwd-->			
+			</div>
 
-	<div>
+			<!--El nombre o la contraseña no son correctos-->
+			<% if (locals.error) { %>
+				<p><strong><%= locals.error %></strong></p>
+			<% } %>
+
+			<button type="submit">INICIAR SESIÓN</button>
+			<p class="p">¿No tienes cuenta? <a href="/usuarios/register"> Crea tu cuenta</a></p>
+		</form>
+	</div>
+</div>
+
+
+<!--<form action="/usuarios/login" method="POST">
+<fieldset>
+	<div class="input-box">
 		<input type="text" name="username" id="username" required 
 			   placeholder="nombre de usuario" 
 			   value="<%= locals.username ? locals.username : '' %>">
+		<i class='bx bxs-user'></i>
 	</div>
-	<div>
+	<div class="input-box">
 		<input type="password" name="password" id="password" required 
 			   placeholder="contraseña">
+
+		<i class='bx bxs-lock-alt'></i>
 	</div>
-	<button type="submit">Iniciar sesión</button>
+	
+	<% if (locals.error) { %>
+		<p><strong><%= locals.error %></strong></p>
+	<% } %>
+	<button type="submit" class="login-btn">INICIAR SESIÓN</button>
 	<p>¿No tienes cuenta?</p>
 	<p><a href="/usuarios/register">Crea tu cuenta</a></p>
 </fieldset>
+-->
