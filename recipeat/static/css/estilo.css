@@ -11,10 +11,13 @@ div#contenedor {
 }
 
 header {
-	padding: 30px;
-	height: 125px;
+	height: 140px;
 	background-color: #111111;
-	color: white;
+	position: relative;  /*Permite posicionar elementos dentro */
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /*Separa el logo y el icono */
+    padding: 10px 20px;
 }
 
 header a, header a:visited {
@@ -106,10 +109,22 @@ button {
 
 .logo {
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+	margin-left: 20px;	/*desplazar logo a la derecha*/
 }
 
-/* Efecto al pasar el mouse */
-.logo:hover {
-    transform: scale(1.1); /* 🔹 Aumenta el tamaño del logo en un 10% */
-    box-shadow: 1px 2px 15px rgba(255, 255, 255, 0.8); /* 🔹 Agrega sombra */
+.icono-login {
+    position: absolute;
+    top: 50%;
+    right: 30px; /*Ajusta la posición desde el borde derecho */
+    transform: translateY(+80%); /*Centra verticalmente */
+}
+
+.icono-login svg {
+    width: 30px; /*Ajusta el tamaño del icono */
+    height: 30px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.icono-login svg:hover{
+    filter: drop-shadow(0px 0px 1px rgba(255, 255, 255, 0.5)); /*Sombra blanca sutil */
 }
