@@ -96,12 +96,13 @@
 .receta-info {
     flex: 2;
     padding: 20px;
-    font-family: 'Comic Sans MS', cursive, sans-serif; /* Fuente similar a la de la imagen */
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .receta-info h3 {
     font-size: 22px;
     margin-bottom: 10px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .receta-info p {
