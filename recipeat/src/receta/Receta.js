@@ -14,9 +14,9 @@ export class Receta {
          //*seleccionar todas las recetas de la tabla
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas');
         //*insertar nueva receta
-        this.#insertStmt = db.prepare('INSERT INTO Recetas (nombre, descripcion, user) VALUES (@nombre, @descripcion, @user)');
+        this.#insertStmt = db.prepare('INSERT INTO Recetas (nombre, descripcion, modo_preparacion, user) VALUES (@nombre, @descripcion, @modo_preparacion, @user)');
         //*modificar receta del usuario 
-        this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, likes = @likes WHERE id = @id');
+        this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, modo_preparacion = @modo_preparacion, likes = @likes WHERE id = @id');
         //*eliminar recetas del usuario
         this.#deleteStmt = db.prepare('DELETE FROM Recetas WHERE id = @id');
         //*actualizar likes de la receta
@@ -36,7 +36,7 @@ export class Receta {
             let user_liked = null;
             if(user)
                 user_liked = Like.usuarioYaHaDadoLike(id, user);
-            return new Receta(receta.nombre, receta.descripcion, receta.likes, receta.id, receta.user, user_liked);
+            return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion, receta.likes, receta.id, receta.user, user_liked);
         }
     }
 
@@ -54,6 +54,7 @@ export class Receta {
             result = this.#insertStmt.run({
                 nombre: receta.nombre,
                 descripcion: receta.descripcion,
+                modo_preparacion: receta.modo_preparacion,
                 user: receta.user
             });
         }
@@ -66,7 +67,7 @@ export class Receta {
             throw new ErrorInsert(receta.nombre, { cause: e });
         }
 
-        return new Receta(receta.nombre, receta.descripcion, receta.likes, result.lastInsertRowid);
+        return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion, receta.likes, result.lastInsertRowid);
     }
 
     // Añade un like a la receta
@@ -99,6 +100,7 @@ export class Receta {
         const result = this.#updateStmt.run({
             id: receta.id,
             nombre: receta.nombre,
+            modo_preparacion: receta.modo_preparacion,
             descripcion: receta.descripcion,
             likes: receta.likes
         });
