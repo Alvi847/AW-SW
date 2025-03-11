@@ -120,7 +120,8 @@ export class Receta {
     likes;  // El numero de likes que tiene la receta
     user; // El usuario que crea la receta
     user_liked; // El usuario (el que hace la petición) ha dado like
-
+    modo_preparacion;   //pasos a seguir para realizar la receta
+    
     constructor(nombre, descripcion, likes = null, id = null, user, user_liked = false) {
         this.nombre = nombre;
         this.descripcion = descripcion;
