@@ -122,9 +122,10 @@ export class Receta {
     user_liked; // El usuario (el que hace la petición) ha dado like
     modo_preparacion;   //pasos a seguir para realizar la receta
     
-    constructor(nombre, descripcion, likes = null, id = null, user, user_liked = false) {
+    constructor(nombre, descripcion, modo_preparacion, likes = null, id = null, user, user_liked = false) {
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.modo_preparacion = modo_preparacion;
         this.likes = likes;
         this.#id = id;
         this.user = user
