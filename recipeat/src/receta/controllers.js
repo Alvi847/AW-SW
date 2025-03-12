@@ -79,11 +79,11 @@ export function viewUpdateReceta(req, res) {
 // Procesar la actualización de la receta
 export function updateReceta(req, res) {
     const id = req.params.id;
-    const { nombre, descripcion, likes } = req.body;
+    const { nombre, descripcion, modo_preparacion, likes } = req.body;
 
     const likesFinal = likes ? likes : 0;
 
-    const recetaExistente = new Receta(nombre, descripcion, likesFinal, id);
+    const recetaExistente = new Receta(nombre, descripcion, modo_preparacion, likesFinal, id);
     Receta.updateReceta(recetaExistente);
 
     res.redirect('/receta/listaRecetas');

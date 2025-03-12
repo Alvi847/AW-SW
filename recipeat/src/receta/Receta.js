@@ -36,6 +36,7 @@ export class Receta {
             let user_liked = null;
             if(user)
                 user_liked = Like.usuarioYaHaDadoLike(id, user);
+            
             return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion, receta.likes, receta.id, receta.user, user_liked);
         }
     }
@@ -97,7 +98,9 @@ export class Receta {
     }
 
     static updateReceta(receta) {
-        const result = this.#updateStmt.run({
+
+        console.log("🔍 Datos antes de actualizar la receta:", receta);
+        const result = this.#updateStmt.run({        
             id: receta.id,
             nombre: receta.nombre,
             modo_preparacion: receta.modo_preparacion,
@@ -125,13 +128,13 @@ export class Receta {
     modo_preparacion;   //pasos a seguir para realizar la receta
     
     constructor(nombre, descripcion, modo_preparacion, likes = null, id = null, user, user_liked = false) {
-        this.nombre = nombre.toUpperCase();
+        this.nombre = nombre;
         this.descripcion = descripcion;
         this.modo_preparacion = modo_preparacion;
         this.likes = likes;
         this.#id = id;
         this.user = user
-        this.user_liked = user_liked;
+        this.user_liked = user_liked;        
     }
 
     get id() {
