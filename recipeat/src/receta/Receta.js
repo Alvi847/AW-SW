@@ -40,11 +40,12 @@ export class Receta {
             return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion, receta.likes, receta.id, receta.user, user_liked);
         }
     }
-
+    
     // Obtener todas las recetas
     static getAllRecetas() {
        
         const recetas = this.#getAllStmt.all();
+        console.log(recetas)
         return recetas;
     }
 
