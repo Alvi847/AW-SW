@@ -18,7 +18,6 @@ export function viewReceta(req, res) {
     const id = req.params.id; // Ahora toma el id correctamente desde la URL
     const user = req.session.username // El usuario que quiere ver la receta (usado para ver si le ha dado like o no)
     const receta = Receta.getRecetaById(id, user); // Método para obtener la receta por ID
-    console.log(receta)
     res.render('pagina', {
         contenido: 'paginas/verReceta',
         receta,

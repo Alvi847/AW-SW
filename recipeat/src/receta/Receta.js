@@ -45,7 +45,6 @@ export class Receta {
     static getAllRecetas() {
        
         const recetas = this.#getAllStmt.all();
-        console.log(recetas)
         return recetas;
     }
 
