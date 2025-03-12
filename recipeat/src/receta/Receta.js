@@ -99,7 +99,6 @@ export class Receta {
 
     static updateReceta(receta) {
 
-        console.log("🔍 Datos antes de actualizar la receta:", receta);
         const result = this.#updateStmt.run({        
             id: receta.id,
             nombre: receta.nombre,
