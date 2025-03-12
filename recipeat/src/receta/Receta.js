@@ -127,7 +127,7 @@ export class Receta {
     modo_preparacion;   //pasos a seguir para realizar la receta
     
     constructor(nombre, descripcion, modo_preparacion, likes = null, id = null, user, user_liked = false) {
-        this.nombre = nombre;
+        this.nombre = nombre.toUpperCase();
         this.descripcion = descripcion;
         this.modo_preparacion = modo_preparacion;
         this.likes = likes;
