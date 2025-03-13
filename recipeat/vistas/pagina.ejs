@@ -8,7 +8,7 @@
 
  <div id="contenedor">
   <%- include('./partials/cabecera.ejs', { session: locals.session }) %>
-  <%- include('./partials/sidebarIzq.ejs', { session: locals.session, error: locals.error }) %>
+  <!--TODO: Poner en la cabecera<%- include('./partials/sidebarIzq.ejs', { session: locals.session, error: locals.error }) %>-->
 
   <main>
     <article>
@@ -16,7 +16,7 @@
     </article>
   </main>
 
-  <%- include('./partials/sidebarDer.ejs') %>
+  
   <%- include('./partials/pie.ejs') %>
 </div> <!-- Fin del contenedor -->
 
