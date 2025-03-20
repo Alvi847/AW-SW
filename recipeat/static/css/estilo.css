@@ -250,7 +250,7 @@ body {
 .texto-contenido {
     position: relative; /* Se mantiene en su sitio pero encima */
     z-index: 1; /* Más alto que el fondo negro */
-    margin-bottom: -15px;
+    margin-bottom: -25px;
 }
 
 .texto p:last-of-type {
@@ -267,7 +267,7 @@ body {
     text-align: center; /* Centra el título */
     margin-top: 50px;
     margin-left: 135px;
-    line-height: 65px;
+    line-height: 80px;
 }
 
 .texto p {
