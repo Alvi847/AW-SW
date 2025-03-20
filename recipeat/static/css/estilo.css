@@ -254,7 +254,7 @@ body {
 }
 
 .texto p:last-of-type {
-    margin-left: 28px; /* mover a la derecha el ultimo parrafo*/
+    margin-left: 25px; /* mover a la derecha el ultimo parrafo*/
 }
 
 /* Mejorar la apariencia de los párrafos */
