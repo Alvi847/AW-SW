@@ -41,8 +41,7 @@ export function createReceta(req, res) {
 // Agregar una nueva receta (procesar el formulario)
 export function doCreateReceta(req, res) {
     const { nombre, descripcion } = req.body;
-    const nuevaReceta = new Receta(nombre, descripcion, null, null, req.session.username);
-
+    const nuevaReceta = new Receta(nombre, descripcion, null, null, null, req.session.username);
     console.log("Datos recibidos: ", nuevaReceta);
     // Insertar la receta en la base de datos
     try {
@@ -94,16 +93,18 @@ export function deleteReceta(req, res) {
 
     if (id && user != null) {
         const receta = Receta.getRecetaById(id, null);
-        if (user === receta.user) {
-
-            Receta.deleteReceta(id); // Elimina la receta por ID
+        if (user === receta.user || req.session.esAdmin) {
+            try{Receta.deleteReceta(id);} // Elimina la receta por ID
+            catch(e){
+                res.status(500).send();
+            }
             res.redirect('/receta/listaRecetas'); // Redirige a la página de recetas
         }
         else
-            res.status(403)
+            res.status(403).send();
     }
     else
-        res.status(400);
+        res.status(400).send();
 }
 
 export function likeReceta(req, res) {

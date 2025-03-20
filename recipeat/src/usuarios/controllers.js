@@ -49,6 +49,7 @@ export function doLogout(req, res, next) {
     req.session.login = null
     req.session.nombre = null;
     req.session.esAdmin = null;
+    req.session.username = null;
     req.session.save((err) => {
         if (err) next(err);
 
