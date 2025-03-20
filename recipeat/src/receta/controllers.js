@@ -44,9 +44,10 @@ export function doCreateReceta(req, res) {
     const nuevaReceta = new Receta(nombre, descripcion, null, null, req.session.username);
 
     console.log("Datos recibidos: ", nuevaReceta);
+
     // Insertar la receta en la base de datos
     try {
-        let receta = Receta.insertReceta(nuevaReceta);
+        Receta.insertReceta(nuevaReceta);
 
         // Redirigir o devolver un mensaje de éxito
         res.redirect('/receta/listaRecetas');

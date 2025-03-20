@@ -11,7 +11,7 @@ export class Receta {
     static initStatements(db) {
         if (this.#getAllStmt !== null) return;
 
-         //*seleccionar todas las recetas de la tabla
+        //*seleccionar todas las recetas de la tabla
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas');
         //*insertar nueva receta
         this.#insertStmt = db.prepare('INSERT INTO Recetas (nombre, descripcion, modo_preparacion, user) VALUES (@nombre, @descripcion, @modo_preparacion, @user)');
@@ -20,9 +20,9 @@ export class Receta {
         //*eliminar recetas del usuario
         this.#deleteStmt = db.prepare('DELETE FROM Recetas WHERE id = @id');
         //*actualizar likes de la receta
-        this.#addLikeStmt = db.prepare('UPDATE Recetas SET likes = likes + 1 WHERE id = @id;');
+        this.#addLikeStmt = db.prepare('UPDATE Recetas SET likes = likes + 1 WHERE id = @id');
         //*eliminar like del usuario sobre una receta 
-        this.#removeLikeStmt = db.prepare('UPDATE Recetas SET likes = likes - 1 WHERE id = @id;');
+        this.#removeLikeStmt = db.prepare('UPDATE Recetas SET likes = likes - 1 WHERE id = @id');
         //*seleccionar la receta por id (unica)
         this.#getByIdStmt = db.prepare('SELECT * FROM Recetas WHERE id = @id');
     }
@@ -33,7 +33,7 @@ export class Receta {
         if (receta === undefined) 
             throw new Error(`No se encontró la receta con ID ${id}`);
         else{ 
-            let user_liked = null;
+            let user_liked = false;
             if(user)
                 user_liked = Like.usuarioYaHaDadoLike(id, user);
             
@@ -65,7 +65,7 @@ export class Receta {
                 console.log("insert result null");
             else
                 console.log(this.#insertStmt);
-            throw new ErrorInsert(receta.nombre, { cause: e });
+            throw new ErrorInsertReceta(receta.id, { cause: e });
         }
 
         return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion, receta.likes, result.lastInsertRowid);
@@ -158,10 +158,20 @@ export class Like {
     }
 
     static addLike(id_receta, username){
-        this.#insertLikeStmt.run({
+        try{
+            this.#insertLikeStmt.run({
             id_receta,
             username
         });
+        }
+        catch(e){
+            console.log("Error al crear like");
+            if (this.#insertLikeStmt == null)
+                console.log("insert result null");
+            else
+                console.log(this.#insertLikeStmt);
+            throw new ErrorInsertLike(id_receta, { cause: e });
+        }
     }
     
     static usuarioYaHaDadoLike(id_receta, username){
@@ -187,5 +197,31 @@ export class Like {
         this.#removeAllStmt.run({
             id_receta,
         });
+    }
+}
+
+
+export class ErrorInsertReceta extends Error {
+    /**
+     * 
+     * @param {int} id 
+     * @param {ErrorOptions} [options]
+     */
+    constructor(id, options) {
+        super(`La receta ${id} no pudo ser insertada en la base de datos`, options);
+        this.name = 'ErrorInsertReceta';
+    }
+}
+
+
+export class ErrorInsertLike extends Error {
+    /**
+     * 
+     * @param {int} id 
+     * @param {ErrorOptions} [options]
+     */
+    constructor(id, options) {
+        super(`No se pudo añadir un like a la receta ${id}`, options);
+        this.name = 'ErrorInsertLike';
     }
 }
