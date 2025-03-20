@@ -74,6 +74,10 @@ body {
     font-size: 18px;
 }
 
+.saludo{
+    margin-top: 10px;
+}
+
 /*cabecera en móviles */
 @media (max-width: 767px) {
 
@@ -237,7 +241,7 @@ body {
        
 }
 
-.container{
+.container-portada{
     display: flex;
     flex-direction: row;
     height: 621px;
@@ -345,7 +349,7 @@ body {
 
 .imagen-container {
     display: inline-block;
-    background: #000000; /* Color del borde */
+    background: #000000; /* Color del contenedor */
     
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 14.5% 100%);
     position: relative;
