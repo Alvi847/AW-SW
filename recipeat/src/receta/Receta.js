@@ -52,11 +52,14 @@ export class Receta {
     static insertReceta(receta) {
         let result;
         try {
+            let user = receta.user;
+            if (user == null)
+                user = "admin";
             result = this.#insertStmt.run({
                 nombre: receta.nombre,
                 descripcion: receta.descripcion,
                 modo_preparacion: receta.modo_preparacion,
-                user: receta.user
+                user
             });
         }
         catch (e) {
@@ -132,7 +135,7 @@ export class Receta {
         this.modo_preparacion = modo_preparacion;
         this.likes = likes;
         this.#id = id;
-        this.user = user
+        this.user = user;
         this.user_liked = user_liked;        
     }
 
