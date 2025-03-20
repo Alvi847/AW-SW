@@ -24,7 +24,8 @@ app.use('/', express.static(config.recursos));
 app.get('/', (req, res) => {
     res.render('pagina', {
         contenido: 'paginas/index',
-        session: req.session
+        session: req.session,
+        portada: 'portada'  //pagina principal
     });
 })
 app.use('/usuarios', usuariosRouter);

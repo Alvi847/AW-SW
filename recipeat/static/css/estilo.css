@@ -1,292 +1,393 @@
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Anton&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+* {
+    margin: 0;  /*eliminar margenes predeterminados que ponen algunos navegadores*/
+    padding: 0; /*eliminar espaciados internos*/
+    box-sizing: border-box; 
+}
+
 body {
-	background-color: #CDCDCD;
-}
-
-div#contenedor {
-	width: 900px;
-	margin: auto;
-	border: 1px solid black;
-	background-color: #aaaaaa;
-	margin-top: 30px;
-}
-
-header {
-	height: 140px;
-	background-color: #111111;
-	position: relative;  /*Permite posicionar elementos dentro */
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /*Separa el logo y el icono */
-    padding: 10px 20px;
-}
-
-header a, header a:visited {
-	color: white;
-	font-weight: bold;
-	text-decoration: none;
-} 
-
-header a:hover {
-	color: red;
-	font-weight: bold;
-	text-decoration: underline;
-} 
-
-
-nav {
-	padding: 10px;
-	float: left;
-	width: 170px;
-	height: 400px;
-	background-color: #dddddd;
-}
-
-nav a, nav a:visited {
-	color: red;
-	font-weight: bold;
-	text-decoration: none;
-} 
-
-nav a:hover {
-	color: red;
-	text-decoration: underline;
-} 
-
-
-aside {
-	padding: 10px;
-	float: right;
-	width: 170px;
-	height: 400px;
-	background-color: #dddddd;
-}
-
-main {
-	padding: 10px;
-	float: left;
-	min-height: 600px;
-	width: 500px;
-	background-color: white;
-}
-
-footer	 {
-	clear: both;
-	padding: 20px;
-	background-color: #303030;
-	color: white;
-	text-align: center;
-}
-
-div.saludo {
-	width: 100%;
-	text-align: right;
-}
-
-fieldset {
-	border: 1px solid black;
-	width: 15em;
-	margin: 0 auto;
-}
-
-legend {
-	color: #fff;
-	background: #303030;
-	border: 1px solid black;
-	padding: 2px 6px;
-} 
-
-label {
-	width: 4em;
-	float: left;
-	text-align: right;
-	margin-right: 0.5em;
-	display: block;
-}
-
-button {
-	margin-left: 100px;
-} 
-
-.logo {
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-	margin-left: 20px;	/*desplazar logo a la derecha*/
-}
-
-.icono-login {
-    position: absolute;
-    top: 50%;
-    right: 30px; /*Ajusta la posición desde el borde derecho */
-    transform: translateY(+80%); /*Centra verticalmente */
-}
-
-.icono-login svg {
-    width: 27px; /*Ajusta el tamaño del icono */
-    height: 30px;
-    transition: transform 0.2s ease-in-out;
-}
-
-.icono-login svg:hover{
-    filter: drop-shadow(0px 0px 1px rgba(255, 255, 255, 0.5)); /*Sombra blanca sutil */
-}
-
-.icono-logout {
-    position: absolute;
-    top: 50%;
-    right: 30px; /*Ajusta la posición desde el borde derecho */
-    transform: translateY(+80%); /*Centra verticalmente */
-}
-
-.icono-logout svg {
-    width: 30px; /*Ajusta el tamaño del icono */
-    height: 30px;
-    transition: transform 0.2s ease-in-out;
-}
-
-.icono-logout svg:hover{
-    filter: drop-shadow(0px 0px 1px rgba(255, 255, 255, 0.5)); /*Sombra blanca sutil */
-}
-
-/*register*/
-.separator {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    width: 100%;
-    margin: 20px 0; /* Espaciado arriba y abajo */
-}
-
-.separator hr {
-    flex: 1;
-    border: none;
-    border-top: 1px solid #ccc;
-    margin: 0 10px;
-}
-
-.separator span {
-    font-weight: bold;
-    white-space: nowrap;
-}
-
-/* Estilos para el buscador */
-.buscador {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    width: 100%;
-    margin-bottom: 20px; /*Aumenta la separación entre el buscador y las recetas */
-}
-
-/* Ajustar las propiedades del icono */
-.icono-busqueda {
-    position: absolute;
-    left: 21px; /* Ajusta la posición del icono */
-    width: 20px; /* Tamaño adecuado del icono */
-    height: 20px;
-    color: #7c7b7b; /* Color gris para el icono */
-}
-
-/* Ajustar el input para que no se solape con el icono */
-.buscador input {
-    width: 80%;
-    padding: 12px 40px; /* Dejar espacio para el icono */
-    font-size: 16px;
-    font-family:Arial, Helvetica, sans-serif;   /*fuente mas usada por las paginas*/ 
-    border: 2px solid #ddd;
-    border-radius: 25px;
-    outline: none;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.3); /*sombra al buscador*/
-}
-
-/* Efecto cuando el usuario hace clic en el input */
-.buscador input:focus {
-    border-color: #000000;
-    box-shadow: 7px 7px 8px rgba(0, 0, 0, 0.8);
-}
-
-.buscador input::placeholder {
-    color: #aaa;
-    font-style: italic;
-}
-
-/* Estilos del contenedor de recetas */
-.recetas-container {
+    min-height: 100vh;
+    background-color: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
 }
 
-/* Estilos para cada tarjeta de receta */
-.receta-card {
-    width: 90%; /*largo de la caja de la receta*/
-    border-radius: 17px;    /*curvatura de los bordes*/
+/*HEADER*/
+.header {
+    width: 100%;    /*el header ocupa todo el ancho de la pantalla*/
+    height: 80px;   /*alto del header*/
+    background-color: black;
+    display: flex;  /*flexbox*/
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 50px; /*agregar espacio interno: 10px arriba y abajo + 20px laterales */
+    position: fixed;    /*el header se queda fijo*/
+    top: 0;
+    left: 0;
+    z-index: 1000;  /*se asegura de que el header este por encima de otros elementos de la pagina*/
+    border-bottom: 0.1px solid white;   /*linea blanca en la parte inferior del header*/
+}
+
+.header nav ul {
+    display: flex;
+    gap: 30px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; 
+}
+
+.header nav ul li {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 18px;
+    color: #ffffff; /* Color inicial */
+    position: relative;
+    transition: color 0.3s ease-in-out;
+}
+
+/*Cambia el color al pasar el cursor */
+.header nav ul li:hover {
+    color: #f4a261; 
+}
+
+/*  pseudo-elemento: Subrayado moderno */
+.header nav ul li::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px; /* Distancia del subrayado */
+    width: 100%;
+    height: 3px; /* Grosor del subrayado */
+    background-color: #f4a261; /* Mismo color que el hover */
+    transform: scaleX(0);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Aparece el subrayado al hacer hover */
+.header nav ul li:hover::after {
+    transform: scaleX(1);
+}
+
+.header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+/*cabecera en móviles */
+@media (max-width: 767px) {
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px; /*espacio arriba y abajo de 10px + espacio laterales 20px*/
+        background-color: black;
+        width: 100%;    /*ocupa todo el ancho*/
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        height: 80px; /* Fija la altura de la cabecera */
+    }
+
+    .logo {        
+        transform: translateX(-35px); /* Mueve el logo 35px a la izquierda */
+    }
+
+    .menu-icon {
+        display: block;
+        font-size: 30px;
+        cursor: pointer;
+        color: white;
+        position: absolute;
+        bottom: 3PX;
+        right: 40px;
+    }
+
+    .nav-menu {
+        display: none; /* Ocultar menú por defecto */
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background-color: black;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        z-index: 1000;
+    }
+
+    .nav-menu li {
+        padding: 10px;
+    }
+
+    .nav-menu a {
+        display: block;
+        color: white;
+        font-size: 18px;
+    }
+
+    .saludo {
+        margin-top: 10px;
+    }
+}
+
+/*LOGO RECIPEAT*/
+.logo{
+    height: 80px;
+    margin-left: 60px;
+    width:120px;
+    filter: contrast(1.12);
+    margin-top: 3px;;
+}
+
+/*FOOTER*/
+.footer {
+    width: 100%;    /*ocupa todo el ancho de la pantalla*/
+    background-color: black;
+    color: white;
+    padding: 10px 0;    /*distancia arriba-abajo de 10px*/
+    padding-top: 40px;
+    text-align: center;
+    margin-top: auto;
+    border-top: 0.1px solid white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-section {
+    flex: 1;
+    margin: 20px;
+    min-width: 250px;
+}
+
+.footer-section h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+}
+
+.footer-section p, 
+.footer-section ul {
+    font-size: 16px;
+    line-height: 1.6;
+    font-family: 'Poppins', sans-serif;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+    color: #f8c471; /* Amarillo dorado */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+    color: #e67e22; /* Naranja más vibrante */
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45px; /* Ajusta la altura del copyright */
+    margin-top: 5px; /* Reduce el espacio entre el contenido del footer y el copyright */
+    font-size: 14px;
+    border-top: 0.1px solid white;
+}
+
+
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+.texto {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: black;
+    color: white;
+    padding: 56px;
+    font-family: 'Poppins', sans-serif;
+    text-align: left;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    margin-left: 30px;
+    margin-bottom:50px; 
+       
+}
+
+.container{
+    display: flex;
+    flex-direction: row;
+    height: 590px;
+    margin-top: 80px;
+    width: 100%;
+    align-items: stretch;
+    background-color: black;
+}
+/* 🔹 Asegurar que el texto esté encima de la franja negra */
+.texto-contenido {
+    position: relative; /* Se mantiene en su sitio pero encima */
+    z-index: 1; /* Más alto que el fondo negro */
+    margin-bottom: -25px;
+}
+
+.texto p:last-of-type {
+    margin-left: 25px; /* mover a la derecha el ultimo parrafo*/
+}
+
+/* Mejorar la apariencia de los párrafos */
+.texto h1 {
+    font-size: 42px;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    text-align: center; /* Centra el título */
+    margin-top: 50px;
+    margin-left: 135px;
+    line-height: 80px;
+}
+
+.texto p {
+    font-family: 'Poppins', sans-serif;
+    font-size:17px;
+    line-height: 1.5;
+    text-align:justify; /* Justifica los párrafos para un mejor look */
+    text-align-last: justify; /* También alinea la última línea */
+    text-transform: uppercase;
+    padding: 30px;
+}
+
+
+/*Resaltar partes clave del texto */
+.texto p strong {
+    font-weight: 600;
+    color: #f8c471; /* Amarillo dorado para destacar palabras clave */
+}
+
+.texto p .destacado {
+    font-weight: 600;
+    color: #f8c471; 
+}
+
+@media (max-width: 768px) {
+    .portada {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .imagen {
+        transform: translateX(30px); /* Mueve el logo 35px a la izquierda */
+    }
+
+    .texto {
+        width: 75%;
+        padding: 1px 10px;
+        text-align: justify;
+    }
+
+    .texto h1 { 
+        transform: translateX(-48px); /* Mueve el logo 35px a la izquierda */
+        font-size: 8px;
+        line-height: 30px;
+        text-align: center; /* Centra el título */
+    }
+    .texto p{        
+        font-size: 9px;
+        padding: 1px 35px;
+        transform: translateX(22px); /* Mueve el logo 35px a la izquierda */
+        margin-bottom: 15px; 
+        line-height: 1.5;
+        
+    }
+}
+
+
+/* 🔹 CONTENIDO PRINCIPAL (PORTADA) */
+#contenedor {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    height: 100vh;
     overflow: hidden;
-    background-color: white;
-    box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.5), /* Sombra más oscura */
-                -6px -6px 15px rgba(255, 255, 255, 0.6); /* Efecto de relieve */
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.imagen {
+    display: block;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 14% 100%);
+    height: 100%; 
+  
+}
+
+.imagen-container {
+    display: inline-block;
+    padding: 4px; /* Grosor del borde */
+    background: #ffffff; /* Color del borde */
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 14% 100%);
+    position: relative;
+}
+
+.menu-icon {
+    display: none;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
     padding: 15px;
 }
 
-.receta-card a {
-    text-decoration: none; /* Elimina el subrayado */
-    color: inherit; /* Mantiene el color del texto */
-}
-
-/* Aumentar la sombra cuando el usuario pasa el mouse */
-.receta-card:hover {
-    transform: scale(1.03);
-    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3), /* Sombra más grande y oscura */
-                -8px -8px 20px rgba(255, 255, 255, 0.7);
-}
-
-/* Contenido de la receta en flexbox */
-.receta-content {
-    display: flex;
-    align-items: center;
-}
-
-/* Estilos para la imagen de la receta */
-.receta-imagen {
-    flex: 1;
-    padding: 10px;
-    text-align: center;
-}
-
-.receta-imagen img {
-    width: 100%;
-    height: auto;
+.menu-icon:hover {
+    background: #e67e22;
     border-radius: 10px;
 }
 
-/* Estilos para la información de la receta */
-.receta-info {
-    flex: 2;
-    padding: 20px;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-}
 
-.receta-info h3 {
-    font-size: 22px;
-    margin-bottom: 10px;
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
-}
 
-.receta-info p {
-    font-size: 16px;
-    color: #333;
-}
+/* 🔹 Mostrar el icono solo en pantallas pequeñas */
+@media (max-width: 768px) {
+    .header nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 80px;
+        right: 0;
+        background-color: black;
+        width: 100%;
+        text-align: center;
+    }
 
-.receta-botones a{
-    text-decoration: none;
-}
+    .header nav ul li {
+        padding: 15px 0;
+        border-bottom: 1px solid white;
+        border-left: 1px solid white;
+        border-right: 1px solid white;
+        border-top: 1px solid white ;
+        border-radius: 20px;
+    }
 
-.resumen{
-    width: 300px; 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    .menu-icon {
+        display: block;
+    }
 }
-

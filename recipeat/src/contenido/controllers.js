@@ -4,7 +4,7 @@ export function viewContenidoNormal(req, res) {
 
     res.render('pagina', {
         contenido,
-        session: req.session
+        session: req.session,
     });
 }
 
@@ -15,6 +15,6 @@ export function viewContenidoAdmin(req, res) {
     }
     res.render('pagina', {
         contenido,
-        session: req.session
+        session: req.session,
     });
 }

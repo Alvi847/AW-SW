@@ -1,3 +1,12 @@
+<% /** Muestra las operaciones de las recetas si el usuario esta logueado */ 
+function mostrarOpsRecetas(session){
+	if (session != null && session.login){ 
+		return `<ul>
+					<li><a href="/receta/createReceta">Añadir</a></li>	
+				</ul>`;
+}
+}
+%>
 <%
 /**
  * Muestra el saludo si el usuario esta registrado, en caso de que no lo este,
@@ -18,11 +27,42 @@ function mostrarSaludo(session){
 				</svg>
 			</a>`;
 }
-%><header>
+%><header class="header">
 	<a href="/">
-		<img src="/img/logo.PNG" alt="logo recipeat"  width="200" height="110" class="logo" title="Página de inicio de Recipeat">	
-	</a>
+		<img src="/img/logo.PNG" alt="logo recipeat" class="logo" title="Página de inicio de Recipeat">	
+	</a>	
+	<!-- 🔹 Icono del menú hamburguesa -->
+	<div class="menu-icon" onclick="toggleMenu()">☰</div>
+	<nav>		
+	<ul class="nav-menu">
+		<li><a href="/">INICIO</a></li>
+		<li><a href="/contenido/normal">CÓMO FUNCIONA</a></li>
+		<li><a href="/contenido/admin">ADMINISTRAR</a></li>
+
+		<li><a href="/receta/listaRecetas">RECETAS</a></li>
+		<%- mostrarOpsRecetas(session)%>
+	</ul>
+	</nav>
 		<div class="saludo">
 			<%- mostrarSaludo(session) %>
 		</div>
 </header>
+
+<!-- 🔹 Script para manejar el menú hamburguesa -->
+<script>
+    function toggleMenu() {
+        var nav = document.querySelector(".nav-menu");
+        if (nav.style.display === "flex") {
+            nav.style.display = "none";
+        } else {
+            nav.style.display = "flex";
+            nav.style.flexDirection = "column";
+            nav.style.position = "absolute";
+            nav.style.top = "80px";
+            nav.style.right = "0";
+            nav.style.backgroundColor = "black";
+            nav.style.width = "100%";
+            nav.style.textAlign = "center";
+        }
+    }
+</script
