@@ -50,19 +50,19 @@ function mostrarSaludo(session){
 
 <!-- 🔹 Script para manejar el menú hamburguesa -->
 <script>
-    function toggleMenu() {
+    document.addEventListener("DOMContentLoaded", function() {
         var nav = document.querySelector(".nav-menu");
-        if (nav.style.display === "flex") {
-            nav.style.display = "none";
-        } else {
-            nav.style.display = "flex";
-            nav.style.flexDirection = "column";
-            nav.style.position = "absolute";
-            nav.style.top = "80px";
-            nav.style.right = "0";
-            nav.style.backgroundColor = "black";
-            nav.style.width = "100%";
-            nav.style.textAlign = "center";
-        }
-    }
+        var menuIcon = document.querySelector(".menu-icon");
+
+        menuIcon.addEventListener("click", function() {
+            nav.classList.toggle("show");
+            
+            // Cambia el icono entre ☰ y ✖
+            if (nav.classList.contains("show")) {
+                menuIcon.innerHTML = "✖"; // Cambia a X
+            } else {
+                menuIcon.innerHTML = "☰"; // Vuelve a ☰
+            }
+        });
+    });
 </script

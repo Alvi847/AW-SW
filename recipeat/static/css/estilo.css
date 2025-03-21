@@ -78,65 +78,6 @@ body {
     margin-top: 10px;
 }
 
-/*cabecera en móviles */
-@media (max-width: 767px) {
-
-    .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 20px; /*espacio arriba y abajo de 10px + espacio laterales 20px*/
-        background-color: black;
-        width: 100%;    /*ocupa todo el ancho*/
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 1000;
-        height: 80px; /* Fija la altura de la cabecera */
-    }
-
-    .logo {        
-        transform: translateX(-35px); /* Mueve el logo 35px a la izquierda */
-    }
-
-    .menu-icon {
-        display: block;
-        font-size: 30px;
-        cursor: pointer;
-        color: white;
-        position: absolute;
-        bottom: 3PX;
-        right: 40px;
-    }
-
-    .nav-menu {
-        display: none; /* Ocultar menú por defecto */
-        flex-direction: column;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        background-color: black;
-        width: 100%;
-        text-align: center;
-        padding: 10px 0;
-        z-index: 1000;
-    }
-
-    .nav-menu li {
-        padding: 10px;
-    }
-
-    .nav-menu a {
-        display: block;
-        color: white;
-        font-size: 18px;
-    }
-
-    .saludo {
-        margin-top: 10px;
-    }
-}
-
 /*LOGO RECIPEAT*/
 .logo{
     height: 80px;
@@ -217,14 +158,6 @@ body {
     border-top: 0.1px solid white;
 }
 
-
-@media (max-width: 768px) {
-    .footer-container {
-        flex-direction: column;
-        text-align: center;
-    }
-}
-
 .texto {
     display: flex;
     flex-direction: column;
@@ -296,39 +229,6 @@ body {
     color: #f8c471; 
 }
 
-@media (max-width: 768px) {
-    .portada {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .imagen {
-        transform: translateX(30px); /* Mueve el logo 35px a la izquierda */
-    }
-
-    .texto {
-        width: 75%;
-        padding: 1px 10px;
-        text-align: justify;
-    }
-
-    .texto h1 { 
-        transform: translateX(-48px); /* Mueve el logo 35px a la izquierda */
-        font-size: 8px;
-        line-height: 30px;
-        text-align: center; /* Centra el título */
-    }
-    .texto p{        
-        font-size: 9px;
-        padding: 1px 35px;
-        transform: translateX(22px); /* Mueve el logo 35px a la izquierda */
-        margin-bottom: 15px; 
-        line-height: 1.5;
-        
-    }
-}
-
-
 /* 🔹 CONTENIDO PRINCIPAL (PORTADA) */
 #contenedor {
     width: 100%;
@@ -368,31 +268,125 @@ body {
     border-radius: 10px;
 }
 
+@media (max-width: 767px) {
 
-
-/* 🔹 Mostrar el icono solo en pantallas pequeñas */
-@media (max-width: 768px) {
-    .header nav ul {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 80px;
-        right: 0;
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px; /*espacio arriba y abajo de 10px + espacio laterales 20px*/
         background-color: black;
-        width: 100%;
-        text-align: center;
+        width: 100%;    /*ocupa todo el ancho*/
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        height: 80px; /* Fija la altura de la cabecera */
     }
 
-    .header nav ul li {
-        padding: 15px 0;
-        border-bottom: 1px solid white;
-        border-left: 1px solid white;
-        border-right: 1px solid white;
-        border-top: 1px solid white ;
-        border-radius: 20px;
+    .logo {        
+        transform: translateX(-35px); /* Mueve el logo 35px a la izquierda */
+        margin-bottom: 3px;
     }
 
     .menu-icon {
         display: block;
+        font-size: 25px;
+        cursor: pointer;
+        color: white;
+        position: absolute;
+        top: 10px;
+        right: 40px;
     }
+
+    
+
+    .nav-menu {
+        display: none !important; /* FORZAMOS que inicie oculto */ flex-direction: column;
+        position: absolute;
+        top: 80px; /* Asegura que el menú aparezca debajo del header */
+        left: 0;
+        background-color: black;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        z-index: 5; /* Se mantiene por encima de otros elementos */
+    }
+    
+    .nav-menu.show {
+        display: flex !important;
+        flex-direction: column;
+        background-color: black;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        z-index: 5;
+    }
+
+    .nav-menu li {
+        padding: 10px;
+    }
+
+    .nav-menu a {
+        display: block;
+        color: white;
+        font-size: 18px;
+    }
+
+    .saludo {
+        margin-top: 10px;
+    }
+
+    .container-portada {
+        display: flex;
+        flex-direction: row; /* Poner el texto arriba y la imagen abajo */
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin: 0 auto;
+        text-align: center; /* Centrar el texto */
+    }
+
+    .texto {
+        width: 100%; /* Para que el texto no ocupe todo el ancho */
+        height: auto;
+        padding: 2px;
+        text-align: center; /* Centrar el contenido */
+        margin: 90px 10px 30px 10px;
+    }
+
+    .texto p{
+        font-size: 9px;
+        line-height: 1.7;
+        padding: 10px;
+        word-spacing: 0.2px;
+        margin: 15px 2px 5px 2px;
+    }
+
+    .texto h1 {
+        font-size: 14px; /* Tamaño del título */
+        line-height: 1.2;        
+        margin: 0 auto 0 auto; /* Centrar completamente */
+    }
+
+    .texto p:last-of-type {
+        margin-left: 0px; /* mover a la derecha el ultimo parrafo*/
+    }
+
+    .imagen-container {
+        height: 538px;
+        margin-top: 80px;
+        width: 70%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; /* Evitar que la imagen sobresalga */
+    }
+
+    .imagen {
+        width: 100%;
+        object-fit: cover; /* Ajustar la imagen sin distorsionarla */
+    }
+    
 }
+
