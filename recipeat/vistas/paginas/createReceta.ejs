@@ -1,5 +1,5 @@
 <h1>CREAR RECETA</h1>
-<form action="/receta/createReceta" method="POST">
+<form action="/receta/createReceta" method="POST" enctype="multipart/form-data">
 <fieldset>
 	<legend>Añadir receta</legend>
 	<% if (locals.error) { %>
@@ -14,6 +14,10 @@
 		<input type="text" name="descripcion" id="descripcion" required 
 			   placeholder="descripción"
 			   value="<%= locals.descripcion ? locals.descripcion : '' %>">
+	</div>
+
+	<div class="foto">
+		<input type="file" name="foto" required value="<%= locals.foto ? locals.foto : '' %>">>
 	</div>
 	<button type="submit">Subir receta</button>
 </fieldset>

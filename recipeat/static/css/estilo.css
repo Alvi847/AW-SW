@@ -13,6 +13,10 @@ body {
     align-items: center;
 }
 
+fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formularios*/
+    margin-top: 25%;
+}
+
 /*HEADER*/
 .header {
     width: 100%;    /*el header ocupa todo el ancho de la pantalla*/

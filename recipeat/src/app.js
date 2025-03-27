@@ -11,6 +11,7 @@ import { config } from './config.js';
 import usuariosRouter from './usuarios/router.js';
 import contenidoRouter from './contenido/router.js';
 import recetasRouter from './receta/router.js';
+import { join } from 'node:path';   
 
 export const app = express();
 
@@ -31,3 +32,9 @@ app.get('/', (req, res) => {
 app.use('/usuarios', usuariosRouter);
 app.use('/contenido', contenidoRouter);
 app.use('/receta', recetasRouter);
+
+app.get("/imagen/:id", (request, response) => {
+    let pathImg = join(__dirname, "/uploads", request.params.id);
+    response.sendFile(pathImg);
+});
+
