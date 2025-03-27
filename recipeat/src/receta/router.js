@@ -1,10 +1,12 @@
 import express from 'express';
 
 import {viewReceta, viewRecetas, createReceta, doCreateReceta, viewUpdateReceta, updateReceta, deleteReceta, likeReceta } from './controllers.js';
-import multer from "multer";
-import path, { join } from 'node:path';
+import multer from 'multer';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'url'; 
 
-const multerFactory = multer({ dest: "/recpieat/uploads" });
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const multerFactory = multer({ dest: join(__dirname, "uploads") });
 
 const recetasRouter = express.Router();
 

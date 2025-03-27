@@ -7,13 +7,19 @@
 	<% } %>
 	<div>
 		<input type="text" name="nombre" id="nombre" required 
-			   placeholder="nombre de receta" 
+			   placeholder="Nombre de receta" 
 			   value="<%= locals.nombre ? locals.nombre : '' %>">
 	</div>
 	<div>
 		<input type="text" name="descripcion" id="descripcion" required 
-			   placeholder="descripción"
+			   placeholder="Descripción"
 			   value="<%= locals.descripcion ? locals.descripcion : '' %>">
+	</div>
+
+	<div>
+		<input type="text" name="modo_preparacion" id="modo_preparacion" required 
+			   placeholder="Modo de preparación"
+			   value="<%= locals.modo_preparacion ? locals.modo_preparacion : '' %>">
 	</div>
 
 	<div class="foto">

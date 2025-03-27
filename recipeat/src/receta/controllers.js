@@ -40,9 +40,10 @@ export function createReceta(req, res) {
 
 // Agregar una nueva receta (procesar el formulario)
 export function doCreateReceta(req, res) {
-    const { nombre, descripcion } = req.body;
+    const { nombre, descripcion, modo_preparacion } = req.body;
     const foto = req.file;
-    const nuevaReceta = new Receta(nombre, descripcion, null, null, null, req.session.username, foto.filename);
+    console.log("Foto: ", foto);
+    const nuevaReceta = new Receta(nombre, descripcion, modo_preparacion, null, null, req.session.username, false , foto.filename);
     console.log("Datos recibidos: ", nuevaReceta);
 
     // Insertar la receta en la base de datos

@@ -3,11 +3,11 @@
 </h1>
 
 <div class="receta-detalle">
-    <% if (imagen) { %> <!-- Realmente siempre debería haber una foto, pero por si acaso-->
-    <div class="receta-imagen">
-        <tr>
-            <td><img src="/imagen/<%= receta.imagen %>"></td>
-    </div>
+    <% if (receta.imagen) { %> <!-- Realmente siempre debería haber una foto, pero por si acaso-->
+        <div class="receta-imagen">
+            <tr>
+                <td><img src="/imagen/<%= receta.imagen %>"></td>
+        </div>
     <% } %>
     <div class="receta-info">
         <% if (receta.user) { %>
@@ -26,7 +26,7 @@
         </p>
         <h2>MODO DE PREPARACIÓN</h2>
         <p>
-            <%= receta.modo_preparacion%>
+            <%= receta.modo_preparacion %>
         </p>
         <h2>COMENTARIOS</h2>
     </div>

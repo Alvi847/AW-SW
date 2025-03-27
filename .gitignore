@@ -132,5 +132,8 @@ dist
 #ficheros .db
 *.db
 
+/uploads
 /entregas
 
+*.db
+/recipeat/recipeat/uploads
