@@ -138,3 +138,4 @@ dist
 *.db
 /recipeat/recipeat/uploads
 *.db-journal
+/recipeat/src/receta/uploads
