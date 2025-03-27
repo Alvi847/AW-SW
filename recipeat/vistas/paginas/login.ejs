@@ -1,23 +1,21 @@
-<h1>INICIA SESIÓN</h1>
-<form action="/usuarios/login" method="POST">
-	<div class="login">
-		<fieldset>
-			<legend>Usuario y contraseña</legend>
-
-			<div>
-				<input type="text" name="username" id="username" required placeholder="nombre de usuario"
-					value="<%= locals.username ? locals.username : '' %>">
-			</div>
-			<div>
-				<input type="password" name="password" id="password" required placeholder="contraseña">
-			</div>
-			<% if (locals.error) { %>
-				<p><strong>
-						<%= locals.error %>
-					</strong></p>
+<div class="container-login">	
+	<div class="form">
+		<form action="/usuarios/login" method="POST">
+			<fieldset>
+				<h1>INICIAR SESIÓN</h1>
+				<% if (locals.error) { %>
+					<p class="error-login"><strong><%= locals.error %></strong></p>
 				<% } %>
-					<button type="submit">Iniciar sesión</button>
-					<p>¿No tienes cuenta?</p>
-					<p><a href="/usuarios/register">Crea tu cuenta</a></p>
-		</fieldset>
+				<div><label>Nombre:</label> <input type="text" name="username" value="<%= datos.username %>" /><%- helpers.error(errores, 'username') %></div>
+				<div><label>Contraseña:</label> <input type="password" name="password" /><%- helpers.error(errores, 'password') %></div>
+				<div><button type="submit">Iniciar sesión</button></div>
+				<div class="new-customer">
+					<div class="divider">
+						<span>¿No tienes cuenta?</span>
+					</div>
+					<a class="create-account-btn" href="/usuarios/registro">Crear cuenta</a>
+				</div>
+			</fieldset>
+		</form>
 	</div>
+</div>

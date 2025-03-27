@@ -1,20 +1,9 @@
-//!como funciona (NAV)
-export function viewContenidoNormal(req, res) {
-    let contenido = 'paginas/normal';
+import { render } from '../utils/render.js';
 
-    res.render('pagina', {
-        contenido,
-        session: req.session,
-    });
+export function viewContenidoNormal(req, res) {
+    render(req, res, 'paginas/normal');
 }
 
 export function viewContenidoAdmin(req, res) {
-    let contenido = 'paginas/noPermisos';
-    if (req.session != null && req.session.login && req.session.nombre === 'Administrador') {
-        contenido = 'paginas/admin';
-    }
-    res.render('pagina', {
-        contenido,
-        session: req.session,
-    });
+    render(req, res, 'paginas/admin');
 }

@@ -1,41 +1,50 @@
-import { body } from 'express-validator';
-import { Usuario, RolesEnum, UsuarioNoEncontrado} from './Usuario.js';
+import { Usuario, UsuarioYaExiste } from './Usuario.js';
+import { render } from '../utils/render.js';
+import { validationResult, matchedData } from 'express-validator';
 
 export function viewLogin(req, res) {
-    let contenido = 'paginas/login';
-    if (req.session != null && req.session.login) {
-        contenido = 'paginas/home'
-    }
-    res.render('pagina', {
-        contenido,
-        session: req.session
+    render(req, res, 'paginas/login', {
+        datos: {},
+        errores: {}
     });
 }
 
-export function doLogin(req, res) {
-    body('username').escape();
-    body('password').escape();
+export function viewHome(req, res) {
+    return render(req, res, 'paginas/home');
+}
+
+export async function doLogin(req, res) {
+    const result = validationResult(req);
+    if (! result.isEmpty()) {
+        const errores = result.mapped();
+        const datos = matchedData(req);
+        return render(req, res, 'paginas/login', {
+            errores,
+            datos
+        });
+    }
     // Capturo las variables username y password
-    const username = req.body.username.trim();
-    const password = req.body.password.trim();
+    const username = req.body.username;
+    const password = req.body.password;
 
     try {
-        const usuario = Usuario.login(username, password);
+        const usuario = await Usuario.login(username, password);
         req.session.login = true;
         req.session.nombre = usuario.nombre;
-        req.session.username = usuario.username;    //!guardamos la informacion de username 
-        req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
+        req.session.rol = usuario.rol;
 
-        return res.render('pagina', {
-            contenido: 'paginas/home',
-            session: req.session
-        });
+        res.setFlash(`Encantado de verte de nuevo: ${usuario.nombre}`);
+        return res.redirect('/usuarios/home');
 
     } catch (e) {
-        res.render('pagina', {
-            contenido: 'paginas/login',
-            error: 'El usuario o contraseña no son válidos'
-        })
+        const datos = matchedData(req);
+        req.log.warn("Problemas al hacer login del usuario '%s'", username);
+        req.log.debug('El usuario %s, no ha podido logarse: %s', username, e.message);
+        render(req, res, 'paginas/login', {
+            error: 'El usuario o contraseña no son válidos',
+            datos,
+            errores: {}
+        });
     }
 }
 
@@ -48,8 +57,7 @@ export function doLogout(req, res, next) {
     // does not have a logged in user
     req.session.login = null
     req.session.nombre = null;
-    req.session.esAdmin = null;
-    req.session.username = null;
+    req.session.rol = null;
     req.session.save((err) => {
         if (err) next(err);
 
@@ -62,84 +70,50 @@ export function doLogout(req, res, next) {
     })
 }
 
-//!2 nuevas funciones (register)
-
-//* *ver interfaz de registro
-export function viewRegister(req, res)
-{
-    let contenido = 'paginas/register';
-    if (req.session != null && req.session.login) {
-        contenido = 'paginas/home'
-    }
-    res.render('pagina', {
-        contenido,
-        session: req.session
+export function viewRegistro(req, res) {
+    render(req, res, 'paginas/registro', {
+        datos: {},
+        errores: {}
     });
 }
 
-//* *recopilar datos del usuario
-export function doRegister(req, res)
-{
-     // Sanitizar los datos de entrada
-     body('username').escape();
-     body("nombre").escape();
-     body('email').escape();
-     body('password').escape();
- 
-     //*3 parametros que se piden al usuario
-     const username = req.body.username.trim(); //*nombre de usuario
-     const nombre = req.body.nombre.trim();     //*nombre
-     const email = req.body.email.trim();       //*correo electronico
-     const password = req.body.password.trim(); //*password
- 
-    //! Expresión regular para validar formato de correo electrónico
-    const emailRegex = /^[^\s@]+@(gmail\.com|hotmail\.com|yahoo\.com|gmail\.es|yahoo\.es|hotmail\.es)$/;
-
-     // Validar que los campos no estén vacíos
-     if (!username || !email || !password || !nombre) {
-         return res.render('pagina', {
-             contenido: 'paginas/register',
-             error: 'Todos los campos son obligatorios'
-         });
-     }
-
-    // Validar que el email tenga un formato válido
-    if (!emailRegex.test(email)) {
-        return res.render('pagina', {
-            contenido: 'paginas/register',
-            error: 'El correo electrónico no tiene un formato válido'
+export async function doRegistro(req, res) {
+    const result = validationResult(req);
+    if (! result.isEmpty()) {
+        const errores = result.mapped();
+        const datos = matchedData(req);
+        return render(req, res, 'paginas/registro', {
+            datos,
+            errores
         });
     }
- 
-     try {
-         // Verificar si el usuario ya existe
-         try {
-             Usuario.getUsuarioByUsername(username);
-             return res.render('pagina', {
-                 contenido: 'paginas/register',
-                 error: 'El usuario ya existe'
-             });
-         } catch (e) {
-             if (!(e instanceof UsuarioNoEncontrado)) {
-                 throw e; // Si es otro error, lo lanzamos
-             }
-         }
- 
-         // Crear un nuevo usuario
-         const nuevoUsuario = new Usuario(username, password, nombre, email, "U", null);  //!rol de usuario(U) por defecto
-         nuevoUsuario.password = password; // Esto hashea la contraseña
-         nuevoUsuario.persist();    //*insertar usuario en la base de datos
-  
-         //*redireccionar al usuario a la pagina login
-         return res.render('pagina', {
-             contenido: 'paginas/login',
-             session: req.session
-         });
- 
-     } catch (e) {
-         return res.render('pagina', {
-             contenido: 'paginas/register',
-             error: 'Error al registrar el usuario'
-         });
-     }
+
+    // Capturo las variables username y password
+    const username = req.body.username;
+    const password = req.body.password;
+    const nombre = req.body.nombre;
+
+    try {
+        const usuario = await Usuario.creaUsuario(username, password, nombre);
+        req.session.login = true;
+        req.session.nombre = usuario.nombre;
+        req.session.rol = usuario.rol;
+
+        return res.redirect('/usuarios/home');
+    } catch (e) {
+        let error = 'No se ha podido crear el usuario';
+        if (e instanceof UsuarioYaExiste) {
+            error = 'El nombre de usuario ya está utilizado';
+        }
+        const datos = matchedData(req);
+        delete datos.password;
+        delete datos.passwordConfirmacion;
+        req.log.error("Problemas al registrar un nuevo usuario '%s'", username);
+        req.log.debug('El usuario no ha podido registrarse: %s', e);
+        render(req, res, 'paginas/registro', {
+            error,
+            datos: {},
+            errores: {}
+        });
+    }
 }

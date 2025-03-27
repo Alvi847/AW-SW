@@ -2,13 +2,14 @@ import { config } from './config.js';
 import { app } from './app.js';
 import { getConnection, checkConnection, closeConnection } from './db.js';
 import { inicializaModelos } from './modelos.js';
+import { logger } from './logger.js';
 
 const db = getConnection();
 checkConnection(db);
 inicializaModelos(db);
 
 const server = app.listen(config.port, (error) => {
-    if (error) return console.log(`Error: ${error}`);
+    if (error) return logger.error(`Error: ${error}`);
     const address = server.address();
     let actualPort = 'n/a';
     if (typeof address === 'string')  {
@@ -16,7 +17,7 @@ const server = app.listen(config.port, (error) => {
     } else {
         actualPort = String(address.port);
     }
-    console.log(`Server is listening on port ${actualPort}`);
+    logger.info(`Server is listening on port ${actualPort}`);
 });
 
 process.on('exit', () => {

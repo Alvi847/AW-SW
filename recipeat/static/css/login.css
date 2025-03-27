@@ -1,0 +1,169 @@
+.container-login {
+    position: relative;
+    height: 620px;
+    width: 945px;
+    margin-top: 80px;
+    background-image: url('/img/backgrd-log-reg.png');  /*fondo del contenedor*/
+    background-repeat: no-repeat;   /*no repetir imagen*/
+    background-size: cover; /*cubrir contenedor con la imagen*/
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form h1 {
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    font-size: 37px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form fieldset {
+    background: rgba(255, 255, 255, 0.1); /* Color blanco translúcido */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 30px;  /*relleno*/
+    backdrop-filter: blur(10px); /* Efecto de desenfoque */
+    -webkit-backdrop-filter: blur(10px);
+    color: white;
+    box-shadow: 0 8px 32px rgba(255, 255, 255, 0.12);
+    width: 350px;
+    height: 450px;
+    margin-bottom: 90px;
+}
+
+form input[type="text"],
+form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+form button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: rgb(0, 0, 0);
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #f2862e;
+}
+
+.new-customer {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: white;
+    margin-bottom: 15px;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+    margin: 0 10px;
+}
+
+.divider span {
+    font-weight: bold;
+    color: white;
+}
+
+.create-account-btn {
+    display: inline-block;
+    padding: 10px 30px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.create-account-btn:hover {
+    background-color: #f2862e;
+    color: #fff;
+}
+
+.error-login{
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #ff1900; 
+    font-size: 16px;
+    display: block;
+    margin-left: 10px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 767px) {
+    .container-login {
+        width: 100vw;
+        height: 100vh;
+        margin-top: 0;
+        padding: 20px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .form {
+        width: 100%;
+        margin-top: 50px;
+    }
+
+    form fieldset {
+        width: 100%;
+        height: auto;
+        padding: 30px 20px;
+        border-radius: 10px;
+    }
+
+    form h1 {
+        font-size: 26px;
+    }
+
+    form input[type="text"],
+    form input[type="password"] {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    form button,
+    .create-account-btn {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .divider span {
+        font-size: 14px;
+    }
+
+    .error-login{ 
+        margin-left: 15px;
+    }
+}
