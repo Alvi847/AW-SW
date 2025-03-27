@@ -52,6 +52,9 @@ export class Receta {
     static insertReceta(receta) {
         let result;
         try {
+            let user = receta.user;
+            if (user == null)
+                user = "admin";
             result = this.#insertStmt.run({
                 nombre: receta.nombre,
                 descripcion: receta.descripcion,

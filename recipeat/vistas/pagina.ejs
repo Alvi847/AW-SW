@@ -6,19 +6,14 @@
 
 <body>
 
- <div id="contenedor">
   <%- include('./partials/cabecera.ejs', { session: locals.session }) %>
-  <%- include('./partials/sidebarIzq.ejs', { session: locals.session, error: locals.error }) %>
 
-  <main>
-    <article>
-    <%- include(contenido) %>
-    </article>
-  </main>
+  <div id="contenedor">
+    <main>       
+       <%- include(contenido) %>
+    </main>
+  </div> <!-- Fin del contenedor -->
 
-  <%- include('./partials/sidebarDer.ejs') %>
   <%- include('./partials/pie.ejs') %>
-</div> <!-- Fin del contenedor -->
-
 </body>
 </html>

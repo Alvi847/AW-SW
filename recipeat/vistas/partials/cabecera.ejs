@@ -1,3 +1,12 @@
+<% /** Muestra las operaciones de las recetas si el usuario esta logueado */ 
+function mostrarOpsRecetas(session){
+	if (session != null && session.login){ 
+		return `<ul>
+					<li><a href="/receta/createReceta">Añadir</a></li>	
+				</ul>`;
+}
+}
+%>
 <%
 /**
  * Muestra el saludo si el usuario esta registrado, en caso de que no lo este,
@@ -6,7 +15,7 @@
 function mostrarSaludo(session){
 	if (session == null || ! session.login){
 		return `<a href="/usuarios/login" class="icono-login" title="Login">
-					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="bevel">
+					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="bevel">
 						<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
 					</svg>
 				</a>`;
@@ -18,11 +27,42 @@ function mostrarSaludo(session){
 				</svg>
 			</a>`;
 }
-%><header>
+%><header class="header">
 	<a href="/">
-		<img src="/img/logo.PNG" alt="logo recipeat"  width="200" height="110" class="logo" title="Página de inicio de Recipeat">	
-	</a>
+		<img src="/img/logo.PNG" alt="logo recipeat" class="logo" title="Página de inicio de Recipeat">	
+	</a>	
+	<!-- 🔹 Icono del menú hamburguesa -->
+	<div class="menu-icon" onclick="toggleMenu()">☰</div>
+	<nav>		
+	<ul class="nav-menu">
+		<li><a href="/">INICIO</a></li>
+		<li><a href="/contenido/normal">CÓMO FUNCIONA</a></li>
+		<li><a href="/contenido/admin">ADMINISTRAR</a></li>
+
+		<li><a href="/receta/listaRecetas">RECETAS</a></li>
+		<%- mostrarOpsRecetas(session)%>
+	</ul>
+	</nav>
 		<div class="saludo">
 			<%- mostrarSaludo(session) %>
 		</div>
 </header>
+
+<!-- 🔹 Script para manejar el menú hamburguesa -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var nav = document.querySelector(".nav-menu");
+        var menuIcon = document.querySelector(".menu-icon");
+
+        menuIcon.addEventListener("click", function() {
+            nav.classList.toggle("show");
+            
+            // Cambia el icono entre ☰ y ✖
+            if (nav.classList.contains("show")) {
+                menuIcon.innerHTML = "✖"; // Cambia a X
+            } else {
+                menuIcon.innerHTML = "☰"; // Vuelve a ☰
+            }
+        });
+    });
+</script

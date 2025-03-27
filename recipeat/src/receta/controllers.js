@@ -95,16 +95,18 @@ export function deleteReceta(req, res) {
 
     if (id && user != null) {
         const receta = Receta.getRecetaById(id, null);
-        if (user === receta.user) {
-
-            Receta.deleteReceta(id); // Elimina la receta por ID
+        if (user === receta.user || req.session.esAdmin) {
+            try{Receta.deleteReceta(id);} // Elimina la receta por ID
+            catch(e){
+                res.status(500).send();
+            }
             res.redirect('/receta/listaRecetas'); // Redirige a la página de recetas
         }
         else
-            res.status(403)
+            res.status(403).send();
     }
     else
-        res.status(400);
+        res.status(400).send();
 }
 
 export function likeReceta(req, res) {
