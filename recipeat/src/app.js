@@ -11,7 +11,8 @@ import { config } from './config.js';
 import usuariosRouter from './usuarios/router.js';
 import contenidoRouter from './contenido/router.js';
 import recetasRouter from './receta/router.js';
-import { join } from 'node:path';   
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'url';   
 
 export const app = express();
 
@@ -34,7 +35,9 @@ app.use('/contenido', contenidoRouter);
 app.use('/receta', recetasRouter);
 
 app.get("/imagen/:id", (request, response) => {
-    let pathImg = join(__dirname, "/uploads", request.params.id);
+    const __filename = fileURLToPath(import.meta.url);  // He visto que esto es necesario para poder obtener la ruta del script en ES
+    let pathImg = join( dirname(__filename), "/receta/uploads", request.params.id);
+    console.log("Recibida peticion para la foto: ", pathImg);
     response.sendFile(pathImg);
 });
 
