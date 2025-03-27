@@ -14,7 +14,7 @@ export class Receta {
         //*seleccionar todas las recetas de la tabla
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas');
         //*insertar nueva receta
-        this.#insertStmt = db.prepare('INSERT INTO Recetas (nombre, descripcion, modo_preparacion, user) VALUES (@nombre, @descripcion, @modo_preparacion, @user)');
+        this.#insertStmt = db.prepare('INSERT INTO Recetas (nombre, descripcion, modo_preparacion, user, imagen) VALUES (@nombre, @descripcion, @modo_preparacion, @user, @imagen)');
         //*modificar receta del usuario 
         this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, modo_preparacion = @modo_preparacion, likes = @likes WHERE id = @id');
         //*eliminar recetas del usuario
@@ -37,7 +37,7 @@ export class Receta {
             if(user)
                 user_liked = Like.usuarioYaHaDadoLike(id, user);
             
-            return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion, receta.likes, receta.id, receta.user, user_liked);
+            return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion, receta.likes, receta.id, receta.user, user_liked, receta.imagen);
         }
     }
     
@@ -56,7 +56,8 @@ export class Receta {
                 nombre: receta.nombre,
                 descripcion: receta.descripcion,
                 modo_preparacion: receta.modo_preparacion,
-                user: receta.user
+                user: receta.user,
+                imagen: receta.imagen
             });
         }
         catch (e) {
@@ -68,7 +69,8 @@ export class Receta {
             throw new ErrorInsertReceta(receta.id, { cause: e });
         }
 
-        return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion, receta.likes, result.lastInsertRowid);
+        return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion,  
+            receta.likes, result.lastInsertRowid, null, false, receta.imagen);
     }
 
     // Añade un like a la receta
@@ -125,15 +127,17 @@ export class Receta {
     user; // El usuario que crea la receta
     user_liked; // El usuario (el que hace la petición) ha dado like
     modo_preparacion;   //pasos a seguir para realizar la receta
+    imagen; // RUTA de la imagen de la receta   
     
-    constructor(nombre, descripcion, modo_preparacion, likes = null, id = null, user, user_liked = false) {
+    constructor(nombre, descripcion, modo_preparacion, likes = null, id = null, user, user_liked = false, filename = null) {
         this.nombre = nombre.toUpperCase();
         this.descripcion = descripcion;
         this.modo_preparacion = modo_preparacion;
         this.likes = likes;
         this.#id = id;
-        this.user = user
-        this.user_liked = user_liked;        
+        this.user = user;
+        this.user_liked = user_liked;
+        this.imagen = filename;        
     }
 
     get id() {

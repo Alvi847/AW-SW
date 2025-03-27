@@ -20,25 +20,24 @@ header {
     padding: 10px 20px;
 }
 
-header a, header a:visited {
-	color: white;
-	font-weight: bold;
-	text-decoration: none;
-} 
+fieldset { /*Esto es temporal, pero es que si no, no se ven los formularios*/
+    margin-top: 25%;
+}
 
-header a:hover {
-	color: red;
-	font-weight: bold;
-	text-decoration: underline;
-} 
-
-
-nav {
-	padding: 10px;
-	float: left;
-	width: 170px;
-	height: 400px;
-	background-color: #dddddd;
+/*HEADER*/
+.header {
+    width: 100%;    /*el header ocupa todo el ancho de la pantalla*/
+    height: 80px;   /*alto del header*/
+    background-color: black;
+    display: flex;  /*flexbox*/
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 50px; /*agregar espacio interno: 10px arriba y abajo + 20px laterales */
+    position: fixed;    /*el header se queda fijo*/
+    top: 0;
+    left: 0;
+    z-index: 1000;  /*se asegura de que el header este por encima de otros elementos de la pagina*/
+    border-bottom: 0.1px solid white;   /*linea blanca en la parte inferior del header*/
 }
 
 nav a, nav a:visited {

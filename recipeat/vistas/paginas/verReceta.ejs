@@ -3,9 +3,12 @@
 </h1>
 
 <div class="receta-detalle">
+    <% if (imagen) { %> <!-- Realmente siempre debería haber una foto, pero por si acaso-->
     <div class="receta-imagen">
-        <img src="/images/<%= receta.foto %>" alt="<%= receta.nombre %>">
+        <tr>
+            <td><img src="/imagen/<%= receta.imagen %>"></td>
     </div>
+    <% } %>
     <div class="receta-info">
         <% if (receta.user) { %>
             <p>Creada por <%= receta.user %>

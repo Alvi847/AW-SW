@@ -1,7 +1,10 @@
 import express from 'express';
 
 import {viewReceta, viewRecetas, createReceta, doCreateReceta, viewUpdateReceta, updateReceta, deleteReceta, likeReceta } from './controllers.js';
+import multer from "multer";
+import path, { join } from 'node:path';
 
+const multerFactory = multer({ dest: "/recpieat/uploads" });
 
 const recetasRouter = express.Router();
 
@@ -15,7 +18,7 @@ recetasRouter.get('/verReceta/:id', viewReceta);
 recetasRouter.get('/createReceta', createReceta);
 
 // Ruta para agregar una receta
-recetasRouter.post('/createReceta', doCreateReceta);
+recetasRouter.post('/createReceta', multerFactory.single("foto") , doCreateReceta);
 
 // Ruta para actualizar una receta (vista)
 recetasRouter.get('/updateReceta/:id', viewUpdateReceta);
