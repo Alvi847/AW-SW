@@ -31,6 +31,7 @@ export async function doLogin(req, res) {
         const usuario = await Usuario.login(username, password);
         req.session.login = true;
         req.session.nombre = usuario.nombre;
+        req.session.username = username; // Se tiene que guardar el nombre de usuario en la sesión, porque este es la clave identificativa
         req.session.rol = usuario.rol;
 
         res.setFlash(`Encantado de verte de nuevo: ${usuario.nombre}`);
@@ -58,6 +59,7 @@ export function doLogout(req, res, next) {
     req.session.login = null
     req.session.nombre = null;
     req.session.rol = null;
+    req.session.username = null;
     req.session.save((err) => {
         if (err) next(err);
 

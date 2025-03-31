@@ -42,9 +42,8 @@ export function createReceta(req, res) {
 export function doCreateReceta(req, res) {
     const { nombre, descripcion, modo_preparacion } = req.body;
     const foto = req.file;
-    console.log("Foto: ", foto);
+
     const nuevaReceta = new Receta(nombre, descripcion, modo_preparacion, null, null, req.session.username, false , foto.filename);
-    console.log("Datos recibidos: ", nuevaReceta);
 
     // Insertar la receta en la base de datos
     try {
@@ -54,7 +53,7 @@ export function doCreateReceta(req, res) {
         res.redirect('/receta/listaRecetas');
     }
     catch (e) {
-        console.log(e);
+        req.log.error("No se ha podido crear la receta: '%s'", e.message);
         let contenido = 'paginas/createReceta';
         res.render('pagina', {
             contenido,
@@ -94,20 +93,24 @@ export function deleteReceta(req, res) {
     const { id } = req.body;
     const user = req.session.username;
 
-    if (id && user != null) {
+    if (id != null && user != null) {
         const receta = Receta.getRecetaById(id, null);
-        if (user === receta.user || req.session.esAdmin) {
+        if (user === receta.user || req.session.rol === "A") {
             try{Receta.deleteReceta(id);} // Elimina la receta por ID
             catch(e){
                 res.status(500).send();
             }
             res.redirect('/receta/listaRecetas'); // Redirige a la página de recetas
         }
-        else
+        else{
             res.status(403).send();
+            req.log.debug("Para borrar la receta, el usuario '%s' tiene que ser '%s' o administrador", user, receta.user);
+        }
     }
-    else
+    else{
         res.status(400).send();
+        req.log.debug("Usuario no logueado o receta no encontrada");
+    }
 }
 
 export function likeReceta(req, res) {
@@ -115,7 +118,7 @@ export function likeReceta(req, res) {
     const user = req.session.username
 
     if (id && user != null ) {
-        const id_num = parseInt(id, 10); // 🔹 Convertir a número
+        const id_num = parseInt(id, 10); // Convertir a número
 
         try{
             const receta = Receta.getRecetaById(id_num, user);
@@ -124,11 +127,16 @@ export function likeReceta(req, res) {
         }
         catch(e){
             res.status(500).send();
+            req.log.error("No se ha podido añadir el like de '%s' a la receta '%i'", user, id);
         }
     }
-    else if (!id)
+    else if (!id){
         res.status(400).send();
-    else
+        req.log.error("Receta '%i' no existe", id);
+    }
+    else{
         res.status(403).send();
+        req.log.error("Usuario no logueado");
+    }
 }
 
