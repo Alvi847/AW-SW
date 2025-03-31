@@ -273,6 +273,135 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
     border-radius: 10px;
 }
 
+/* Estilos para el buscador */
+.buscador {
+    right: 112px;
+    display: flex;
+    position: absolute;
+    text-align: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 75%;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 100em;
+    background-color: #ccc;
+    margin-top: 100px;
+}
+
+.buscador .icono-busqueda{
+    position: relative;
+    width: 2em;
+}
+
+.buscador .input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-left: 1em;
+}
+
+.recetas-container{
+    margin-top: 200px;
+    display: flow;
+    border-color: white;
+    border-width: 1px;
+    overflow: scroll;
+    overflow-x: hidden;
+    height: 25em;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: 2%;
+}
+
+.receta-card {
+    position: relative;
+    display: flex;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: white;
+    margin-right: 1%;
+    margin-left: 1%;
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+    background-color: #ccc;
+}
+
+/* Scrollbar de la lista de recetas */
+.recetas-container::-webkit-scrollbar {
+    width: 12px;
+}
+
+.recetas-container::-webkit-scrollbar-track { /* Es todo el recorrido del scrollbar*/
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.recetas-container::-webkit-scrollbar-thumb {
+    background: #888; /* Color del thumb (parte que se mueve) */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+.recetas-container::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color del thumb cuando se pasa el mouse */
+}
+
+.receta-card a{
+    text-decoration: none;
+    color: black;
+}
+
+.receta-card:hover {
+    background-color:rgb(252, 202, 161);
+}
+
+.receta-card .receta-content {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+.receta-card .receta-info {
+    margin-left: 10%;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.receta-card .receta-info h3{ /*TODO: estilizar*/
+    font-family: 'Montserrat', sans-serif;
+}
+
+.receta-card .resumen{ /*TODO: estilizar*/
+    font-family: 'Montserrat', sans-serif;
+}
+
+.receta-card img{
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+}
+
+.receta-card .receta-imagen{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.buscador .input input {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: #ccc;
+    outline: none;
+}
+
 @media (max-width: 767px) {
 
     .header {

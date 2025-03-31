@@ -1,30 +1,38 @@
 <div class="buscador">
-    <svg class="icono-busqueda" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="icono-busqueda" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"></circle>
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
     </svg>
-    <input type="text" placeholder="Buscar" id="buscadorRecetas">
+    <div class="input">
+        <input type="text" placeholder="Buscar" id="buscadorRecetas">
+    </div>
 </div>
 
 <div class="recetas-container">
-    <p id="mensajeNoEncontrado" style="display: none; text-align: center; font-family:Arial, Helvetica, sans-serif; font-size: 14px; color: black;">
+    <p id="mensajeNoEncontrado"
+        style="display: none; text-align: center; font-family:Arial, Helvetica, sans-serif; font-size: 14px; color: black;">
         No se ha encontrado ninguna receta
     </p>
-    <% recetas.forEach((r) => { %>
+    <% recetas.forEach((r)=> { %>
         <div class="receta-card">
             <a href="/receta/verReceta/<%= r.id %>">
                 <div class="receta-content">
                     <div class="receta-imagen">
-                        <img src="/images/<%= r.foto %>" alt="<%= r.nombre %>">
+                        <img src="/imagen/<%= r.imagen %>" alt="<%= r.nombre %>">
                     </div>
                     <div class="receta-info">
-                        <h3><%= r.nombre %></h3>
-                        <p class="resumen"><%= r.descripcion %></p>
+                        <h3>
+                            <%= r.nombre %>
+                        </h3>
+                        <p class="resumen">
+                            <%= r.descripcion %>
+                        </p>
                     </div>
                 </div>
             </a>
         </div>
-    <% }) %>
+        <% }) %>
 </div>
 
 <!--script para el buscador de recetas-->
@@ -33,29 +41,28 @@
         const buscador = document.getElementById("buscadorRecetas");
         const recetas = document.querySelectorAll(".receta-card");
         const mensajeNoEncontrado = document.getElementById("mensajeNoEncontrado");
-    
+
         buscador.addEventListener("input", function () {
             const filtro = buscador.value.toLowerCase().trim();
             let hayCoincidencias = false;
-    
+
             recetas.forEach((receta) => {
                 const nombreReceta = receta.querySelector("h3").innerText.toLowerCase().trim();
-    
+
                 // Dividir el nombre en palabras y comprobar si alguna empieza con el filtro
                 const palabras = nombreReceta.split(" ");
                 const coincide = palabras.some(palabra => palabra.startsWith(filtro));
-    
+
                 if (coincide) {
-                    receta.style.display = "block"; 
+                    receta.style.display = "block";
                     hayCoincidencias = true;
                 } else {
-                    receta.style.display = "none"; 
+                    receta.style.display = "none";
                 }
             });
-    
+
             // Mostrar mensaje si no hay coincidencias
             mensajeNoEncontrado.style.display = hayCoincidencias ? "none" : "block";
         });
     });
-    </script>
-    
+</script>
