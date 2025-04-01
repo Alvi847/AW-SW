@@ -1,36 +1,44 @@
-<h1>
-    <%=receta.nombre%>
-</h1>
+<div class="receta-vista">
+    <div class="receta-detalle">
+        <% if (receta.imagen) { <!-- Realmente siempre debería haber una foto, pero por si acaso--> %>
+            <div class="receta-imagen">
+                <tr>
+                    <td><img src="/imagen/<%= receta.imagen %>"></td>
+            </div>
+            <% } %>
+                <div class="receta-info">
+                    <h1>
+                        <%=receta.nombre%>
+                    </h1>
+                    <% if (receta.user) { %>
+                        <p>Creada por <%= receta.user %>
+                        </p>
+                        <% } else { %>
+                            <p class="receta-autor">Creada por admin</p>
+                            <% } %>
+                                <h2>INFORMACIÓN</h2>
+                                <p class="receta-descripcion">
+                                    <%= receta.descripcion %>
+                                </p>
 
-<div class="receta-detalle">
-    <% if (receta.imagen) { %> <!-- Realmente siempre debería haber una foto, pero por si acaso-->
-        <div class="receta-imagen">
-            <tr>
-                <td><img src="/imagen/<%= receta.imagen %>"></td>
-        </div>
-    <% } %>
-    <div class="receta-info">
-        <% if (receta.user) { %>
-            <p>Creada por <%= receta.user %>
-            </p>
-            <% } else { %>
-                <p>Creada por admin</p>
-                <% } %>
-        <h2>INFORMACIÓN</h2>
+                </div>
+    </div>
+    <div class="receta-ingredientes">
+        <h2>INGREDIENTES</h2>
         <p>
-            <%= receta.descripcion %>
-        </p>   
-        <h2>INGREDIENTES</h2>     
-        <p>
-            
+            5 kg de comida
         </p>
+    </div>
+    <div class="receta-preparacion">
         <h2>MODO DE PREPARACIÓN</h2>
         <p>
             <%= receta.modo_preparacion %>
         </p>
-        <h2>COMENTARIOS</h2>
     </div>
+    <div class="receta-comentarios">
+        <h2>COMENTARIOS</h2>
 
+    </div>
     <div class="receta-botones">
         <p>Likes: <span id="likeCount">
                 <%= receta.likes %>
@@ -45,7 +53,8 @@
                 <% } %>
                     <!-- Mostrar Modificar y Borrar solo si el usuario actual es el creador -->
                     <% if (session.username && (session.username===receta.user || session.esAdmin)) { %>
-                        <a href="/receta/updateReceta/<%= receta.id %>">✏️</a> <!-- TODO hacer la modificación-->
+                        <a href="/receta/updateReceta/<%= receta.id %>">✏️</a>
+                        <!-- TODO hacer la modificación-->
                         <form id="deleteForm" action="/receta/removeReceta" method="POST">
                             <input type="hidden" name="id" value="<%= receta.id %>">
                             <button type="submit" id="deleteButton">🗑️</button>
@@ -53,4 +62,5 @@
                         <% } %>
         </p>
     </div>
+</div>
 </div>

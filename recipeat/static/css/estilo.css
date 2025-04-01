@@ -332,22 +332,22 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
     overflow: hidden;
 }
 
-/* Scrollbar de la lista de recetas */
-.recetas-container::-webkit-scrollbar {
+/* Scrollbar de la lista de recetas. IMPORTANTE: Con Webkit sólo funciona en algunos navegadores */
+body::-webkit-scrollbar {
     width: 12px;
 }
 
-.recetas-container::-webkit-scrollbar-track { /* Es todo el recorrido del scrollbar*/
+body::-webkit-scrollbar-track { /* Es todo el recorrido del scrollbar*/
     background: #ccc;
     border-radius: 10px;
 }
 
-.recetas-container::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb {
     background: #888; /* Color del thumb (parte que se mueve) */
     border-radius: 10px; /* Bordes redondeados */
 }
 
-.recetas-container::-webkit-scrollbar-thumb:hover {
+body::-webkit-scrollbar-thumb:hover {
     background: #555; /* Color del thumb cuando se pasa el mouse */
 }
 
@@ -371,6 +371,7 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
 .receta-card .receta-info {
     margin-left: 10%;
     font-family: 'Montserrat', sans-serif;
+
 }
 
 .receta-card .receta-info h3{ /*TODO: estilizar*/
@@ -398,6 +399,75 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
     border: none;
     background-color: #ccc;
     outline: none;
+}
+
+/*.receta-vista {
+    object-fit: cover;
+    background-color: #ccc;
+    border-radius: 10px;
+    display: flow;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: 5%;
+    margin-top: 30%;
+}*/
+
+.receta-vista {
+    max-width: 100% ;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: 5%;
+    margin-top: 30%;
+    padding: 15px;
+    border-radius: 12px;
+    background-color: #ccc;
+    /*font-family: Arial, sans-serif;*/
+}
+
+.receta-vista .receta-detalle {
+    display: flex;
+    padding: 2%;
+    border-radius: inherit;
+}
+
+.receta-vista .receta-detalle .receta-imagen{
+    border-radius: inherit;
+    max-width: 50%;
+}
+
+.receta-vista .receta-detalle .receta-imagen img    {
+    border-radius: inherit;
+}
+
+main{
+    width: -webkit-fill-available; /*TODO CAMBIAR*/
+}
+
+.receta-vista .receta-detalle .receta-info{
+    border-radius: inherit;
+    padding-left: 5%;
+    max-width: 50%;
+}
+
+.receta-vista p {
+    display: block;
+    width: 100%;
+    height: 2em;
+    object-fit: cover;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+
+.receta-ingredientes,
+.receta-preparacion,
+.receta-comentarios {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
 }
 
 @media (max-width: 767px) {
