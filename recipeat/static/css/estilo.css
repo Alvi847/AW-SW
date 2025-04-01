@@ -319,8 +319,7 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
 
 .receta-card {
     position: relative;
-    display: flex;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    display: flexbox;
     transition: 0.3s;
     border-radius: 10px;
     border-width: 2px;
@@ -330,6 +329,7 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
     margin-top: 2.5%;
     margin-bottom: 2.5%;
     background-color: #ccc;
+    overflow: hidden;
 }
 
 /* Scrollbar de la lista de recetas */
@@ -358,6 +358,7 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
 
 .receta-card:hover {
     background-color:rgb(252, 202, 161);
+    transform: scale(1.01);
 }
 
 .receta-card .receta-content {
@@ -382,13 +383,10 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
 
 .receta-card img{
     border-radius: 10px;
-    width: 100%;
     height: 100%;
 }
 
 .receta-card .receta-imagen{
-    width: 100%;
-    height: 100%;
     position: relative;
 }
 
