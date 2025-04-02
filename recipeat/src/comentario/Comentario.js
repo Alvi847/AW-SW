@@ -105,9 +105,16 @@ export class Comentario {
     }
 
     // Obtener todos los comentarios
-    static getAllComentarios(id_receta) {
+    static getAllComentarios(id_receta, user) {
 
         const comentarios = this.#getAllStmt.all({ id_receta });
+        comentarios.forEach(comentario => {
+            if (user)
+                comentario.user_liked = Valoracion.usuarioYaHaValorado(id, user); // En este caso, hay que devolver si el usuario ha dado like porque, a diferencia de las recetas, 
+                                                                                  //a los comentarios se le puede dar like desede la misma lista
+
+        });
+        
         return comentarios;
     }
 

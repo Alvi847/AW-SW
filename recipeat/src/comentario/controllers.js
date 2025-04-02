@@ -4,16 +4,20 @@ import { body } from 'express-validator';
 
 // Ver los comentarios
 export function viewComentarios(req, res) {
-    const id_receta = req.params.id_receta; // Id de la receta del comentario
+    const id_receta = req.params.id; // Id de la receta del comentario
+    const user = req.session.username;
 
-    let contenido = ``; // TODO: Poner URL correcta
-
-    const comentarios = Comentario.getAllComentarios(id_receta);
-    res.render('pagina', {
+    let contenido = `pagina/`; // TODO: Poner URL correcta
+    
+    req.log.debug("Cargando todos los comentarios de la receta '%i'", id_receta);
+    
+    const comentarios = Comentario.getAllComentarios(id_receta, user);
+    /*res.render('pagina', {
         contenido,
         session: req.session,
-        recetas
-    });
+    });*/
+
+    res.send(comentarios);
 }
 
 // Crear un comentario (mostrar el formulario de creación)
@@ -21,7 +25,7 @@ export function createComentario(req, res) {
     let contenido;
 
     if (req.session == null || !req.session.login) {
-        contenido = 'paginas/home';
+        contenido = 'paginas/verReceta/${comentario.id_receta}';
     }
     else {
         const id_receta = req.params.id_receta; // Id de la receta del comentario
@@ -51,7 +55,7 @@ export function doCreateComentario(req, res) {
     }
     catch (e) {
         console.log(e);
-        let contenido = 'paginas/createReceta';
+        let contenido = 'paginas/createComentario';
         res.render('pagina', {
             contenido,
             session: req.session,

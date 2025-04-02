@@ -14,18 +14,18 @@ const comentariosRouter = express.Router();
  */
 
 //Ruta para ver la lista de comentarios
-recetasRouter.get('', viewComentarios);
+comentariosRouter.get('/listaComentarios/:id', viewComentarios);
 
 // Ruta para crear un comentario (vista)
-recetasRouter.get('', createComentario);
+comentariosRouter.get('/createComentario', createComentario);
 
-// Ruta para agregar una receta
-recetasRouter.post('', doCreateComentario);
+// Ruta para agregar un comentario
+comentariosRouter.post('/createComentario', doCreateComentario);
 
-// Ruta para eliminar una receta
-recetasRouter.post('', deleteComentario);
+// Ruta para eliminar un comentario
+comentariosRouter.post('/removeComentario/:id', deleteComentario);
 
-// Ruta para cuando se da like a una receta
-recetasRouter.post('', valorarComentario);
+// Ruta para cuando se da like a un comentario
+comentariosRouter.post('/like', valorarComentario);
 
-export default recetasRouter;
+export default comentariosRouter;

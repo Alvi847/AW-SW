@@ -11,6 +11,7 @@ import { config } from './config.js';
 import usuariosRouter from './usuarios/router.js';
 import contenidoRouter from './contenido/router.js';
 import recetasRouter from './receta/router.js';
+import comentariosRouter from './comentario/router.js';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'url';  
 import { logger } from './logger.js';
@@ -39,6 +40,7 @@ app.get('/', (req, res) => {
 app.use('/usuarios', usuariosRouter);
 app.use('/contenido', contenidoRouter);
 app.use('/receta', recetasRouter);
+app.use('/comentario', comentariosRouter);
 
 app.get("/imagen/:id", (request, response) => {
     const __filename = fileURLToPath(import.meta.url);  // He visto que esto es necesario para poder obtener la ruta del script en ES
