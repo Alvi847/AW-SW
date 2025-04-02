@@ -1,4 +1,4 @@
-.container-login {
+.container-logreg {
     position: relative;
     height: 620px;
     width: 945px;
@@ -36,12 +36,13 @@ form fieldset {
     color: white;
     box-shadow: 0 8px 32px rgba(255, 255, 255, 0.12);
     width: 350px;
-    height: 450px;
+    height: 500px;
     margin-bottom: 90px;
 }
 
 form input[type="text"],
-form input[type="password"] {
+form input[type="password"],
+form input[type="email"]{
     width: 100%;
     padding: 10px;
     margin-top: 6px;
@@ -69,7 +70,7 @@ form button:hover {
 }
 
 .new-customer {
-    margin-top: 30px;
+    margin-top: 25px;
     text-align: center;
 }
 
@@ -78,7 +79,7 @@ form button:hover {
     align-items: center;
     text-align: center;
     color: white;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .divider::before,
@@ -111,7 +112,7 @@ form button:hover {
     color: #fff;
 }
 
-.error-login{
+.error-logreg{
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     color: #ff1900; 
     font-size: 16px;

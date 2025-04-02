@@ -1,22 +1,24 @@
-<h1>CREAR CUENTA</h1>	
-<form action="/usuarios/registro" method="POST">
-	<fieldset>
-		<% if (locals.error) { %>
-			<p><strong><%= locals.error %></strong></p>
-		<% } %>
-		<legend>Datos del usuario</legend>
-		<div><input type="text" name="username" placeholder="Nombre de usuario" required/></div>
-		<div><input type="text" name="nombre" placeholder="Nombre" required/></div>		
-		<div><input type="email" name="email" placeholder="Email" required/></div>    	<!--type = email (no deja hacer mal las cosas)-->
-		<div><input type="password" name="password" placeholder="Contraseña" required/></div>
-		<button type="submit">Crear Cuenta</button>
-		<div class="separator">
-			<hr>
-			<span>Ya tengo una cuenta</span>
-			<hr>
-		</div>
-		<a href="/usuarios/login">
-			<button type="button">Iniciar sesión</button>
-		</a>		
-	</fieldset>
-</form>
+<div class="container-logreg">
+	<div class="form">
+
+		<form action="/usuarios/registro" method="POST">
+			<fieldset>
+				<h1>CREAR CUENTA</h1>
+				<% if (locals.error) { %>
+					<p class="error-logreg"><strong><%= locals.error %></strong></p>
+				<% } %>
+				<div><input type="text" name="username" placeholder="Nombre de usuario" required/></div>
+				<div><input type="text" name="nombre" placeholder="Nombre" required/></div>		
+				<div><input type="email" name="email" placeholder="Email" required/></div>    	<!--type = email (no deja hacer mal las cosas)-->
+				<div><input type="password" name="password" placeholder="Contraseña" required/></div>
+				<div><button type="submit">Crear cuenta</button></div>
+				<div class="new-customer">
+					<div class="divider">
+						<span>Ya tengo una cuenta</span>
+					</div>
+					<a class="create-account-btn" href="/usuarios/login">Iniciar sesión</a>
+				</div>		
+			</fieldset>
+		</form>
+	</div>
+</div>
