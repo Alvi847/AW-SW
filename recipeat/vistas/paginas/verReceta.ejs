@@ -39,10 +39,13 @@
         <h2>COMENTARIOS</h2>
 
     </div>
-    <div class="receta-botones">
+    <div class="receta-likes">
         <p>Likes: <span id="likeCount">
                 <%= receta.likes %>
-            </span>
+            </span></p>
+    </div>
+    <div class="receta-botones">
+        <p>
             <% if (session.username) { %>
                 <form id="likeForm" action="/receta/like" method="POST">
                     <input type="hidden" name="id" value="<%= receta.id %>">
