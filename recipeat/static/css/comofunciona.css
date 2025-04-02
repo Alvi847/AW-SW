@@ -1,0 +1,29 @@
+/* Estilos para la sección de "¿Cómo funciona RecipEat?" */
+.container-comofunciona {
+    background-color: #1a1a1a; /* Fondo oscuro para resaltar el contenido */
+    padding: 40px 20px; /* Espaciado interno */
+    text-align: center; /* Centrar el texto */
+    border-radius: 8px; /* Bordes redondeados */
+    margin-top: 100px; /* Margen superior*/
+    max-width: 800px; /* Ancho máximo para la sección */
+}
+
+header h1 {
+    font-family: 'Montserrat', sans-serif; /* Fuente para el título */
+    font-size: 36px; /* Tamaño de fuente del título */
+    color: #f8c471; /* Color dorado para el título */
+    margin-bottom: 10px; /* Espacio debajo del título */
+}
+
+header .subtitulo {
+    font-family: 'Poppins', sans-serif; /* Fuente para el subtítulo */
+    font-size: 20px; /* Tamaño de fuente del subtítulo */
+    color: #ffffff; /* Color blanco para el subtítulo */
+    margin-top: 0; /* Sin margen superior */
+}
+
+/* Efecto de hover para el título */
+header h1:hover {
+    color: #e67e22; /* Cambia a un color naranja más vibrante al pasar el mouse */
+    transition: color 0.3s ease; /* Transición suave para el cambio de color */
+}
