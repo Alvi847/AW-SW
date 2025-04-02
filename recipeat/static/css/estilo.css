@@ -1,10 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Anton&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('/css/logreg.css');
 @import url('/css/comofunciona.css');
+
 * {
-    margin: 0;  /*eliminar margenes predeterminados que ponen algunos navegadores*/
-    padding: 0; /*eliminar espaciados internos*/
-    box-sizing: border-box; 
+    margin: 0;
+    /*eliminar margenes predeterminados que ponen algunos navegadores*/
+    padding: 0;
+    /*eliminar espaciados internos*/
+    box-sizing: border-box;
 }
 
 body {
@@ -15,45 +18,54 @@ body {
     align-items: center;
 }
 
-fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formularios*/
+fieldset {
+    /* TODO: Esto es temporal, pero es que si no, no se ven los formularios*/
     margin-top: 25%;
 }
 
 /*HEADER*/
 .header {
-    width: 100%;    /*el header ocupa todo el ancho de la pantalla*/
-    height: 80px;   /*alto del header*/
+    width: 100%;
+    /*el header ocupa todo el ancho de la pantalla*/
+    height: 80px;
+    /*alto del header*/
     background-color: black;
-    display: flex;  /*flexbox*/
+    display: flex;
+    /*flexbox*/
     justify-content: space-between;
     align-items: center;
-    padding: 10px 50px; /*agregar espacio interno: 10px arriba y abajo + 20px laterales */
-    position: fixed;    /*el header se queda fijo*/
+    padding: 10px 50px;
+    /*agregar espacio interno: 10px arriba y abajo + 20px laterales */
+    position: fixed;
+    /*el header se queda fijo*/
     top: 0;
     left: 0;
-    z-index: 1000;  /*se asegura de que el header este por encima de otros elementos de la pagina*/
-    border-bottom: 0.1px solid white;   /*linea blanca en la parte inferior del header*/
+    z-index: 1000;
+    /*se asegura de que el header este por encima de otros elementos de la pagina*/
+    border-bottom: 0.1px solid white;
+    /*linea blanca en la parte inferior del header*/
 }
 
 .header nav ul {
     display: flex;
     gap: 30px;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700; 
+    font-weight: 700;
 }
 
 .header nav ul li {
     display: inline-block;
     font-weight: 700;
     font-size: 18px;
-    color: #ffffff; /* Color inicial */
+    color: #ffffff;
+    /* Color inicial */
     position: relative;
     transition: color 0.3s ease-in-out;
 }
 
 /*Cambia el color al pasar el cursor */
 .header nav ul li:hover {
-    color: #f4a261; 
+    color: #f4a261;
 }
 
 /*  pseudo-elemento: Subrayado moderno */
@@ -61,10 +73,13 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
     content: "";
     position: absolute;
     left: 0;
-    bottom: -5px; /* Distancia del subrayado */
+    bottom: -5px;
+    /* Distancia del subrayado */
     width: 100%;
-    height: 3px; /* Grosor del subrayado */
-    background-color: #f4a261; /* Mismo color que el hover */
+    height: 3px;
+    /* Grosor del subrayado */
+    background-color: #f4a261;
+    /* Mismo color que el hover */
     transform: scaleX(0);
     transition: transform 0.3s ease-in-out;
 }
@@ -80,25 +95,28 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
     font-size: 18px;
 }
 
-.saludo{
+.saludo {
     margin-top: 10px;
 }
 
 /*LOGO RECIPEAT*/
-.logo{
+.logo {
     height: 80px;
     margin-left: 60px;
-    width:120px;
+    width: 120px;
     filter: contrast(1.12);
-    margin-top: 3px;;
+    margin-top: 3px;
+    ;
 }
 
 /*FOOTER*/
 .footer {
-    width: 100%;    /*ocupa todo el ancho de la pantalla*/
+    width: 100%;
+    /*ocupa todo el ancho de la pantalla*/
     background-color: black;
     color: white;
-    padding: 10px 0;    /*distancia arriba-abajo de 10px*/
+    padding: 10px 0;
+    /*distancia arriba-abajo de 10px*/
     padding-top: 40px;
     text-align: center;
     margin-top: auto;
@@ -128,7 +146,7 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
     text-transform: uppercase;
 }
 
-.footer-section p, 
+.footer-section p,
 .footer-section ul {
     font-size: 10px;
     line-height: 1.6;
@@ -145,21 +163,25 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
 }
 
 .footer-section ul li a {
-    color: #f8c471; /* Amarillo dorado */
+    color: #f8c471;
+    /* Amarillo dorado */
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .footer-section ul li a:hover {
-    color: #e67e22; /* Naranja más vibrante */
+    color: #e67e22;
+    /* Naranja más vibrante */
 }
 
 .footer-bottom {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 45px; /* Ajusta la altura del copyright */
-    margin-top: 5px; /* Reduce el espacio entre el contenido del footer y el copyright */
+    height: 45px;
+    /* Ajusta la altura del copyright */
+    margin-top: 5px;
+    /* Reduce el espacio entre el contenido del footer y el copyright */
     font-size: 10px;
     border-top: 0.1px solid white;
 }
@@ -171,16 +193,16 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
     align-items: flex-start;
     background-color: black;
     color: white;
-    padding:50px;
+    padding: 50px;
     font-family: 'Poppins', sans-serif;
     text-align: left;
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
     margin-left: 30px;
-    margin-bottom:50px; 
-       
+    margin-bottom: 50px;
+
 }
 
-.container-portada{
+.container-portada {
     display: flex;
     flex-direction: row;
     height: 621px;
@@ -189,15 +211,19 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
     align-items: stretch;
     background-color: black;
 }
+
 /* 🔹 Asegurar que el texto esté encima de la franja negra */
 .texto-contenido {
-    position: relative; /* Se mantiene en su sitio pero encima */
-    z-index: 1; /* Más alto que el fondo negro */
+    position: relative;
+    /* Se mantiene en su sitio pero encima */
+    z-index: 1;
+    /* Más alto que el fondo negro */
     margin-bottom: -25px;
 }
 
 .texto p:last-of-type {
-    margin-left: 15px; /* mover a la derecha el ultimo parrafo*/
+    margin-left: 15px;
+    /* mover a la derecha el ultimo parrafo*/
 }
 
 /* Mejorar la apariencia de los párrafos */
@@ -207,7 +233,8 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
     font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;
     letter-spacing: 1.4px;
-    text-align: center; /* Centra el título */
+    text-align: center;
+    /* Centra el título */
     margin-top: 50px;
     margin-left: 132px;
     line-height: 80px;
@@ -215,10 +242,12 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
 
 .texto p {
     font-family: 'Poppins', sans-serif;
-    font-size:17px;
+    font-size: 17px;
     line-height: 1.5;
-    text-align:justify; /* Justifica los párrafos para un mejor look */
-    text-align-last: justify; /* También alinea la última línea */
+    text-align: justify;
+    /* Justifica los párrafos para un mejor look */
+    text-align-last: justify;
+    /* También alinea la última línea */
     text-transform: uppercase;
     padding: 30px;
 }
@@ -227,12 +256,13 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
 /*Resaltar partes clave del texto */
 .texto p strong {
     font-weight: 600;
-    color: #f8c471; /* Amarillo dorado para destacar palabras clave */
+    color: #f8c471;
+    /* Amarillo dorado para destacar palabras clave */
 }
 
 .texto p .destacado {
     font-weight: 600;
-    color: #f8c471; 
+    color: #f8c471;
 }
 
 /* 🔹 CONTENIDO PRINCIPAL (PORTADA) */
@@ -247,16 +277,17 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
 
 .imagen {
     display: block;
-    
+
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 14.5% 100%);
-    height: 100%; 
-  
+    height: 100%;
+
 }
 
 .imagen-container {
     display: inline-block;
-    background: #000000; /* Color del contenedor */
-    
+    background: #000000;
+    /* Color del contenedor */
+
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 14.5% 100%);
     position: relative;
 }
@@ -274,24 +305,245 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
     border-radius: 10px;
 }
 
+/* Estilos para el buscador */
+.buscador {
+    right: 112px;
+    display: flex;
+    position: absolute;
+    text-align: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 75%;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 100em;
+    background-color: #ccc;
+    margin-top: 100px;
+}
+
+.buscador .icono-busqueda {
+    position: relative;
+    width: 2em;
+}
+
+.buscador .input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-left: 1em;
+}
+
+.recetas-container {
+    margin-top: 200px;
+    display: flow;
+    border-color: white;
+    border-width: 1px;
+    overflow: scroll;
+    overflow-x: hidden;
+    height: 25em;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: 2%;
+}
+
+.receta-card {
+    position: relative;
+    display: flex;
+    transition: 0.3s;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: white;
+    margin-right: 1%;
+    margin-left: 1%;
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+    background-color: #ccc;
+    overflow: hidden;
+}
+
+/* Scrollbar de la lista de recetas. IMPORTANTE: Con Webkit sólo funciona en algunos navegadores */
+body::-webkit-scrollbar {
+    width: 12px;
+}
+
+body::-webkit-scrollbar-track {
+    /* Es todo el recorrido del scrollbar*/
+    background: #ccc;
+    border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #888;
+    /* Color del thumb (parte que se mueve) */
+    border-radius: 10px;
+    /* Bordes redondeados */
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    /* Color del thumb cuando se pasa el mouse */
+}
+
+.receta-card a {
+    text-decoration: none;
+    color: black;
+}
+
+.receta-card:hover {
+    background-color: rgb(252, 202, 161);
+    transform: scale(1.01);
+}
+
+.receta-card .receta-content {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 33% 66%;
+}
+
+.receta-card .receta-info {
+    margin-left: 10%;
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+.receta-card .receta-info h3 {
+    /*TODO: estilizar*/
+    font-family: 'Montserrat', sans-serif;
+}
+
+.receta-card .resumen {
+    /*TODO: estilizar*/
+    font-family: 'Montserrat', sans-serif;
+}
+
+.receta-card img {
+    border-radius: 10px;
+    height: auto;
+    max-width: 100%;
+}
+
+.receta-card .receta-imagen {
+    position: relative;
+}
+
+.buscador .input input {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: #ccc;
+    outline: none;
+}
+
+.receta-vista {
+    max-width: 100%;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: 5%;
+    margin-top: 30%;
+    padding: 15px;
+    border-radius: 12px;
+    background-color: #ccc;
+}
+
+.receta-vista .receta-detalle {
+    display: grid;
+    padding: 2%;
+    border-radius: inherit;
+    grid-gap: 5%;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: auto;
+    grid-template-areas: "img info";
+}
+
+.receta-vista .receta-detalle .receta-imagen {
+    border-radius: inherit;
+    max-width: 25em;
+}
+
+.receta-vista .receta-detalle .receta-imagen img {
+    border-radius: inherit;
+    max-width: inherit;
+    height: auto;
+    width: auto;
+}
+
+.receta-vista .receta-detalle .receta-info {
+    border-radius: inherit;
+    padding-left: 5%;
+    max-width: 50%;
+}
+
+.receta-vista p {
+    display: block;
+    width: 100%;
+    height: 2em;
+    object-fit: cover;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+.receta-vista .receta-botones {
+    width: 25%;
+    margin-left: 37.5%;
+    display: grid;
+    grid-template-rows: auto;
+}
+
+.receta-botones a {
+    padding-left: 44.5%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    border: 1px solid #ccc;
+    background-color: rgb(0, 0, 0);
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.receta-botones a:hover {
+    background-color: #e67e22;
+}
+
+.receta-ingredientes,
+.receta-preparacion,
+.receta-comentarios {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
 @media (max-width: 767px) {
 
     .header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 10px 20px; /*espacio arriba y abajo de 10px + espacio laterales 20px*/
+        padding: 10px 20px;
+        /*espacio arriba y abajo de 10px + espacio laterales 20px*/
         background-color: black;
-        width: 100%;    /*ocupa todo el ancho*/
+        width: 100%;
+        /*ocupa todo el ancho*/
         position: fixed;
         top: 0;
         left: 0;
         z-index: 1000;
-        height: 80px; /* Fija la altura de la cabecera */
+        height: 80px;
+        /* Fija la altura de la cabecera */
     }
 
-    .logo {        
-        transform: translateX(-35px); /* Mueve el logo 35px a la izquierda */
+    .logo {
+        transform: translateX(-35px);
+        /* Mueve el logo 35px a la izquierda */
         margin-bottom: 3px;
     }
 
@@ -305,20 +557,24 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
         right: 40px;
     }
 
-    
+
 
     .nav-menu {
-        display: none !important; /* FORZAMOS que inicie oculto */ flex-direction: column;
+        display: none !important;
+        /* FORZAMOS que inicie oculto */
+        flex-direction: column;
         position: absolute;
-        top: 80px; /* Asegura que el menú aparezca debajo del header */
+        top: 80px;
+        /* Asegura que el menú aparezca debajo del header */
         left: 0;
         background-color: black;
         width: 100%;
         text-align: center;
         padding: 10px 0;
-        z-index: 5; /* Se mantiene por encima de otros elementos */
+        z-index: 5;
+        /* Se mantiene por encima de otros elementos */
     }
-    
+
     .nav-menu.show {
         display: flex !important;
         flex-direction: column;
@@ -345,23 +601,27 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
 
     .container-portada {
         display: flex;
-        flex-direction: row; /* Poner el texto arriba y la imagen abajo */
+        flex-direction: row;
+        /* Poner el texto arriba y la imagen abajo */
         align-items: center;
         justify-content: center;
         width: 100%;
         margin: 0 auto;
-        text-align: center; /* Centrar el texto */
+        text-align: center;
+        /* Centrar el texto */
     }
 
     .texto {
-        width: 100%; /* Para que el texto no ocupe todo el ancho */
+        width: 100%;
+        /* Para que el texto no ocupe todo el ancho */
         height: auto;
         padding: 2px;
-        text-align: center; /* Centrar el contenido */
+        text-align: center;
+        /* Centrar el contenido */
         margin: 90px 10px 30px 10px;
     }
 
-    .texto p{
+    .texto p {
         font-size: 9px;
         line-height: 1.7;
         padding: 10px;
@@ -370,13 +630,16 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
     }
 
     .texto h1 {
-        font-size: 14px; /* Tamaño del título */
-        line-height: 1.2;        
-        margin: 0 auto 0 auto; /* Centrar completamente */
+        font-size: 14px;
+        /* Tamaño del título */
+        line-height: 1.2;
+        margin: 0 auto 0 auto;
+        /* Centrar completamente */
     }
 
     .texto p:last-of-type {
-        margin-left: 0px; /* mover a la derecha el ultimo parrafo*/
+        margin-left: 0px;
+        /* mover a la derecha el ultimo parrafo*/
     }
 
     .imagen-container {
@@ -386,13 +649,14 @@ fieldset { /* TODO: Esto es temporal, pero es que si no, no se ven los formulari
         display: flex;
         justify-content: center;
         align-items: center;
-        overflow: hidden; /* Evitar que la imagen sobresalga */
+        overflow: hidden;
+        /* Evitar que la imagen sobresalga */
     }
 
     .imagen {
         width: 100%;
-        object-fit: cover; /* Ajustar la imagen sin distorsionarla */
+        object-fit: cover;
+        /* Ajustar la imagen sin distorsionarla */
     }
-    
-}
 
+}
