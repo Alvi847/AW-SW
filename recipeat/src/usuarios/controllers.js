@@ -119,3 +119,31 @@ export async function doRegistro(req, res) {
         });
     }
 }
+
+export async function viewPerfil(req, res) {
+  
+    try {
+        // Obtén el usuario de la base de datos con el username de la sesión
+        const usuario = await Usuario.getUsuarioByUsername(req.session.username);
+
+        if (!usuario) {
+            return res.redirect('/usuarios/login');  // Si no se encuentra el usuario, redirigir al login
+        }
+
+        // Pasa los datos del usuario a la vista de perfil
+        /*render('pagina', {
+            contenido: 'paginas/verPerfil', // Renderiza la vista de perfil
+            usuario                    
+        });*/
+         // Renderiza la vista y envía los datos del usuario
+         render(req, res, 'paginas/verPerfil', { usuario });
+
+    } catch (error) {
+        console.error(error);
+        render(req, res, 'paginas/perfil', {
+            error: 'Hubo un problema al cargar tu perfil',
+            usuario: {},
+            errores: {}
+        });
+    }
+}
