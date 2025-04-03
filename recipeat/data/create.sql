@@ -3,20 +3,20 @@ DROP TABLE IF EXISTS "Comentarios";
 CREATE TABLE "Comentarios" (
 	"id"	INTEGER NOT NULL,
 	"id_receta"	INTEGER NOT NULL,
-	"user"	TEXT NOT NULL,
+	"user"	INTEGER NOT NULL,
 	"valoracion"	INTEGER,
 	"descripcion"	TEXT NOT NULL,
 	PRIMARY KEY("id" AUTOINCREMENT),
 	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id"),
-	FOREIGN KEY("user") REFERENCES "Usuarios"("username")
+	FOREIGN KEY("user") REFERENCES "Usuarios"("id")
 );
 DROP TABLE IF EXISTS "Likes";
 CREATE TABLE "Likes" (
 	"id_receta"	INTEGER NOT NULL,
-	"user"	TEXT NOT NULL,
+	"user"	INTEGER NOT NULL,
 	PRIMARY KEY("id_receta","user"),
 	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id") ON DELETE CASCADE,
-	FOREIGN KEY("user") REFERENCES "Usuarios"("username") ON DELETE CASCADE
+	FOREIGN KEY("user") REFERENCES "Usuarios"("id") ON DELETE CASCADE
 );
 DROP TABLE IF EXISTS "Recetas";
 CREATE TABLE "Recetas" (
@@ -24,11 +24,11 @@ CREATE TABLE "Recetas" (
 	"nombre"	TEXT NOT NULL,
 	"descripcion"	TEXT NOT NULL,
 	"likes"	INTEGER NOT NULL DEFAULT '0',
-	"user"	TEXT DEFAULT NULL,
+	"user"	INTEGER DEFAULT NULL,
 	"modo_preparacion"	TEXT,
 	"imagen"	VARCHAR(255),
 	PRIMARY KEY("id" AUTOINCREMENT),
-	FOREIGN KEY("user") REFERENCES "Usuarios"("username")
+	FOREIGN KEY("user") REFERENCES "Usuarios"("id")
 );
 DROP TABLE IF EXISTS "Usuarios";
 CREATE TABLE "Usuarios" (
@@ -42,9 +42,9 @@ CREATE TABLE "Usuarios" (
 );
 DROP TABLE IF EXISTS "Valoraciones_Comentarios";
 CREATE TABLE "Valoraciones_Comentarios" (
-	"id_comentario"	INTEGER,
-	"user"	TEXT,
+	"id_comentario"	INTEGER NOT NULL,
+	"user"	INTEGER NOT NULL,
 	FOREIGN KEY("id_comentario") REFERENCES "Comentarios"("id"),
-	FOREIGN KEY("user") REFERENCES "Usuarios"("username")
+	FOREIGN KEY("user") REFERENCES "Usuarios"("id")
 );
 COMMIT;
