@@ -8,12 +8,12 @@
                         <%=receta.nombre%>
                     </h1>
                     <% if (receta.user) { %>
-                        Creada por <%= receta.user %>
+                    <p> Creada por <%= receta.user %></p>
                             <% } else { %>
-                                Creada por admin
+                            <p>Creada por admin</p>
                                 <% } %>
                                     <h2>INFORMACIÓN</h2>
-                                    <%= receta.descripcion %>
+                                    <p><%= receta.descripcion %></p>
 
                 </div>
     </div>

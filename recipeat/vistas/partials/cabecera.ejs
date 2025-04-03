@@ -1,9 +1,9 @@
 <% /** Muestra las operaciones de las recetas si el usuario esta logueado */ 
 function mostrarOpsRecetas(session){
 	if (session != null && session.login){ 
-		return `<ul>
-					<li><a href="/receta/createReceta">Añadir</a></li>	
-				</ul>`;
+		return `
+				<li><a href="/receta/createReceta">AÑADIR</a></li>	
+				`;
 }
 }
 %>
