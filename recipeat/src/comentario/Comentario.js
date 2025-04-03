@@ -41,7 +41,7 @@ export class Comentario {
                 });
             else
                 this.#insertStmt.run({
-                    valoracion: null,
+                    valoracion: 0,
                     descripcion: comentario.descripcion,
                     id_receta: comentario.id_receta,
                     user: comentario.user
@@ -57,26 +57,26 @@ export class Comentario {
         }
     }
 
-    // Añade un like a la receta
-    static addLikeReceta(id, user) {
-        Like.addLike(id, user);
+    // Añade un like al comentario
+    static addLikeComentario(id, user) {
+        Valoracion.addValoracion(id, user);
 
         this.#addValoracionStmt.run({
             id
         });
     }
 
-    // Mira si el usuario ya ha dado like o no a la receta para decidir si se ha de eliminar o de añadir el like
+    // Mira si el usuario ya ha dado like o no al comentario para decidir si se ha de eliminar o de añadir el like
     static processLike(id, user) {
-        if (Like.usuarioYaHaDadoLike(id, user))
-            this.removeLikeReceta(id, user);
+        if (Valoracion.usuarioYaHaValorado(id, user))
+            this.removeLikeComentario(id, user);
         else
-            this.addLikeReceta(id, user);
+            this.addLikeComentario(id, user);
     }
 
-    // Elimina un like a la receta.
-    static removeLikeReceta(id, user) {
-        Like.retiraLike(id, user);
+    // Elimina un like al comentario.
+    static removeLikeComentario(id, user) {
+        Valoracion.retiraValoracion(id, user);
 
         this.#removeValoracionStmt.run({
             id
@@ -84,6 +84,7 @@ export class Comentario {
     }
 
     static deleteComentario(id) {
+        Valoracion.retiraTodosValoraciones(id);
         const result = this.#deleteStmt.run({ id });
         if (result.changes === 0) throw new Error(`No se encontró el comentario con ID ${id}`);
     }
@@ -92,8 +93,8 @@ export class Comentario {
     // Obtener una comentario por ID
     static getComentarioById(id, user) {
         const comentario = this.#getByIdStmt.get({ id });
-        if (receta === undefined)
-            throw new Error(`No se encontró la receta con ID ${id}`);
+        if (comentario === undefined)
+            throw new Error(`No se encontró el comentario con ID ${id}`);
         else {
             let user_liked = false;
             if (user)
@@ -108,9 +109,10 @@ export class Comentario {
     static getAllComentarios(id_receta, user) {
 
         const comentarios = this.#getAllStmt.all({ id_receta });
+
         comentarios.forEach(comentario => {
             if (user)
-                comentario.user_liked = Valoracion.usuarioYaHaValorado(id, user); // En este caso, hay que devolver si el usuario ha dado like porque, a diferencia de las recetas, 
+                comentario.user_liked = Valoracion.usuarioYaHaValorado(comentario.id, user); // En este caso, hay que devolver si el usuario ha dado like porque, a diferencia de las recetas, 
                                                                                   //a los comentarios se le puede dar like desede la misma lista
 
         });
@@ -120,14 +122,14 @@ export class Comentario {
 
     #id;
     user;
-    receta;
+    id_receta;
     valoracion; // Valoraciones de otros usuarios sobre el comentario
     descripcion;
     user_liked; // Indica si ha valorado el usuario el comentario (en caso de ser un comentario ya existente)
 
-    constructor(user, receta, valoracion = null, descripcion, id = null, user_liked = false) {
+    constructor(user, id_receta, valoracion = null, descripcion, id = null, user_liked = false) {
         this.user = user;
-        this.receta = receta;
+        this.id_receta = id_receta;
         this.valoracion = valoracion;
         this.descripcion = descripcion;
         this.#id = id;
@@ -190,7 +192,7 @@ export class Valoracion {
         });
     }
 
-    static retiraTodosValoracions(id_comentario) {
+    static retiraTodosValoraciones(id_comentario) {
         this.#removeAllStmt.run({
             id_comentario,
         });

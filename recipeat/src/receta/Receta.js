@@ -118,9 +118,9 @@ export class Receta {
 
      // Eliminar una receta por ID
      static deleteReceta(id) {
+        Like.retiraTodosLikes(id);
         const result = this.#deleteStmt.run({ id });
         if (result.changes === 0) throw new Error(`No se encontró la receta con ID ${id}`);
-        Like.retiraTodosLikes(id);
     }
 
     #id; // El id de la receta

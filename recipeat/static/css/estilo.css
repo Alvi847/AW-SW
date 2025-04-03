@@ -527,8 +527,31 @@ body::-webkit-scrollbar-thumb:hover {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); 
 }
 
-.receta-comentarios #cometarios-container{
-    display: none;
+.comentario-botones {
+    width: 25%;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-gap: 15%;
+}
+
+.receta-comentarios .comentarios-container{
+    overflow-y: scroll;
+    max-height: 10em;
+}
+
+.receta-comentarios #create-comentario {
+    padding-top: 5%;
+}
+
+.receta-comentarios #create-comentario input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: black;
 }
 
 @media (max-width: 767px) {

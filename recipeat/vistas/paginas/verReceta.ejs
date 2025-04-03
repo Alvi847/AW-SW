@@ -29,14 +29,8 @@
             <%= receta.modo_preparacion %>
         </p>
     </div>
-    <div class="receta-comentarios">
-        <h2>COMENTARIOS</h2>
 
 
-        <button id="carga-comentarios">Cargar Comentarios</button>
-
-        <div id="comentarios-container"></div>
-    </div>
     <div class="receta-likes">
         <p>Likes: <span id="likeCount">
                 <%= receta.likes %>
@@ -44,10 +38,10 @@
     </div>
     <div class="receta-botones">
         <p>
-            <% if (session.username) { %>
-                <form id="likeForm" action="/receta/like" method="POST">
+            <% if (session.login) { %>
+                <form id="receta-like-form" action="/receta/like" method="POST">
                     <input type="hidden" name="id" value="<%= receta.id %>">
-                    <button type="submit" id="likeButton">
+                    <button type="submit" id="receta-like-button">
                         <%= receta.user_liked ? '💔' : '❤️' %>
                     </button>
                 </form>
@@ -63,63 +57,112 @@
                         <% } %>
         </p>
     </div>
-</div>
-</div>
-
-
-<script> /* Esto es un script de js para hacer una carga dinámica de comentarios al pulsar el botón de cargar comentarios*/
-    document.getElementById("carga-comentarios").addEventListener("click", function () {
-        const recetaId = "<%= receta.id %>"; // Obtener el ID de la receta
-        const user = "<%= session.username %>"; //Vemos si el usuario está logueado
-
-        fetch(`/comentario/listaComentarios/${recetaId}`)
-            .then(response => response.json()) // Convertir respuesta a JSON
-            .then(comentarios => {
-                const container = document.getElementById("comentarios-container");
-                container.innerHTML = ""; // Limpiar comentarios previos
-                container.style.display = "flow";
-
-                if (comentarios.length === 0) {
-                    container.innerHTML = "<p>No hay comentarios aún.</p>";
-                }   
-                else
-                    comentarios.forEach(comentario => {
-                        let boton_like = " ";
-
-                        let user_liked = `❤️`;
-
-                        if(comentario.user_liked)
-                            user_liked = `💔`;
-
-                        if (user != null){
-                            boton_like = `
-                                <form id="likeForm" action="/comentario/like" method="POST">
-                                        <input type="hidden" name="id" value= ${comentario.id}>
-                                        <button type="submit" id="likeButton">
-                                            ${user_liked}
+    <div class="receta-comentarios">
+        <h2>COMENTARIOS</h2>
+        <div class="comentarios-container">
+            <% if (hayComentarios==false) { %>
+                <p>No hay comentarios aún.</p>
+                <% } else { %>
+                    <% comentarios.forEach((comentario)=> { %>
+                        <div class="comentario-card">
+                            <h3>
+                                <%= comentario.user %> dice:
+                            </h3>
+                            <p class="comentario-descripcion">
+                                <%= comentario.descripcion %>
+                            </p>
+                            <p class="comentario-valoracion">Valoración: <%= comentario.valoracion %> likes</p>
+                            <% if(session.login) { %>
+                                <div class="comentario-botones">
+                                    <form id="comentario-like-form" action="/comentario/like" method="POST">
+                                        <input type="hidden" name="id" value="<%= comentario.id %>">
+                                        <button type="submit" id="comentario-like-button">
+                                            <%= comentario.user_liked ? '💔' : '❤️' %>
                                         </button>
-                                </form>
-                            `;
-                        }
+                                    </form>
+                                    <% if(session.username===comentario.user || session.rol === "A") { %>
+                                        <form id="comentario-remove-form" action="/comentario/removeComentario"
+                                            method="POST">
+                                            <input type="hidden" name="id" value="<%= comentario.id %>">
+                                            <button type="submit" id="comentario-remove-button">
+                                                🗑️
+                                            </button>
+                                        </form>
+                                        <% } %>
+                                </div>
+                                <% } %>
+                        </div>
+                        <% }) %>
+                            <% } %>
+        </div>
+        <% if(session.login) { %>
+            <form id="create-comentario" action="/comentario/createComentario" method="POST">
+                <label>Contenido del comentario:</label><input type="text"
+                    name="descripcion"><!-- helpers.error(errores, 'descripcion') -->
+                <input type="hidden" name="id" value="<%= receta.id %>">
+                <button type="submit" id="comentario-create-button">
+                    Escribe un comentario
+                </button>
+            </form>
+            <% } %>
+    </div>
+</div>
 
-                        const comentarioHTML = `
-                            <div class="comentario-card">
-                                <h3>${comentario.user} dice:</h3>
-                                <p class="comentario-descripcion">${comentario.descripcion}</p>
-                                <p class="comentario-valoracion">Valoración: ${comentario.valoracion} likes</p>
-                                ${boton_like}
-                            </div>
-                        `;
-
-                        container.innerHTML += comentarioHTML;
-                    });
-
-                document.getElementById("carga-comentarios").style.display = "none";
-
-            })
-            .catch(error => {
-                console.error("Error cargando comentarios:", error);
-                document.getElementById("comentarios-container").innerHTML = "<p>Error al cargar comentarios.</p>";
-            });
-    });
+<!--SOLO QUEDA COMO ALGO PROVISIONAL, NO USAR-->
+<script>
+    /*Esto es un script de js para hacer una carga dinámica de comentarios al pulsar el botón de cargar comentarios*/
+    /*document.getElementById("carga-comentarios").addEventListener("click", function () {
+         const recetaId = "<%= receta.id %>"; // Obtener el ID de la receta
+         const user = "<%= session.username %>"; //Vemos si el usuario está logueado
+ 
+         fetch(`/comentario/listaComentarios/${recetaId}`)
+             .then(response => response.json()) // Convertir respuesta a JSON
+             .then(comentarios => {
+                 const container = document.getElementById("comentarios-container");
+                 container.innerHTML = ""; // Limpiar comentarios previos
+                 container.style.display = "flow";
+ 
+                 if (comentarios.length === 0) {
+                     container.innerHTML = "<p>No hay comentarios aún.</p>";
+                 }   
+                 else
+                     comentarios.forEach(comentario => {
+                         let boton_like = " ";
+ 
+                         let user_liked = `❤️`;
+ 
+                         if(comentario.user_liked)
+                             user_liked = `💔`;
+ 
+                         if (user != null){
+                             boton_like = `
+                                 <form id="likeForm" action="/comentario/like" method="POST">
+                                         <input type="hidden" name="id" value= ${comentario.id}>
+                                         <button type="submit" id="likeButton">
+                                             ${user_liked}
+                                         </button>
+                                 </form>
+                             `;
+                         }
+ 
+                         const comentarioHTML = `
+                             <div class="comentario-card">
+                                 <h3>${comentario.user} dice:</h3>
+                                 <p class="comentario-descripcion">${comentario.descripcion}</p>
+                                 <p class="comentario-valoracion">Valoración: ${comentario.valoracion} likes</p>
+                                 ${boton_like}
+                             </div>
+                         `;
+ 
+                         container.innerHTML += comentarioHTML;
+                     });
+ 
+                 document.getElementById("carga-comentarios").style.display = "none";
+ 
+             })
+             .catch(error => {
+                 console.error("Error cargando comentarios:", error);
+                 document.getElementById("comentarios-container").innerHTML = "<p>Error al cargar comentarios.</p>";
+             });
+     });*/
 </script>

@@ -45,7 +45,7 @@ app.use('/comentario', comentariosRouter);
 app.get("/imagen/:id", (request, response) => {
     const __filename = fileURLToPath(import.meta.url);  // He visto que esto es necesario para poder obtener la ruta del script en ES
     let pathImg = join( dirname(__filename), "/receta/uploads", request.params.id);
-    console.log("Recibida peticion para la foto: ", pathImg);
+    request.log.debug("Recibida peticion para la foto: '%s'", pathImg);
     response.sendFile(pathImg);
 });
 

@@ -1,9 +1,12 @@
 import { Context } from 'express-validator/lib/context.js';
 import { Comentario, Valoracion } from './Comentario.js';
 import { body } from 'express-validator';
+import { Receta } from '../receta/Receta.js';
+import { render } from '../utils/render.js';
 
 // Ver los comentarios
-export function viewComentarios(req, res) {
+// ACTUALMENTE EN DESUSO
+/*export function viewComentarios(req, res) {
     const id_receta = req.params.id; // Id de la receta del comentario
     const user = req.session.username;
 
@@ -12,56 +15,75 @@ export function viewComentarios(req, res) {
     req.log.debug("Cargando todos los comentarios de la receta '%i'", id_receta);
     
     const comentarios = Comentario.getAllComentarios(id_receta, user);
-    /*res.render('pagina', {
-        contenido,
-        session: req.session,
-    });*/
 
     res.send(comentarios);
-}
+}*/
 
 // Crear un comentario (mostrar el formulario de creación)
-export function createComentario(req, res) {
+// NO SE USA
+/*export function createComentario(req, res) {
     let contenido;
+    const { id } = req.body;
+    const user = req.session.username;
 
     if (req.session == null || !req.session.login) {
-        contenido = 'paginas/verReceta/${comentario.id_receta}';
+        contenido = '/receta/verReceta';
+        req.log.debug("El usuario no está logueado, no se puede crear un comentario");
     }
     else {
         const id_receta = req.params.id_receta; // Id de la receta del comentario
 
-        contenido = 'paginas/createComentario/${comentario.id_receta}'; // URL del formulario
+        contenido = 'paginas/createComentario'; // URL del formulario
     }
-    res.render('pagina', {
-        contenido,
-        session: req.session
+
+    const receta = Receta.getRecetaById(id, user);
+
+    const comentarios = Comentario.getAllComentarios(id, user);
+
+    let hayComentarios = true;
+    if (comentarios.length == 0)
+        hayComentarios = false;
+
+    render(req, res, contenido, {
+        receta,
+        session: req.session,
+        hayComentarios,
+        comentarios
     });
-}
+}*/
 
-// Agregar un nuevo comentario (procesar el formulario)
+// Agregar un nuevo comentario
 export function doCreateComentario(req, res) {
-    const { descripcion, receta, user } = req.body;
-    const nuevoComentario = new Comentario(user, id_receta, null, descripcion, null);
+    const { descripcion, id } = req.body;
+    const user = req.session.username;
 
-    console.log("Datos recibidos: ", nuevoComentario);
+    const contenido = 'paginas/verReceta';
 
-    // Insertar comentario en la base de datos
-
-    try {
-        let receta = Comentario.insertComentario(nuevaReceta);
-
-        // Redirigir o devolver un mensaje de éxito
-        res.redirect('/receta/listaRecetas');
+    if (req.session == null || req.session.login === undefined) {
+        req.log.error("El usuario no esta logueado, no se puede crear un comentario");
     }
-    catch (e) {
-        console.log(e);
-        let contenido = 'paginas/createComentario';
-        res.render('pagina', {
-            contenido,
-            session: req.session,
-            error: 'No se ha podido crear la receta'
-        });
+    else {
+        const nuevoComentario = new Comentario(user, id, null, descripcion, null);
+        console.log("Datos recibidos: ", nuevoComentario);
+
+        try {
+            // Insertar comentario en la base de datos
+            Comentario.insertComentario(nuevoComentario);
+        }
+        catch (e) {
+            console.log(e);
+        }
     }
+    const receta = Receta.getRecetaById(id, user);
+
+    const comentarios = Comentario.getAllComentarios(id, user);
+
+    let hayComentarios = true;
+    if (comentarios.length == 0)
+        hayComentarios = false;
+
+    // Redirigir al finalizar
+    res.redirect(`/receta/verReceta/${id}`);
 }
 
 // Eliminar un comentario
@@ -69,18 +91,41 @@ export function deleteComentario(req, res) {
     const { id } = req.body;
     const user = req.session.username;
 
-    if (id && user != null) {
-        const comentario = Comentario.getComentarioById(id, null);
-        if (user === comentario.user) {
+    let comentario = null
 
-            Comentario.deleteComentario(id); // Elimina la receta por ID
-            res.res.redirect(`/receta/verReceta/${comentario.id_receta}`); // TODO: Debería ser aquí?? Ahora redirige a la página de la receta  
+    if (id != null && req.session.login) {
+        try{
+            comentario = Comentario.getComentarioById(id, null);
         }
-        else
-            res.status(403)
+        catch(e){
+            req.log.error("Error interno al intentar eliminar el comentario '%i': '%s'", id, e.message);
+            res.status(500).send();
+        }
+        if (comentario != null && (user === comentario.user || req.session.rol === "A")) {
+            
+            try {
+                Comentario.deleteComentario(id); // Elimina el comentario por ID
+                req.log.info("Comentario '%i' eliminado con exito", id);
+            }
+            catch (e) {
+                req.log.error("Error interno al intentar eliminar el comentario '%i': '%s'", id, e.message);
+                res.status(500).send();
+            }
+            res.redirect(`/receta/verReceta/${comentario.id_receta}`); // Ahora redirige a la página de la receta  
+        }
+        else if(receta != null) {
+            req.log.error("Error al elminar el comentario '%i', de '%s': acceso no permitido al usuario '%s'", id, comentario.user, user);
+            res.status(403);
+        }
     }
-    else
-        res.status(400);
+    else if (!id) {
+        req.log.error("Error al elminar un comentario: id inválido");
+        res.status(400).send();
+    }
+    else {
+        req.log.error("Error al eliminar el comentario '%i': Usuario no registrado", id);
+        res.status(403).send();
+    }
 }
 
 // Añadir una valoración al comentario (He usado un formato de likes, pero si queremos poner estrellas ponemos estrellas)
@@ -88,7 +133,7 @@ export function valorarComentario(req, res) {
     const { id } = req.body;
     const user = req.session.username
 
-    if (id && user != null) {
+    if (id && req.session.login) {
         const id_num = parseInt(id, 10); // 🔹 Convertir a número
 
         try {
@@ -97,12 +142,17 @@ export function valorarComentario(req, res) {
             res.redirect(`/receta/verReceta/${comentario.id_receta}`);
         }
         catch (e) {
+            req.log.error("Error al añadir un like al comentario: '%s'", e.message);
             res.status(500).send();
         }
     }
-    else if (!id)
+    else if (!id) {
+        req.log.error("Error al añadir un like al comentario: id inválido");
         res.status(400).send();
-    else
+    }
+    else {
+        req.log.error("Error al añadir un like al comentario: Usuario no registrado");
         res.status(403).send();
+    }
 
 }

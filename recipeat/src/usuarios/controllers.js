@@ -100,7 +100,7 @@ export async function doRegistro(req, res) {
         req.session.login = true;
         req.session.nombre = usuario.nombre;
         req.session.rol = usuario.rol;
-
+        req.session.username = usuario.username;
         return res.redirect('/usuarios/home');
     } catch (e) {
         let error = 'No se ha podido crear el usuario';
