@@ -89,6 +89,13 @@ export class Comentario {
         if (result.changes === 0) throw new Error(`No se encontró el comentario con ID ${id}`);
     }
 
+    static deleteAllComentarios(id_receta){
+        const comentarios = this.getAllComentarios(id_receta, null);
+
+        comentarios.forEach(comentario => {
+            this.deleteComentario(comentario.id);
+        });
+    }
 
     // Obtener una comentario por ID
     static getComentarioById(id, user) {

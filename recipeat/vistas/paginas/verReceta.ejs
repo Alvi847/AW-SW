@@ -71,7 +71,11 @@
                             <p class="comentario-descripcion">
                                 <%= comentario.descripcion %>
                             </p>
-                            <p class="comentario-valoracion">Valoración: <%= comentario.valoracion %> likes</p>
+                            <% if( comentario.valoracion != 1) { %>
+                                <p class="comentario-valoracion">Valoración: <%= comentario.valoracion %> likes</p>
+                            <% } else { %>
+                                <p class="comentario-valoracion">Valoración: <%= comentario.valoracion %> like</p>
+                            <% } %>
                             <% if(session.login) { %>
                                 <div class="comentario-botones">
                                     <form id="comentario-like-form" action="/comentario/like" method="POST">
@@ -97,7 +101,7 @@
         </div>
         <% if(session.login) { %>
             <form id="create-comentario" action="/comentario/createComentario" method="POST">
-                <label>Contenido del comentario:</label><input type="text"
+                <label>Escribe aquí tu comentario:</label><input type="text"
                     name="descripcion"><!-- helpers.error(errores, 'descripcion') -->
                 <input type="hidden" name="id" value="<%= receta.id %>">
                 <button type="submit" id="comentario-create-button">

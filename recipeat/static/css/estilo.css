@@ -550,7 +550,7 @@ body::-webkit-scrollbar-thumb:hover {
     margin-bottom: 16px;
     border: none;
     border-radius: 6px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(72, 71, 71, 0.2);
     color: black;
 }
 

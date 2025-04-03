@@ -1,3 +1,5 @@
+import { Comentario } from "../comentario/Comentario.js";
+
 export class Receta {
 
     static #getAllStmt = null;
@@ -118,6 +120,7 @@ export class Receta {
 
      // Eliminar una receta por ID
      static deleteReceta(id) {
+        Comentario.deleteAllComentarios(id);
         Like.retiraTodosLikes(id);
         const result = this.#deleteStmt.run({ id });
         if (result.changes === 0) throw new Error(`No se encontró la receta con ID ${id}`);
