@@ -11,13 +11,14 @@ export class Usuario {
     static #getByUsernameStmt = null;
     static #insertStmt = null;
     static #updateStmt = null;
-
+    static #getUserByIdStmt = null;
     static initStatements(db) {
         if (this.#getByUsernameStmt !== null) return;
 
         this.#getByUsernameStmt = db.prepare('SELECT * FROM Usuarios WHERE username = @username');
         this.#insertStmt = db.prepare('INSERT INTO Usuarios(username, password, nombre, rol) VALUES (@username, @password, @nombre, @rol)');
         this.#updateStmt = db.prepare('UPDATE Usuarios SET username = @username, password = @password, rol = @rol, nombre = @nombre WHERE id = @id');
+        this.#getUserByIdStmt = db.prepare( 'SELECT * FROM Usuarios WHERE id = @id');
     }
 
     static getUsuarioByUsername(username) {
@@ -27,6 +28,15 @@ export class Usuario {
         const { password, rol, nombre, id } = usuario;
 
         return new Usuario(username, password, nombre, rol, id);
+    }
+
+    static getUsuarioById( iduser ) {
+        const usuario = this.#getUserByIdStmt.get({ iduser });
+        if (usuario === undefined) throw new UsuarioNoEncontrado(username);
+
+        const { username, password, rol, nombre } = usuario; //quiza quitar el pasword de aqui
+
+        return new Usuario(username, password, nombre, rol, iduser);
     }
 
     static #insert(usuario) {
