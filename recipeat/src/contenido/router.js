@@ -6,9 +6,9 @@ import asyncHandler from 'express-async-handler';
 
 const contenidoRouter = express.Router();
 
-contenidoRouter.use(autenticado('/usuarios/login'));
-
 contenidoRouter.get('/normal', asyncHandler(viewContenidoNormal));
+
+contenidoRouter.use(autenticado('/usuarios/login'));
 
 contenidoRouter.get('/admin', tieneRol(RolesEnum.ADMIN), asyncHandler(viewContenidoAdmin));
 
