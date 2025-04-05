@@ -1,29 +1,146 @@
 /* Estilos para la sección de "¿Cómo funciona RecipEat?" */
 .container-comofunciona {
-    background-color: #1a1a1a; /* Fondo oscuro para resaltar el contenido */
+    background-color: transparent; /* Fondo transparente */
     padding: 40px 20px; /* Espaciado interno */
     text-align: center; /* Centrar el texto */
     border-radius: 8px; /* Bordes redondeados */
     margin-top: 100px; /* Margen superior*/
+    margin-left: 140px;
     max-width: 800px; /* Ancho máximo para la sección */
 }
 
-header h1 {
+.titulo {
     font-family: 'Montserrat', sans-serif; /* Fuente para el título */
     font-size: 36px; /* Tamaño de fuente del título */
     color: #f8c471; /* Color dorado para el título */
     margin-bottom: 10px; /* Espacio debajo del título */
 }
 
-header .subtitulo {
+.subtitulo {
     font-family: 'Poppins', sans-serif; /* Fuente para el subtítulo */
     font-size: 20px; /* Tamaño de fuente del subtítulo */
     color: #ffffff; /* Color blanco para el subtítulo */
     margin-top: 0; /* Sin margen superior */
 }
 
-/* Efecto de hover para el título */
-header h1:hover {
-    color: #e67e22; /* Cambia a un color naranja más vibrante al pasar el mouse */
-    transition: color 0.3s ease; /* Transición suave para el cambio de color */
+.menu-anclas {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.menu-anclas a {
+    padding: 8px 15px;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    border: 4px solid #ffbf57; /* Borde invisible inicial */
+}
+
+.menu-anclas a:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-2px);    
+}
+
+/* Estilo para el contenedor principal */
+.container-explicacion {
+    display: flex; /* Usar flexbox para alinear elementos */
+    align-items: flex-start; /* Alinear elementos al inicio */
+    max-width: 1150px; /* Ancho máximo del contenedor */
+    margin: 0 auto; /* Centrar el contenedor */
+    padding: 10px; /* Espaciado interno */
+    background-color: transparent; /* Color de fondo */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Estilo para la sección de tipos de usuarios */
+.tipos-usuarios {
+    flex: 1; /* Permitir que el contenido ocupe el espacio disponible */
+}
+
+/* Estilo para el título de la sección */
+.tipos-usuarios h2 {
+    font-size: 23px; /* Tamaño de fuente */
+    color: #ffffff; /* Color del texto */
+    margin-top: 100px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Estilo para la lista */
+.tipos-usuarios ul {
+    font-family: 'Montserrat',sans-serif;
+    margin-top: 20px;
+    margin-left: 20px;
+    list-style-type: none; /* Quitar viñetas */
+    padding: 0; /* Quitar padding */
+}
+
+.tipos-usuarios li {
+    position: relative;
+    padding-left: 30px; /* Espacio para el anillo */
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.tipos-usuarios li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 4px; /* Ajusta para alinear verticalmente */
+    width: 7px;
+    height: 7px;
+    border: 3px solid #f8c471; /* Color dorado */
+    border-radius: 50%; /* Hace que sea un círculo */
+    background-color: transparent;
+}
+
+/* Estilo para los elementos destacados */
+.highlight {
+    font-weight: bold; /* Negrita */
+    color: #f8c471; /* Color azul */
+}
+
+/* Estilo para la imagen */
+.container-explicacion img {
+    max-width: 550px; /* Ancho máximo de la imagen */
+    height: auto; /* Altura automática para mantener la proporción */
+    border-radius: 8px; /* Bordes redondeados */
+    margin-left: 17px;
+}
+
+/* Estilo para el botón de registro */
+.btn-reg {
+    display: inline-block; /* Permitir que el botón tenga un tamaño adecuado */
+    padding: 10px 20px; /* Espaciado interno (arriba/abajo, izquierda/derecha) */
+    background-color: #ff9d00; /* Color de fondo dorado */
+    color: #fff; /* Color del texto blanco */
+    font-size: 18px; /* Tamaño de fuente */
+    font-weight: bold; /* Negrita */
+    text-align: center; /* Centrar el texto */
+    text-decoration: none; /* Quitar subrayado */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s, transform 0.3s; /* Transiciones suaves */
+    margin-top: 15px; /* Espaciado superior */
+    margin-left: 170px;
+}
+
+/* Efecto al pasar el ratón sobre el botón */
+.btn-reg:hover {
+    background-color: #ffbd3a; /* Color de fondo más claro al pasar el ratón */
+    transform: scale(1.05); /* Aumentar ligeramente el tamaño */
+}
+
+/* Efecto al hacer clic en el botón */
+.btn-reg:active {
+    transform: scale(0.95); /* Reducir ligeramente el tamaño al hacer clic */
 }
