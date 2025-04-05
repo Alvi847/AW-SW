@@ -21,10 +21,20 @@
         </ul>       
         <a href="/usuarios/registro" class="btn-reg">REGISTRARME</a>
     </section>
-    <img src="/img/receta_no_registrado.png" alt="ver receta sin estar registrado">
+     <!-- Contenedor para las dos imágenes en columna -->
+     <div class="imagenes-verticales">
+        <img src="/img/buscar_receta.png" alt="buscar receta">
+        <img src="/img/receta_no_registrado.png" alt="ver receta sin estar registrado">        
+    </div>
 </div>
-    <section id="usuarios-registrados" class="tipos-usuarios">
-        <h2>👤 PARA USUARIOS REGISTRADOS</h2>
+<div class="container-explicacion">    
+     <!-- Contenedor para las dos imágenes en columna -->
+     <div class="imagenes-verticales">          
+        <img src="/img/receta_registrado.png" alt="ver receta registrado">
+    </div>
+    
+    <section class="tipos-usuarios">
+        <h2 id="usuarios-registrados">👤 PARA USUARIOS REGISTRADOS</h2>
         
         <h3>📌 Interacción con Recetas</h3>
         <ul>
@@ -40,11 +50,11 @@
         </ul>
         
         <h3>🛒 Lista de Compra Automática</h3>
-        <ol>
+        <ul>
             <li>Haz clic en el botón <span class="highlight">"Comprar Ingredientes"</span> (en la página de la receta).</li>
             <li>Revisa la lista generada automáticamente.</li>
             <li>Confirma el pedido y un <span class="highlight">proveedor te los entregará</span> en tu domicilio.</li>
-        </ol>
+        </ul>
         
         <h3>📱 Visualización de Recetas</h3>
         <p>Al hacer clic en una receta, verás:</p>
@@ -53,25 +63,16 @@
             <li><span class="highlight">📝 Ingredientes</span> y <span class="highlight">pasos de preparación</span>.</li>
             <li><span class="highlight">👍 Likes</span> y <span class="highlight">comentarios</span> de la comunidad.</li>
         </ul>
-        
-        <div class="visual-flow">
-            <h3>🔍 Flujo de Uso</h3>
-            <div class="flow-steps">
-                <div class="step">1</div>
-                <div class="arrow">→</div>
-                <div class="step">2</div>
-                <div class="arrow">→</div>
-                <div class="step">3</div>
-            </div>
-            <p>Búsqueda → Like/Comentario → Lista de compra</p>
-        </div>
     </section>
+</div>
+<div class="container-explicacion">
 
     <section id="administradores" class="tipos-usuarios">
-        <h2>👨‍🍳 PARA ADMINISTRADORES</h2>
+        <h2>🛡️ PARA ADMINISTRADORES</h2>
         <ul>
-            <li><span class="highlight">🛡️ Moderan contenido</span> (eliminan recetas o comentarios inapropiados).</li>
-            <li><span class="highlight">🔧 Gestionan usuarios</span> y mantienen la comunidad segura.</li>
+            <li><span class="highlight">Moderan contenido</span> (eliminan recetas o comentarios inapropiados).</li>
+            <li><span class="highlight">Gestionan usuarios</span> y mantienen la comunidad segura.</li>
         </ul>
     </section>
+</div>
 </div>

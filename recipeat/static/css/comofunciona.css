@@ -6,7 +6,7 @@
     border-radius: 8px; /* Bordes redondeados */
     margin-top: 100px; /* Margen superior*/
     margin-left: 140px;
-    max-width: 800px; /* Ancho máximo para la sección */
+    max-width: 900px; /* Ancho máximo para la sección */
 }
 
 .titulo {
@@ -52,9 +52,9 @@
 /* Estilo para el contenedor principal */
 .container-explicacion {
     display: flex; /* Usar flexbox para alinear elementos */
-    align-items: flex-start; /* Alinear elementos al inicio */
-    max-width: 1150px; /* Ancho máximo del contenedor */
-    margin: 0 auto; /* Centrar el contenedor */
+    align-items: center; /* Alinear elementos al inicio */
+    max-width: 1200px; /* Ancho máximo del contenedor */
+    margin: 20px auto; /* Centrar el contenedor */
     padding: 10px; /* Espaciado interno */
     background-color: transparent; /* Color de fondo */
     border-radius: 8px; /* Bordes redondeados */
@@ -64,6 +64,7 @@
 /* Estilo para la sección de tipos de usuarios */
 .tipos-usuarios {
     flex: 1; /* Permitir que el contenido ocupe el espacio disponible */
+    margin-left: 30px;
 }
 
 /* Estilo para el título de la sección */
@@ -74,11 +75,20 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+.tipos-usuarios h3{
+    
+    font-size: 20px; /* Tamaño de fuente */
+    margin-top: 20px;
+    margin-left: 20px;
+    color: #ffffff; /* Color del texto */
+    font-family: 'Montserrat', sans-serif;
+}
+
 /* Estilo para la lista */
 .tipos-usuarios ul {
     font-family: 'Montserrat',sans-serif;
     margin-top: 20px;
-    margin-left: 20px;
+    margin-left: 40px;
     list-style-type: none; /* Quitar viñetas */
     padding: 0; /* Quitar padding */
 }
@@ -90,6 +100,13 @@
     font-size: 15px;
     color: white;
     font-family: 'Montserrat', sans-serif;
+}
+
+.tipos-usuarios p{
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 10px;
+    margin-left: 30px;
 }
 
 .tipos-usuarios li::before {
@@ -130,8 +147,8 @@
     text-decoration: none; /* Quitar subrayado */
     border-radius: 5px; /* Bordes redondeados */
     transition: background-color 0.3s, transform 0.3s; /* Transiciones suaves */
-    margin-top: 15px; /* Espaciado superior */
-    margin-left: 170px;
+    margin-top: 35px; /* Espaciado superior */
+    margin-left: 225px;
 }
 
 /* Efecto al pasar el ratón sobre el botón */
@@ -143,4 +160,17 @@
 /* Efecto al hacer clic en el botón */
 .btn-reg:active {
     transform: scale(0.95); /* Reducir ligeramente el tamaño al hacer clic */
+}
+
+.imagenes-verticales {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espacio entre las imágenes */
+    margin-left: 17px;
+}
+
+.imagenes-verticales img {
+    max-width: 480px;
+    height: auto;
+    border-radius: 8px;
 }
