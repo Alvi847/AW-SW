@@ -1,3 +1,12 @@
+<% /** Muestra las operaciones de las recetas si el usuario esta logueado */ 
+function mostrarBotonRegistro(session){
+	if (session == null || !session.login){ 
+		return `				
+        <a href="/usuarios/registro" class="btn-reg">REGISTRARME</a>	
+				`;
+    }
+}
+%> 
  <header>
     <div class="container-comofunciona">
         <h1 class="titulo">👨‍🍳 ¿CÓMO FUNCIONA RECIPEAT?</h1>
@@ -18,8 +27,8 @@
             <li><span class="highlight">Explora recetas públicas</span> sin restricciones.</li>
             <li><span class="highlight">Visualiza detalles de recetas</span> (ingredientes, preparación, imágenes).</li>
             <li><span class="highlight">Necesitas registrarte</span> para interactuar (likes, comentarios, recetas).</li>
-        </ul>       
-        <a href="/usuarios/registro" class="btn-reg">REGISTRARME</a>
+        </ul>               
+		<%- mostrarBotonRegistro(session)%>
     </section>
      <!-- Contenedor para las dos imágenes en columna -->
      <div class="imagenes-verticales">
