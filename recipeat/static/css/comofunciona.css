@@ -52,13 +52,25 @@
 /* Estilo para el contenedor principal */
 .container-explicacion {
     display: flex; /* Usar flexbox para alinear elementos */
+    flex-direction: row;
     align-items: center; /* Alinear elementos al inicio */
     max-width: 1200px; /* Ancho máximo del contenedor */
     margin: 20px auto; /* Centrar el contenedor */
     padding: 10px; /* Espaciado interno */
     background-color: transparent; /* Color de fondo */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    border-radius: 8px; /* Bordes redondeados */    
+}
+
+/* Estilo para el contenedor principal */
+.container-explicacion-0 {
+    display: flex; /* Usar flexbox para alinear elementos */
+    flex-direction: row-reverse;
+    align-items: center; /* Alinear elementos al inicio */
+    max-width: 1200px; /* Ancho máximo del contenedor */
+    margin: 20px auto; /* Centrar el contenedor */
+    padding: 10px; /* Espaciado interno */
+    background-color: transparent; /* Color de fondo */
+    border-radius: 8px; /* Bordes redondeados */    
 }
 
 /* Estilo para la sección de tipos de usuarios */
@@ -173,4 +185,83 @@
     max-width: 480px;
     height: auto;
     border-radius: 8px;
+}
+
+/* Estilos generales para pantallas móviles (máximo 600px) */
+@media (max-width: 767px) {
+    .container-comofunciona {
+        padding: 20px 10px; /* Reducir el espaciado interno */
+        margin-left: 10px; /* Ajustar margen */
+    }
+
+    .container-explicacion, .container-explicacion-0{
+        flex-direction: column; /* Poner contenido en columna */
+        align-items: center; /* Centrar horizontalmente */
+        gap: 20px; /* Espacio entre elementos */
+        padding: 5px 20px;
+        margin: 20px auto;
+    }
+
+    .titulo {
+        font-size: 18px; /* Reducir tamaño de fuente del título */
+        margin-right: 6px;
+    }
+
+    .subtitulo {
+        font-size: 13px; /* Reducir tamaño de fuente del subtítulo */
+        margin-right: 10px;
+    }
+
+    .menu-anclas {
+        flex-direction: column; /* Cambiar a columna */
+        gap: 10px; /* Reducir espacio entre enlaces */
+        margin-right: 6px;
+    }
+
+    .tipos-usuarios{
+        margin-left: 0;
+    }
+
+    .tipos-usuarios h2 {
+        margin-top: 20px;
+        margin-left: 4px;
+        font-size: 16px; /* Reducir tamaño de fuente */
+    }
+
+    .tipos-usuarios h3 {
+        font-size: 15px; /* Reducir tamaño de fuente */
+        margin-left: 13px;
+    }
+
+    .tipos-usuarios li {
+        font-size: 14px; /* Reducir tamaño de fuente de la lista */
+    }
+
+    .tipos-usuarios ul{
+        margin-left: 30px;
+    }
+
+    .btn-reg {
+        font-size: 16px; /* Reducir tamaño de fuente del botón */
+        margin-left: 96px; /* Centrar el botón */
+        margin-top: 20px; /* Ajustar margen superior */
+    }
+
+   .imagenes-verticales {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.imagenes-verticales img {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    border-radius: 8px;
+    margin-left: 0;
+    margin-right: 15px;
+    margin-top: 15px;
+}
 }
