@@ -1,9 +1,20 @@
-<h1>Bienvenido a tu perfil, <%= usuario.nombre %></h1>
-    
-    <h2>Detalles del usuario:</h2>
-    <p><strong>Nombre:</strong> <%= usuario.nombre %></p>
-    <p><strong>Username:</strong> <%= usuario.username %></p>
-    <p><strong>Email:</strong> <%= usuario.email %></p>
-    
-
-    <a href="/usuarios/logout">Cerrar sesión</a>
+<div class="perfil-card-container">
+    <div class="perfil-card">
+      <div class="perfil-foto">
+        <img src="/ruta/a/tu/foto.jpg" alt="Foto de perfil">
+      </div>
+      <div class="perfil-detalles">
+        <h1>Bienvenido a tu perfil, <%= usuario.nombre %></h1>
+        <h2>Detalles del usuario:</h2>
+        <p><strong>Nombre:</strong> <%= usuario.nombre %></p>
+        <p><strong>Username:</strong> <%= usuario.username %></p>
+        <p><strong>Email:</strong> <%= usuario.email %></p>
+        <p><strong>Contraseña:</strong> <%= usuario.password %></p>
+        <div class="botones-perfil">
+          <a href="/usuarios/editar" class="editar">Editar perfil</a>
+          <a href="/usuarios/logout" class="logout">Cerrar sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
