@@ -35,7 +35,7 @@ export async function doLogin(req, res) {
         req.session.rol = usuario.rol;
 
         res.setFlash(`Encantado de verte de nuevo: ${usuario.nombre}`);
-        return res.redirect('/usuarios/home');
+        return res.redirect('/');
 
     } catch (e) {
         const datos = matchedData(req);
