@@ -16,8 +16,8 @@ export class Usuario {
         if (this.#getByUsernameStmt !== null) return;
 
         this.#getByUsernameStmt = db.prepare('SELECT * FROM Usuarios WHERE username = @username');
-        this.#insertStmt = db.prepare('INSERT INTO Usuarios(username, password, nombre, rol) VALUES (@username, @password, @nombre, @rol)');
-        this.#updateStmt = db.prepare('UPDATE Usuarios SET username = @username, password = @password, rol = @rol, nombre = @nombre WHERE id = @id');
+        this.#insertStmt = db.prepare('INSERT INTO Usuarios(username, password, nombre, rol, email) VALUES (@username, @password, @nombre, @rol, @email)');
+        this.#updateStmt = db.prepare('UPDATE Usuarios SET username = @username, password = @password, rol = @rol, nombre = @nombre, email = @email WHERE id = @id');
         this.#getUserByIdStmt = db.prepare( 'SELECT * FROM Usuarios WHERE id = @id');
     }
 
@@ -25,18 +25,18 @@ export class Usuario {
         const usuario = this.#getByUsernameStmt.get({ username });
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
 
-        const { password, rol, nombre, id } = usuario;
+        const { password, rol, nombre, id, email } = usuario;
 
-        return new Usuario(username, password, nombre, rol, id);
+        return new Usuario(username, password, nombre, rol, id, email);
     }
 
     static getUsuarioById( iduser ) {
         const usuario = this.#getUserByIdStmt.get({ iduser });
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
 
-        const { username, password, rol, nombre } = usuario; //quiza quitar el pasword de aqui
+        const { username, password, rol, nombre, email } = usuario; //quiza quitar el pasword de aqui
 
-        return new Usuario(username, password, nombre, rol, iduser);
+        return new Usuario(username, password, nombre, rol, iduser, email);
     }
 
     static #insert(usuario) {
@@ -46,7 +46,8 @@ export class Usuario {
             const password = usuario.#password;
             const nombre = usuario.nombre;
             const rol = usuario.rol;
-            const datos = {username, password, nombre, rol};
+            const email = usuario.#email;
+            const datos = {username, password, nombre, rol, email};
 
             result = this.#insertStmt.run(datos);
 
@@ -66,7 +67,8 @@ export class Usuario {
         const password = usuario.#password;
         const nombre = usuario.nombre;
         const rol = usuario.rol;
-        const datos = {username, password, nombre, rol, id};
+        const email = usuario.#email;
+        const datos = {username, password, nombre, rol, email, id};
 
         const result = this.#updateStmt.run(datos);
         if (result.changes === 0) throw new UsuarioNoEncontrado(username);
@@ -99,16 +101,23 @@ export class Usuario {
     #id;
     #username;
     #password;
+    #email;
     rol;
     nombre;
 
-    constructor(username, password, nombre, rol = RolesEnum.USUARIO, id = null) {
+    constructor(username, password, nombre, rol = RolesEnum.USUARIO, id = null, email = '') {
         this.#username = username;
         this.#password = password;
         this.nombre = nombre;
         this.rol = rol;
         this.#id = id;
+        this.#email = email;
     }
+
+    get email() {
+        return this.#email;
+      }
+      
 
     get id() {
         return this.#id;
