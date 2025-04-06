@@ -307,15 +307,7 @@ fieldset {
     border-radius: 10px;
 }
 
-.lista-recetas {
-    display: flex;
-    margin-top: 15%;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-/* Scrollbar de la lista de recetas. IMPORTANTE: Con Webkit sólo funciona en algunos navegadores */
+/* Scrollbar, usado principalmente en las listas de recetas y comentarios. IMPORTANTE: Con Webkit sólo funciona en algunos navegadores */
 body::-webkit-scrollbar {
     width: 12px;
 }

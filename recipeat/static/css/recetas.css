@@ -2,8 +2,19 @@
 Hoja de estilos para las vistas de la lista de recetas y las páginas de las recetas
 */
 
-.receta-ingredientes{ 
-    visibility: "hidden"; /*Cuando se implemente la compra de ingredientes se mostrará*/
+.receta-ingredientes {
+    /*Cuando se implemente la compra de ingredientes se mostrará*/
+    visibility: hidden;
+}
+
+/* Estilo del contenedor de la lista de recetas*/
+.lista-recetas {
+    display: flex;
+    margin-top: 15%;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 100px;
 }
 
 /* Estilos para el buscador */
@@ -11,7 +22,7 @@ Hoja de estilos para las vistas de la lista de recetas y las páginas de las rec
     display: flex;
     position: relative;
     margin-bottom: 20px;
-    width: 75%;
+    width: 65%;
     padding: 10px;
     font-size: 16px;
     border: 2px solid #ccc;
@@ -58,6 +69,9 @@ Hoja de estilos para las vistas de la lista de recetas y las páginas de las rec
     margin-bottom: 2.5%;
     background-color: #ccc;
     overflow: hidden;
+    max-height: 20vw;
+    font-family: 'Montserrat', sans-serif;
+    
 }
 
 
@@ -65,6 +79,7 @@ Hoja de estilos para las vistas de la lista de recetas y las páginas de las rec
     text-decoration: none;
     color: black;
     width: 100%;
+    max-height: inherit;
 }
 
 .receta-card:hover {
@@ -78,33 +93,26 @@ Hoja de estilos para las vistas de la lista de recetas y las páginas de las rec
     width: 100%;
     display: grid;
     grid-template-columns: 33% 66%;
-}
-
-.receta-card .receta-info {
-    margin-left: 10%;
-    font-family: 'Montserrat', sans-serif;
-
-}
-
-.receta-card .receta-info h3 {
-    /*TODO: estilizar*/
-    font-family: 'Montserrat', sans-serif;
+    max-height: inherit;
 }
 
 .receta-card .resumen {
-    /*TODO: estilizar*/
-    font-family: 'Montserrat', sans-serif;
+    /*Esto se asegura de cambiar de línea si se sale de la anchura*/
+    overflow-wrap: break-word;
+    max-width: 100vw;
+    overflow-y: hidden;
 }
 
-fieldset .error{
+fieldset .error {
     color: red;
 }
 
 .receta-card .receta-imagen {
     position: relative;
     border-radius: 10px;
-    height: auto;
+    height: 100%;
     max-width: 100%;
+    max-height: inherit;
 }
 
 .buscador .input input {
@@ -129,17 +137,18 @@ fieldset .error{
     border-radius: 12px;
     background-color: #ccc;
     width: 90vw;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .receta-vista .receta-detalle {
     display: flex;
     padding: 2%;
+    padding-right: 20%;
     border-radius: inherit;
     flex-direction: row;
     align-items: center;
     gap: 5%;
     max-width: 100%;
-    justify-content: center;
 }
 
 .receta-vista .receta-detalle .receta-imagen {
@@ -150,22 +159,29 @@ fieldset .error{
 }
 
 .receta-vista .receta-detalle .receta-info {
+    display: flex;
+    flex-direction: column;
     border-radius: inherit;
     width: 100%;
-    max-width: fit-content;
+    max-width: inherit;
 }
 
-.receta-vista .receta-detalle .receta-info h2{
-    padding-top: 5%;
+.receta-vista .receta-detalle .receta-info p {
+    max-width: 90%;
 }
 
 .receta-vista p {
     display: block;
     width: 100%;
-    height: 2em;
     object-fit: cover;
     padding-top: 1%;
     padding-bottom: 1%;
+    /*Esto se asegura de cambiar de línea si se sale de la anchura*/
+    overflow-wrap: break-word;
+}
+
+.receta-vista .receta-likes {
+    border-top: 1px solid #ddd;
 }
 
 .receta-vista .receta-botones {
@@ -196,6 +212,8 @@ fieldset .error{
 .receta-ingredientes,
 .receta-preparacion,
 .receta-comentarios {
+    display: flex;
+    flex-direction: column;
     margin-top: 15px;
     padding-top: 10px;
     border-top: 1px solid #ddd;
@@ -237,7 +255,7 @@ fieldset .error{
     color: black;
 }
 
-@media (max-width: 1000px){
+@media (max-width: 1000px) {
     .receta-vista .receta-detalle {
         flex-direction: column;
         /* Cambia a columna si es muy estrecho */
