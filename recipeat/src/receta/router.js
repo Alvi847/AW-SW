@@ -27,10 +27,13 @@ recetasRouter.get('/createReceta'
 recetasRouter.post('/createReceta'
     , autenticado('/receta/listaRecetas')
     , multerFactory.single("imagen") // IMPORTANTE: En un form con enctype="multipart/form-data" hay que hacer que multer se encarge del cuerpo de la request antes de validarlo
-    , body('nombre', 'No puede ser vacío').trim().not().isEmpty()
+    , body('nombre', 'No puede ser vacío').trim().notEmpty()
     , body('nombre', 'Sólo puede contener letras').trim().matches(/^[A-Z\s]*$/i)
+    , body('nombre', 'Máximo 50 caracteres').trim().isLength({ min: 1, max: 50 })
     , body('descripcion', 'No puede ser vacío').trim().notEmpty()
+    , body('descripcion', 'Máximo 100 caracteres').trim().isLength({ min: 1, max: 100 })
     , body('modo_preparacion', 'No puede ser vacío').trim().notEmpty()
+    , body('modo_preparacion', 'Máximo 500 caracteres').trim().isLength({ min: 1, max: 500 })
     , doCreateReceta);
 
 // Ruta para actualizar una receta (vista)
@@ -43,9 +46,12 @@ recetasRouter.post('/updateReceta/:id'
     , autenticado('/receta/listaRecetas')
     , multerFactory.single("imagen")
     , body('nombre', 'No puede ser vacío').trim().notEmpty()
-    , body('nombre', 'Sólo puede contener letras').trim().matches(/^[A-Z]*$/i)
+    , body('nombre', 'Sólo puede contener letras').trim().matches(/^[A-Z\s]*$/i)
+    , body('nombre', 'Máximo 50 caracteres').trim().isLength({ min: 1, max: 50 })
     , body('descripcion', 'No puede ser vacío').trim().notEmpty()
+    , body('descripcion', 'Máximo 100 caracteres').trim().isLength({ min: 1, max: 100 })
     , body('modo_preparacion', 'No puede ser vacío').trim().notEmpty()
+    , body('modo_preparacion', 'Máximo 500 caracteres').trim().isLength({ min: 1, max: 500 })
     , updateReceta);
 
 // Ruta para eliminar una receta
