@@ -1,6 +1,6 @@
 import { body } from 'express-validator';
 import express from 'express';
-import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil } from './controllers.js';
+import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil } from './controllers.js';
 import { autenticado } from '../middleware/auth.js';
 import asyncHandler from 'express-async-handler';
 
@@ -23,6 +23,13 @@ usuariosRouter.post('/registro'
     , asyncHandler(doRegistro));
 
 usuariosRouter.get('/verPerfil', autenticado('/usuarios/home'), asyncHandler(viewPerfil));
+usuariosRouter.get('/updatePerfil', autenticado('/usuarios/home'), asyncHandler(viewUpdatePerfil));
+usuariosRouter.post('/updatePerfil'
+    , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
+    , body('username', 'No puede ser vacío').trim().notEmpty()
+    , body('nombre', 'No puede ser vacío').trim().notEmpty()
+    , body('email', 'No es un email válido').isEmail()
+    , asyncHandler(updatePerfil));
 
 
 export default usuariosRouter;

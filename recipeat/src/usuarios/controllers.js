@@ -123,19 +123,13 @@ export async function doRegistro(req, res) {
 export async function viewPerfil(req, res) {
   
     try {
-        // Obtén el usuario de la base de datos con el username de la sesión
+        
         const usuario = await Usuario.getUsuarioByUsername(req.session.username);
 
         if (!usuario) {
             return res.redirect('/usuarios/login');  // Si no se encuentra el usuario, redirigir al login
         }
 
-        // Pasa los datos del usuario a la vista de perfil
-        /*render('pagina', {
-            contenido: 'paginas/verPerfil', // Renderiza la vista de perfil
-            usuario                    
-        });*/
-         // Renderiza la vista y envía los datos del usuario
          render(req, res, 'paginas/verPerfil', { usuario });
 
     } catch (error) {
@@ -147,3 +141,63 @@ export async function viewPerfil(req, res) {
         });
     }
 }
+
+export async function viewUpdatePerfil(req, res) {
+    try {
+        const usuario = await Usuario.getUsuarioByUsername(req.session.username);
+        if (!usuario) {
+            return res.redirect('/usuarios/login');
+        }
+
+        render(req, res, 'paginas/updatePerfil', { usuario, errores: {} });
+    } catch (error) {
+        console.error(error);
+        render(req, res, 'paginas/updatePerfil', {
+            error: 'No se pudo cargar el formulario de edición',
+            usuario: {},
+            errores: {}
+        });
+    }
+}
+
+export async function updatePerfil(req, res) {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+        const datos = matchedData(req);
+        return render(req, res, 'paginas/updatePerfil', {
+            usuario: datos,
+            errores
+        });
+    }
+
+    const { username, nombre, email, password } = req.body;
+
+    try {
+        const usuario = await Usuario.getUsuarioByUsername(req.session.username);
+        usuario.nombre = nombre;
+        //usuario.#username = username; 
+        usuario.email = email;        
+
+        if (password && password.trim() !== '') {
+            await usuario.cambiaPassword(password);
+        }
+
+        usuario.persist();
+
+        req.session.username = username;
+        req.session.nombre = nombre;
+
+        res.setFlash('Perfil actualizado correctamente');
+        return res.redirect('/usuarios/verPerfil');
+
+    } catch (error) {
+        console.error(error);
+        render(req, res, 'paginas/updatePerfil', {
+            error: 'No se pudo actualizar el perfil',
+            usuario: req.body,
+            errores: {}
+        });
+    }
+}
+  
