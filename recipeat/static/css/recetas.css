@@ -1,3 +1,11 @@
+/**
+Hoja de estilos para las vistas de la lista de recetas y las páginas de las recetas
+*/
+
+.receta-ingredientes{ 
+    visibility: "hidden"; /*Cuando se implemente la compra de ingredientes se mostrará*/
+}
+
 /* Estilos para el buscador */
 .buscador {
     display: flex;
