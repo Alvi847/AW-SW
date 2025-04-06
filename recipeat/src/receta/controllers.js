@@ -124,7 +124,7 @@ export function updateReceta(req, res) {
     const imagen = req.file;
     const user = req.session.username;
 
-    if (recetaExistente.user === user) {
+    if (recetaExistente.user === user || req.session.rol === 'A') {
         recetaExistente.nombre = nombre;
         recetaExistente.descripcion = descripcion;
         recetaExistente.modo_preparacion = modo_preparacion;

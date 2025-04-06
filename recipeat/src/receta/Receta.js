@@ -103,8 +103,9 @@ export class Receta {
     }
 
     static updateReceta(receta) {
+        let result
         try {
-            const result = this.#updateStmt.run({
+            result = this.#updateStmt.run({
                 id: receta.id,
                 nombre: receta.nombre,
                 modo_preparacion: receta.modo_preparacion,
