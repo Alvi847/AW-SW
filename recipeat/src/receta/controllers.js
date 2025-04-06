@@ -130,9 +130,7 @@ export function updateReceta(req, res) {
         recetaExistente.modo_preparacion = modo_preparacion;
         recetaExistente.imagen = imagen.filename;
 
-        console.log("Datos recibidos: ", req.body);
-        console.log("Nueva receta: ", recetaExistente);
-
+        req.log.debug("Actualizando receta con id '%i'", id);
         Receta.updateReceta(recetaExistente);
         req.log.info("Receta '%i', editada con éxito por '%s'", id, user);
     }
@@ -162,7 +160,7 @@ export function deleteReceta(req, res) {
             receta = Receta.getRecetaById(id, null);
         }
         catch (e) {
-            req.log.error("Error interno al intentar eliminar el comentario '%i': '%s'", id, e.message);
+            req.log.error("Error interno al intentar eliminar la receta '%i': '%s'", id, e.message);
             res.status(500).send();
         }
         if (receta != null && (user === receta.user || req.session.rol === "A")) {

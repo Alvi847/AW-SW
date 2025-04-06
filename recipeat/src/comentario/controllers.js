@@ -147,7 +147,7 @@ export function valorarComentario(req, res) {
 
         try {
             const comentario = Comentario.getComentarioById(id_num, user);
-            Comentario.processLike(id_num, user);
+            Comentario.processLike(id_num, comentario.id_receta, user);
             res.redirect(`/receta/verReceta/${comentario.id_receta}`);
         }
         catch (e) {

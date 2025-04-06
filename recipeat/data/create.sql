@@ -44,7 +44,9 @@ DROP TABLE IF EXISTS "Valoraciones_Comentarios";
 CREATE TABLE "Valoraciones_Comentarios" (
 	"id_comentario"	INTEGER,
 	"user"	TEXT,
+	"id_receta"	INTEGER,
 	FOREIGN KEY("id_comentario") REFERENCES "Comentarios"("id"),
+	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id"),
 	FOREIGN KEY("user") REFERENCES "Usuarios"("username")
 );
 COMMIT;
