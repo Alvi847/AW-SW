@@ -1,6 +1,6 @@
 <h1>Actualizar Receta</h1>
 
-<form action="/receta/updateReceta/<%= receta.id %>" method="POST">
+<form action="/receta/updateReceta/<%= receta.id %>" method="POST" enctype="multipart/form-data">
     <fieldset>
         <legend>Editar Receta</legend>
 
@@ -8,16 +8,25 @@
             <p><strong><%= locals.error %></strong></p>
         <% } %>
 
-        <div>
+        <div class ="nombre">
+            <p class="error"><%- helpers.error(errores, 'nombre') %></p>
             <label for="nombre">Nombre:</label>
-            <input type="text" name="nombre" id="nombre" required 
+            <input type="text" name="nombre"
                    value="<%= receta.nombre %>">
         </div>
-            <input type="hidden" name="likes" value="<%= receta.likes %>">
-        <div>
+        <div class ="descripcion">
+            <p class="error"><%- helpers.error(errores, 'descripcion') %></p>
             <label for="descripcion">Descripción:</label>
-            <p></p>
-            <textarea name="descripcion" id="descripcion" required><%= receta.descripcion %></textarea>
+            <input type="text" name="descripcion" value="<%= receta.descripcion %>">
+        </div>
+        <div class ="preparacion">
+            <p class="error"><%- helpers.error(errores, 'modo_preparacion') %></p>
+            <label for="modo_preparacion">Método de preparación:</label>
+            <input type="text" name="modo_preparacion" value="<%= receta.modo_preparacion %>">
+        </div>
+        <div class="receta-imagen">
+            <p class="error"><%- helpers.error(errores, 'imagen') %></p>
+            <input type="file" name="imagen" required value="<%= locals.foto ? locals.foto : receta.imagen %>">
         </div>
 
         <button type="submit">Guardar Cambios</button>

@@ -1,22 +1,31 @@
 import express from 'express';
+import { body } from 'express-validator';
+import { autenticado } from '../middleware/auth.js';
 
 import {deleteComentario, valorarComentario, doCreateComentario} from './controllers.js';
 
 
-const comentariosRouter = express.Router();
-
 /**
  * Router de controllers para los comentarios
  */
+const comentariosRouter = express.Router();
 
-//Ruta para ver la lista de comentarios NO SE USA
+
+// La ruta para ver la lista de comentarios NO SE USA
 //comentariosRouter.get('/listaComentarios/:id', viewComentarios);
 
-// Ruta para agregar un comentario NO SE USA
-comentariosRouter.post('/createComentario', doCreateComentario);
+// Ruta para agregar un comentario
+comentariosRouter.post('/createComentario'
+    , body('id', 'Id inválido').notEmpty()
+    , body('descripcion', 'No puede ser vacío').trim().notEmpty()
+    , autenticado('/receta/listaRecetas')
+    , doCreateComentario);
 
 // Ruta para eliminar un comentario
-comentariosRouter.post('/removeComentario', deleteComentario);
+comentariosRouter.post('/removeComentario'
+    , body('id', 'Id inválido').notEmpty()
+    , autenticado('/receta/listaRecetas')
+    , deleteComentario);
 
 // Ruta para cuando se da like a un comentario
 comentariosRouter.post('/like', valorarComentario);

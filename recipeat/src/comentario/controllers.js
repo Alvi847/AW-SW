@@ -1,11 +1,10 @@
-import { Context } from 'express-validator/lib/context.js';
-import { Comentario, Valoracion } from './Comentario.js';
-import { body } from 'express-validator';
+import { validationResult, matchedData } from 'express-validator';
+import { Comentario } from './Comentario.js';
 import { Receta } from '../receta/Receta.js';
 import { render } from '../utils/render.js';
 
 // Ver los comentarios
-// ACTUALMENTE EN DESUSO
+// ACTUALMENTE EN DESUSO, el middleware viewReceta ya carga los comentarios
 /*export function viewComentarios(req, res) {
     const id_receta = req.params.id; // Id de la receta del comentario
     const user = req.session.username;
@@ -54,33 +53,32 @@ import { render } from '../utils/render.js';
 
 // Agregar un nuevo comentario
 export function doCreateComentario(req, res) {
-    const { descripcion, id } = req.body;
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+        const datos = matchedData(req);
+        return render(req, res, 'paginas/listaRecetas', {
+            datos,
+            errores,
+        });
+    }
+
+    const {descripcion, id} = req.body;
     const user = req.session.username;
-
-    const contenido = 'paginas/verReceta';
-
     if (req.session == null || req.session.login === undefined) {
         req.log.error("El usuario no esta logueado, no se puede crear un comentario");
     }
     else {
         const nuevoComentario = new Comentario(user, id, null, descripcion, null);
-        console.log("Datos recibidos: ", nuevoComentario);
 
         try {
             // Insertar comentario en la base de datos
             Comentario.insertComentario(nuevoComentario);
         }
         catch (e) {
-            console.log(e);
+            req.log.error(e);
         }
     }
-    const receta = Receta.getRecetaById(id, user);
-
-    const comentarios = Comentario.getAllComentarios(id, user);
-
-    let hayComentarios = true;
-    if (comentarios.length == 0)
-        hayComentarios = false;
 
     // Redirigir al finalizar
     res.redirect(`/receta/verReceta/${id}`);
@@ -88,21 +86,32 @@ export function doCreateComentario(req, res) {
 
 // Eliminar un comentario
 export function deleteComentario(req, res) {
+
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+        const datos = matchedData(req);
+        return render(req, res, `paginas/listaRecetas`, {
+            datos,
+            errores,
+        });
+    }
+
     const { id } = req.body;
     const user = req.session.username;
 
     let comentario = null
 
     if (id != null && req.session.login) {
-        try{
+        try {
             comentario = Comentario.getComentarioById(id, null);
         }
-        catch(e){
+        catch (e) {
             req.log.error("Error interno al intentar eliminar el comentario '%i': '%s'", id, e.message);
             res.status(500).send();
         }
         if (comentario != null && (user === comentario.user || req.session.rol === "A")) {
-            
+
             try {
                 Comentario.deleteComentario(id); // Elimina el comentario por ID
                 req.log.info("Comentario '%i' eliminado con exito", id);
@@ -113,7 +122,7 @@ export function deleteComentario(req, res) {
             }
             res.redirect(`/receta/verReceta/${comentario.id_receta}`); // Ahora redirige a la página de la receta  
         }
-        else if(receta != null) {
+        else if (receta != null) {
             req.log.error("Error al elminar el comentario '%i', de '%s': acceso no permitido al usuario '%s'", id, comentario.user, user);
             res.status(403);
         }

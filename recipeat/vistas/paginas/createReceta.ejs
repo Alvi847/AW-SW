@@ -5,25 +5,29 @@
 	<% if (locals.error) { %>
 		<p><strong><%= locals.error %></strong></p>
 	<% } %>
-	<div>
-		<input type="text" name="nombre" id="nombre" required 
+	<div class ="nombre">
+		<p class="error"><%- helpers.error(errores, 'nombre') %></p>
+		<input type="text" name="nombre" 
 			   placeholder="Nombre de receta" 
 			   value="<%= locals.nombre ? locals.nombre : '' %>">
 	</div>
-	<div>
-		<input type="text" name="descripcion" id="descripcion" required 
+	<div class ="descripcion">
+		<p class="error"><%- helpers.error(errores, 'descripcion') %></p>
+		<input type="text" name="descripcion"
 			   placeholder="Descripción"
 			   value="<%= locals.descripcion ? locals.descripcion : '' %>">
 	</div>
 
-	<div>
-		<input type="text" name="modo_preparacion" id="modo_preparacion" required 
+	<div class ="preparacion">
+		<p class="error"><%- helpers.error(errores, 'modo_preparacion') %></p>
+		<input type="text" name="modo_preparacion"  
 			   placeholder="Modo de preparación"
 			   value="<%= locals.modo_preparacion ? locals.modo_preparacion : '' %>">
 	</div>
 
-	<div class="foto">
-		<input type="file" name="foto" required value="<%= locals.foto ? locals.foto : '' %>">>
+	<div class="receta-imagen">
+		<p class="error"><%- helpers.error(errores, 'imagen') %></p>
+		<input type="file" name="imagen" required value="<%= locals.foto ? locals.foto : '' %>">
 	</div>
 	<button type="submit">Subir receta</button>
 </fieldset>
