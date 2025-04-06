@@ -28,7 +28,7 @@ recetasRouter.post('/createReceta'
     , autenticado('/receta/listaRecetas')
     , multerFactory.single("imagen") // IMPORTANTE: En un form con enctype="multipart/form-data" hay que hacer que multer se encarge del cuerpo de la request antes de validarlo
     , body('nombre', 'No puede ser vacío').trim().not().isEmpty()
-    , body('nombre', 'Sólo puede contener letras').trim().matches(/^[A-Z]*$/i)
+    , body('nombre', 'Sólo puede contener letras').trim().matches(/^[A-Z\s]*$/i)
     , body('descripcion', 'No puede ser vacío').trim().notEmpty()
     , body('modo_preparacion', 'No puede ser vacío').trim().notEmpty()
     , doCreateReceta);
