@@ -27,7 +27,7 @@ export class Usuario {
 
         const { password, rol, nombre, id, email } = usuario;
 
-        return new Usuario(username, password, nombre, rol, id, email);
+        return new Usuario(username, password, nombre, email, rol, id);
     }
 
     static getUsuarioById( iduser ) {
@@ -36,7 +36,7 @@ export class Usuario {
 
         const { username, password, rol, nombre, email } = usuario; //quiza quitar el pasword de aqui
 
-        return new Usuario(username, password, nombre, rol, iduser, email);
+        return new Usuario(username, password, nombre, email, rol, iduser);
     }
 
     static #insert(usuario) {
@@ -47,7 +47,7 @@ export class Usuario {
             const nombre = usuario.nombre;
             const rol = usuario.rol;
             const email = usuario.#email;
-            const datos = {username, password, nombre, rol, email};
+            const datos = {username, password, nombre, email, rol};
 
             result = this.#insertStmt.run(datos);
 
@@ -68,7 +68,7 @@ export class Usuario {
         const nombre = usuario.nombre;
         const rol = usuario.rol;
         const email = usuario.#email;
-        const datos = {username, password, nombre, rol, email, id};
+        const datos = {username, password, nombre, email, rol, id};
 
         const result = this.#updateStmt.run(datos);
         if (result.changes === 0) throw new UsuarioNoEncontrado(username);
@@ -91,8 +91,8 @@ export class Usuario {
         return usuario;
     }
 
-    static async creaUsuario(username, password, nombre) {
-        const usuario = new Usuario(username, password, nombre);
+    static async creaUsuario(username, password, nombre, email) {
+        const usuario = new Usuario(username, password, nombre, email);
         await usuario.cambiaPassword(password);
         usuario.persist();
         return usuario;
@@ -105,7 +105,7 @@ export class Usuario {
     rol;
     nombre;
 
-    constructor(username, password, nombre, rol = RolesEnum.USUARIO, id = null, email = '') {
+    constructor(username, password, nombre, email = '', rol = RolesEnum.USUARIO, id = null) {
         this.#username = username;
         this.#password = password;
         this.nombre = nombre;
@@ -117,8 +117,12 @@ export class Usuario {
     get email() {
         return this.#email;
       }
+    
+    set email(valor) {
+        this.#email = valor;
+    }
       
-
+      
     get id() {
         return this.#id;
     }

@@ -94,13 +94,15 @@ export async function doRegistro(req, res) {
     const username = req.body.username;
     const password = req.body.password;
     const nombre = req.body.nombre;
+    const email = req.body.email;
 
     try {
-        const usuario = await Usuario.creaUsuario(username, password, nombre);
+        const usuario = await Usuario.creaUsuario(username, password, nombre, email);
         req.session.login = true;
         req.session.nombre = usuario.nombre;
         req.session.rol = usuario.rol;
         req.session.username = usuario.username;
+        req.session.email = usuario.email;
         return res.redirect('/usuarios/home');
     } catch (e) {
         let error = 'No se ha podido crear el usuario';
@@ -183,7 +185,7 @@ export async function updatePerfil(req, res) {
             await usuario.cambiaPassword(password);
         }
 
-        usuario.persist();
+        await usuario.persist();
 
         req.session.username = username;
         req.session.nombre = nombre;
