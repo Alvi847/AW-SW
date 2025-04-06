@@ -88,14 +88,15 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-.receta-card img {
-    border-radius: 10px;
-    height: auto;
-    max-width: 100%;
+fieldset .error{
+    color: red;
 }
 
 .receta-card .receta-imagen {
     position: relative;
+    border-radius: 10px;
+    height: auto;
+    max-width: 100%;
 }
 
 .buscador .input input {
@@ -135,7 +136,7 @@
 
 .receta-vista .receta-detalle .receta-imagen {
     border-radius: inherit;
-    max-width: 100%;
+    max-width: 50%;
     height: auto;
     width: auto;
 }
