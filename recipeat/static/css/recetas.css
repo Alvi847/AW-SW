@@ -15,6 +15,7 @@ Hoja de estilos para las vistas de la lista de recetas y las páginas de las rec
     align-items: center;
     width: 100%;
     margin-top: 100px;
+    max-height: 90vw;
 }
 
 /* Estilos para el buscador */
@@ -50,7 +51,7 @@ Hoja de estilos para las vistas de la lista de recetas y las páginas de las rec
     border-color: white;
     border-width: 1px;
     overflow-y: scroll;
-    max-height: 25em;
+    max-height: 100%;
     margin-left: 2%;
     margin-right: 2%;
     margin-bottom: 2%;
@@ -164,6 +165,7 @@ fieldset .error {
     border-radius: inherit;
     width: 100%;
     max-width: inherit;
+    gap: 1em;
 }
 
 .receta-vista .receta-detalle .receta-info p {
@@ -192,7 +194,6 @@ fieldset .error {
 }
 
 .receta-botones a {
-    padding-left: 44.5%;
     padding-top: 3%;
     padding-bottom: 3%;
     border: 1px solid #ccc;
@@ -203,6 +204,7 @@ fieldset .error {
     cursor: pointer;
     transition: background-color 0.3s ease;
     text-decoration: none;
+    text-align: center;
 }
 
 .receta-botones a:hover {
@@ -261,5 +263,11 @@ fieldset .error {
         /* Cambia a columna si es muy estrecho */
         align-items: center;
         text-align: center;
+        padding-right: 2%;
+    }
+
+    .receta-vista .receta-detalle .receta-info{
+        align-items: center;
+        /*text-align: center;*/
     }
 }
