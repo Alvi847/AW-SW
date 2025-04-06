@@ -1,116 +1,16 @@
-/*.perfil-card {
-    max-width: 700px;
-    margin: 50px auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: row;
-    background: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    gap: 20px;
-  }
-  
-  .perfil-foto {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .perfil-foto img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 3px solid #007bff;
-  }
-  
-  .perfil-detalles {
-    flex: 2;
-  }
-  
-  .perfil-detalles h1 {
-    margin: 0 0 10px;
-    font-size: 24px;
-    color: #333;
-  }
-  
-  .perfil-detalles h2 {
-    margin-bottom: 10px;
-    font-size: 20px;
-    color: #007bff;
-  }
-  
-  .perfil-detalles p {
-    margin: 6px 0;
-    font-size: 16px;
-    color: #555;
-  }
-  
-  .logout {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 15px;
-    background-color: #dc3545;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: background-color 0.3s;
-  }
-  
-  .logout:hover {
-    background-color: #c82333;
-  }*/
-  
-  /* 🌐 Responsive para móviles */
-  /*@media (max-width: 600px) {
-    .perfil-card {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-  
-    .perfil-foto {
-      padding: 0;
-      margin-bottom: 20px;
-    }
-  
-    .perfil-foto img {
-      width: 120px;
-      height: 120px;
-    }
-  
-    .perfil-detalles h1 {
-      font-size: 20px;
-    }
-  
-    .perfil-detalles h2 {
-      font-size: 18px;
-    }
-  
-    .perfil-detalles p {
-      font-size: 15px;
-    }
-  
-    .logout {
-      padding: 8px 12px;
-      font-size: 14px;
-    }
-  }
-  */
+
   .perfil-card {
-    max-width: 800px; /* Aumentamos el ancho */
-    margin: 100px auto; /* Más margen superior e inferior */
+    max-width: 800px; 
+    margin: 100px auto; 
     padding: 30px;
     display: flex;
     flex-direction: row;
-    background: #fff;
+    background: #cccccc;
     box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
     border-radius: 15px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Montserrat',sans-serif;
     gap: 30px;
-    align-items: center; /* Centra verticalmente los elementos */
+    align-items: center; 
   }
   
   /* Centramos todo el contenido de la card */
@@ -118,7 +18,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Que ocupe toda la pantalla */
+    min-height: 100vh; 
   }
   
   /* Imagen de perfil */
@@ -130,7 +30,7 @@
   }
   
   .perfil-foto img {
-    width: 180px; /* Imagen más grande */
+    width: 180px; 
     height: 180px;
     object-fit: cover;
     border-radius: 50%;
