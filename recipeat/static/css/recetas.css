@@ -67,8 +67,7 @@ Hoja de estilos para las vistas de la lista de recetas y las páginas de las rec
 }
 
 .receta-info{
-    padding-left: 25px;
-    padding-top: 20px;
+    padding: 15px 20px 15px ;
 }
 
 .receta-info h3{
