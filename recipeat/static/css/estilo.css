@@ -21,7 +21,6 @@ body {
 }
 
 fieldset {
-    /* TODO: Esto es temporal, pero es que si no, no se ven los formularios*/
     margin-top: 25%;
 }
 
@@ -331,141 +330,101 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 @media (max-width: 767px) {
-
-
+    /* Header adjustments */
     .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 20px;
-        /*espacio arriba y abajo de 10px + espacio laterales 20px*/
-        background-color: black;
-        width: 100%;
-        /*ocupa todo el ancho*/
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 1000;
-        height: 80px;
-        /* Fija la altura de la cabecera */
+        padding: 10px 20px; /* Adjust padding for smaller screens */
     }
 
     .logo {
-        transform: translateX(-35px);
-        /* Mueve el logo 35px a la izquierda */
-        margin-bottom: 3px;
+        transform: translateX(-35px); /* Move the logo slightly */
+        margin-bottom: 3px; /* Adjust margin */
     }
 
     .menu-icon {
-        display: block;
-        font-size: 25px;
-        cursor: pointer;
-        color: white;
-        position: absolute;
-        top: 10px;
-        right: 40px;
+        display: block; /* Show menu icon on smaller screens */
+        font-size: 25px; /* Adjust font size */
+        position: absolute; /* Positioning for better layout */
+        top: 10px; /* Position from the top */
+        right: 40px; /* Position from the right */
     }
 
-
-
+    /* Navigation menu adjustments */
     .nav-menu {
-        display: none !important;
-        /* FORZAMOS que inicie oculto */
-        flex-direction: column;
-        position: absolute;
-        top: 80px;
-        /* Asegura que el menú aparezca debajo del header */
-        left: 0;
-        background-color: black;
-        width: 100%;
-        text-align: center;
-        padding: 10px 0;
-        z-index: 5;
-        /* Se mantiene por encima de otros elementos */
+        display: none !important; /* Start hidden */
+        flex-direction: column; /* Stack items vertically */
+        position: absolute; /* Positioning */
+        top: 80px; /* Below the header */
+        left: 0; /* Align to the left */
+        background-color: black; /* Background color */
+        width: 100%; /* Full width */
+        text-align: center; /* Center text */
+        padding: 10px 0; /* Padding */
+        z-index: 5; /* Above other elements */
     }
 
     .nav-menu.show {
-        display: flex !important;
-        flex-direction: column;
-        background-color: black;
-        width: 100%;
-        text-align: center;
-        padding: 10px 0;
-        z-index: 5;
+        display: flex !important; /* Show when active */
     }
 
     .nav-menu li {
-        padding: 10px;
+        padding: 10px; /* Padding for list items */
     }
 
     .nav-menu a {
-        display: block;
-        color: white;
-        font-size: 18px;
+        display: block; /* Block display for links */
+        color: white; /* Link color */
+        font-size: 18px; /* Font size */
     }
 
-    .saludo {
-        margin-top: 10px;
-    }
-
+    /* Container adjustments */
     .container-portada {
-        display: flex;
-        flex-direction: row;
-        /* Poner el texto arriba y la imagen abajo */
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        margin: 0 auto;
-        text-align: center;
-        /* Centrar el texto */
+        flex-direction: column; /* Stack text and image vertically */
+        align-items: center; /* Center items */
+        justify-content: center; /* Center content */
+        width: 100%; /* Full width */
+        margin: 0 auto; /* Center container */
+        text-align: center; /* Center text */
     }
 
     .texto {
-        width: 100%;
-        /* Para que el texto no ocupe todo el ancho */
-        height: auto;
-        padding: 2px;
-        text-align: center;
-        /* Centrar el contenido */
-        margin: 90px 10px 30px 10px;
+        width: 100%; /* Full width for text */
+        height: auto; /* Auto height */
+        padding: 2px; /* Padding */
+        margin: 90px 10px 30px 10px; /* Margin adjustments */
     }
 
     .texto p {
-        font-size: 9px;
-        line-height: 1.7;
-        padding: 10px;
-        word-spacing: 0.2px;
-        margin: 15px 2px 5px 2px;
+        font-size: 9px; /* Smaller font size for paragraphs */
+        line-height: 1.7; /* Line height */
+        padding: 10px; /* Padding */
+        word-spacing: 0.2px; /* Word spacing */
+        margin: 15px 2px 5px 2px; /* Margin adjustments */
     }
 
     .texto h1 {
-        font-size: 14px;
-        /* Tamaño del título */
-        line-height: 1.2;
-        margin: 0 auto 0 auto;
-        /* Centrar completamente */
-    }
-
-    .texto p:last-of-type {
-        margin-left: 0px;
-        /* mover a la derecha el ultimo parrafo*/
+        font-size: 14px; /* Smaller font size for headings */
+        line-height: 1.2; /* Line height */
+        margin: 0 auto; /* Center heading */
     }
 
     .imagen-container {
-        height: 538px;
-        margin-top: 80px;
-        width: 70%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        /* Evitar que la imagen sobresalga */
+        height: auto; /* Auto height for image container */
+        margin-bottom: 50px;
+        width: 147px; /* Full width */
+        display: flex; /* Flex display */
+        justify-content: center; /* Center content */
+        align-items: center; /* Center items */
+        overflow: hidden; /* Hide overflow */
+        clip-path: none;
+        
+        border: 5px solid white; /* Borde blanco de 5px */
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Sombra opcional para darle un efecto más atractivo */
     }
 
     .imagen {
+        height: 100%;
         width: 100%;
-        object-fit: cover;
-        /* Ajustar la imagen sin distorsionarla */
+        object-fit: contain; /* Cover image without distortion */
+        clip-path: none;
     }
-
 }
