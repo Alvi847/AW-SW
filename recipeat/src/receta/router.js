@@ -8,7 +8,9 @@ import { body } from 'express-validator';
 import { autenticado } from '../middleware/auth.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const multerFactory = multer({ dest: join(__dirname, "../../uploads") });
+export const UPLOAD_PATH = join(__dirname, "../../uploads");
+
+const multerFactory = multer({ dest: join(UPLOAD_PATH) });
 
 const recetasRouter = express.Router();
 

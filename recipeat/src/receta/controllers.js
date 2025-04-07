@@ -3,6 +3,8 @@ import { Comentario } from '../comentario/Comentario.js';
 import { validationResult, matchedData } from 'express-validator';
 import { render } from '../utils/render.js';
 import { error } from '../utils/helpers.js';
+import { UPLOAD_PATH } from './router.js';
+import { join } from 'node:path';
 
 /**
  * Para que los formularios funcionen usando multer y express-validator, he de parsear los datos con multer antes de pasarlos por el validator
@@ -12,7 +14,7 @@ import { error } from '../utils/helpers.js';
  * aunque no se cree la receta. Así que esta es la forma que tengo de solucionar esto. Si el formulario no es válido, borro la foto en caso de haber alguna
  * 
  */
-import * as fs from 'node:fs';
+import * as fs from 'node:fs/promises';
 
 // Ver las recetas (página de inicio de recetas)
 export function viewRecetas(req, res) {
@@ -54,13 +56,13 @@ export function createReceta(req, res) {
 }
 
 // Agregar una nueva receta (procesar el formulario)
-export function doCreateReceta(req, res) {
+export async function doCreateReceta(req, res) {
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
         const errores = result.mapped();
         if(req.file)
-            fs.unlinkSync(req.file.path); // (Ver comentario del import) Se puede usar fs.unlink() con promises: https://midu.dev/como-eliminar-un-ficher-con-node-js/
+            await fs.unlink(req.file.path); // (Ver comentario del import): https://midu.dev/como-eliminar-un-ficher-con-node-js/
         const datos = matchedData(req);
         return render(req, res, 'paginas/createReceta', {
             datos,
@@ -102,7 +104,7 @@ export function viewUpdateReceta(req, res) {
 }
 
 // Procesar la actualización de la receta
-export function updateReceta(req, res) {
+export async function updateReceta(req, res) {
     
     const id = req.params.id;
     const recetaExistente = Receta.getRecetaById(id);
@@ -112,7 +114,7 @@ export function updateReceta(req, res) {
         const errores = result.mapped();
         const datos = matchedData(req);
         if(req.file)
-            fs.unlinkSync(req.file.path); // En la actualización también borramos la foto si el usuario ha subido alguna
+            await fs.unlink(req.file.path); // En la actualización también borramos la foto si el usuario ha subido alguna
         return render(req, res, `paginas/updateReceta`, {
             datos,
             errores,
@@ -140,7 +142,7 @@ export function updateReceta(req, res) {
 }
 
 // Eliminar una receta
-export function deleteReceta(req, res) {
+export async function deleteReceta(req, res) {
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -166,13 +168,14 @@ export function deleteReceta(req, res) {
         if (receta != null && (user === receta.user || req.session.rol === "A")) {
             try {
                 Receta.deleteReceta(id);
+                await fs.unlink(join(UPLOAD_PATH, receta.imagen));  // Se borra la imagen de la receta del disco
                 req.log.info("Receta '%i' eliminada con exito", id);
+                res.redirect('/receta/listaRecetas'); // Redirige a la lista de recetas
             } // Elimina la receta por ID
             catch (e) {
                 req.log.error("Error interno al intentar eliminar la receta '%i': '%s'", id, e.message);
                 res.status(500).send();
             }
-            res.redirect('/receta/listaRecetas'); // Redirige a la lista de recetas
         }
         else if (receta != null) {
             res.status(403).send();
