@@ -182,7 +182,7 @@
 }
 
 .imagenes-verticales img {
-    max-width: 480px;
+    max-width: 400px;
     height: auto;
     border-radius: 8px;
 }

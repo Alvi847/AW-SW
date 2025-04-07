@@ -66,6 +66,19 @@ Hoja de estilos para las vistas de la lista de recetas y las páginas de las rec
     margin-bottom: 2%;
 }
 
+.receta-info{
+    padding-left: 25px;
+    padding-top: 20px;
+}
+
+.receta-info h3{
+    margin-bottom: 10px;
+}
+
+.receta-info p{
+    font-family: 'Poppins', sans-serif;
+}
+
 .receta-card {
     position: relative;
     display: flex;
