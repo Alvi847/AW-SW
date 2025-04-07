@@ -50,10 +50,10 @@ recetasRouter.post('/updateReceta/:id'
     , body('nombre', 'No puede ser vacío').trim().notEmpty()
     , body('nombre', 'Sólo puede contener letras').trim().matches(/^[\p{L}\s]*$/u)
     , body('nombre', 'Máximo 50 caracteres').trim().isLength({ min: 1, max: 50 })
-    , body('descripcion', 'No puede ser vacío').trim().notEmpty()
-    , body('descripcion', 'Máximo 200 caracteres').trim().isLength({ min: 1, max: 200 })
-    , body('modo_preparacion', 'No puede ser vacío').trim().notEmpty()
-    , body('modo_preparacion', 'Máximo 1000 caracteres').trim().isLength({ min: 1, max: 1000 })
+    , body('descripcion', 'No puede ser vacío').notEmpty()
+    , body('descripcion', 'Máximo 200 caracteres').isLength({ min: 1, max: 200 })
+    , body('modo_preparacion', 'No puede ser vacío').notEmpty()
+    , body('modo_preparacion', 'Máximo 1000 caracteres').isLength({ min: 1, max: 1000 })
     , updateReceta);
 
 // Ruta para eliminar una receta

@@ -16,6 +16,40 @@ Hoja de estilos para las vistas de la lista de recetas y las páginas de las rec
     visibility: hidden;
 }
 
+.create-receta, .update-receta{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.create-receta input, .update-receta input{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.create-receta textarea, .update-receta textarea{
+    font-family: 'Montserrat', sans-serif;
+    resize: none;
+    width: 100%;             
+    height: auto;            
+    min-height: 10em;        /* Mínimo 20 filas, equivalente a 20em de altura (aproximadamente 20 líneas) */
+    resize: none;            /* No se puede redimensionar */
+    box-sizing: border-box;  /* Incluye el padding y borde en el cálculo de ancho y altura */
+}
+
+#create-comentario textarea{
+    font-family: 'Montserrat', sans-serif;
+    resize: none;
+    width: 100%;             
+    height: auto;            
+    min-height: 5em;        
+    resize: none;            
+    box-sizing: border-box;  
+    font-family: 'Montserrat', sans-serif;
+    border: none;
+}
+
+.create-receta fieldset, .update-receta fieldset{
+    height: auto;
+}
+
 /* Estilo del contenedor de la lista de recetas*/
 .lista-recetas {
     display: flex;
@@ -127,6 +161,17 @@ Hoja de estilos para las vistas de la lista de recetas y las páginas de las rec
 
 fieldset .error {
     color: red;
+}
+
+fieldset textarea{
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
 }
 
 .receta-card .receta-imagen {

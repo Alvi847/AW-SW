@@ -101,8 +101,8 @@
         </div>
         <% if(session.login) { %>
             <form id="create-comentario" action="/comentario/createComentario" method="POST">
-                <label>Escribe aquí tu comentario:</label><input type="text" required
-                    name="descripcion"><!-- helpers.error(errores, 'descripcion') -->
+                <label>Escribe aquí tu comentario:</label><textarea type="text" required
+                    name="descripcion"></textarea><!-- helpers.error(errores, 'descripcion') -->
                 <input type="hidden" name="id" value="<%= receta.id %>">
                 <button type="submit" id="comentario-create-button">
                     Escribe un comentario

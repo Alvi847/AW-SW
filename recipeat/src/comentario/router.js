@@ -17,7 +17,7 @@ const comentariosRouter = express.Router();
 // Ruta para agregar un comentario
 comentariosRouter.post('/createComentario'
     , body('id', 'Id inválido').notEmpty()
-    , body('descripcion', 'No puede ser vacío').trim().notEmpty()
+    , body('descripcion', 'No puede ser vacío').notEmpty()
     , autenticado('/receta/listaRecetas')
     , doCreateComentario);
 

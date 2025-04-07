@@ -1,33 +1,33 @@
+<div class="create-receta">
 <h1>CREAR RECETA</h1>
 <form action="/receta/createReceta" method="POST" enctype="multipart/form-data">
-<fieldset>
-	<legend>Añadir receta</legend>
-	<% if (locals.error) { %>
-		<p><strong><%= locals.error %></strong></p>
-	<% } %>
-	<div class ="nombre">
-		<p class="error"><%- helpers.error(errores, 'nombre') %></p>
-		<input type="text" name="nombre" 
-			   placeholder="Nombre de receta" 
-			   value="<%= locals.nombre ? locals.nombre : '' %>">
-	</div>
-	<div class ="descripcion">
-		<p class="error"><%- helpers.error(errores, 'descripcion') %></p>
-		<input type="text" name="descripcion"
-			   placeholder="Descripción"
-			   value="<%= locals.descripcion ? locals.descripcion : '' %>">
-	</div>
+	<fieldset>
+		<legend>Añadir receta</legend>
+		<% if (locals.error) { %>
+			<p><strong>
+					<%= locals.error %>
+				</strong></p>
+			<% } %>
+				<div class="nombre">
+					<p class="error"><%- helpers.error(errores, 'nombre' ) %></p>
+					<input type="text" name="nombre" placeholder="Nombre de receta"
+						value="<%= locals.nombre ? locals.nombre : '' %>">
+				</div>
+				<div class="descripcion">
+					<p class="error"><%- helpers.error(errores, 'descripcion' ) %></p>
+					<textarea name="descripcion" placeholder="Descripción"><%= locals.descripcion ? locals.descripcion : '' %></textarea>
+				</div>
 
-	<div class ="preparacion">
-		<p class="error"><%- helpers.error(errores, 'modo_preparacion') %></p>
-		<input type="text" name="modo_preparacion"  
-			   placeholder="Modo de preparación"
-			   value="<%= locals.modo_preparacion ? locals.modo_preparacion : '' %>">
-	</div>
+				<div class="preparacion">
+					<p class="error"><%- helpers.error(errores, 'modo_preparacion' ) %></p>
+					<textarea name="modo_preparacion" placeholder="Modo de preparación"><%= locals.modo_preparacion ? locals.modo_preparacion : '' %></textarea>
+				</div>
 
-	<div class="receta-imagen">
-		<p class="error"><%- helpers.error(errores, 'imagen') %></p>
-		<input type="file" name="imagen" required value="<%= locals.foto ? locals.foto : '' %>">
-	</div>
-	<button type="submit">Subir receta</button>
-</fieldset>
+				<div class="receta-imagen">
+					<label for="imagen">Imagen:</label>
+					<p class="error"><%- helpers.error(errores, 'imagen' ) %></p>
+					<input type="file" name="imagen" required value="<%= locals.foto ? locals.foto : '' %>">
+				</div>
+				<button type="submit">Subir receta</button>
+	</fieldset>
+</div>

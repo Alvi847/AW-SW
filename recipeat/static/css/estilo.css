@@ -346,7 +346,7 @@ body::-webkit-scrollbar-thumb:hover {
         font-size: 25px; /* Adjust font size */
         position: absolute; /* Positioning for better layout */
         top: 10px; /* Position from the top */
-        right: 40px; /* Position from the right */
+        right: 70px; /* Position from the right */
     }
 
     /* Navigation menu adjustments */
