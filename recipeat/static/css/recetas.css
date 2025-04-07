@@ -2,6 +2,15 @@
 Hoja de estilos para las vistas de la lista de recetas y las páginas de las recetas
 */
 
+#mensajeNoEncontrado{
+    width: 1000px;
+    display: none;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 50px;
+    color: white;
+}
+
 .receta-ingredientes {
     /*Cuando se implemente la compra de ingredientes se mostrará*/
     visibility: hidden;
