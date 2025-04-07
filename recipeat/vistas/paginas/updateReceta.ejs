@@ -1,5 +1,5 @@
+<div class="update-receta">
 <h1>Actualizar Receta</h1>
-
 <form action="/receta/updateReceta/<%= receta.id %>" method="POST" enctype="multipart/form-data">
     <fieldset>
         <legend>Editar Receta</legend>
@@ -10,21 +10,20 @@
 
         <div class ="nombre">
             <p class="error"><%- helpers.error(errores, 'nombre') %></p>
-            <label for="nombre">Nombre:</label>
             <input type="text" name="nombre"
-                   value="<%= receta.nombre %>">
+                   value="<%= receta.nombre %>" placeholder="Nombre">
         </div>
-        <div class ="descripcion">
-            <p class="error"><%- helpers.error(errores, 'descripcion') %></p>
-            <label for="descripcion">Descripción:</label>
-            <input type="text" name="descripcion" value="<%= receta.descripcion %>">
+        <div class="descripcion">
+            <p class="error"><%- helpers.error(errores, 'descripcion' ) %></p>
+            <textarea name="descripcion" placeholder="Descripción"><%= receta.descripcion ? receta.descripcion : '' %></textarea>
         </div>
-        <div class ="preparacion">
-            <p class="error"><%- helpers.error(errores, 'modo_preparacion') %></p>
-            <label for="modo_preparacion">Método de preparación:</label>
-            <input type="text" name="modo_preparacion" value="<%= receta.modo_preparacion %>">
+
+        <div class="preparacion">
+            <p class="error"><%- helpers.error(errores, 'modo_preparacion' ) %></p>
+            <textarea name="modo_preparacion" placeholder="Modo de preparación"><%= receta.modo_preparacion ? receta.modo_preparacion : '' %></textarea>
         </div>
         <div class="receta-imagen">
+            <label for="imagen">Imagen:</label>
             <p class="error"><%- helpers.error(errores, 'imagen') %></p>
             <input type="file" name="imagen" required value="<%= locals.foto ? locals.foto : receta.imagen %>">
         </div>
@@ -32,3 +31,4 @@
         <button type="submit">Guardar Cambios</button>
     </fieldset>
 </form>
+</div>
