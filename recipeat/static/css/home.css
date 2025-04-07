@@ -1,0 +1,10 @@
+.info{
+    color: white;
+    width: auto;
+    margin-top: 80px;    
+    padding: 20px 20px;
+}
+
+.info h1, p{
+    margin-top: 10px;
+}
