@@ -31,7 +31,7 @@ recetasRouter.post('/createReceta'
     , body('nombre', 'Sólo puede contener letras').trim().matches(/^[A-Z\s]*$/i)
     , body('nombre', 'Máximo 50 caracteres').trim().isLength({ min: 1, max: 50 })
     , body('descripcion', 'No puede ser vacío').trim().notEmpty()
-    , body('descripcion', 'Máximo 100 caracteres').trim().isLength({ min: 1, max: 100 })
+    , body('descripcion', 'Máximo 200 caracteres').trim().isLength({ min: 1, max: 200 })
     , body('modo_preparacion', 'No puede ser vacío').trim().notEmpty()
     , body('modo_preparacion', 'Máximo 500 caracteres').trim().isLength({ min: 1, max: 500 })
     , doCreateReceta);
@@ -49,7 +49,7 @@ recetasRouter.post('/updateReceta/:id'
     , body('nombre', 'Sólo puede contener letras').trim().matches(/^[A-Z\s]*$/i)
     , body('nombre', 'Máximo 50 caracteres').trim().isLength({ min: 1, max: 50 })
     , body('descripcion', 'No puede ser vacío').trim().notEmpty()
-    , body('descripcion', 'Máximo 100 caracteres').trim().isLength({ min: 1, max: 100 })
+    , body('descripcion', 'Máximo 200 caracteres').trim().isLength({ min: 1, max: 200 })
     , body('modo_preparacion', 'No puede ser vacío').trim().notEmpty()
     , body('modo_preparacion', 'Máximo 500 caracteres').trim().isLength({ min: 1, max: 500 })
     , updateReceta);
