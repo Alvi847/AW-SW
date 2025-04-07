@@ -101,7 +101,7 @@
     background-color: #c85f23;
   }
   
-  /* Responsive */
+  /* moviles*/
   @media (max-width: 768px) {
     .perfil-card {
       flex-direction: column;
