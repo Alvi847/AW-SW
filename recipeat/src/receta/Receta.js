@@ -9,7 +9,8 @@ export class Receta {
     static #addLikeStmt = null;
     static #removeLikeStmt = null;
     static #getByIdStmt = null;
-
+    static #getRecetasByIdsStmt = null;
+    
     static initStatements(db) {
         if (this.#getAllStmt !== null) return;
 
@@ -27,6 +28,11 @@ export class Receta {
         this.#removeLikeStmt = db.prepare('UPDATE Recetas SET likes = likes - 1 WHERE id = @id');
         //*seleccionar la receta por id (unica)
         this.#getByIdStmt = db.prepare('SELECT * FROM Recetas WHERE id = @id');
+         this.#getRecetasByIdsStmt = db.prepare(`
+            SELECT * FROM Recetas WHERE id IN (
+                SELECT id_receta FROM Likes WHERE user = @username
+            )
+        `);
     }
 
     // Obtener una receta por ID
@@ -48,6 +54,10 @@ export class Receta {
 
         const recetas = this.#getAllStmt.all();
         return recetas;
+    }
+    //Obtener recetas con like de @username 
+    static recetasConLike(username) {
+        return this.#getRecetasByIdsStmt.all({ username });
     }
 
     // Insertar una nueva receta
