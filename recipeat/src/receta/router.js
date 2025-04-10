@@ -1,6 +1,6 @@
 import express from 'express';
 
-import {viewReceta, viewRecetas, createReceta, doCreateReceta, viewUpdateReceta, updateReceta, deleteReceta, likeReceta } from './controllers.js';
+import {viewReceta, viewRecetas, createReceta, doCreateReceta, viewUpdateReceta, updateReceta, deleteReceta, likeReceta, viewFavoritos } from './controllers.js';
 import multer from 'multer';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'url'; 
@@ -16,6 +16,9 @@ const recetasRouter = express.Router();
 
 //Ruta para ver la lista de recetas
 recetasRouter.get('/listaRecetas', viewRecetas);
+
+//ruta para ver favoritos (liked by user)
+recetasRouter.get('/favoritos', viewFavoritos);
 
 //Ruta para ver una receta
 recetasRouter.get('/verReceta/:id', viewReceta);
