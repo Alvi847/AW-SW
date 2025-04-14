@@ -198,6 +198,9 @@ fieldset {
     padding: 50px;
     font-family: 'Poppins', sans-serif;
     text-align: left;
+    /*polygon */
+    /*polygon(X0 Y0, X1 Y1 ... Xn Yn)*/
+    /*referencia: https://www.youtube.com/watch?v=N_IrzRpJ0s4&t=398s*/
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
     margin-left: 30px;
     margin-bottom: 50px;
@@ -395,7 +398,7 @@ body::-webkit-scrollbar-thumb:hover {
     }
 
     .texto p {
-        font-size: 9px; /* Smaller font size for paragraphs */
+        font-size: 9px; 
         line-height: 1.7; /* Line height */
         padding: 10px; /* Padding */
         word-spacing: 0.2px; /* Word spacing */
@@ -403,20 +406,20 @@ body::-webkit-scrollbar-thumb:hover {
     }
 
     .texto h1 {
-        font-size: 14px; /* Smaller font size for headings */
+        font-size: 14px; 
         line-height: 1.2; /* Line height */
         margin: 0 auto; /* Center heading */
     }
 
     .imagen-container {
-        height: auto; /* Auto height for image container */
+        height: auto; 
         margin-bottom: 50px;
-        width: 147px; /* Full width */
+        width: 147px; 
         display: flex; /* Flex display */
-        justify-content: center; /* Center content */
-        align-items: center; /* Center items */
-        overflow: hidden; /* Hide overflow */
-        clip-path: none;
+        justify-content: center; 
+        align-items: center; /* Centrar */
+        overflow: hidden; 
+        clip-path: none;    /*eliminar clip-path en movil*/
         
         border: 5px solid white; /* Borde blanco de 5px */
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Sombra opcional para darle un efecto más atractivo */
@@ -425,7 +428,7 @@ body::-webkit-scrollbar-thumb:hover {
     .imagen {
         height: 100%;
         width: 100%;
-        object-fit: contain; /* Cover image without distortion */
+        object-fit: contain; 
         clip-path: none;
     }
 }
