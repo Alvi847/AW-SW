@@ -41,7 +41,9 @@
         height: auto;            
         min-height: 5em;        
         resize: none;            
-        box-sizing: border-box;  
+        box-sizing: border-box; 
+        margin-top: 10px;
+        border-radius: 10px; 
         font-family: 'Montserrat', sans-serif;
         border: none;
     }
@@ -340,20 +342,78 @@
     }
 
     @media (max-width: 1000px) {
+
+        .receta-vista {
+            margin-top: 100px;
+            width: 95vw; /* más margen lateral en móvil */
+            padding: 10px;
+        }
+    
         .receta-vista .receta-detalle {
             flex-direction: column;
-            /* Cambia a columna si es muy estrecho */
             align-items: center;
             text-align: center;
-            padding-right: 2%;
+            padding: 0;
+            gap: 15px;
         }
-
-        .receta-vista .receta-detalle .receta-info{
+    
+        .receta-vista .receta-detalle .receta-imagen {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+        }
+    
+        .receta-vista .receta-detalle {
+            width: 100%;
+            padding: 0 10px;
             align-items: center;
-            /*text-align: center;*/
+            text-align: center;
+        }
+    
+        .receta-info {
+            padding: 10px;
+            font-size: 16px;
         }
 
-        .receta-card{
-            font-size: 3vw;
+        .receta-info h2{    
+            text-align: center;
         }
+
+        .receta-info p:last-of-type{
+            text-align: left;
+        } 
+
+        .receta-img{
+            height: 200px;
+            margin-left: 0;
+        }
+    
+        .receta-card {
+            flex-direction: column;
+            font-size: 4vw;
+            max-height: none;
+        }
+    
+        .receta-card .receta-content {
+            display: flex;
+            flex-direction: column;
+        }
+    
+        .receta-comentarios .comentarios-container {
+            grid-template-columns: 1fr; /* una columna por fila en móvil */
+            padding: 5px;
+        }
+    
+        .comentario-botones {
+            width: 100%;
+            grid-template-columns: 1fr 1fr;
+            justify-items: center;
+        }
+    
+        .receta-vista .receta-botones {
+            width: 100%;
+            margin-left: 0;
+        }
+    
     }
+    
