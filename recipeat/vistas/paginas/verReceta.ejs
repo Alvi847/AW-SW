@@ -1,14 +1,14 @@
 <div class="receta-vista">
     <div class="receta-detalle">
         <% if (receta.imagen) { <!-- Realmente siempre debería haber una foto, pero por si acaso--> %>
-            <img class="receta-imagen" src="/imagen/<%= receta.imagen %>">
+            <img class="receta-img" src="/imagen/<%= receta.imagen %>">
             <% } %>
                 <div class="receta-info">
                     <h1>
                         <%=receta.nombre%>
                     </h1>
                     <% if (receta.user) { %>
-                    <p> Creada por <%= receta.user %></p>
+                    <p class="creador"> Creada por <%= receta.user %></p>
                             <% } else { %>
                             <p>Creada por admin</p>
                                 <% } %>

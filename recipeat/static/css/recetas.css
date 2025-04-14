@@ -182,6 +182,13 @@
         max-height: inherit;
     }
 
+    .receta-img{        
+        border: 2.5px solid black; /* puedes cambiar el grosor y color */
+        margin-left: 15px;
+        margin-top: 15px;
+        border-radius: 10px;
+    }
+
     .buscador .input input {
         position: absolute;
         top: 0;
@@ -208,8 +215,7 @@
 
     .receta-vista .receta-detalle {
         display: flex;
-        padding: 2%;
-        padding-right: 20%;
+        padding: 5px;
         border-radius: inherit;
         flex-direction: row;
         align-items: center;
@@ -230,11 +236,17 @@
         border-radius: inherit;
         width: 100%;
         max-width: inherit;
-        gap: 1em;
     }
 
     .receta-vista .receta-detalle .receta-info p {
-        max-width: 90%;
+        max-width: 100%;
+    }
+
+    .creador{
+        margin-top: 0;
+        font-size: 12px;
+        margin-bottom: 20px;
+        margin-left: 8px;
     }
 
     .receta-vista p {
