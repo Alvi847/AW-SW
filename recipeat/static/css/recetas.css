@@ -287,12 +287,11 @@
     }
 
     .comentario-card {
-        border: 1px solid #e1e1e1;
+        border: 2.2px solid black; /* cambia de gris claro a negro */
         border-radius: 10px;
         padding: 10px;
-        margin-bottom: 10px;
         background-color: #e1e1e1;
-        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        box-shadow: 2px 5px 8px rgba(0, 0, 0, 0.7); /* puedes mantener esto o quitarlo */
     }
 
     .comentario-botones {
@@ -303,12 +302,17 @@
     }
 
     .receta-comentarios .comentarios-container {
-        overflow-y: scroll;
-        max-height: 10em;
+        display: grid;  /*uso de grid*/
+        grid-template-columns: repeat(3, 1fr); /* 3 comentarios x fila y dividir espacio disponible en 1 fraccion (fr) */
+        gap: 20px; /* espacio entre comentarios */
+        max-height: none; /* quitamos el scroll */
+        overflow-y: auto;
+        margin-top: 15px;
+        padding: 11px;
     }
 
     .receta-comentarios #create-comentario {
-        padding-top: 5%;
+        padding-top: 4.5%;
     }
 
     .receta-comentarios #create-comentario input {
