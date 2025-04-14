@@ -14,7 +14,7 @@ export class Ingrediente {
         //*Crear un nuevo ingrediente
         this.#insertStmt = db.prepare('INSERT INTO Ingredientes (nombre, precio, unidad) VALUES (@nombre, @precio, @unidad)');
 
-        //*Seleccionar e ingrediente por nombre (unico)
+        //*Seleccionar el ingrediente por nombre (unico)
         this.#getByNameStmt = db.prepare('SELECT * FROM Ingredientes WHERE nombre = @nombre');
 
         //*Seleccionar todos los ingredientes de la tabla

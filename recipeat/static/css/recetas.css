@@ -13,7 +13,7 @@
 
     .receta-ingredientes {
         /*Cuando se implemente la compra de ingredientes se mostrará*/
-        visibility: hidden;
+        visibility:visible;
     }
 
     .create-receta, .update-receta{
