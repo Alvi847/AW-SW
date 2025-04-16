@@ -341,14 +341,16 @@
         color: black;
     }
  
-    /*contenedor seccion favoritos*/
     .favoritos-section {
         padding: 5px;
         max-width: 1500px;
-        margin: auto;
+        margin: 20px auto; /* auto centra horizontalmente */
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; 
     }
     
-    /*titulo favoritos*/
+    /* título favoritos */
     .favoritos-section h2 {
         font-size: 1.5rem;
         margin-bottom: 2rem;
@@ -378,11 +380,12 @@
         gap: 1.5rem;
     }
     
+    /*contenedor de la receta*/
     .fav-receta-card {
         position: relative;
         overflow: hidden;
         border-radius: 10px;
-        cursor: pointer;
+        cursor: pointer;    /*cambiar el icono del puntero*/
         transition: transform 0.3s ease;
     }
     
@@ -398,14 +401,15 @@
         border-radius: 10px;
     }
     
+    /*overlay del card de la receta fav*/
     .fav-receta-overlay {
         position: absolute;
         bottom: -100%;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0,0,0,0.5);
-        color: white;
+        background: rgba(0, 0, 0, 0.5); /*color de overlay*/
+        color: white;   /*color del texto*/
         display: flex;
         justify-content: center;
         align-items: center;
@@ -423,22 +427,26 @@
         display: none;
     }
     
-    .expand-btn {
-        margin-top: 1rem;
-        background-color: #333;
-        color: #fff;
-        padding: 0.6rem 1.2rem;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
+    .expand-btn {        
+        margin-top: 20px;
+        margin-left: 585px;
+    background-color: #333;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border: 3px solid white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
     }
-    
-    .expand-btn:hover {
-        background-color: #555;
-    }
-    
-    
+
+    .expand-btn svg {
+        transition: transform 0.3s ease;
+      }
+      
+      .rotado {
+        transform: rotate(180deg);
+      }
+          
     @media (max-width: 1000px) {
 
         .receta-vista {

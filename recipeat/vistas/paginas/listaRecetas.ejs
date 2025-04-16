@@ -9,30 +9,6 @@
             <input type="text" placeholder="Buscar" id="buscadorRecetas">
         </div>
     </div>
-    <% if (login && favoritos.length > 0) { %>
-        <div class="favoritos-section">
-            <h2>TUS FAVORITOS</h2>
-            <div class="fav-grid" id="fav-grid">
-                <% favoritos.forEach((f, index) => { %>
-                    <div class="fav-receta-card <%= index >= 3 ? 'hidden-fav' : '' %>">
-                        <a href="/receta/verReceta/<%= f.id %>">
-                            <div class="fav-receta-content">
-                                <img class="fav-receta-imagen" src="/imagen/<%= f.imagen %>" alt="<%= f.nombre %>">
-                                <div class="fav-receta-overlay">
-                                    <h3><%= f.nombre %></h3>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                <% }) %>
-    
-                <% if (favoritos.length > 3) { %>
-                    <button id="toggle-button" class="expand-btn">Mostrar más ⬇️</button>
-                <% } %>
-            </div>
-        </div>
-    <% } %>
-    
     <div class="recetas-container">
         <p id="mensajeNoEncontrado">
             No se ha encontrado ninguna receta
@@ -56,7 +32,39 @@
             <% }) %>
     </div>  
 </div>
-
+<!--si el usuario esta logueado y sus favoritos son como minimo 1-->
+<!--se penso al prinipio de hacer un carrusel, pero hemos pensado que es ineficiente si el usuario tiene-->
+<!--unas 50 recetas con like. Tendria que estar dandole a las flechitas constantemente-->
+<!--De este modo, el usuario, las podra visualizar mejor-->
+<% if (login && favoritos.length > 0) { %>
+    <div class="favoritos-section">
+        <h2>TUS FAVORITOS</h2>
+        <div class="fav-grid" id="fav-grid">
+            <% favoritos.forEach((f, index) => { %>
+                <div class="fav-receta-card <%= index >= 3 ? 'hidden-fav' : '' %>">
+                    <a href="/receta/verReceta/<%= f.id %>">
+                        <div class="fav-receta-content">
+                            <img class="fav-receta-imagen" src="/imagen/<%= f.imagen %>" alt="<%= f.nombre %>">
+                            <div class="fav-receta-overlay">
+                                <h3><%= f.nombre %></h3>    <!--nombre de la receta-->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <% }) %>
+        </div>    
+    <% if (favoritos.length > 3) { %>
+        <button id="toggle-button" class="expand-btn">
+            <svg id="icon-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                 fill="currentColor" class="bi bi-chevron-compact-down" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                    d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67"/>
+            </svg>
+          </button>
+          
+    <% } %>
+    </div>
+<% } %>
 <script>
     const contenedor = document.querySelector(".buscador");
 const input = document.getElementById("buscadorRecetas");
@@ -104,21 +112,24 @@ input.addEventListener("blur", () => {
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const toggleBtn = document.getElementById('toggle-button');
-        const hiddenCards = document.querySelectorAll('.hidden-fav');
+    const toggleBtn = document.getElementById('toggle-button');
+    const hiddenCards = document.querySelectorAll('.hidden-fav');
+    const chevronIcon = document.getElementById('icon-chevron');
 
-        let expanded = false;
+    let expanded = false;
 
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', () => {
-                expanded = !expanded;
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            expanded = !expanded;
 
-                hiddenCards.forEach(card => {
-                    card.style.display = expanded ? 'block' : 'none';
-                });
-
-                toggleBtn.textContent = expanded ? 'Mostrar menos ⬆️' : 'Mostrar más ⬇️';
+            hiddenCards.forEach(card => {
+                card.style.display = expanded ? 'block' : 'none';
             });
-        }
-    });
+
+            // Rotar el icono
+            chevronIcon.classList.toggle('rotado', expanded);
+        });
+    }
+});
+
 </script>
