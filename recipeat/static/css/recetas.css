@@ -340,7 +340,105 @@
         background-color: rgba(72, 71, 71, 0.2);
         color: black;
     }
+ 
+    /*contenedor seccion favoritos*/
+    .favoritos-section {
+        padding: 5px;
+        max-width: 1500px;
+        margin: auto;
+    }
+    
+    /*titulo favoritos*/
+    .favoritos-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+        color: #fff;
+        text-align: center;
+        position: relative;
+        display: inline-block;
+        font-family: 'Montserrat', sans-serif;
+    }
 
+    /*seccion favoritos subrayado*/
+    .favoritos-section h2::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: -8px;
+        width: 100%;
+        height: 3px;
+        background-color: #fff;
+        border-radius: 2px;
+    }
+
+    .fav-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .fav-receta-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    
+    .fav-receta-card:hover {
+        transform: scale(1.02);
+    }
+    
+    .fav-receta-imagen {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        display: block;
+        border-radius: 10px;
+    }
+    
+    .fav-receta-overlay {
+        position: absolute;
+        bottom: -100%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: bottom 0.4s ease;
+        border-radius: 10px;
+        text-align: center;
+    }
+    
+    .fav-receta-card:hover .fav-receta-overlay {
+        bottom: 0;
+    }
+    
+    /* Ocultar tarjetas adicionales por defecto */
+    .hidden-fav {
+        display: none;
+    }
+    
+    .expand-btn {
+        margin-top: 1rem;
+        background-color: #333;
+        color: #fff;
+        padding: 0.6rem 1.2rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    .expand-btn:hover {
+        background-color: #555;
+    }
+    
+    
     @media (max-width: 1000px) {
 
         .receta-vista {

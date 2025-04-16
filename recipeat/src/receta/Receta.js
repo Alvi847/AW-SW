@@ -9,6 +9,7 @@ export class Receta {
     static #addLikeStmt = null;
     static #removeLikeStmt = null;
     static #getByIdStmt = null;
+    static #getFavoritosByUserStmt = null;
 
     static initStatements(db) {
         if (this.#getAllStmt !== null) return;
@@ -26,8 +27,21 @@ export class Receta {
         //*eliminar like del usuario sobre una receta 
         this.#removeLikeStmt = db.prepare('UPDATE Recetas SET likes = likes - 1 WHERE id = @id');
         //*seleccionar la receta por id (unica)
-        this.#getByIdStmt = db.prepare('SELECT * FROM Recetas WHERE id = @id');
+        this.#getByIdStmt = db.prepare('SELECT * FROM Recetas WHERE id = @id'); 
+        //seleccionar favoritos 
+        this.#getFavoritosByUserStmt = db.prepare(`
+            SELECT r.* FROM Recetas r
+            INNER JOIN Likes l ON r.id = l.id_receta
+            WHERE l.user = @username
+        `);
+              
     }
+
+    static getFavoritosPorUsuario(username) {
+        const favoritos = this.#getFavoritosByUserStmt.all({ username });
+        return favoritos;
+    }
+    
 
     // Obtener una receta por ID
     static getRecetaById(id, user) {

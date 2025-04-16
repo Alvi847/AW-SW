@@ -1,5 +1,5 @@
 <div class="lista-recetas">
-    <div class="buscador">
+        <div class="buscador">
         <svg class="icono-busqueda" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"></circle>
@@ -9,11 +9,34 @@
             <input type="text" placeholder="Buscar" id="buscadorRecetas">
         </div>
     </div>
-
+    <% if (login && favoritos.length > 0) { %>
+        <div class="favoritos-section">
+            <h2>TUS FAVORITOS</h2>
+            <div class="fav-grid" id="fav-grid">
+                <% favoritos.forEach((f, index) => { %>
+                    <div class="fav-receta-card <%= index >= 3 ? 'hidden-fav' : '' %>">
+                        <a href="/receta/verReceta/<%= f.id %>">
+                            <div class="fav-receta-content">
+                                <img class="fav-receta-imagen" src="/imagen/<%= f.imagen %>" alt="<%= f.nombre %>">
+                                <div class="fav-receta-overlay">
+                                    <h3><%= f.nombre %></h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                <% }) %>
+    
+                <% if (favoritos.length > 3) { %>
+                    <button id="toggle-button" class="expand-btn">Mostrar más ⬇️</button>
+                <% } %>
+            </div>
+        </div>
+    <% } %>
+    
     <div class="recetas-container">
         <p id="mensajeNoEncontrado">
             No se ha encontrado ninguna receta
-        </p>
+        </p>    
         <% recetas.forEach((r)=> { %>
             <div class="receta-card">
                 <a href="/receta/verReceta/<%= r.id %>">
@@ -77,5 +100,25 @@ input.addEventListener("blur", () => {
             // Mostrar mensaje si no hay coincidencias
             mensajeNoEncontrado.style.display = hayCoincidencias ? "none" : "block";
         });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleBtn = document.getElementById('toggle-button');
+        const hiddenCards = document.querySelectorAll('.hidden-fav');
+
+        let expanded = false;
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                expanded = !expanded;
+
+                hiddenCards.forEach(card => {
+                    card.style.display = expanded ? 'block' : 'none';
+                });
+
+                toggleBtn.textContent = expanded ? 'Mostrar menos ⬆️' : 'Mostrar más ⬇️';
+            });
+        }
     });
 </script>
