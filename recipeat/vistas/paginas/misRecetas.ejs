@@ -1,14 +1,31 @@
-<!-- paginas/misRecetas.ejs -->
-<h1>Mis Recetas</h1>
+<h1 class="favoritos-section"><span>Mis Recetas</span></h1>
 
-<% if (recetas.length === 0) { %>
-    <p>No has creado ninguna receta aún.</p>
+<% if (recetas && recetas.length === 0) { %>
+    <p id="mensajeNoEncontrado">No has creado ninguna receta aún.</p>
+<% } else if (recetas && recetas.length > 0) { %>
+    <div class="recetas-container">
+        <% recetas.forEach(receta => { %>
+            <div class="receta-card">
+                <a href="/receta/verReceta/<%= receta.id %>">
+                    <div class="receta-content">
+                        <div class="receta-imagen">
+                            <% if (receta.imagen) { %>
+                                <img class="receta-img" src="<%= receta.imagen %>" alt="Imagen de <%= receta.nombre %>" />
+                            <% } else { %>
+                                <img class="receta-img" src="/images/placeholder.jpg" alt="Sin imagen disponible" />
+                            <% } %>
+                        </div>
+                        <div class="receta-info">
+                            <h3><%= receta.nombre %></h3>
+                            <p class="resumen"><%= receta.descripcion ? receta.descripcion.slice(0, 150) + '...' : 'Sin descripción' %></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        <% }) %>
+    </div>
 <% } else { %>
-    <ul>
-    <% recetas.forEach(receta => { %>
-        <li>
-            <a href="/receta/verReceta/<%= receta.id %>"><%= receta.nombre %></a>
-        </li>
-    <% }) %>
-    </ul>
-<% } %><%>
+    <p id="mensajeNoEncontrado">No se han podido cargar tus recetas.</p>
+<% } %>
+
+
