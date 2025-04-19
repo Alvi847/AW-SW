@@ -10,6 +10,7 @@ export class Receta {
     static #removeLikeStmt = null;
     static #getByIdStmt = null;
     static #getFavoritosByUserStmt = null;
+    static #getRecetasByUserStmt = null;
 
     static initStatements(db) {
         if (this.#getAllStmt !== null) return;
@@ -34,7 +35,18 @@ export class Receta {
             INNER JOIN Likes l ON r.id = l.id_receta
             WHERE l.user = @username
         `);
+        //seleccionar recetas por usuario
+        this.#getRecetasByUserStmt = db.prepare(`
+            SELECT * FROM Recetas WHERE user = @username
+        `);
+
               
+    }
+
+    // Obtener recetas por usuario
+    static getRecetasPorUsuario(username) {
+        const recetas = this.#getRecetasByUserStmt.all({ username });
+        return recetas;
     }
 
     static getFavoritosPorUsuario(username) {

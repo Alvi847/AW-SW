@@ -1,6 +1,6 @@
 import express from 'express';
 
-import {viewReceta, viewRecetas, createReceta, doCreateReceta, viewUpdateReceta, updateReceta, deleteReceta, likeReceta } from './controllers.js';
+import {viewReceta, viewRecetas, createReceta, doCreateReceta, viewUpdateReceta, updateReceta, deleteReceta, likeReceta, viewMisRecetas } from './controllers.js';
 import multer from 'multer';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'url'; 
@@ -66,5 +66,7 @@ recetasRouter.post('/removeReceta'
 recetasRouter.post('/like'
     , autenticado('/receta/listaRecetas')
     , likeReceta);
+
+recetasRouter.get('/misRecetas', viewMisRecetas);
 
 export default recetasRouter;

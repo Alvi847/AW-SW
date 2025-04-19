@@ -1,0 +1,14 @@
+<!-- paginas/misRecetas.ejs -->
+<h1>Mis Recetas</h1>
+
+<% if (recetas.length === 0) { %>
+    <p>No has creado ninguna receta aún.</p>
+<% } else { %>
+    <ul>
+    <% recetas.forEach(receta => { %>
+        <li>
+            <a href="/receta/verReceta/<%= receta.id %>"><%= receta.nombre %></a>
+        </li>
+    <% }) %>
+    </ul>
+<% } %><%>

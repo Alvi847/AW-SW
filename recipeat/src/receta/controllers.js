@@ -217,3 +217,27 @@
         }
     }
 
+    // Ver las recetas del usuario logueado
+    export function viewMisRecetas(req, res) {
+        let contenido = 'paginas/misRecetas';
+        const user = req.session.username;
+    
+        if (!user) {
+            return res.redirect('/login');
+        }
+    
+        try {
+            const recetas = Receta.getRecetasPorUsuario(user);
+            render(req, res, contenido, {
+                recetas,
+                login: true
+            });
+        } catch (e) {
+            req.log.error("Error al obtener las recetas del usuario '%s': %s", user, e.message);
+            res.status(500).send("Error interno del servidor");
+        }
+    }
+    
+
+
+
