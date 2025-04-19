@@ -1,4 +1,4 @@
-
+/*
   .perfil-card {
     max-width: 800px; 
     margin: 100px auto; 
@@ -11,18 +11,18 @@
     font-family: 'Montserrat',sans-serif;
     gap: 30px;
     align-items: center; 
-  }
+  }*/
   
   /* Centramos todo el contenido de la card */
-  .perfil-card-container {
+  /*.perfil-card-container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh; 
-  }
+  }*/
   
   /* Imagen de perfil */
-  .perfil-foto {
+  /*.perfil-foto {
     flex: 1;
     display: flex;
     align-items: center;
@@ -64,10 +64,10 @@
     display: flex;
     gap: 10px;
     margin-top: 15px;
-  }
+  }*/
   
   /* Botón Editar */
-  .editar {
+  /*.editar {
     display: inline-block;
     margin-top: 15px;
     padding: 12px 18px;
@@ -82,10 +82,10 @@
   .editar:hover {
     background-color: #0056b3;
   }
-  
+  */
   
   /* Botón de cerrar sesión */
-  .logout {
+  /*.logout {
     display: inline-block;
     margin-top: 15px;
     padding: 12px 18px;
@@ -100,9 +100,9 @@
   .logout:hover {
     background-color: #c85f23;
   }
-  
+  */
   /* Responsive */
-  @media (max-width: 768px) {
+  /*@media (max-width: 768px) {
     .perfil-card {
       flex-direction: column;
       text-align: center;
@@ -113,5 +113,218 @@
       width: 150px;
       height: 150px;
     }
+  }*/
+
+  .perfil-card {
+    max-width: 1200px; /* Aumentamos el ancho */
+    min-height: 600px; /* Aumentamos la altura mínima */
+    margin: 100px auto;
+    padding: 40px;
+    display: flex;
+    flex-direction: row;
+    background: #1c1c1c;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    font-family: 'Montserrat', sans-serif;
+    gap: 30px;
+    color: #fff;
+  
+    
+    border: 1px solid #ffffff;
   }
+  
+  
+  /* Menú lateral */
+  .menu-lateral {
+    width: 220px;
+    border-right: 1px solid #333;
+  }
+  
+  .menu-lateral ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menu-lateral li {
+    margin-bottom: 25px;
+  }
+  
+  .menu-lateral a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+    position: relative;
+    padding-bottom: 5px;
+    display: inline-block;
+    transition: color 0.3s;
+  }
+  
+  .menu-lateral a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #ffbd3a;
+    transition: width 0.3s ease-in-out;
+  }
+  
+  .menu-lateral a:hover::after {
+    width: 100%;
+  }
+  
+  .menu-lateral a:hover {
+    color: #ffbd3a;
+  }
+  
+  /* Contenido a la derecha */
+  .contenido-perfil {
+    flex: 1;
+    display: flex;
+    gap: 30px;
+    align-items: flex-start; /* ✅ Esto alinea arriba */
+  }
+  
+  
+  .perfil-foto img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #ffbd3a;
+  }
+
+  .perfil-detalles {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    height: 100%; /* Asegura que ocupe todo el alto disponible */
+  }
+  
+  
+  .perfil-detalles h1 {
+    font-size: 26px;
+    margin-bottom: 45px;
+    color: #fff;
+  }
+  
+  .perfil-detalles h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #ffbd3a;
+  }
+  
+  .perfil-detalles p {
+    font-size: 18px;
+    margin: 8px 0;
+    color: #ccc;
+  }
+  
+  .botones-perfil {
+    display: flex;
+    gap: 10px;
+    margin-top: auto; 
+  }
+  
+  
+  .editar, .logout {
+    padding: 12px 18px;
+    font-size: 16px;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+  
+  .editar {
+    background-color: #007bff;
+  }
+  
+  .editar:hover {
+    background-color: #0056b3;
+  }
+  
+  .logout {
+    background-color: #dc6a35;
+  }
+  
+  .logout:hover {
+    background-color: #c85f23;
+  }
+
+
+  .form-editar label {
+    display: block;
+    margin-bottom: 15px;
+    color: #fff;
+    font-size: 16px;
+  }
+  
+  .form-editar input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+    background-color: #2c2c2c;
+    color: white;
+  }
+  
+  .guardar {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  .guardar:hover {
+    background-color: #0056b3;
+  }
+  
+  .cancelar {
+    background-color: #dc3545;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+  
+  .cancelar:hover {
+    background-color: #b02a37;
+  }
+  
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .perfil-card {
+      flex-direction: column;
+    }
+  
+    .contenido-perfil {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  
+    .menu-lateral {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #333;
+      margin-bottom: 20px;
+    }
+  
+    .menu-lateral ul {
+      display: flex;
+      justify-content: space-around;
+    }
+  }
+  
   

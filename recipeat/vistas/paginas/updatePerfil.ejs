@@ -1,35 +1,50 @@
-<div class="perfil-card-container">
+
+  <div class="perfil-card-container">
     <div class="perfil-card">
-      <div class="perfil-foto">
-        <img src="/ruta/a/tu/foto.jpg" alt="Foto de perfil">
+  
+      
+      <div class="menu-lateral">
+        <ul>
+          <li><a href="/usuarios/favoritas">Mis Recetas Favoritas</a></li>
+          <li><a href="/usuarios/mis-recetas">Mis Recetas</a></li>
+        </ul>
       </div>
   
-      <div class="perfil-detalles">
-        <h1>Editar tu perfil</h1>
+      
+      <div class="contenido-perfil">
+        <div class="perfil-foto">
+          <img src="/ruta/a/tu/foto.jpg" alt="Foto de perfil">
+        </div>
   
-        <form class="form-editar" action="/usuarios/updatePerfil" method="POST">
-          <label>Nombre:
-            <input type="text" name="nombre" value="<%= usuario.nombre %>" required>
-          </label>
+        <div class="perfil-detalles">
+          <h1>Editar tu perfil</h1>
   
-          <label>Username:
-            <input type="text" name="username" value="<%= usuario.username %>" readonly>
-          </label>
+          <form class="form-editar" action="/usuarios/updatePerfil" method="POST">
+            <label>Nombre:
+              <input type="text" name="nombre" value="<%= usuario.nombre %>" required>
+            </label>
   
-          <label>Email:
-            <input type="email" name="email" value="<%= usuario.email %>" required>
-          </label>
+            <label>Username:
+              <input type="text" name="username" value="<%= usuario.username %>" readonly>
+            </label>
   
-        <label>Nueva contraseña:
-            <input type="password" name="password" placeholder="Dejar en blanco si no quieres cambiarla">
-          </label>
+            <label>Email:
+              <input type="email" name="email" value="<%= usuario.email %>" required>
+            </label>
   
-          <div class="botones-perfil">
-            <button type="submit" class="guardar">Guardar cambios</button>
-            <a href="/usuarios/verPerfil" class="cancelar">Cancelar</a>
-          </div>
-        </form>
+            <label>Nueva contraseña:
+              <input type="password" name="password" placeholder="Dejar en blanco si no quieres cambiarla">
+            </label>
+  
+            <div class="botones-perfil">
+              <button type="submit" class="guardar">Guardar cambios</button>
+              <a href="/usuarios/verPerfil" class="cancelar">Cancelar</a>
+            </div>
+          </form>
+        </div>
       </div>
+  
     </div>
   </div>
+  
   
