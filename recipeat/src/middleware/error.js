@@ -1,3 +1,5 @@
+import { render } from '../utils/render.js';
+
 export function errorHandler (err, req, res, next) {
 
     if (res.headersSent) {
@@ -35,7 +37,7 @@ export function errorHandler (err, req, res, next) {
         });
     }
     // Si es otro tipo de petición (e.g generada por el usuario) mostramos página de error
-    render(eq, res, 'paginas/error', {
+    render(req, res, 'paginas/error', {
         message
     });
 }
