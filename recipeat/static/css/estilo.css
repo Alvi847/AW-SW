@@ -349,7 +349,7 @@ body::-webkit-scrollbar-thumb:hover {
         font-size: 25px; /* Adjust font size */
         position: absolute; /* Positioning for better layout */
         top: 10px; /* Position from the top */
-        right: 70px; /* Position from the right */
+        right: 53px; /* Position from the right */
     }
 
     /* Navigation menu adjustments */
@@ -430,5 +430,10 @@ body::-webkit-scrollbar-thumb:hover {
         width: 100%;
         object-fit: contain; 
         clip-path: none;
+    }
+
+    .icono-logout svg {
+        width: 35px !important;
+        height: 35px !important;
     }
 }
