@@ -478,7 +478,6 @@
     
         .receta-info {
             padding: 10px;
-            font-size: 16px;
         }
 
         .receta-info h2{    
@@ -487,8 +486,12 @@
 
         .receta-info p:last-of-type{
             text-align: left;
-            padding: 10px;
         } 
+
+        .resumen{
+            padding: 10px;
+            font-size: 14px;
+        }
 
         .receta-img{
             height: 200px;
@@ -508,7 +511,7 @@
     
         .receta-comentarios .comentarios-container {
             grid-template-columns: 1fr; /* una columna por fila en móvil */
-            padding: 5px;
+            padding: 15px;
         }
     
         .comentario-botones {
