@@ -487,6 +487,7 @@
 
         .receta-info p:last-of-type{
             text-align: left;
+            padding: 10px;
         } 
 
         .receta-img{
@@ -607,5 +608,5 @@
         padding: 10px;
     }
     
-    }
+}
     
