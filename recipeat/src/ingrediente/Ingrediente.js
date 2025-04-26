@@ -49,6 +49,7 @@ export class Ingrediente {
     }
 
     static deleteIngrediente(nombre) {
+        Contiene.deleteAllByIngrediente(nombre);
         const result = this.#deleteStmt.run({ nombre });
         if (result.changes === 0) throw new Error(`No se encontró el ingrediente con nombre ${nombre}`);
     }
@@ -91,15 +92,23 @@ export class Ingrediente {
 export class Contiene {
     static #insertStmt = null;
     static #deleteStmt = null;
+    static #deleteAllByIngredienteStmt = null;
+    static #deleteAllByRecetaStmt = null;
 
     static initStatements(db) {
-        if (this.#deleteStmt !== null) return;
+        if (this.#deleteAllByRecetaStmt !== null) return;
 
         // Añadir un ingrediente a una receta
         this.#insertStmt = db.prepare('INSERT INTO Contiene (id_receta, nombre_ingrediente, cantidad) VALUES (@id_receta, @nombre_ingrediente, @cantidad)');
 
         // Borrar un ingrediente de una receta
         this.#deleteStmt = db.prepare('DELETE FROM Contiene WHERE id_receta = @id_receta AND nombre_ingrediente = @nombre_ingrediente');
+
+        // Borrar todas las recetas a las que pertenece un ingrediente
+        this.#deleteAllByIngredienteStmt = db.prepare('DELETE FROM Contiene WHERE nombre_ingrediente = @nombre_ingrediente');
+
+        // Borrar todos los ingredientes que pertenecen a la receta
+        this.#deleteAllByRecetaStmt = db.prepare('DELETE FROM Contiene WHERE id_receta = @id_receta');
     }
 
     static insert(n_ingrediente, id_receta, cantidad) {
@@ -119,11 +128,25 @@ export class Contiene {
     }
 
     static delete(n_ingrediente, id_receta) {
-        const result = this.#deleteStmt.run({ 
+        const result = this.#deleteStmt.run({
             nombre_ingrediente: n_ingrediente,
-            id_receta: id_receta 
-            });
+            id_receta: id_receta
+        });
         if (result.changes === 0) throw new Error(`No se encontró el ingrediente con nombre ${nombre} en la receta ${id_receta}`);
+    }
+
+    static deleteAllByIngrediente(n_ingrediente) {
+        const result = this.#deleteAllByIngredienteStmt.run({
+            nombre_ingrediente: n_ingrediente,
+        });
+        if (result.changes === 0) throw new Error(`No se encontró el ingrediente con nombre ${nombre}`);
+    }
+
+    static deleteAllByReceta(id_receta) {
+        const result = this.#deleteAllByRecetaStmt.run({
+            id_receta,
+        });
+        if (result.changes === 0) throw new Error(`No se encontró la receta ${id_receta}`);
     }
 
     cantidad; // Cantidad del ingrediente
