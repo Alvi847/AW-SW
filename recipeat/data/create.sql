@@ -10,6 +10,21 @@ CREATE TABLE "Comentarios" (
 	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id"),
 	FOREIGN KEY("user") REFERENCES "Usuarios"("username")
 );
+DROP TABLE IF EXISTS "Contiene";
+CREATE TABLE "Contiene" (
+	"id_receta"	INTEGER,
+	"nombre_ingrediente"	TEXT,
+	"cantidad"	INTEGER NOT NULL,
+	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id"),
+	FOREIGN KEY("nombre_ingrediente") REFERENCES "Ingredientes"("nombre")
+);
+DROP TABLE IF EXISTS "Ingredientes";
+CREATE TABLE "Ingredientes" (
+	"nombre"	TEXT,
+	"unidad"	TEXT NOT NULL DEFAULT 'g',
+	"precio"	NUMERIC NOT NULL DEFAULT 0.01,
+	PRIMARY KEY("nombre")
+);
 DROP TABLE IF EXISTS "Likes";
 CREATE TABLE "Likes" (
 	"id_receta"	INTEGER NOT NULL,
