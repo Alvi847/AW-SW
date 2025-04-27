@@ -3,6 +3,14 @@ import express from 'express';
 import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil } from './controllers.js';
 import { autenticado } from '../middleware/auth.js';
 import asyncHandler from 'express-async-handler';
+import multer from 'multer';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'url'; 
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+export const UPLOAD_PATH = join(__dirname, "../../uploads");
+
+const multerFactory = multer({ dest: join(UPLOAD_PATH) });
 
 const usuariosRouter = express.Router();
 
@@ -15,7 +23,7 @@ usuariosRouter.get('/logout', doLogout);
 
 usuariosRouter.get('/home', autenticado('/usuarios/home'), asyncHandler(viewHome));
 usuariosRouter.get('/registro', autenticado(null, '/usuarios/home'), asyncHandler(viewRegistro));
-usuariosRouter.post('/registro'
+usuariosRouter.post('/registro', multerFactory.single("imagen")
     , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
     , body('username', 'No puede ser vacío').trim().notEmpty()
     , body('nombre', 'No puede ser vacío').trim().notEmpty()
@@ -24,7 +32,7 @@ usuariosRouter.post('/registro'
 
 usuariosRouter.get('/verPerfil', autenticado('/usuarios/home'), asyncHandler(viewPerfil));
 usuariosRouter.get('/updatePerfil', autenticado('/usuarios/home'), asyncHandler(viewUpdatePerfil));
-usuariosRouter.post('/updatePerfil'
+usuariosRouter.post('/updatePerfil', multerFactory.single("imagen")
     , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
     , body('username', 'No puede ser vacío').trim().notEmpty()
     , body('nombre', 'No puede ser vacío').trim().notEmpty()

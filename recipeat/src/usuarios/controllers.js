@@ -95,14 +95,16 @@ export async function doRegistro(req, res) {
     const password = req.body.password;
     const nombre = req.body.nombre;
     const email = req.body.email;
+    const imagen = req.file;
 
     try {
-        const usuario = await Usuario.creaUsuario(username, password, nombre, email);
+        const usuario = await Usuario.creaUsuario(username, password, nombre, email, imagen);
         req.session.login = true;
         req.session.nombre = usuario.nombre;
         req.session.rol = usuario.rol;
         req.session.username = usuario.username;
         req.session.email = usuario.email;
+        req.session.imagen = usuario.imagen;
         return res.redirect('/usuarios/home');
     } catch (e) {
         let error = 'No se ha podido crear el usuario';
@@ -167,6 +169,8 @@ export async function updatePerfil(req, res) {
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
+        if(req.file)
+            await fs.unlink(req.file.path); // En la actualización también borramos la foto si el usuario ha subido alguna
         return render(req, res, 'paginas/updatePerfil', {
             usuario: datos,
             errores
@@ -174,13 +178,23 @@ export async function updatePerfil(req, res) {
     }
 
     const { username, nombre, email, password } = req.body;
+    /*const imagen = (req.file && req.file.filename) ? req.file.filename : null;*/
+    /*let imagen = null;
+    if (req.file && typeof req.file.filename === 'string') {
+        imagen = req.file.filename;
+    }*/
+
 
     try {
         const usuario = await Usuario.getUsuarioByUsername(req.session.username);
         usuario.nombre = nombre;
         //usuario.#username = username; 
-        usuario.email = email;        
-
+        usuario.email = email;
+        //usuario.imagen = imagen.filename;
+        if (req.file) {
+            usuario.imagen = req.file.filename;
+        }
+      
         if (password && password.trim() !== '') {
             await usuario.cambiaPassword(password);
         }

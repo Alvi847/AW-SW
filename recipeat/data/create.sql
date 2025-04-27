@@ -38,6 +38,7 @@ CREATE TABLE "Usuarios" (
 	"rol"	TEXT NOT NULL DEFAULT 'U' CHECK("rol" IN ('U', 'A')),
 	"nombre"	TEXT NOT NULL,
 	"email"	TEXT,
+	"imagen"	VARCHAR(255),
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 DROP TABLE IF EXISTS "Valoraciones_Comentarios";

@@ -18,7 +18,10 @@ import { logger } from './logger.js';
 import pinoHttp  from 'pino-http';
 const pinoMiddleware = pinoHttp(config.logger.http(logger));
 import { flashMessages } from './middleware/flash.js';
-import { errorHandler } from './middleware/error.js'; 
+import { errorHandler } from './middleware/error.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 
 export const app = express();
 
@@ -31,6 +34,7 @@ app.use(session(config.session));
 app.use(flashMessages);
 
 app.use('/', express.static(config.recursos));
+
 app.get('/', (req, res) => {
     res.render('pagina', {
         contenido: 'paginas/index',

@@ -16,8 +16,8 @@ export class Usuario {
         if (this.#getByUsernameStmt !== null) return;
 
         this.#getByUsernameStmt = db.prepare('SELECT * FROM Usuarios WHERE username = @username');
-        this.#insertStmt = db.prepare('INSERT INTO Usuarios(username, password, nombre, rol, email) VALUES (@username, @password, @nombre, @rol, @email)');
-        this.#updateStmt = db.prepare('UPDATE Usuarios SET username = @username, password = @password, rol = @rol, nombre = @nombre, email = @email WHERE id = @id');
+        this.#insertStmt = db.prepare('INSERT INTO Usuarios(username, password, nombre, rol, email, imagen) VALUES (@username, @password, @nombre, @rol, @email, @imagen)');
+        this.#updateStmt = db.prepare('UPDATE Usuarios SET username = @username, password = @password, rol = @rol, nombre = @nombre, email = @email, imagen = @imagen WHERE id = @id');
         this.#getUserByIdStmt = db.prepare( 'SELECT * FROM Usuarios WHERE id = @id');
     }
 
@@ -27,7 +27,7 @@ export class Usuario {
 
         const { password, rol, nombre, id, email } = usuario;
 
-        return new Usuario(username, password, nombre, email, rol, id);
+        return new Usuario(username, password, nombre, email, rol, id, usuario.imagen);
     }
 
     static getUsuarioById( iduser ) {
@@ -36,7 +36,7 @@ export class Usuario {
 
         const { username, password, rol, nombre, email } = usuario; //quiza quitar el pasword de aqui
 
-        return new Usuario(username, password, nombre, email, rol, iduser);
+        return new Usuario(username, password, nombre, email, rol, iduser, usuario.imagen);
     }
 
     static #insert(usuario) {
@@ -47,7 +47,8 @@ export class Usuario {
             const nombre = usuario.nombre;
             const rol = usuario.rol;
             const email = usuario.#email;
-            const datos = {username, password, nombre, email, rol};
+            const imagen = usuario.imagen;
+            const datos = {username, password, nombre, email, rol, imagen};
 
             result = this.#insertStmt.run(datos);
 
@@ -68,7 +69,8 @@ export class Usuario {
         const nombre = usuario.nombre;
         const rol = usuario.rol;
         const email = usuario.#email;
-        const datos = {username, password, nombre, email, rol, id};
+        const imagen = usuario.imagen;
+        const datos = {username, password, nombre, email, rol, id, imagen};
 
         const result = this.#updateStmt.run(datos);
         if (result.changes === 0) throw new UsuarioNoEncontrado(username);
@@ -91,8 +93,8 @@ export class Usuario {
         return usuario;
     }
 
-    static async creaUsuario(username, password, nombre, email) {
-        const usuario = new Usuario(username, password, nombre, email);
+    static async creaUsuario(username, password, nombre, email, imagen) {
+        const usuario = new Usuario(username, password, nombre, email, imagen);
         await usuario.cambiaPassword(password);
         usuario.persist();
         return usuario;
@@ -104,14 +106,16 @@ export class Usuario {
     #email;
     rol;
     nombre;
+    imagen;
 
-    constructor(username, password, nombre, email = '', rol = RolesEnum.USUARIO, id = null) {
+    constructor(username, password, nombre, email = '', rol = RolesEnum.USUARIO, id = null, filename = null) {
         this.#username = username;
         this.#password = password;
         this.nombre = nombre;
         this.rol = rol;
         this.#id = id;
         this.#email = email;
+        this.imagen = filename;
     }
 
     get email() {

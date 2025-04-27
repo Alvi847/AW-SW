@@ -12,14 +12,19 @@
   
       
       <div class="contenido-perfil">
-        <div class="perfil-foto">
-          <img src="/ruta/a/tu/foto.jpg" alt="Foto de perfil">
-        </div>
+        
   
         <div class="perfil-detalles">
           <h1>Editar tu perfil</h1>
   
-          <form class="form-editar" action="/usuarios/updatePerfil" method="POST">
+          <form class="form-editar" action="/usuarios/updatePerfil" method="POST" enctype="multipart/form-data">
+
+            <div class="perfil-foto">
+              <label for="Imagen">Imagen:</label>             
+              <p class="error"><%- helpers.error(errores, 'imagen' ) %></p>
+              <input type="file" name="imagen" value="<%= locals.foto ? locals.foto : '' %>">
+            </div>
+
             <label>Nombre:
               <input type="text" name="nombre" value="<%= usuario.nombre %>" required>
             </label>
