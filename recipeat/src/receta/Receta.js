@@ -1,4 +1,5 @@
 import { Comentario } from "../comentario/Comentario.js";
+import { Contiene } from "../ingrediente/Ingrediente.js"
 
 export class Receta {
 
@@ -153,6 +154,7 @@ export class Receta {
 
     // Eliminar una receta por ID
     static deleteReceta(id) {
+        Contiene.deleteAllByReceta(id);
         Comentario.deleteAllComentarios(id);
         Like.retiraTodosLikes(id);
         const result = this.#deleteStmt.run({ id });

@@ -478,7 +478,6 @@
     
         .receta-info {
             padding: 10px;
-            font-size: 16px;
         }
 
         .receta-info h2{    
@@ -488,6 +487,11 @@
         .receta-info p:last-of-type{
             text-align: left;
         } 
+
+        .resumen{
+            padding: 10px;
+            font-size: 14px;
+        }
 
         .receta-img{
             height: 200px;
@@ -507,7 +511,7 @@
     
         .receta-comentarios .comentarios-container {
             grid-template-columns: 1fr; /* una columna por fila en móvil */
-            padding: 5px;
+            padding: 15px;
         }
     
         .comentario-botones {
@@ -520,6 +524,92 @@
             width: 100%;
             margin-left: 0;
         }
-    
+
+          /* Centrar el título de favoritos en móvil */
+    .favoritos-section {
+        align-items: center;
+        text-align: center;
     }
+
+    .favoritos-section h2 {
+        text-align: center;
+    }
+
+    .favoritos-section h2::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    /* Grid responsivo: 1 columna en móvil */
+    .fav-grid {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    .fav-receta-card {
+        width: 90vw;
+    }
+
+    .fav-receta-overlay {
+        bottom: 0 !important;
+        background: rgba(0, 0, 0, 0.6);
+        font-size: 1rem;    /*root em = relativo al tamanio fuente del elemento raiz*/
+        padding: 0.5rem;
+    }
+
+    .fav-receta-card:hover .fav-receta-overlay {
+        bottom: 0; /* sin animación de subida */
+    }
+
+    .expand-btn {
+        margin-left: 0;
+        margin-top: 15px;
+        align-self: center;
+    }
+
+    /* Ajustar buscador */
+    .buscador {
+        width: 90%;
+    }
+
+    .recetas-container {
+        margin-left: 0;
+        margin-right: 0;
+        padding: 0 10px;
+    }
+
+    /* Receta card (de la lista principal) en columna */
+    .receta-card {
+        flex-direction: column;
+        font-size: 1rem;
+        max-height: none;
+        width: 90vw;
+    }
+
+    .receta-card .receta-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .receta-card .receta-imagen {
+        height: auto;
+        width: 100%;
+    }
+
+    .receta-info {
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .receta-info h3 {
+        text-align: center;
+    }
+
+    .mensajeNoEncontrado {
+        font-size: 30px;
+        width: 100%;
+        padding: 10px;
+    }
+    
+}
     
