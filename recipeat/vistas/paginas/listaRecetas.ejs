@@ -65,71 +65,8 @@
     <% } %>
     </div>
 <% } %>
-<script>
-    const contenedor = document.querySelector(".buscador");
-const input = document.getElementById("buscadorRecetas");
-
-input.addEventListener("focus", () => {
-    contenedor.style.border = "3.5px solid #e67e22"; // nuevo color o estilo
-});
-
-input.addEventListener("blur", () => {
-    contenedor.style.border = "1px solid #ccc"; // estilo original
-});
-
-</script>
-
+<!--script para enfocar el buscador-->
+<script src="/js/colorBuscadorRecetas.js" defer></script>
 <!--script para el buscador de recetas-->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const buscador = document.getElementById("buscadorRecetas");
-        const recetas = document.querySelectorAll(".receta-card");
-        const mensajeNoEncontrado = document.getElementById("mensajeNoEncontrado");
-
-        buscador.addEventListener("input", function () {
-            const filtro = buscador.value.toLowerCase().trim();
-            let hayCoincidencias = false;
-
-            recetas.forEach((receta) => {
-                const nombreReceta = receta.querySelector("h3").innerText.toLowerCase().trim();
-
-                // Dividir el nombre en palabras y comprobar si alguna empieza con el filtro
-                const palabras = nombreReceta.split(" ");
-                const coincide = palabras.some(palabra => palabra.startsWith(filtro));
-
-                if (coincide) {
-                    receta.style.display = "block";
-                    hayCoincidencias = true;
-                } else {
-                    receta.style.display = "none";
-                }
-            });
-
-            // Mostrar mensaje si no hay coincidencias
-            mensajeNoEncontrado.style.display = hayCoincidencias ? "none" : "block";
-        });
-    });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-    const toggleBtn = document.getElementById('toggle-button');
-    const hiddenCards = document.querySelectorAll('.hidden-fav');
-    const chevronIcon = document.getElementById('icon-chevron');
-
-    let expanded = false;
-
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            expanded = !expanded;
-
-            hiddenCards.forEach(card => {
-                card.style.display = expanded ? 'block' : 'none';
-            });
-
-            // Rotar el icono
-            chevronIcon.classList.toggle('rotado', expanded);
-        });
-    }
-});
-
-</script>
+<script src="/js/buscadorRecetas.js" defer></script>    <!--defer: le dice al navegador que cargue el js despues de haber cargado el html-->
+<script src="/js/favoritos.js" defer></script>
