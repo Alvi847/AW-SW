@@ -1,73 +1,100 @@
 <div class="lista-recetas">
-        <div class="buscador">
-        <svg class="icono-busqueda" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <div class="input">
-            <input type="text" placeholder="Buscar" id="buscadorRecetas">
-        </div>
+  <div class="buscador">
+    <svg
+      class="icono-busqueda"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <div class="input">
+      <input type="text" placeholder="Buscar" id="buscadorRecetas" />
     </div>
-    <div class="recetas-container">
-        <p id="mensajeNoEncontrado">
-            No se ha encontrado ninguna receta
-        </p>    
-        <% recetas.forEach((r)=> { %>
-            <div class="receta-card">
-                <a href="/receta/verReceta/<%= r.id %>">
-                    <div class="receta-content">
-                            <img class="receta-imagen" src="/imagen/<%= r.imagen %>" alt="<%= r.nombre %>">
-                        <div class="receta-info">
-                            <h3>
-                                <%= r.nombre %>
-                            </h3>
-                            <p class="resumen">
-                                <%= r.descripcion %>
-                            </p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <% }) %>
-    </div>  
+    <div class="select-container">
+        <select id="tipoFiltro">
+            <option value="nombre">Nombre</option>
+            <option value="ingrediente">Ingrediente</option>
+        </select>
+    </div>
+  </div>
+  <div class="recetas-container">
+    <% recetas.forEach((r)=> { %>
+    <div class="receta-card">
+      <a href="/receta/verReceta/<%= r.id %>">
+        <div class="receta-content">
+          <img
+            class="receta-imagen"
+            src="/imagen/<%= r.imagen %>"
+            alt="<%= r.nombre %>"
+          />
+          <div class="receta-info">
+            <h3><%= r.nombre %></h3>
+            <p class="resumen"><%= r.descripcion %></p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <% }) %>
+  </div>  
+  <p id="mensajeNoEncontrado" style="display:none;">No se ha encontrado ninguna receta</p>
 </div>
 <!--si el usuario esta logueado y sus favoritos son como minimo 1-->
 <!--se penso al prinipio de hacer un carrusel, pero hemos pensado que es ineficiente si el usuario tiene-->
 <!--unas 50 recetas con like. Tendria que estar dandole a las flechitas constantemente-->
 <!--De este modo, el usuario, las podra visualizar mejor-->
 <% if (login && favoritos.length > 0) { %>
-    <div class="favoritos-section">
-        <h2>TUS FAVORITOS</h2>
-        <div class="fav-grid" id="fav-grid">
-            <% favoritos.forEach((f, index) => { %>
-                <div class="fav-receta-card <%= index >= 3 ? 'hidden-fav' : '' %>">
-                    <a href="/receta/verReceta/<%= f.id %>">
-                        <div class="fav-receta-content">
-                            <img class="fav-receta-imagen" src="/imagen/<%= f.imagen %>" alt="<%= f.nombre %>">
-                            <div class="fav-receta-overlay">
-                                <h3><%= f.nombre %></h3>    <!--nombre de la receta-->
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            <% }) %>
-        </div>    
-    <% if (favoritos.length > 3) { %>
-        <button id="toggle-button" class="expand-btn">
-            <svg id="icon-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                 fill="currentColor" class="bi bi-chevron-compact-down" viewBox="0 0 16 16">
-              <path fill-rule="evenodd"
-                    d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67"/>
-            </svg>
-          </button>
-          
-    <% } %>
+<div class="favoritos-section">
+  <h2>TUS FAVORITOS</h2>
+  <div class="fav-grid" id="fav-grid">
+    <% favoritos.forEach((f, index) => { %>
+    <div class="fav-receta-card <%= index >= 3 ? 'hidden-fav' : '' %>">
+      <a href="/receta/verReceta/<%= f.id %>">
+        <div class="fav-receta-content">
+          <img
+            class="fav-receta-imagen"
+            src="/imagen/<%= f.imagen %>"
+            alt="<%= f.nombre %>"
+          />
+          <div class="fav-receta-overlay">
+            <h3><%= f.nombre %></h3>
+            <!--nombre de la receta-->
+          </div>
+        </div>
+      </a>
     </div>
+    <% }) %>
+  </div>
+  <% if (favoritos.length > 3) { %>
+  <button id="toggle-button" class="expand-btn">
+    <svg
+      id="icon-chevron"
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      class="bi bi-chevron-compact-down"
+      viewBox="0 0 16 16"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67"
+      />
+    </svg>
+  </button>
+
+  <% } %>
+</div>
 <% } %>
 <!--script para enfocar el buscador-->
 <script src="/js/colorBuscadorRecetas.js" defer></script>
 <!--script para el buscador de recetas-->
-<script src="/js/buscadorRecetas.js" defer></script>    <!--defer: le dice al navegador que cargue el js despues de haber cargado el html-->
+<script src="/js/buscadorRecetas.js" defer></script>
+<!--defer: le dice al navegador que cargue el js despues de haber cargado el html-->
 <!--script para la seccion de recetas favoritas del usuario logueado-->
 <script src="/js/favoritos.js" defer></script>

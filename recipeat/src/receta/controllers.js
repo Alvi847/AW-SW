@@ -247,6 +247,23 @@ export function viewMisRecetas(req, res) {
     }
 }
 
+export function apiBuscarRecetas(req, res) {
+    const { tipo, q } = req.query;
+    const recetas = Receta.getAllRecetas();
 
+    const filtro = q.toLowerCase().trim();
+
+    const recetasFiltradas = recetas.filter(r => {
+        if (tipo === 'nombre') {
+            return r.nombre.toLowerCase().includes(filtro);
+        } else if (tipo === 'ingrediente') {
+            // Si quieres más realismo tendrías que buscar en r.ingredientes
+            return (r.ingredientes || []).some(ing => ing.toLowerCase().includes(filtro));
+        }
+        return false;
+    });
+
+    res.json(recetasFiltradas);
+}
 
 
