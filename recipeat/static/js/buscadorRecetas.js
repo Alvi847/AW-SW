@@ -4,14 +4,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const recetasContainer = document.querySelector(".recetas-container");
     const mensajeNoEncontrado = document.getElementById("mensajeNoEncontrado");
 
-    const recetasOriginales = recetasContainer.innerHTML;  // 💾 Guardamos el HTML inicial
+    const recetasOriginales = recetasContainer.innerHTML;  //Guardamos el HTML inicial
 
     async function buscarRecetas() {
         const query = buscador.value.trim();
         const filtro = tipoFiltro.value;
 
         if (query.length === 0) {
-            recetasContainer.innerHTML = recetasOriginales; // ✅ Recuperamos todas las recetas
+            recetasContainer.innerHTML = recetasOriginales; //Recuperamos todas las recetas
             mensajeNoEncontrado.style.display = "none";
             return;
         }
