@@ -463,6 +463,114 @@
       .rotado {
         transform: rotate(180deg);
       }
+
+      .recomendadas-section {
+        margin-top: 50px;
+        width: 100%;
+        text-align: center;
+        font-family: 'Montserrat', sans-serif;
+    }
+    
+    .recomendadas-section h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: white;
+    }
+    
+    .recomendadas-carrusel {
+        position: relative;
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    
+    .recomendadas-track {
+        display: flex;
+        transition: transform 0.5s ease;
+        scroll-behavior: smooth;
+        overflow-x: hidden; /* ← importante para que no se salga */
+    }
+    
+    .receta-recomendada-card {
+        flex: 0 0 25%;
+        max-width: 25%;
+        padding: 10px;
+        box-sizing: border-box;
+        position: relative;
+    }
+    
+    .receta-recomendada-card a {
+        display: block;
+        position: relative;
+        height: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: #ccc;
+        text-decoration: none;
+        color: white;
+    }
+    
+    .receta-recomendada-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.3s;
+    }
+    
+    .receta-recomendada-card:hover img {
+        transform: scale(1.05);
+    }
+    
+    /* Overlay cubre toda la imagen y centra el texto */
+    .receta-recomendada-card h3 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.6); /* fondo negro translúcido */
+        font-size: 1.2rem;
+        font-family: 'Montserrat', sans-serif;
+        text-align: center;
+        padding: 10px;
+        box-sizing: border-box;
+        transition: background 0.3s;
+    }
+    
+    .receta-recomendada-card:hover h3 {
+        background: rgba(0, 0, 0, 0.8); /* un poco más oscuro al pasar el ratón */
+    }
+    
+    
+    /* Botones flecha */
+    .carrusel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0,0,0,0.8);
+        color: white;
+        border: none;
+        font-size: 18px;
+        padding: 10px;
+        border-radius:60%;
+        cursor: pointer;
+        z-index: 10;
+    }
+    
+    .carrusel-btn.left {
+        left: 15px;
+    }
+    
+    .carrusel-btn.right {
+        right: 15px;
+    }
+    
           
     @media (max-width: 1000px) {
 

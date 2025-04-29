@@ -25,10 +25,22 @@ export function viewRecetas(req, res) {
     const user = req.session.username;
 
     let favoritos = [];
+    let recomendadas = [];
+
+    if (login) {
+        favoritos = Receta.getFavoritosPorUsuario(user);
+
+        recomendadas = recetas
+            .filter(r => !favoritos.some(fav => fav.id === r.id)) // ❌ No mostrar favoritos
+            .sort((a, b) => b.likes - a.likes)                   // 📈 Ordenar por likes descendente
+            .slice(0, 6);                                        // 🎯 Tomar las 5 recetas más populares
+    }
+
     render(req, res, contenido, {
         recetas,
         login,
-        favoritos: Receta.getFavoritosPorUsuario(user)
+        favoritos,
+        recomendadas
     });
 }
 
