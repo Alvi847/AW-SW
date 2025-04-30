@@ -359,9 +359,9 @@
     }
  
     .favoritos-section {
-        padding: 50px;
+        padding: 10px;
         max-width: 1500px;
-        margin: 20px auto; /* auto centra horizontalmente */
+        margin: 10px; /* auto centra horizontalmente */
         display: flex;
         flex-direction: column;
         align-items: flex-start; 
@@ -370,7 +370,8 @@
     /* título favoritos */
     .favoritos-section h2 {
         font-size: 1.5rem;
-        margin-bottom: 2rem;
+        margin-bottom: 1.8rem;
+        margin-left: 19px;
         color: #fff;
         text-align: center;
         position: relative;

@@ -63,7 +63,6 @@ export function viewReceta(req, res) {
 
 // Crear una receta (mostrar el formulario de creación)
 export function createReceta(req, res) {
-
     let contenido = 'paginas/createReceta';
     if (req.session == null || !req.session.login) {
         contenido = 'paginas/home';
