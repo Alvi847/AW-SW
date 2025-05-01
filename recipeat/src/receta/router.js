@@ -6,6 +6,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'url'; 
 import { body } from 'express-validator';
 import { autenticado } from '../middleware/auth.js';
+import { apiBuscarRecetas } from './controllers.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const UPLOAD_PATH = join(__dirname, "../../uploads");
@@ -68,5 +69,8 @@ recetasRouter.post('/like'
     , likeReceta);
 
 recetasRouter.get('/misRecetas', viewMisRecetas);
+
+
+recetasRouter.get('/api/buscar', apiBuscarRecetas);
 
 export default recetasRouter;

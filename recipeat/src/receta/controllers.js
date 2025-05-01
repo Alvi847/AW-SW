@@ -25,10 +25,22 @@ export function viewRecetas(req, res) {
     const user = req.session.username;
 
     let favoritos = [];
+    let recomendadas = [];
+
+    if (login) {
+        favoritos = Receta.getFavoritosPorUsuario(user);
+
+        recomendadas = recetas
+            .filter(r => !favoritos.some(fav => fav.id === r.id)) // ❌ No mostrar favoritos
+            .sort((a, b) => b.likes - a.likes)                   // 📈 Ordenar por likes descendente
+            .slice(0, 6);                                        // 🎯 Tomar las 5 recetas más populares
+    }
+
     render(req, res, contenido, {
         recetas,
         login,
-        favoritos: Receta.getFavoritosPorUsuario(user)
+        favoritos,
+        recomendadas
     });
 }
 
@@ -51,7 +63,6 @@ export function viewReceta(req, res) {
 
 // Crear una receta (mostrar el formulario de creación)
 export function createReceta(req, res) {
-
     let contenido = 'paginas/createReceta';
     if (req.session == null || !req.session.login) {
         contenido = 'paginas/home';
@@ -247,6 +258,23 @@ export function viewMisRecetas(req, res) {
     }
 }
 
+export function apiBuscarRecetas(req, res) {
+    const { tipo, q } = req.query;
+    const recetas = Receta.getAllRecetas();
 
+    const filtro = q.toLowerCase().trim();
+
+    const recetasFiltradas = recetas.filter(r => {
+        if (tipo === 'nombre') {
+            return r.nombre.toLowerCase().includes(filtro);
+        } else if (tipo === 'ingrediente') {
+            // Si quieres más realismo tendrías que buscar en r.ingredientes
+            return (r.ingredientes || []).some(ing => ing.toLowerCase().includes(filtro));
+        }
+        return false;
+    });
+
+    res.json(recetasFiltradas);
+}
 
 
