@@ -140,3 +140,4 @@ dist
 *.db-journal
 /recipeat/src/receta/uploads
 /recipeat/uploads
+recipeat/src/receta/cadena_express-validator.js

@@ -40,7 +40,6 @@ export class Receta {
         this.#getRecetasByUserStmt = db.prepare(`
             SELECT * FROM Recetas WHERE user = @username
         `);
-
               
     }
 
@@ -55,8 +54,13 @@ export class Receta {
         return favoritos;
     }
     
-
-    // Obtener una receta por ID
+    /**
+     * Obtener una receta por ID
+     * 
+     * @param { int } id 
+     * @param { string } user Nombre de usuario al que se va a mostrar la receta
+     * @returns 
+     */
     static getRecetaById(id, user) {
         const receta = this.#getByIdStmt.get({ id });
         if (receta === undefined)
@@ -70,14 +74,21 @@ export class Receta {
         }
     }
 
-    // Obtener todas las recetas
+    /**
+     *Obtener todas las recetas
+     * @returns Una lista con todas las recetas
+     */
     static getAllRecetas() {
 
         const recetas = this.#getAllStmt.all();
         return recetas;
     }
 
-    // Insertar una nueva receta
+    /**
+     * Insertar una nueva receta
+     * @param {Receta} receta Una receta con los datos que se tienen que insertar en la tabla  
+     * @returns 
+     */
     static insertReceta(receta) {
         let result;
         try {
@@ -103,7 +114,11 @@ export class Receta {
             receta.likes, result.lastInsertRowid, null, false, receta.imagen);
     }
 
-    // Añade un like a la receta
+    /**
+     * Añade un like a una receta
+     * @param {int} id id de la receta
+     * @param {string} user username del usuario 
+     */
     static addLikeReceta(id, user) {
         Like.addLike(id, user);
 
@@ -112,7 +127,11 @@ export class Receta {
         });
     }
 
-    // Mira si el usuario ya ha dado like o no a la receta para decidir si se ha de eliminar o de añadir el like
+    /**
+     * Mira si el usuario ya ha dado like o no a la receta para decidir si se ha de eliminar o de añadir el like
+     * @param {int} id id de la receta
+     * @param {string} user username del usuario
+     */
     static processLike(id, user) {
         if (Like.usuarioYaHaDadoLike(id, user))
             this.removeLikeReceta(id, user);
@@ -120,7 +139,11 @@ export class Receta {
             this.addLikeReceta(id, user);
     }
 
-    // Elimina un like a la receta.
+    /**
+     * Elimina un like a la receta
+     * @param {int} id id de la receta
+     * @param {string} user username del usuario
+     */
     static removeLikeReceta(id, user) {
         Like.retiraLike(id, user);
 
@@ -129,6 +152,11 @@ export class Receta {
         });
     }
 
+    /**
+     *Cambia los datos de la receta por los de la nueva receta de entrada
+     *
+     * @param {Receta} receta receta DE MISMO ID con los nuevos datos
+     */
     static updateReceta(receta) {
         let result
         try {
@@ -152,7 +180,10 @@ export class Receta {
         return receta;
     }
 
-    // Eliminar una receta por ID
+    /**
+     * Eliminar una receta por ID
+     * @param {int} id 
+     */
     static deleteReceta(id) {
         Contiene.deleteAllByReceta(id);
         Comentario.deleteAllComentarios(id);
@@ -167,7 +198,7 @@ export class Receta {
     likes;  // El numero de likes que tiene la receta
     user; // El usuario que crea la receta
     user_liked; // El usuario (el que hace la petición) ha dado like
-    modo_preparacion;   //pasos a seguir para realizar la receta
+    modo_preparacion;   // Pasos a seguir para realizar la receta
     imagen; // RUTA de la imagen de la receta
     ingredientes; // Ingredientes de la receta (array de ingredientes)
 
@@ -193,16 +224,24 @@ export class Like {
     static #insertLikeStmt = null;
     static #removeLikeStmt = null
     static #removeAllStmt = null;
+    static #getAllByUserStmt = null;
 
     static initStatements(db) {
         if (this.#getLikeStmt !== null) return;
 
+        this.#getAllByUserStmt = db.prepare('SELECT * FROM Likes WHERE user = @username');
         this.#getLikeStmt = db.prepare('SELECT * FROM Likes WHERE id_receta = @id_receta AND user = @username');
         this.#insertLikeStmt = db.prepare('INSERT INTO Likes (id_receta, user) VALUES (@id_receta, @username)');
         this.#removeLikeStmt = db.prepare('DELETE FROM Likes WHERE id_receta = @id_receta AND user = @username;');
         this.#removeAllStmt = db.prepare('DELETE FROM Likes WHERE id_receta = @id_receta');
     }
 
+    /**
+     * Añade un like a una receta
+     * 
+     * @param {int} id_receta id de la receta
+     * @param {string} username username del usuario
+     */
     static addLike(id_receta, username) {
         try {
             this.#insertLikeStmt.run({
@@ -219,7 +258,26 @@ export class Like {
             throw new ErrorInsertLike(id_receta, { cause: e });
         }
     }
+    /**
+     * Obtén una lista de recetas a las que el usuario ha dado like
+     * @param {string} username username del usuario
+     * @returns lista de ids de recetas
+     */
+    static getAllLikedPorUsuario(username){
+        const result = this.#getAllByUserStmt.get({
+            username
+        });
 
+        return result;
+    }
+
+    /**
+     * Devuelve true o false dependiendo de si el usuario ha dado like a la receta o no
+     * 
+     * @param {int} id_receta id de la receta a analizar
+     * @param {string} username username del usuario
+     * @returns 
+     */
     static usuarioYaHaDadoLike(id_receta, username) {
         const result = this.#getLikeStmt.get({
             id_receta,
@@ -232,6 +290,11 @@ export class Like {
             return false;
     }
 
+    /**
+     * Retira un like de la receta
+     * @param {int} id_receta id de la receta
+     * @param {string} username username del usuario
+     */
     static retiraLike(id_receta, username) {
         this.#removeLikeStmt.run({
             id_receta,
@@ -239,6 +302,10 @@ export class Like {
         });
     }
 
+    /**
+     * Retira todos los likes de la receta
+     * @param {int} id_receta id de la receta
+     */
     static retiraTodosLikes(id_receta) {
         this.#removeAllStmt.run({
             id_receta,

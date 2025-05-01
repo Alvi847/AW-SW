@@ -76,11 +76,20 @@ export function createReceta(req, res) {
 export async function doCreateReceta(req, res) {
 
     const result = validationResult(req);
+    const requestWith = req.get('X-Requested-With');
+    const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
+    if(esAjax)
+        req.log.debug("Petición AJAX recibida para doCreateReceta()");
+
     if (!result.isEmpty()) {
         const errores = result.mapped();
         if (req.file)
             await fs.unlink(req.file.path); // (Ver comentario del import): https://midu.dev/como-eliminar-un-ficher-con-node-js/
         const datos = matchedData(req);
+        if (esAjax) {
+            req.log.debug("Devuelto código 400 a la petición AJAX");
+            return res.status(400).json({ status: 400, errores });
+        }
         return render(req, res, 'paginas/createReceta', {
             datos,
             errores
@@ -90,6 +99,8 @@ export async function doCreateReceta(req, res) {
     const { nombre, descripcion, modo_preparacion } = req.body;
     const imagen = req.file;
 
+    console.log("Archivo recibido: ", req.file);
+
     const nuevaReceta = new Receta(nombre, descripcion, modo_preparacion, null, null, req.session.username, false, imagen.filename);
 
     // Insertar la receta en la base de datos
@@ -97,7 +108,13 @@ export async function doCreateReceta(req, res) {
         Receta.insertReceta(nuevaReceta);
 
         // Redirigir o devolver un mensaje de éxito
-        res.redirect('/receta/listaRecetas');
+
+        if (esAjax) {
+            req.log.debug("Devuelto código 200 a la petición AJAX");
+            return res.status(200).json({ ok: true });
+        }
+
+        return res.redirect('/receta/listaRecetas');
     }
     catch (e) {
         req.log.error("No se ha podido crear la receta: '%s'", e.message);
@@ -126,12 +143,22 @@ export async function updateReceta(req, res) {
     const id = req.params.id;
     const recetaExistente = Receta.getRecetaById(id);
 
+    const requestWith = req.get('X-Requested-With');
+    const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
+
+    if(esAjax)
+        req.log.debug("Petición AJAX recibida para updateReceta()");
+
     const result = validationResult(req);
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
         if (req.file)
             await fs.unlink(req.file.path); // En la actualización también borramos la foto si el usuario ha subido alguna
+        if (esAjax) {
+            req.log.debug("Devuelto código 400 a la petición AJAX");
+            return res.status(400).json({ status: 400, errores });
+        }
         return render(req, res, `paginas/updateReceta`, {
             datos,
             errores,
@@ -161,6 +188,11 @@ export async function updateReceta(req, res) {
         req.log.debug("Actualizando receta con id '%i'", id);
         Receta.updateReceta(recetaExistente);
         req.log.info("Receta '%i', editada con éxito por '%s'", id, user);
+
+        if (esAjax) {
+            req.log.debug("Devuelto código 200 a la petición AJAX");
+            return res.status(200).json({ ok: true });
+        }
     }
     else
         req.log.error("La receta '%i',no puede ser editada por '%s'", id, user);

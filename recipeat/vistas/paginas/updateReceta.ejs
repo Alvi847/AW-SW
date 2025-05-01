@@ -1,6 +1,6 @@
 <div class="update-receta">
 <h1>Actualizar Receta</h1>
-<form action="/receta/updateReceta/<%= receta.id %>" method="POST" enctype="multipart/form-data">
+<form action="/receta/updateReceta/<%= receta.id %>" method="POST" enctype="multipart/form-data" name="form-update-receta">
     <fieldset>
         <legend>Editar Receta</legend>
 
@@ -12,23 +12,31 @@
             <p class="error"><%- helpers.error(errores, 'nombre') %></p>
             <input type="text" name="nombre"
                    value="<%= receta.nombre %>" placeholder="Nombre">
+                   <span class="error"></span><span class="feedback"></span>
         </div>
         <div class="descripcion">
             <p class="error"><%- helpers.error(errores, 'descripcion' ) %></p>
             <textarea name="descripcion" placeholder="Descripción"><%= receta.descripcion ? receta.descripcion : '' %></textarea>
+            <span class="error"></span><span class="feedback"></span>
         </div>
 
         <div class="preparacion">
             <p class="error"><%- helpers.error(errores, 'modo_preparacion' ) %></p>
             <textarea name="modo_preparacion" placeholder="Modo de preparación"><%= receta.modo_preparacion ? receta.modo_preparacion : '' %></textarea>
+            <span class="error"></span><span class="feedback"></span>
         </div>
         <div class="receta-imagen">
             <label for="imagen">Imagen:</label>
             <p class="error"><%- helpers.error(errores, 'imagen') %></p>
             <input type="file" name="imagen" required value="<%= locals.foto ? locals.foto : receta.imagen %>">
+            <span class="error"></span><span class="feedback"></span>
         </div>
+            <input type="hidden" name="id_receta" value="<%= receta.id %>">
 
         <button type="submit">Guardar Cambios</button>
     </fieldset>
 </form>
 </div>
+
+<script src="/js/updateReceta.js" defer></script>
+<script src="/js/fetch.js" defer></script>
