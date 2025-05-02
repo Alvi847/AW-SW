@@ -216,4 +216,30 @@ export async function updatePerfil(req, res) {
         });
     }
 }
+
+export async function viewAdministrar(req, res) {
+    try {
+        const usuarios = Usuario.getAllUsuarios();
+        render(req, res, 'paginas/administrar', { usuarios });
+    } catch (error) {
+        console.error(error);
+        render(req, res, 'paginas/home', {
+            error: 'No se pudo cargar la vista de administración'
+        });
+    }
+}
+
+export async function deleteUsuario(req, res) {
+    const { username } = req.body;
+    try {
+        Usuario.delete(username);
+        res.redirect('/usuarios/administrar');
+    } catch (error) {
+        console.error(error);
+        res.setFlash('No se pudo eliminar el usuario');
+        res.redirect('/usuarios/administrar');
+    }
+}
+
+
   

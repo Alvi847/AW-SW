@@ -12,6 +12,8 @@ export class Usuario {
     static #insertStmt = null;
     static #updateStmt = null;
     static #getUserByIdStmt = null;
+    static #getAllStmt = null;
+    static #deleteStmt = null;
     static initStatements(db) {
         if (this.#getByUsernameStmt !== null) return;
 
@@ -19,6 +21,12 @@ export class Usuario {
         this.#insertStmt = db.prepare('INSERT INTO Usuarios(username, password, nombre, rol, email, imagen) VALUES (@username, @password, @nombre, @rol, @email, @imagen)');
         this.#updateStmt = db.prepare('UPDATE Usuarios SET username = @username, password = @password, rol = @rol, nombre = @nombre, email = @email, imagen = @imagen WHERE id = @id');
         this.#getUserByIdStmt = db.prepare( 'SELECT * FROM Usuarios WHERE id = @id');
+        this.#getAllStmt = db.prepare('SELECT id, username, nombre, email, rol FROM Usuarios');
+        this.#deleteStmt = db.prepare('DELETE FROM Usuarios WHERE username = @username');
+    }
+
+    static getAllUsuarios() {
+        return this.#getAllStmt.all();
     }
 
     static getUsuarioByUsername(username) {
@@ -76,6 +84,12 @@ export class Usuario {
         if (result.changes === 0) throw new UsuarioNoEncontrado(username);
 
         return usuario;
+    }
+
+    static delete(username) {
+        const result = this.#deleteStmt.run({ username });
+        if (result.changes === 0) throw new UsuarioNoEncontrado(username);
+        return result;
     }
 
 

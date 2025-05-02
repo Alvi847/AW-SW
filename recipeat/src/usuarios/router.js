@@ -1,11 +1,12 @@
 import { body } from 'express-validator';
 import express from 'express';
-import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil } from './controllers.js';
+import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil, deleteUsuario, viewAdministrar } from './controllers.js';
 import { autenticado } from '../middleware/auth.js';
 import asyncHandler from 'express-async-handler';
 import multer from 'multer';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'url'; 
+import { fileURLToPath } from 'url';
+import { soloAdmins } from '../middleware/auth.js'; 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const UPLOAD_PATH = join(__dirname, "../../uploads");
@@ -38,6 +39,9 @@ usuariosRouter.post('/updatePerfil', multerFactory.single("imagen")
     , body('nombre', 'No puede ser vacío').trim().notEmpty()
     , body('email', 'No es un email válido').isEmail()
     , asyncHandler(updatePerfil));
+
+usuariosRouter.post('/removeUsuario', autenticado('/usuarios/home'), soloAdmins('/usuarios/home'), asyncHandler(deleteUsuario));
+usuariosRouter.get('/administrar', autenticado('/usuarios/home'), soloAdmins('/usuarios/home'), asyncHandler(viewAdministrar));
 
 
 export default usuariosRouter;

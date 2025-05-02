@@ -20,3 +20,10 @@ export function tieneRol(rol = RolesEnum.ADMIN){
         });
     }
 }
+
+export function soloAdmins(redirect = '/') {
+    return function (req, res, next) {
+        if (req.session.rol === 'A') return next();
+        res.redirect(redirect);
+    };
+}

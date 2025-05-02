@@ -1,0 +1,31 @@
+<h1>Administración de Usuarios</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% usuarios.forEach(u => { %>
+        <tr>
+            <td><%= u.username %></td>
+            <td><%= u.nombre %></td>
+            <td><%= u.email %></td>
+            <td><%= u.rol === 'A' ? 'Admin' : 'Usuario' %></td>
+            <td>
+                <% if (u.username !== session.username) { %>
+                    <form action="/usuarios/removeUsuario" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
+                        <input type="hidden" name="username" value="<%= u.username %>">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                <% } %>
+            </td>
+        </tr>
+        <% }); %>
+    </tbody>
+</table>
