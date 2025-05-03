@@ -6,7 +6,7 @@ import asyncHandler from 'express-async-handler';
 import multer from 'multer';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'url';
-import { soloAdmins } from '../middleware/auth.js'; 
+//import { soloAdmins } from '../middleware/auth.js'; 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const UPLOAD_PATH = join(__dirname, "../../uploads");
@@ -40,9 +40,9 @@ usuariosRouter.post('/updatePerfil', multerFactory.single("imagen")
     , body('email', 'No es un email válido').isEmail()
     , asyncHandler(updatePerfil));
 
-usuariosRouter.post('/removeUsuario', autenticado('/usuarios/home'), soloAdmins('/usuarios/home'), asyncHandler(deleteUsuario));
-usuariosRouter.get('/administrar', autenticado('/usuarios/home'), soloAdmins('/usuarios/home'), asyncHandler(viewAdministrar));
-usuariosRouter.post('/cambiarRol', autenticado('/usuarios/home'), soloAdmins('/usuarios/home'), asyncHandler(cambiarRolUsuario));
+usuariosRouter.post('/removeUsuario', autenticado('/usuarios/home'), asyncHandler(deleteUsuario));
+usuariosRouter.get('/administrar', autenticado('/usuarios/home'), asyncHandler(viewAdministrar));
+usuariosRouter.post('/cambiarRol', autenticado('/usuarios/home'), asyncHandler(cambiarRolUsuario));
   
 
 export default usuariosRouter;
