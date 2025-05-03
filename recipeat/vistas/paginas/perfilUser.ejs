@@ -1,0 +1,27 @@
+<div class="lista-recetas">
+    <h1>Perfil de <%= usuario.username %></h1>
+
+    <% if (usuario.nombre) { %>
+        <p><strong>Nombre:</strong> <%= usuario.nombre %></p>
+    <% } %>
+
+    <% if (usuario.email) { %>
+        <p><strong>Email:</strong> <%= usuario.email %></p>
+    <% } %>
+
+    <h2>Recetas publicadas</h2>
+
+    <% if (recetas && recetas.length > 0) { %>
+        <ul class="lista-recetas">
+            <% recetas.forEach(receta => { %>
+                <li>
+                    <a href="/receta/verReceta/<%= receta.id %>">
+                        <%= receta.nombre %>
+                    </a>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>Este usuario aún no ha publicado recetas.</p>
+    <% } %>
+</div>
