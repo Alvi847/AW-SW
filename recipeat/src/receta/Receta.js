@@ -10,6 +10,7 @@ export class Receta {
     static #removeLikeStmt = null;
     static #getByIdStmt = null;
     static #getRecetasByIdsStmt = null;
+    static #getRecetasFromUserStmt = null;
     
     static initStatements(db) {
         if (this.#getAllStmt !== null) return;
@@ -33,6 +34,7 @@ export class Receta {
                 SELECT id_receta FROM Likes WHERE user = @username
             )
         `);
+        this.#getRecetasFromUserStmt = db.prepare('SELECT * FROM Recetas WHERE user = @username ');
     }
 
     // Obtener una receta por ID
@@ -58,6 +60,13 @@ export class Receta {
     //Obtener recetas con like de @username 
     static recetasConLike(username) {
         return this.#getRecetasByIdsStmt.all({ username });
+    }
+
+    //obtiene recetas de un user
+    static getRecetasFromUser(username){
+        const recetas = this.#getRecetasFromUserStmt.all( {username} );
+        
+        return recetas;
     }
 
     // Insertar una nueva receta
