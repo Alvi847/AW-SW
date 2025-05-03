@@ -144,6 +144,36 @@ export async function viewPerfil(req, res) {
     }
 }
 
+export async function viewPerfilUser(req, res) {  // ver perfil de usuario concreto, pasado por params en url
+    try {
+        const { username } = req.params;
+
+        const usuario = await Usuario.getUsuarioByUsername(username);
+        if (!usuario) {
+            return render(req, res, 'paginas/error', {
+                error: 'Usuario no encontrado',
+                usuario: {},
+                errores: {}
+            });
+        }
+
+        const recetas = await Receta.getRecetasFromUser(username);
+
+        render(req, res, 'paginas/perfilUser', {
+            usuario,
+            recetas
+        });
+
+    } catch (error) {
+        console.error(error);
+        render(req, res, 'paginas/PerfilUser', {
+            error: 'Hubo un problema al cargar el perfil del usuario',
+            usuario: {},
+            errores: {}
+        });
+    }
+}
+
 export async function viewUpdatePerfil(req, res) {
     try {
         const usuario = await Usuario.getUsuarioByUsername(req.session.username);
