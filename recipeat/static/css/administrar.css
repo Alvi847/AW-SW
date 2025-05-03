@@ -1,0 +1,80 @@
+
+.admin-panel {
+    max-width: 1200px;
+    margin: 100px auto;
+    padding: 40px;
+    background: #1c1c1c;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    border: 1px solid #ffffff;
+  }
+  
+  .admin-panel h1 {
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: #ffbd3a;
+    text-align: center;
+    border-bottom: 2px solid #333;
+    padding-bottom: 15px;
+  }
+  
+  .admin-panel table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+  }
+  
+  .admin-panel th,
+  .admin-panel td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #333;
+  }
+  
+  .admin-panel th {
+    background-color: #292929;
+    color: #f9f9f9;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .admin-panel td {
+    color: #ccc;
+  }
+  
+  .admin-panel form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .admin-panel label {
+    color: #ccc;
+    font-size: 14px;
+  }
+  
+  .admin-panel input[type="radio"] {
+    margin-right: 6px;
+  }
+  
+  .admin-panel form button {
+    background-color: #dc6a35;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .admin-panel form button:hover {
+    background-color: #c85f23;
+  }
+  

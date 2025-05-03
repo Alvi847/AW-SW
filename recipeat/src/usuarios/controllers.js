@@ -241,5 +241,27 @@ export async function deleteUsuario(req, res) {
     }
 }
 
+export async function cambiarRolUsuario(req, res) {
+    const { username, rol } = req.body;
+
+    if (!['U', 'A'].includes(rol)) {
+        res.setFlash('Rol no válido');
+        return res.redirect('/usuarios/administrar');
+    }
+
+    try {
+        const usuario = await Usuario.getUsuarioByUsername(username);
+        usuario.rol = rol;
+        await usuario.persist();
+        res.setFlash('Rol actualizado correctamente');
+    } catch (error) {
+        console.error(error);
+        res.setFlash('No se pudo actualizar el rol');
+    }
+
+    return res.redirect('/usuarios/administrar');
+}
+
+
 
   

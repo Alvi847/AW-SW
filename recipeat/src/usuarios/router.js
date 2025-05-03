@@ -1,6 +1,6 @@
 import { body } from 'express-validator';
 import express from 'express';
-import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil, deleteUsuario, viewAdministrar } from './controllers.js';
+import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil, deleteUsuario, viewAdministrar, cambiarRolUsuario } from './controllers.js';
 import { autenticado } from '../middleware/auth.js';
 import asyncHandler from 'express-async-handler';
 import multer from 'multer';
@@ -42,6 +42,7 @@ usuariosRouter.post('/updatePerfil', multerFactory.single("imagen")
 
 usuariosRouter.post('/removeUsuario', autenticado('/usuarios/home'), soloAdmins('/usuarios/home'), asyncHandler(deleteUsuario));
 usuariosRouter.get('/administrar', autenticado('/usuarios/home'), soloAdmins('/usuarios/home'), asyncHandler(viewAdministrar));
-
+usuariosRouter.post('/cambiarRol', autenticado('/usuarios/home'), soloAdmins('/usuarios/home'), asyncHandler(cambiarRolUsuario));
+  
 
 export default usuariosRouter;
