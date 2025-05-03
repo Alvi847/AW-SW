@@ -1,7 +1,7 @@
 import { Usuario, UsuarioYaExiste } from './Usuario.js';
 import { render } from '../utils/render.js';
 import { validationResult, matchedData } from 'express-validator';
-
+import { Receta } from '../receta/Receta.js';
 export function viewLogin(req, res) {
     render(req, res, 'paginas/login', {
         datos: {},
