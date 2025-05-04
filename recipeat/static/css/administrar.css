@@ -77,4 +77,60 @@
   .admin-panel form button:hover {
     background-color: #c85f23;
   }
+
+  @media (max-width: 768px) {
+    .admin-panel {
+      padding: 20px;
+      margin: 60px 10px;
+    }
+  
+    .admin-panel h1 {
+      font-size: 24px;
+      line-height: 1.2;
+      padding: 10px;
+      word-break: break-word;
+      text-align: center;
+    }
+  
+    .admin-panel table,
+    .admin-panel thead,
+    .admin-panel tbody,
+    .admin-panel th,
+    .admin-panel td,
+    .admin-panel tr {
+      display: block;
+      width: 100%;
+    }
+  
+    .admin-panel thead {
+      display: none;
+    }
+  
+    .admin-panel tr {
+      margin-bottom: 20px;
+      border: 1px solid #333;
+      padding: 10px;
+      border-radius: 10px;
+    }
+  
+    .admin-panel td {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border: none;
+      border-bottom: 1px solid #333;
+      position: relative;
+    }
+  
+    .admin-panel td::before {
+      content: attr(data-label);
+      font-weight: bold;
+      color: #ffbd3a;
+    }
+  
+    .admin-panel form {
+      flex-direction: column;
+      gap: 6px;
+    }
+  }
   

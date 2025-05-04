@@ -14,10 +14,10 @@
         <tbody>
             <% usuarios.forEach(u => { %>
                 <tr>
-                    <td><%= u.username %></td>
-                    <td><%= u.nombre %></td>
-                    <td><%= u.email %></td>
-                    <td>
+                    <td data-label="Username"><%= u.username %></td>
+                    <td data-label="Nombre"><%= u.nombre %></td>
+                    <td data-label="Email"><%= u.email %></td>
+                    <td data-label="Rol">
                         <% if (u.username !== session.username) { %>
                             <form action="/usuarios/cambiarRol" method="post">
                                 <input type="hidden" name="username" value="<%= u.username %>">
@@ -33,7 +33,7 @@
                             <%= u.rol === 'A' ? 'Admin' : 'Usuario' %>
                         <% } %>
                     </td>
-                    <td>
+                    <td data-label="Acciones">
                         <% if (u.username !== session.username) { %>
                             <form action="/usuarios/removeUsuario" method="post"
                                 onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
@@ -45,6 +45,7 @@
                 </tr>
             <% }); %>
         </tbody>
+        
     </table>
 </div>
 
