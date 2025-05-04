@@ -1,7 +1,7 @@
 <h1 class="favoritos-section"><span>Mis Recetas</span></h1>
 
 <% if (recetas && recetas.length === 0) { %>
-    <p id="mensajeNoEncontrado">No has creado ninguna receta aún.</p>
+    <p id="mensajeNoEncontrado">No hay ninguna receta aún.</p>
 <% } else if (recetas && recetas.length > 0) { %>
     <div class="recetas-container">
         <% recetas.forEach(receta => { %>

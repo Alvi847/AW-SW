@@ -1,6 +1,7 @@
 import { Usuario, UsuarioYaExiste } from './Usuario.js';
 import { render } from '../utils/render.js';
 import { validationResult, matchedData } from 'express-validator';
+import { Receta } from '../receta/Receta.js';
 
 export function viewLogin(req, res) {
     render(req, res, 'paginas/login', {
@@ -140,6 +141,36 @@ export async function viewPerfil(req, res) {
         console.error(error);
         render(req, res, 'paginas/perfil', {
             error: 'Hubo un problema al cargar tu perfil',
+            usuario: {},
+            errores: {}
+        });
+    }
+}
+
+export async function viewPerfilUser(req, res) {  // ver perfil de usuario concreto, pasado por params en url
+    try {
+        const { username } = req.params;
+
+        const usuario = await Usuario.getUsuarioByUsername(username);
+        if (!usuario) {
+            return render(req, res, 'paginas/error', {
+                error: 'Usuario no encontrado',
+                usuario: {},
+                errores: {}
+            });
+        }
+
+        const recetas = await Receta.getRecetasPorUsuario(username);
+
+        render(req, res, 'paginas/misRecetas', {
+            usuario,
+            recetas
+        });
+
+    } catch (error) {
+        console.error(error);
+        render(req, res, 'paginas/misRecetas', {
+            error: 'Hubo un problema al cargar el perfil del usuario',
             usuario: {},
             errores: {}
         });

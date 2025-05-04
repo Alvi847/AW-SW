@@ -1,6 +1,6 @@
 import { body } from 'express-validator';
 import express from 'express';
-import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil, deleteUsuario, viewAdministrar, cambiarRolUsuario } from './controllers.js';
+import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil, deleteUsuario, viewAdministrar, cambiarRolUsuario, viewPerfilUser } from './controllers.js';
 import { autenticado } from '../middleware/auth.js';
 import asyncHandler from 'express-async-handler';
 import multer from 'multer';
@@ -14,6 +14,8 @@ export const UPLOAD_PATH = join(__dirname, "../../uploads");
 const multerFactory = multer({ dest: join(UPLOAD_PATH) });
 
 const usuariosRouter = express.Router();
+
+usuariosRouter.get('/perfil/:username', autenticado('/usuarios/home'), asyncHandler(viewPerfilUser)); //ver perfil de users dinamico
 
 usuariosRouter.get('/login', autenticado(null), asyncHandler(viewLogin));
 usuariosRouter.post('/login', autenticado(null, '/usuarios/home')
