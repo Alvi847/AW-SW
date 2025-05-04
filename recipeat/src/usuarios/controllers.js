@@ -153,18 +153,13 @@ export async function viewPerfilUser(req, res) {  // ver perfil de usuario concr
 
         const usuario = await Usuario.getUsuarioByUsername(username);
         if (!usuario) {
-            return render(req, res, 'paginas/error', {
-                error: 'Usuario no encontrado',
-                usuario: {},
-                errores: {}
-            });
+            return res.redirect('/usuarios/login');  // Si no se encuentra el usuario, redirigir al login
         }
 
-        const recetas = await Receta.getRecetasPorUsuario(username);
+        
 
-        render(req, res, 'paginas/misRecetas', {
-            usuario,
-            recetas
+        render(req, res, 'paginas/verPerfil', {
+            usuario
         });
 
     } catch (error) {
@@ -176,6 +171,46 @@ export async function viewPerfilUser(req, res) {  // ver perfil de usuario concr
         });
     }
 }
+
+export async function viewFavoritosUser(req, res) {
+    const { username } = req.params;
+  
+    if (!username) {
+      return render(req, res , 'paginas/error', { error: 'Usuario no encontrado' });
+    }
+    const usuario = await Usuario.getUsuarioByUsername(username);
+    const recetas = await Receta.getFavoritosPorUsuario(username);
+  
+    render(req, res, 'paginas/misRecetas', {
+        recetas,
+        usuario
+    });
+}
+
+export async function viewRecetasUser(req, res) {
+    const { username } = req.params;
+  
+    try {
+      const usuario = await Usuario.getUsuarioByUsername(username);
+      if (!usuario) {
+        return res.redirect('/usuarios/login');  // Si no se encuentra el usuario, redirigir al login
+         }
+  
+      const recetas = await Receta.getRecetasPorUsuario(username);
+  
+      render(req, res, 'paginas/misRecetas', {
+        usuario,
+        recetas,
+      });
+    } catch (error) {
+        console.error(error);
+        render(req, res, 'paginas/perfil', {
+            error: 'Hubo un problema al cargar tu perfil',
+            usuario: {},
+            errores: {}
+        });
+    }
+  }
 
 export async function viewUpdatePerfil(req, res) {
     try {

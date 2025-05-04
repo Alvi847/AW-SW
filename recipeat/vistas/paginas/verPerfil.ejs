@@ -1,39 +1,41 @@
 
-  <div class="perfil-card-container">
-    <div class="perfil-card">
-      
-      
-      <div class="menu-lateral">
-        <ul>
-          <li><a href="/usuarios/favoritas">Mis Recetas Favoritas</a></li>
-          <li><a href="/receta/misRecetas">Mis Recetas</a></li>
-        </ul>
-      </div>
-  
-     
-      <div class="contenido-perfil">
-        <h1 class="titulo-perfil">Bienvenido a tu perfil, <%= usuario.nombre %></h1>
-      
-        <div class="contenido-info">
-          <div class="perfil-foto">
-            <% if (usuario.imagen) { %>
-              <img src="/imagen/<%= usuario.imagen %>" alt="Foto de perfil">
-            <% } %>
-          </div>
-      
-          <div class="perfil-detalles">
-            <h2>Detalles del usuario:</h2>
-            <p><strong>Nombre:</strong> <%= usuario.nombre %></p>
-            <p><strong>Username:</strong> <%= usuario.username %></p>
-            <p><strong>Email:</strong> <%= usuario.email %></p>
+<div class="perfil-card-container">
+  <div class="perfil-card">
+    
+    <div class="menu-lateral">
+      <ul>
+       
+        <li><a href="/usuarios/<%= usuario.username %>/recetas">Recetas de <%= usuario.nombre %></a></li>
+        <li><a href="/usuarios/<%= usuario.username %>/favoritos">Favoritas de <%= usuario.nombre %></a></li>
+      </ul>
+    </div>
+
+    <div class="contenido-perfil">
+      <h1 class="titulo-perfil">Perfil de <%= usuario.nombre %></h1>
+
+      <div class="contenido-info">
+        <div class="perfil-foto">
+          <% if (usuario.imagen) { %>
+            <img src="/imagen/<%= usuario.imagen %>" alt="Foto de perfil">
+          <% } else { %>
+            <p>Este usuario no tiene foto de perfil.</p>
+          <% } %>
+        </div>
+
+        <div class="perfil-detalles">
+          <h2>Detalles del usuario:</h2>
+          <p><strong>Nombre:</strong> <%= usuario.nombre %></p>
+          <p><strong>Username:</strong> <%= usuario.username %></p>
+          <p><strong>Email:</strong> <%= usuario.email %></p>
+
+          <% if (session.username === usuario.username) { %>
             <div class="botones-perfil">
               <a href="/usuarios/updatePerfil" class="editar">Editar perfil</a>
               <a href="/usuarios/logout" class="logout">Cerrar sesión</a>
             </div>
-          </div>
+          <% } %>
         </div>
       </div>
     </div>
   </div>
-  
-  
+</div>

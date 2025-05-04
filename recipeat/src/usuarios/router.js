@@ -1,6 +1,6 @@
 import { body } from 'express-validator';
 import express from 'express';
-import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil, deleteUsuario, viewAdministrar, cambiarRolUsuario, viewPerfilUser } from './controllers.js';
+import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil, deleteUsuario, viewAdministrar, cambiarRolUsuario, viewPerfilUser, viewFavoritosUser, viewRecetasUser } from './controllers.js';
 import { autenticado } from '../middleware/auth.js';
 import asyncHandler from 'express-async-handler';
 import multer from 'multer';
@@ -15,7 +15,9 @@ const multerFactory = multer({ dest: join(UPLOAD_PATH) });
 
 const usuariosRouter = express.Router();
 
-usuariosRouter.get('/perfil/:username', autenticado('/usuarios/home'), asyncHandler(viewPerfilUser)); //ver perfil de users dinamico
+
+
+
 
 usuariosRouter.get('/login', autenticado(null), asyncHandler(viewLogin));
 usuariosRouter.post('/login', autenticado(null, '/usuarios/home')
@@ -23,6 +25,10 @@ usuariosRouter.post('/login', autenticado(null, '/usuarios/home')
     , body('password', 'No puede ser vacío').trim().notEmpty()
     , asyncHandler(doLogin));
 usuariosRouter.get('/logout', doLogout);
+
+usuariosRouter.get('/:username/recetas', autenticado('/usuarios/home'), asyncHandler(viewRecetasUser));
+usuariosRouter.get('/:username/favoritos', autenticado('/usuarios/home'), asyncHandler(viewFavoritosUser));
+usuariosRouter.get('/:username', autenticado('/usuarios/home'), asyncHandler(viewPerfilUser)); //ver perfil de users dinamico
 
 usuariosRouter.get('/home', autenticado('/usuarios/home'), asyncHandler(viewHome));
 usuariosRouter.get('/registro', autenticado(null, '/usuarios/home'), asyncHandler(viewRegistro));

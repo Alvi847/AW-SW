@@ -8,7 +8,7 @@
                         <%=receta.nombre%>
                     </h1>
                     <% if (receta.user) { %>
-                        <p>Creada por <a href="/usuarios/perfil/<%= receta.user %>"><%= receta.user %></a></p>
+                        <p>Creada por <a href="/usuarios/<%= receta.user %>"><%= receta.user %></a></p>
                     <% } else { %>
                          <p>Sin dueño wtf</p>
                                 <% } %>
@@ -67,7 +67,7 @@
                     <% comentarios.forEach((comentario)=> { %>
                         <div class="comentario-card">
                             <h3>
-                                <a href="/usuarios/perfil/<%= comentario.user %>"><%= comentario.user %></a> dice:
+                                <a href="/usuarios/<%= comentario.user %>"><%= comentario.user %></a> dice:
                             </h3>
                             <p class="comentario-descripcion">
                                 <%= comentario.descripcion %>
