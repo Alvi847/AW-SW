@@ -19,7 +19,7 @@ const usuariosRouter = express.Router();
 
 
 
-usuariosRouter.get('/login', autenticado(null), asyncHandler(viewLogin));
+usuariosRouter.get('/login', autenticado(null), asyncHandler(viewLogin)); //TODO: Si estás logueado no deberia mostrar el formulario de inicio de sesión autenticado(null, '/usuarios/home')
 usuariosRouter.post('/login', autenticado(null, '/usuarios/home')
     , body('username', 'No puede ser vacío').trim().notEmpty()
     , body('password', 'No puede ser vacío').trim().notEmpty()

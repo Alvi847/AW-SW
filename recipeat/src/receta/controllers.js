@@ -2,7 +2,6 @@ import { Receta } from './Receta.js';
 import { Comentario } from '../comentario/Comentario.js';
 import { validationResult, matchedData } from 'express-validator';
 import { render } from '../utils/render.js';
-import { error } from '../utils/helpers.js';
 import { UPLOAD_PATH } from './router.js';
 import { join } from 'node:path';
 
@@ -86,10 +85,12 @@ export async function doCreateReceta(req, res) {
         if (req.file)
             await fs.unlink(req.file.path); // (Ver comentario del import): https://midu.dev/como-eliminar-un-ficher-con-node-js/
         const datos = matchedData(req);
+
         if (esAjax) {
             req.log.debug("Devuelto código 400 a la petición AJAX");
             return res.status(400).json({ status: 400, errores });
         }
+        
         return render(req, res, 'paginas/createReceta', {
             datos,
             errores
@@ -171,6 +172,8 @@ export async function updateReceta(req, res) {
     const user = req.session.username;
 
     if (recetaExistente.user === user || req.session.rol === 'A') {
+        if(!recetaExistente.user) // En caso de un administrador estar editando una receta que fue colocada sin dueño (las recetas que colocamos al principio), el administrador que la esté editando pasará a ser su dueño
+            recetaExistente.user = user;
         recetaExistente.nombre = nombre;
         recetaExistente.descripcion = descripcion;
         recetaExistente.modo_preparacion = modo_preparacion;
