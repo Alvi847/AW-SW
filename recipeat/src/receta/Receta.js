@@ -192,6 +192,22 @@ export class Receta {
         if (result.changes === 0) throw new Error(`No se encontró la receta con ID ${id}`);
     }
 
+    /**
+     * Elimina todas las recetas de un usuario, no es muy eficiente
+     * @param { Usuario } username 
+     */
+    static deleteAllRecetas(username) {
+        const recetas = getRecetasPorUsuario(username);
+        recetas.forEach(element => {
+            const id = element.id;
+            Contiene.deleteAllByReceta(id);
+            Comentario.deleteAllComentarios(id);
+            Like.retiraTodosLikes(id);
+            const result = this.#deleteStmt.run({ id });
+            if (result.changes === 0) throw new Error(`No se encontró la receta con ID ${id}`); 
+        });
+    }
+
     #id; // El id de la receta
     descripcion; // La descripción de la receta
     nombre; // El nombre de la receta

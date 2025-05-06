@@ -1,6 +1,7 @@
 
 import bcrypt from "bcryptjs";
 import { ErrorDatos } from "../db.js";
+import { Receta } from "../receta/Receta.js";
 
 export const RolesEnum = Object.freeze({
     USUARIO: 'U',
@@ -25,10 +26,21 @@ export class Usuario {
         this.#deleteStmt = db.prepare('DELETE FROM Usuarios WHERE username = @username');
     }
 
+    /**
+     * Consigue todos los usuarios de la base de datos
+     * @returns { Usuario[] }
+     */
     static getAllUsuarios() {
         return this.#getAllStmt.all();
     }
 
+    /**
+     * Busca en la base de datos el usuario con el username dado y devuelve sus datos
+     * 
+     * @param {string} username Nombre de usuario que se intenta buscar
+     * @returns { Usuario } El usuario con ese nombre en la base de datos
+     * @throws { UsuarioNoEncontrado } Error si el usuario no existe en la base de datos
+     */
     static getUsuarioByUsername(username) {
         const usuario = this.#getByUsernameStmt.get({ username });
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
@@ -38,6 +50,29 @@ export class Usuario {
         return new Usuario(username, password, nombre, email, rol, id, usuario.imagen);
     }
 
+    /**
+     * Consulta la base de datos para ver si ya existe un usuario con ese nombre de usuario
+     * 
+     * @param {string} username Nombre de usuario que se intenta buscar
+     * @returns { boolean }
+     */
+    static existe(username){
+        try{
+            this.getUsuarioByUsername(username);
+            return false;
+        }
+        catch(e){
+            return false;
+        }
+    }
+
+    /**
+     * Busca en la base de datos el usuario con el id dado y devuelve sus datos
+     * 
+     * @param { int } iduser Id del usuario que se intenta buscar
+     * @returns { Usuario } El usuario con ese id en la base de datos
+     * @throws { UsuarioNoEncontrado } Error si el usuario no existe en la base de datos
+     */
     static getUsuarioById( iduser ) {
         const usuario = this.#getUserByIdStmt.get({ iduser });
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
@@ -47,6 +82,13 @@ export class Usuario {
         return new Usuario(username, password, nombre, email, rol, iduser, usuario.imagen);
     }
 
+    /**
+     * Inserta un nuevo usuario en la base de datos
+     * @param { Usuario } usuario 
+     * @returns { Usuario }
+     * @throws { ErrorDatos } Si ha habido algún problema con los datos
+     * @throws { UsuarioYaExiste } Si se intenta insertar un usuario que ya existe en la base de datos
+     */
     static #insert(usuario) {
         let result = null;
         try {
@@ -70,6 +112,13 @@ export class Usuario {
         return usuario;
     }
 
+    /**
+     * Actuliaza la información de un usuario en la base de datos
+     * 
+     * @param { Usuario } usuario El usuario con los nuevos datos 
+     * @returns { Usuario }
+     * @throws { UsuarioNoEncontrado } Si el usuario no está en la base de datos
+     */
     static #update(usuario) {
         const id = usuario.#id;
         const username = usuario.#username;
@@ -86,13 +135,34 @@ export class Usuario {
         return usuario;
     }
 
+    /**
+     * Borra un usuario de la base de dato, junto con sus recetas
+     * 
+     * @param { Usuario } username 
+     * @returns El resultado de la operacion
+     * @throws { UsuarioNoEncontrado } Si el usuario no existe
+     * @throws { Error } Si ha habido algún error borrando las recetas
+     */
     static delete(username) {
+        try{
+            Receta.deleteAllRecetas(username);
+        }
+        catch(e){
+            throw new Error(e.message);
+        }
         const result = this.#deleteStmt.run({ username });
         if (result.changes === 0) throw new UsuarioNoEncontrado(username);
         return result;
     }
 
-
+    /**
+     * Hace login de un usuario
+     * 
+     * @param { string } username Nombre de usuario
+     * @param { string } password Contraseña del usuario
+     * @throws { UsuarioOPasswordNoValido } Si el usuario o la contraseña no son correctos
+     * @returns { Usuario }
+     */
     static async login(username, password) {
         let usuario = null;
         try {
@@ -107,6 +177,16 @@ export class Usuario {
         return usuario;
     }
 
+    /**
+     * Crea un usuario
+     * 
+     * @param { string } username Nombre de usuario
+     * @param { string } password Contraseña del usuario
+     * @param { string } nombre Nombre real del usuario
+     * @param { string } email Email de usuario 
+     * @param { string } imagen Nombre de la imagen de perfil del usuario
+     * @returns 
+     */
     static async creaUsuario(username, password, nombre, email, imagen) {
         const usuario = new Usuario(username, password, nombre, email, imagen);
         await usuario.cambiaPassword(password);
