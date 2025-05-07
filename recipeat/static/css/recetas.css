@@ -24,16 +24,102 @@
     .create-receta input, .update-receta input{
         font-family: 'Montserrat', sans-serif;
     }
+/*
+    .create-receta textarea, .update-receta textarea {
+    font-family: 'Montserrat', sans-serif;
+    width: 100%;
+    min-height: 300px;          
+    resize: none;
+    padding: 1rem;
+    border-radius: 8px;
+    border: none;
+    background-color: #1c1c1c;
+    color: #ffffff;
+    box-sizing: border-box;  
+    overflow-y: auto;             
+    box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
 
     .create-receta textarea, .update-receta textarea{
         font-family: 'Montserrat', sans-serif;
         resize: none;
         width: 100%;             
         height: auto;            
-        min-height: 10em;        /* Mínimo 20 filas, equivalente a 20em de altura (aproximadamente 20 líneas) */
-        resize: none;            /* No se puede redimensionar */
-        box-sizing: border-box;  /* Incluye el padding y borde en el cálculo de ancho y altura */
+        min-height: 10em;        // Mínimo 20 filas, equivalente a 20em de altura (aproximadamente 20 líneas) 
+        resize: none;            // No se puede redimensionar 
+        box-sizing: border-box;  // Incluye el padding y borde en el cálculo de ancho y altura 
     }
+
+    .create-receta fieldset, .update-receta fieldset{
+        height: auto;
+    }
+*/
+.create-receta form fieldset {
+    width: 100% !important;
+    height: auto !important;
+}
+
+
+.create-receta {
+    max-height: calc(100vh - 120px); /* espacio para el header */
+    overflow-y: scroll !important;
+    margin-top: 100px;
+    padding: 20px;
+    width: 90%;
+    max-width: 800px;
+    background-color: #111;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    position: relative; /* necesario para el contenedor de scroll */
+}
+
+.create-receta fieldset .update-receta fieldset {
+    width: 100%;
+    padding: 2rem;
+    background-color: #121212;
+    border-radius: 12px;
+    border: 1px solid #333;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    margin: 0;
+}
+
+
+
+/* El contenedor del editor también se puede ajustar si es necesario */
+.cke_editor_descripcion, .cke_editor_modo_preparacion {
+    width: 100% !important;
+    max-width: 100%;
+}
+
+/* Asegura que el fieldset no limite el ancho 
+.create-receta fieldset, .update-receta fieldset {
+    width: 100%;
+    padding: 2rem;
+    background-color: #121212;
+    border-radius: 12px;
+    border: 1px solid #333;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}*/
+
+
+.create-receta::-webkit-scrollbar {
+    width: 10px;
+}
+
+.create-receta::-webkit-scrollbar-track {
+    background: #222;
+}
+
+.create-receta::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 5px;
+}
+
+.create-receta::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+
 
     #create-comentario textarea{
         font-family: 'Montserrat', sans-serif;
@@ -49,9 +135,7 @@
         border: none;
     }
 
-    .create-receta fieldset, .update-receta fieldset{
-        height: auto;
-    }
+    
 
     /* Estilo del contenedor de la lista de recetas*/
     .lista-recetas {

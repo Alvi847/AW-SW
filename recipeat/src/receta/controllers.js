@@ -4,6 +4,8 @@ import { validationResult, matchedData } from 'express-validator';
 import { render } from '../utils/render.js';
 import { UPLOAD_PATH } from './router.js';
 import { join } from 'node:path';
+import sanitizeHtml from 'sanitize-html';
+
 
 /**
  * Para que los formularios funcionen usando multer y express-validator, he de parsear los datos con multer antes de pasarlos por el validator
@@ -110,15 +112,38 @@ export async function doCreateReceta(req, res) {
         });
     }
 
+
+
+
     const { nombre, descripcion, modo_preparacion } = req.body;
     const imagen = req.file;
 
     console.log("Archivo recibido: ", req.file);
 
-    const nuevaReceta = new Receta(nombre, descripcion, modo_preparacion, null, null, req.session.username, false, imagen.filename);
+    //const nuevaReceta = new Receta(nombre, descripcion, modo_preparacion, null, null, req.session.username, false, imagen.filename);
 
     // Insertar la receta en la base de datos
     try {
+
+        const descripcionSegura = sanitizeHtml(descripcion, {
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img', 'h1', 'h2' ]),
+            allowedAttributes: {
+                a: ['href', 'name', 'target'],
+                img: ['src', 'alt', 'width', 'height'],
+                '*': ['style'] // Si quieres permitir estilos en línea
+            }
+        });
+        
+        const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img', 'ul', 'li', 'h1', 'h2' ]),
+            allowedAttributes: {
+                img: ['src', 'alt'],
+                '*': ['style']
+            }
+        });
+        
+        const nuevaReceta = new Receta(nombre, descripcionSegura, modoPreparacionSeguro, null, null, req.session.username, false, imagen.filename);
+
         Receta.insertReceta(nuevaReceta);
 
         // Redirigir o devolver un mensaje de éxito
