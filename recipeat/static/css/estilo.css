@@ -204,6 +204,7 @@ fieldset {
     /*referencia: https://www.youtube.com/watch?v=N_IrzRpJ0s4&t=398s*/
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
     margin-bottom: 50px;
+    margin-left: 30px;
 
 }
 
@@ -227,7 +228,7 @@ fieldset {
 }
 
 .texto p:last-of-type {
-    margin-left: 15px;
+    margin-left: 10px;
     /* mover a la derecha el ultimo parrafo*/
 }
 
