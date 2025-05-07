@@ -86,9 +86,6 @@
     width: 100%;
   }
 
-  .contenido-info img{
-    margin-bottom: 20px;
-  }
   
   .perfil-foto {
     display: flex;
@@ -128,14 +125,14 @@
   
   .perfil-detalles p {
     font-size: 18px;
-    margin: 8px 0;
+    margin: 0 0 5px 0;
     color: #ccc;
   }
   
   .botones-perfil {
     display: flex;
     gap: 10px;
-    margin-top: 20px;
+    margin-top: 15px;
   }
   
   .editar, .logout {
