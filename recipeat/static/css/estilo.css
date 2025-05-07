@@ -352,14 +352,13 @@ body::-webkit-scrollbar-thumb:hover {
         top: 10px; /* Position from the top */
         right: 53px; /* Position from the right */
     }
-
+    
     /* Navigation menu adjustments */
     .nav-menu {
         display: none !important; /* Start hidden */
         flex-direction: column; /* Stack items vertically */
         position: absolute; /* Positioning */
         top: 80px; /* Below the header */
-        left: 0; /* Align to the left */
         background-color: black; /* Background color */
         width: 100%; /* Full width */
         text-align: center; /* Center text */
