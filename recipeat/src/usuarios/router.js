@@ -19,7 +19,7 @@ const usuariosRouter = express.Router();
 
 
 
-usuariosRouter.get('/login', autenticado(null), asyncHandler(viewLogin));
+usuariosRouter.get('/login', autenticado(null), asyncHandler(viewLogin)); //TODO: Si estás logueado no deberia mostrar el formulario de inicio de sesión autenticado(null, '/usuarios/home')
 usuariosRouter.post('/login', autenticado(null, '/usuarios/home')
     , body('username', 'No puede ser vacío').trim().notEmpty()
     , body('password', 'No puede ser vacío').trim().notEmpty()
@@ -28,7 +28,7 @@ usuariosRouter.get('/logout', doLogout);
 
 usuariosRouter.get('/:username/recetas', autenticado('/usuarios/home'), asyncHandler(viewRecetasUser));
 usuariosRouter.get('/:username/favoritos', autenticado('/usuarios/home'), asyncHandler(viewFavoritosUser));
-usuariosRouter.get('/:username', autenticado('/usuarios/home'), asyncHandler(viewPerfilUser)); //ver perfil de users dinamico
+usuariosRouter.get('/verPerfilUser/:username', autenticado('/usuarios/home'), asyncHandler(viewPerfilUser)); //ver perfil de users dinamico
 
 usuariosRouter.get('/home', autenticado('/usuarios/home'), asyncHandler(viewHome));
 usuariosRouter.get('/registro', autenticado(null, '/usuarios/home'), asyncHandler(viewRegistro));

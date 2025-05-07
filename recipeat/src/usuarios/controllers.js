@@ -16,6 +16,7 @@ export function viewHome(req, res) {
 
 export async function doLogin(req, res) {
     const result = validationResult(req);
+
     if (! result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
@@ -36,7 +37,8 @@ export async function doLogin(req, res) {
         req.session.rol = usuario.rol;
 
         res.setFlash(`Encantado de verte de nuevo: ${usuario.nombre}`);
-        return render(req, res, 'paginas/home');
+
+        return redirect('paginas/home'); //TODO: esto no puede ser un render(), tiene que ser un redirect()
 
     } catch (e) {
         const datos = matchedData(req);
@@ -82,9 +84,22 @@ export function viewRegistro(req, res) {
 
 export async function doRegistro(req, res) {
     const result = validationResult(req);
+
+    
+    const requestWith = req.get('X-Requested-With');
+    const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
+    if(esAjax)
+        req.log.debug("Petición AJAX recibida para doRegistro()");
+
     if (! result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
+
+        if (esAjax) {
+            req.log.debug("Devuelto código 400 a la petición AJAX");
+            return res.status(400).json({ status: 400, errores });
+        }
+
         return render(req, res, 'paginas/registro', {
             datos,
             errores
@@ -106,6 +121,14 @@ export async function doRegistro(req, res) {
         req.session.username = usuario.username;
         req.session.email = usuario.email;
         req.session.imagen = usuario.imagen;
+
+        if (esAjax) {
+            req.log.debug("Devuelto código 200 a la petición AJAX");
+            return res.status(200).json({ ok: true });
+        }
+
+        req.log.info("Usuario %s registrado con éxito", usuario.username);
+
         return res.redirect('/usuarios/home');
     } catch (e) {
         let error = 'No se ha podido crear el usuario';
@@ -153,7 +176,7 @@ export async function viewPerfilUser(req, res) {  // ver perfil de usuario concr
 
         const usuario = await Usuario.getUsuarioByUsername(username);
         if (!usuario) {
-            return res.redirect('/usuarios/login');  // Si no se encuentra el usuario, redirigir al login
+            return res.redirect('/');  // Si no se encuentra el usuario, redirigir al login
         }
 
         
@@ -176,7 +199,7 @@ export async function viewFavoritosUser(req, res) {
     const { username } = req.params;
   
     if (!username) {
-      return render(req, res , 'paginas/error', { error: 'Usuario no encontrado' });
+      return render(req, res , 'paginas/home', { error: 'Usuario no encontrado' });
     }
     const usuario = await Usuario.getUsuarioByUsername(username);
     const recetas = await Receta.getFavoritosPorUsuario(username);
