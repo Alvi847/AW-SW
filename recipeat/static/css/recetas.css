@@ -504,17 +504,17 @@
         box-sizing: border-box;
         position: relative;
     }
-    
-    .receta-recomendada-card a {
-        display: block;
-        position: relative;
-        height: 100%;
-        border-radius: 10px;
-        overflow: hidden;
-        background-color: #ccc;
-        text-decoration: none;
-        color: white;
-    }
+        
+        .receta-recomendada-card a {
+            display: block;
+            position: relative;
+            height: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: transparent;
+            text-decoration: none;
+            color: white;
+        }
     
     .receta-recomendada-card img {
         width: 100%;
