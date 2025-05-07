@@ -28,7 +28,7 @@ export class Usuario {
 
     /**
      * Consigue todos los usuarios de la base de datos
-     * @returns { Usuario[] }
+     * @returns { Usuario[] } Un array de usuarios sin la contraseña
      */
     static getAllUsuarios() {
         return this.#getAllStmt.all();

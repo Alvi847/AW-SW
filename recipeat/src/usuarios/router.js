@@ -28,7 +28,7 @@ usuariosRouter.get('/logout', doLogout);
 
 usuariosRouter.get('/:username/recetas', autenticado('/usuarios/home'), asyncHandler(viewRecetasUser));
 usuariosRouter.get('/:username/favoritos', autenticado('/usuarios/home'), asyncHandler(viewFavoritosUser));
-usuariosRouter.get('/:username', autenticado('/usuarios/home'), asyncHandler(viewPerfilUser)); //ver perfil de users dinamico
+usuariosRouter.get('/verPerfilUser/:username', autenticado('/usuarios/home'), asyncHandler(viewPerfilUser)); //ver perfil de users dinamico
 
 usuariosRouter.get('/home', autenticado('/usuarios/home'), asyncHandler(viewHome));
 usuariosRouter.get('/registro', autenticado(null, '/usuarios/home'), asyncHandler(viewRegistro));
