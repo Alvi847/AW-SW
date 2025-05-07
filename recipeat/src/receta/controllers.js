@@ -45,6 +45,19 @@ export function viewRecetas(req, res) {
 
 // Ver una receta
 export function viewReceta(req, res) {
+    
+    /*
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+        const datos = matchedData(req);
+        
+        return render(req, res, 'paginas/listaRecetas', {
+            datos,
+            errores
+        });
+    }*/
     const id = req.params.id; // Ahora toma el id correctamente desde la URL
     const user = req.session.username // El usuario que quiere ver la receta (usado para ver si le ha dado like o no)
     const receta = Receta.getRecetaById(id, user); // Método para obtener la receta por ID
@@ -224,7 +237,8 @@ export async function deleteReceta(req, res) {
     }
     catch (e) {
         req.log.error("Error interno al intentar eliminar la receta '%i': '%s'", id, e.message);
-        res.status(500).send();
+        res.status(500).send(); // Usar AJAX
+        //return res.redirect('/receta/listaRecetas'); //TODO: Poner otro mensaje
     }
     if (receta != null && (user === receta.user || req.session.rol === "A")) {
         try {
@@ -235,7 +249,8 @@ export async function deleteReceta(req, res) {
         } // Elimina la receta por ID
         catch (e) {
             req.log.error("Error interno al intentar eliminar la receta '%i': '%s'", id, e.message);
-            res.status(500).send();
+            res.status(500).send(); //Usar AJAX
+            //return res.redirect('/receta/listaRecetas'); //TODO: Poner otro mensaje
         }
     }
     else if (receta != null) {
