@@ -62,11 +62,11 @@
 
 .create-receta {
     max-height: calc(100vh - 120px); /* espacio para el header */
-    overflow-y: scroll !important;
+    overflow-y: auto;
     margin-top: 100px;
     padding: 20px;
     width: 90%;
-    max-width: 800px;
+    max-width: 1200px;
     background-color: #111;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(255,255,255,0.1);
@@ -75,7 +75,7 @@
 
 .create-receta form {
     width: 100%;
-    max-width: 800px;
+    max-width: 1200px;
     background-color: rgba(255, 255, 255, 0.03); /* fondo sutilmente translúcido */
     padding: 30px;
     border-radius: 12px;
@@ -100,11 +100,7 @@
 
 
 
-/* El contenedor del editor también se puede ajustar si es necesario */
-.cke_editor_descripcion, .cke_editor_modo_preparacion {
-    width: 100% !important;
-    max-width: 100%;
-}
+
 
 /* Asegura que el fieldset no limite el ancho 
 .create-receta fieldset, .update-receta fieldset {
