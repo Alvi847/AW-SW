@@ -2,7 +2,8 @@
   .perfil-card {
     max-width: 1200px;
     min-height: 600px;
-    margin: 100px auto;
+    margin-top: 125px;
+    margin-bottom: 50px;
     padding: 40px;
     display: flex;
     flex-direction: row;
