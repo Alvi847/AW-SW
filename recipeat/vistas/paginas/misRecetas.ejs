@@ -10,7 +10,7 @@
                     <div class="receta-content">
                         <div class="receta-imagen">
                             <% if (receta.imagen) { %>
-                                <img class="receta-img" src="<%= receta.imagen %>" alt="Imagen de <%= receta.nombre %>" />
+                                <img class="receta-img" src="/imagen/<%= receta.imagen %>" alt="Imagen de <%= receta.nombre %>" />
                             <% } else { %>
                                 <img class="receta-img" src="/images/placeholder.jpg" alt="Sin imagen disponible" />
                             <% } %>
