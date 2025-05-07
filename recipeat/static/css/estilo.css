@@ -193,17 +193,16 @@ fieldset {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     background-color: black;
     color: white;
     padding: 50px;
     font-family: 'Poppins', sans-serif;
-    text-align: left;
+    text-align: justify;
     /*polygon */
     /*polygon(X0 Y0, X1 Y1 ... Xn Yn)*/
     /*referencia: https://www.youtube.com/watch?v=N_IrzRpJ0s4&t=398s*/
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-    margin-left: 30px;
     margin-bottom: 50px;
 
 }
@@ -211,7 +210,7 @@ fieldset {
 .container-portada {
     display: flex;
     flex-direction: row;
-    height: 621px;
+    height: 665px;
     margin-top: 80px;
     width: 100%;
     align-items: stretch;
@@ -239,10 +238,9 @@ fieldset {
     font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;
     letter-spacing: 1.4px;
-    text-align: center;
+    text-align: justify;
     /* Centra el título */
     margin-top: 50px;
-    margin-left: 132px;
     line-height: 80px;
 }
 
@@ -251,11 +249,10 @@ fieldset {
     font-size: 17px;
     line-height: 1.5;
     text-align: justify;
-    /* Justifica los párrafos para un mejor look */
     text-align-last: justify;
-    /* También alinea la última línea */
     text-transform: uppercase;
     padding: 30px;
+    max-width: 720px;        
 }
 
 
@@ -282,20 +279,20 @@ fieldset {
 }
 
 .imagen {
-    display: block;
-
-    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 14.5% 100%);
+    width: 100%;
     height: 100%;
-
+    object-fit: cover;
+    display: block;
 }
 
-.imagen-container {
-    display: inline-block;
-    background: #000000;
-    /* Color del contenedor */
-
+.imagen-container {         /* Asegura mitad del contenedor */
+    height: 100%;
+    width: 816px;
+    overflow: hidden;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 14.5% 100%);
     position: relative;
+    display: flex;
+    background-color: transparent;
 }
 
 .menu-icon {
@@ -352,13 +349,14 @@ body::-webkit-scrollbar-thumb:hover {
         top: 10px; /* Position from the top */
         right: 53px; /* Position from the right */
     }
-    
+
     /* Navigation menu adjustments */
     .nav-menu {
         display: none !important; /* Start hidden */
         flex-direction: column; /* Stack items vertically */
         position: absolute; /* Positioning */
         top: 80px; /* Below the header */
+        left: 0;
         background-color: black; /* Background color */
         width: 100%; /* Full width */
         text-align: center; /* Center text */
