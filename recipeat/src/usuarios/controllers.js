@@ -38,7 +38,7 @@ export async function doLogin(req, res) {
 
         res.setFlash(`Encantado de verte de nuevo: ${usuario.nombre}`);
 
-        return render(req, res, 'paginas/home'); //TODO: esto no puede ser un render(), tiene que ser un redirect()
+        return redirect('paginas/home'); //TODO: esto no puede ser un render(), tiene que ser un redirect()
 
     } catch (e) {
         const datos = matchedData(req);
@@ -176,7 +176,7 @@ export async function viewPerfilUser(req, res) {  // ver perfil de usuario concr
 
         const usuario = await Usuario.getUsuarioByUsername(username);
         if (!usuario) {
-            return res.redirect('/usuarios/login');  // Si no se encuentra el usuario, redirigir al login
+            return res.redirect('/');  // Si no se encuentra el usuario, redirigir al login
         }
 
         
@@ -199,7 +199,7 @@ export async function viewFavoritosUser(req, res) {
     const { username } = req.params;
   
     if (!username) {
-      return render(req, res , 'paginas/error', { error: 'Usuario no encontrado' });
+      return render(req, res , 'paginas/home', { error: 'Usuario no encontrado' });
     }
     const usuario = await Usuario.getUsuarioByUsername(username);
     const recetas = await Receta.getFavoritosPorUsuario(username);
