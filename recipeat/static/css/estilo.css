@@ -392,8 +392,13 @@ body::-webkit-scrollbar-thumb:hover {
     .texto {
         width: 100%; /* Full width for text */
         height: auto; /* Auto height */
-        padding: 2px; /* Padding */
-        margin: 90px 10px 30px 10px; /* Margin adjustments */
+        padding: 5px; /* Padding */
+        margin: 110px 10px 30px 10px; /* Margin adjustments */
+    }
+    
+    .texto p:last-of-type {
+        margin-left: 5px;
+        /* mover a la derecha el ultimo parrafo*/
     }
 
     .texto p {
@@ -421,7 +426,6 @@ body::-webkit-scrollbar-thumb:hover {
         clip-path: none;    /*eliminar clip-path en movil*/
         
         border: 5px solid white; /* Borde blanco de 5px */
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Sombra opcional para darle un efecto más atractivo */
     }
 
     .imagen {
