@@ -166,7 +166,7 @@
     .receta-card .receta-content {
         position: relative;
         height: 100%;
-        width: 100%;
+        width: 1200px;
         display: grid;
         grid-template-columns: 33% 66%;
         max-height: inherit;
@@ -363,8 +363,8 @@
  
     .favoritos-section {
         padding: 10px;
-        max-width: 1500px;
-        margin: 10px; /* auto centra horizontalmente */
+        max-width: 1800px;
+        margin-right: 50px;
         display: flex;
         flex-direction: column;
         align-items: flex-start; 
@@ -399,7 +399,7 @@
         display: grid;
         grid-template-columns: repeat(3, minmax(200px, 1fr));
         gap: 1.5rem;
-        margin-left: 100px;
+        margin-left: 50px;
     }
     
     /*contenedor de la receta*/
@@ -451,7 +451,7 @@
     
     .expand-btn {        
         margin-top: 20px;
-        margin-left: 655px;
+        margin-left: 610px;
     background-color: #333;
     color: #fff;
     padding: 0.6rem 1.2rem;
