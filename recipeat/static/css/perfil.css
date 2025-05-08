@@ -253,6 +253,24 @@
   overflow: visible !important;
 }
 
+/* Tooltip personalizado para FullCalendar (con Tippy.js) */
+.tippy-box[data-theme~='light'] {
+  background-color: #353535 !important;
+  color: #ffbd3a !important;
+  border: 2.5px solid #ffbd3a;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+  padding: 5px;
+  border-radius: 8px;
+  min-width: 50px;
+  line-height: 1.4;
+  text-align: justify; 
+  word-spacing: normal;
+}
+
+
+
 /* Responsive */
 @media (max-width: 768px) {
   #calendar {

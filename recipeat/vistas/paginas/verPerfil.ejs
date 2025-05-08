@@ -57,6 +57,9 @@
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
 
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/locales/es.global.min.js"></script>
+<!-- Tippy.js y Popper.js (requerido por Tippy) -->
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
 
 <script>
   document.addEventListener('DOMContentLoaded', async function () {
@@ -86,7 +89,19 @@
           console.error('Error al cargar eventos:', err);
           failureCallback(err);
         }
-      }
+      },
+      eventDidMount: function (info) {
+  if (info.event.extendedProps.description) {
+    tippy(info.el, {
+      content: info.event.extendedProps.description,
+      placement: 'top',
+      animation: 'shift-away',
+      theme: 'light',
+      delay: [200, 0],
+    });
+  }
+},
+
     });
 
     calendar.render();
