@@ -25,3 +25,22 @@ export async function crearEventoUsuario(req, res) {
     res.status(500).json({ error: 'Error al crear evento' });
   }
 }
+
+export async function eliminarEventoUsuario(req, res) {
+  try {
+    const { id } = req.params;
+    const user = req.session.username;
+
+    const result = Evento.eliminarEvento(id, user);
+
+    if (result.changes > 0) {
+      res.json({ ok: true });
+    } else {
+      res.status(404).json({ error: 'Evento no encontrado o no autorizado' });
+    }
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Error al eliminar evento' });
+  }
+}
+
