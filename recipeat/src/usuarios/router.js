@@ -26,10 +26,6 @@ usuariosRouter.post('/login', autenticado(null, '/usuarios/home')
     , asyncHandler(doLogin));
 usuariosRouter.get('/logout', doLogout);
 
-usuariosRouter.get('/:username/recetas', autenticado('/usuarios/home'), asyncHandler(viewRecetasUser));
-usuariosRouter.get('/:username/favoritos', autenticado('/usuarios/home'), asyncHandler(viewFavoritosUser));
-usuariosRouter.get('/:username', autenticado('/usuarios/home'), asyncHandler(viewPerfilUser)); //ver perfil de users dinamico
-
 usuariosRouter.get('/home', autenticado('/usuarios/home'), asyncHandler(viewHome));
 usuariosRouter.get('/registro', autenticado(null, '/usuarios/home'), asyncHandler(viewRegistro));
 usuariosRouter.post('/registro', multerFactory.single("imagen")
@@ -51,6 +47,12 @@ usuariosRouter.post('/updatePerfil', multerFactory.single("imagen")
 usuariosRouter.post('/removeUsuario', autenticado('/usuarios/home'), asyncHandler(deleteUsuario));
 usuariosRouter.get('/administrar', autenticado('/usuarios/home'), asyncHandler(viewAdministrar));
 usuariosRouter.post('/cambiarRol', autenticado('/usuarios/home'), asyncHandler(cambiarRolUsuario));
+
+
+
+usuariosRouter.get('/:username/recetas', autenticado('/usuarios/home'), asyncHandler(viewRecetasUser));
+usuariosRouter.get('/:username/favoritos', autenticado('/usuarios/home'), asyncHandler(viewFavoritosUser));
+usuariosRouter.get('/:username', autenticado('/usuarios/home'), asyncHandler(viewPerfilUser)); //ver perfil de users dinamico
   
 
 export default usuariosRouter;
