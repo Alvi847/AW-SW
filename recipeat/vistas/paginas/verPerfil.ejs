@@ -1,12 +1,17 @@
-
 <div class="perfil-card-container">
   <div class="perfil-card">
-    
     <div class="menu-lateral">
       <ul>
-       
-        <li><a href="/usuarios/<%= usuario.username %>/recetas">Recetas de <%= usuario.nombre %></a></li>
-        <li><a href="/usuarios/<%= usuario.username %>/favoritos">Favoritas de <%= usuario.nombre %></a></li>
+        <li>
+          <a href="/usuarios/<%= usuario.username %>/recetas"
+            >Recetas de <%= usuario.nombre %></a
+          >
+        </li>
+        <li>
+          <a href="/usuarios/<%= usuario.username %>/favoritos"
+            >Favoritas de <%= usuario.nombre %></a
+          >
+        </li>
       </ul>
     </div>
 
@@ -16,9 +21,9 @@
       <div class="contenido-info">
         <div class="perfil-foto">
           <% if (usuario.imagen) { %>
-            <img src="/imagen/<%= usuario.imagen %>" alt="Foto de perfil">
+          <img src="/imagen/<%= usuario.imagen %>" alt="Foto de perfil" />
           <% } else { %>
-            <p>Este usuario no tiene foto de perfil.</p>
+          <p>Este usuario no tiene foto de perfil.</p>
           <% } %>
         </div>
 
@@ -29,112 +34,184 @@
           <p><strong>Email:</strong> <%= usuario.email %></p>
 
           <% if (session.username === usuario.username) { %>
-            <div class="botones-perfil">
-              <a href="/usuarios/updatePerfil" class="editar">Editar perfil</a>
-              <a href="/usuarios/logout" class="logout">Cerrar sesión</a>
-            </div>
+          <div class="botones-perfil">
+            <a href="/usuarios/updatePerfil" class="editar">Editar perfil</a>
+            <a href="/usuarios/logout" class="logout">Cerrar sesión</a>
+          </div>
           <% } %>
         </div>
-        
       </div>
-      <div id='calendar'></div>
+
+      <div id="calendar"></div>
+
       <% if (session.username === usuario.username) { %>
         <div class="crear-evento">
-          <h3>Añadir evento</h3>
+          <h3>📅 Añadir nuevo evento</h3>
           <form id="formEvento">
-            <input type="text" id="titulo" placeholder="Título" required>
-            <input type="date" id="fecha" required>
-            <textarea id="descripcion" placeholder="Descripción" rows="3"></textarea>
-            <button type="submit">Crear evento</button>
+            <div class="form-group">
+              <label for="titulo">Título del evento</label>
+              <input type="text" id="titulo" required />
+            </div>
+        
+            <div class="form-group">
+              <label for="fecha">Fecha</label>
+              <input type="date" id="fecha" required />
+            </div>
+        
+            <div class="form-group">
+              <label for="descripcion">Descripción</label>
+              <textarea id="descripcion" rows="3" placeholder="Escribe una breve descripción..."></textarea>
+            </div>
+        
+            <button type="submit" class="btn-enviar">Crear evento</button>
           </form>
         </div>
+        
       <% } %>
-      
     </div>
   </div>
 </div>
 
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
-
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/locales/es.global.min.js"></script>
-<!-- Tippy.js y Popper.js (requerido por Tippy) -->
 <script src="https://unpkg.com/@popperjs/core@2"></script>
 <script src="https://unpkg.com/tippy.js@6"></script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', async function () {
-    const calendarEl = document.getElementById('calendar');
+  document.addEventListener("DOMContentLoaded", async function () {
+    const calendarEl = document.getElementById("calendar");
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      locale: 'es',  // Calendario en español
+      initialView: "dayGridMonth",
+      locale: "es",
       headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek'
+        left: "prev,next today",
+        center: "title",
+        right: "dayGridMonth,timeGridWeek",
       },
       events: async function (info, successCallback, failureCallback) {
         try {
-          const res = await fetch('/eventos/<%= usuario.username %>');
+          const res = await fetch("/eventos/<%= usuario.username %>");
           const data = await res.json();
 
-          const eventos = data.map(e => ({
+          const eventos = data.map((e) => ({
+            id: e.id, // ¡IMPORTANTE!
             title: e.titulo,
             start: e.fecha,
-            description: e.descripcion
+            description: e.descripcion,
           }));
 
           successCallback(eventos);
         } catch (err) {
-          console.error('Error al cargar eventos:', err);
+          console.error("Error al cargar eventos:", err);
           failureCallback(err);
         }
       },
       eventDidMount: function (info) {
-  if (info.event.extendedProps.description) {
-    tippy(info.el, {
-      content: info.event.extendedProps.description,
-      placement: 'top',
-      animation: 'shift-away',
-      theme: 'light',
-      delay: [200, 0],
-    });
-  }
-},
+        const titulo = info.event.title || "";
+        const descripcion = info.event.extendedProps.description || "";
+        const fecha = new Date(info.event.start).toLocaleDateString("es-ES");
 
+        const contenido = `
+    <div style="max-width: 250px;">
+      <div style="text-align: center; font-weight: bold; color: #ffbd3a; font-size: 15px; margin-bottom: 5px;">
+        ${titulo}
+      </div>
+      <div style="text-align: justify; color: #ccc; font-size: 13px; line-height: 1.4; margin-bottom: 8px;">
+        ${descripcion}
+      </div>
+      <div style="text-align: right; color: #999; font-size: 12px;">
+        📅 ${fecha}
+      </div>
+    </div>
+  `;
+
+        tippy(info.el, {
+          content: contenido,
+          allowHTML: true,
+          placement: "top",
+          animation: "shift-away",
+          theme: "light",
+          delay: [200, 0],
+        });
+      },
+      eventContent: function (arg) {
+        const { event } = arg;
+        const container = document.createElement("div");
+        container.classList.add("fc-event-custom");
+
+        const title = document.createElement("span");
+        title.textContent = event.title;
+
+        const close = document.createElement("span");
+        close.innerHTML = "&times;";
+        close.classList.add("event-delete");
+        close.setAttribute("data-id", event.id);
+
+        container.appendChild(title);
+        container.appendChild(close);
+
+        return { domNodes: [container] };
+      },
     });
 
     calendar.render();
+
+    // Listener de eliminación de eventos
+    document.addEventListener("click", async function (e) {
+      if (e.target.classList.contains("event-delete")) {
+        const id = e.target.getAttribute("data-id");
+        if (confirm("¿Seguro que quieres eliminar este evento?")) {
+          try {
+            const res = await fetch(`/eventos/${id}`, {
+              method: "DELETE",
+            });
+            if (res.ok) {
+              alert("Evento eliminado");
+              calendar.refetchEvents();
+            } else {
+              alert("No se pudo eliminar el evento");
+            }
+          } catch (err) {
+            console.error(err);
+            alert("Error de red");
+          }
+        }
+      }
+    });
   });
 </script>
+
 <script>
-  document.getElementById('formEvento')?.addEventListener('submit', async function (e) {
-    e.preventDefault();
+  document
+    .getElementById("formEvento")
+    ?.addEventListener("submit", async function (e) {
+      e.preventDefault();
 
-    const titulo = document.getElementById('titulo').value.trim();
-    const fecha = document.getElementById('fecha').value;
-    const descripcion = document.getElementById('descripcion').value.trim();
+      const titulo = document.getElementById("titulo").value.trim();
+      const fecha = document.getElementById("fecha").value;
+      const descripcion = document.getElementById("descripcion").value.trim();
 
-    if (!titulo || !fecha) return alert("Título y fecha son obligatorios");
+      if (!titulo || !fecha) return alert("Título y fecha son obligatorios");
 
-    try {
-      const res = await fetch('/eventos/crear', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ titulo, fecha, descripcion })
-      });
+      try {
+        const res = await fetch("/eventos/crear", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ titulo, fecha, descripcion }),
+        });
 
-      if (res.ok) {
-        alert('Evento creado correctamente');
-        location.reload(); // recarga para mostrar el nuevo evento
-      } else {
-        alert('Error al crear evento');
+        if (res.ok) {
+          alert("Evento creado correctamente");
+          location.reload();
+        } else {
+          alert("Error al crear evento");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error de red");
       }
-    } catch (err) {
-      console.error(err);
-      alert('Error de red');
-    }
-  });
+    });
 </script>
