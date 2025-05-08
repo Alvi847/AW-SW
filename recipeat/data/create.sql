@@ -65,4 +65,14 @@ CREATE TABLE "Valoraciones_Comentarios" (
 	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id"),
 	FOREIGN KEY("user") REFERENCES "Usuarios"("username")
 );
+DROP TABLE IF EXISTS "Eventos";
+CREATE TABLE "Eventos" (
+  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "titulo" TEXT NOT NULL,
+  "fecha" TEXT NOT NULL,
+  "descripcion" TEXT,
+  "user" TEXT NOT NULL,
+  FOREIGN KEY("user") REFERENCES "Usuarios"("username")
+);
+
 COMMIT;

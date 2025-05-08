@@ -38,6 +38,88 @@
         
       </div>
       <div id='calendar'></div>
+      <% if (session.username === usuario.username) { %>
+        <div class="crear-evento">
+          <h3>Añadir evento</h3>
+          <form id="formEvento">
+            <input type="text" id="titulo" placeholder="Título" required>
+            <input type="date" id="fecha" required>
+            <textarea id="descripcion" placeholder="Descripción" rows="3"></textarea>
+            <button type="submit">Crear evento</button>
+          </form>
+        </div>
+      <% } %>
+      
     </div>
   </div>
 </div>
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/locales/es.global.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', async function () {
+    const calendarEl = document.getElementById('calendar');
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      locale: 'es',  // Calendario en español
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek'
+      },
+      events: async function (info, successCallback, failureCallback) {
+        try {
+          const res = await fetch('/eventos/<%= usuario.username %>');
+          const data = await res.json();
+
+          const eventos = data.map(e => ({
+            title: e.titulo,
+            start: e.fecha,
+            description: e.descripcion
+          }));
+
+          successCallback(eventos);
+        } catch (err) {
+          console.error('Error al cargar eventos:', err);
+          failureCallback(err);
+        }
+      }
+    });
+
+    calendar.render();
+  });
+</script>
+<script>
+  document.getElementById('formEvento')?.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const titulo = document.getElementById('titulo').value.trim();
+    const fecha = document.getElementById('fecha').value;
+    const descripcion = document.getElementById('descripcion').value.trim();
+
+    if (!titulo || !fecha) return alert("Título y fecha son obligatorios");
+
+    try {
+      const res = await fetch('/eventos/crear', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ titulo, fecha, descripcion })
+      });
+
+      if (res.ok) {
+        alert('Evento creado correctamente');
+        location.reload(); // recarga para mostrar el nuevo evento
+      } else {
+        alert('Error al crear evento');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error de red');
+    }
+  });
+</script>
