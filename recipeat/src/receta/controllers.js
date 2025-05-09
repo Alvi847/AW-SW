@@ -37,7 +37,7 @@ export function viewRecetas(req, res) {
             .slice(0, 6);                                        // 🎯 Tomar las 5 recetas más populares
     }
 
-    render(req, res, contenido, {
+    return render(req, res, contenido, {
         recetas,
         login,
         favoritos,
@@ -71,7 +71,8 @@ export function viewReceta(req, res) {
     return render(req, res, 'paginas/verReceta', {
         receta,
         comentarios,
-        hayComentarios
+        hayComentarios,
+        errores: {}
     });
 }
 

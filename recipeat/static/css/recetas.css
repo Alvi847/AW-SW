@@ -274,7 +274,7 @@
         overflow-y: hidden;
     }
 
-    fieldset .error {
+    form .error {
         color: red;
     }
 

@@ -56,7 +56,7 @@ export class Usuario {
      * @param {string} username Nombre de usuario que se intenta buscar
      * @returns { boolean }
      */
-    static existe(username){
+    static exists(username){
         try{
             this.getUsuarioByUsername(username);
             return false;

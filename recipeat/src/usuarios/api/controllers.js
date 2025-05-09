@@ -11,7 +11,7 @@ import { Usuario } from '../Usuario.js';
  * 
  * @param {*} req 
  * @param {*} res 
- * @returns Un código de estado HTTP indicando el resultados
+ * @returns Un código de estado HTTP indicando el resultado
  */
 export async function checkUsername(req, res) {
     const result = validationResult(req);
@@ -21,7 +21,7 @@ export async function checkUsername(req, res) {
         return res.status(400).json({ status: 400, errores });
     }
     const { username } = datos;
-    const disponible = ! Usuario.existe(username);
+    const disponible = ! Usuario.exists(username);
 
     return res.status(200).json(disponible);
 }

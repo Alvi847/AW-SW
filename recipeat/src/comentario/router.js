@@ -18,6 +18,7 @@ const comentariosRouter = express.Router();
 comentariosRouter.post('/createComentario'
     , body('id', 'Id inválido').notEmpty()
     , body('descripcion', 'No puede ser vacío').notEmpty()
+    , body('descripcion', 'Máximo 1500 caracteres').isLength({min: 0, max: 1500})
     , autenticado('/receta/listaRecetas')
     , doCreateComentario);
 

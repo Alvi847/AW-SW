@@ -54,19 +54,66 @@ import { render } from '../utils/render.js';
 // Agregar un nuevo comentario
 export function doCreateComentario(req, res) {
     const result = validationResult(req);
+
+    const requestWith = req.get('X-Requested-With');
+    const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
+    if (esAjax)
+        req.log.debug("Petición AJAX recibida para doCreateComentario()");
+
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
-        return render(req, res, 'paginas/listaRecetas', {
-            datos,
-            errores,
-        });
+
+        const { id } = req.body;
+
+        console.log("Body: ", req.body);
+
+        if (esAjax) {
+            req.log.debug("Devuelto código 400 a la petición AJAX");
+            return res.status(400).json({ status: 400, errores });
+        }
+
+        if (id && Receta.exists(id)) {
+
+            console.log("Id: ", id);
+            console.log("Devolviendo errores de descripción...");
+
+            const user = req.session.username;
+            const receta = Receta.getRecetaById(id, user); // Método para obtener la receta por ID
+            const comentarios = Comentario.getAllComentarios(id, user);
+
+            let hayComentarios = true;
+            if (comentarios.length == 0)
+                hayComentarios = false;
+
+
+            console.log("Errores", errores);
+            return render(req, res, 'paginas/verReceta', {
+                receta,
+                comentarios,
+                hayComentarios,
+                errores,
+                datos,
+            });
+        }
+        else {
+            console.log("Volviendo al index...");
+            return render(req, res, 'paginas/index', {
+                datos,
+                errores,
+            });
+        }
     }
 
-    const {descripcion, id} = req.body;
+    const { descripcion, id } = req.body;
     const user = req.session.username;
     if (req.session == null || req.session.login === undefined) {
         req.log.error("El usuario no esta logueado, no se puede crear un comentario");
+
+        if (esAjax) {
+            req.log.debug("Devuelto código 401 a la petición AJAX");
+            return res.status(401).json({ ok: true });
+        }
     }
     else {
         const nuevoComentario = new Comentario(user, id, null, descripcion, null);
@@ -74,6 +121,10 @@ export function doCreateComentario(req, res) {
         try {
             // Insertar comentario en la base de datos
             Comentario.insertComentario(nuevoComentario);
+            if (esAjax) {
+                req.log.debug("Devuelto código 200 a la petición AJAX");
+                return res.status(200).json({ ok: true });
+            }
         }
         catch (e) {
             req.log.error(e);
