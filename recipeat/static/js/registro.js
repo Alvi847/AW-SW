@@ -63,7 +63,7 @@ function compruebaUsername(e) {
         username.setCustomValidity(validity);
     }
 
-    // validación html5, porque el campo es <input type="username" ...>
+    // validación html5, porque el campo es <input type="text" ...>
     // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/checkValidity
     // se asigna la pseudoclase :invalid
     const esNombreValido = username.checkValidity();
@@ -85,14 +85,14 @@ function usernameValido(username) {
         return "El nombre de usuario no puede ser vacío";
     if (!regex.test(trimmed))
         return "Sólo puede contener números y letras";
-    if(!usernameDisponible(username))
+    if(usernameDisponible(username))
         return "Nombre de usuario no disponible";
     return "";
 }
 
 async function usernameDisponible(username){
     const response = await postJson('/api/usuarios/disponible', {
-        username: username.value
+        username
     });
     const jsonData = await response.json();
     return JSON.parse(jsonData);

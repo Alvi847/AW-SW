@@ -121,6 +121,6 @@ recetasRouter.post('/like'
 recetasRouter.get('/misRecetas', viewMisRecetas);
 
 
-recetasRouter.get('/api/buscar', apiBuscarRecetas);
+//recetasRouter.get('/buscar', apiBuscarRecetas);
 
 export default recetasRouter;

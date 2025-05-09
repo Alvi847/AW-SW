@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const response = await fetch(`/receta/api/buscar?tipo=${filtro}&q=${encodeURIComponent(query)}`);
+            const response = await fetch(`/api/recetas/buscar?tipo=${filtro}&q=${encodeURIComponent(query)}`);
             if (!response.ok) throw new Error("Error en la búsqueda");
 
             const recetas = await response.json();

@@ -21,6 +21,7 @@ import pinoHttp  from 'pino-http';
 const pinoMiddleware = pinoHttp(config.logger.http(logger));
 import { flashMessages } from './middleware/flash.js';
 import { errorHandler } from './middleware/error.js';
+import apiRouter from './apiRouter.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -57,5 +58,7 @@ app.get("/imagen/:id", (request, response) => {
     request.log.debug("Recibida peticion para la foto: '%s'", pathImg);
     response.sendFile(pathImg);
 });
+
+app.use('/api', apiRouter);
 
 app.use(errorHandler);

@@ -33,6 +33,7 @@ export async function checkReceta(req, res) {
  * @param {*} res 
  */
 export function buscarRecetas(req, res) {
+
     const { tipo, q } = req.query;
     const recetas = Receta.getAllRecetas();
 

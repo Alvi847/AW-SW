@@ -63,9 +63,6 @@ function compruebaNombre(e) {
         nombre.setCustomValidity(validity);
     }
 
-    // validación html5, porque el campo es <input type="nombre" ...>
-    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/checkValidity
-    // se asigna la pseudoclase :invalid
     const esNombreValido = nombre.checkValidity();
     if (esNombreValido) {
         nombre.parentNode.querySelector('span.error').textContent = ' ';

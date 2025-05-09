@@ -51,23 +51,17 @@ async function displayErrores(response) {
 function compruebaId(e) {
     const id = e.target;
 
-    const validity = recetaExiste(id.value)
-    if (validity == "") {
+    if (!recetaExiste(id.value)) {
         id.setCustomValidity('');
     } else {
-        id.setCustomValidity(validity);
+        id.setCustomValidity("Id de receta inválido");
     }
 
-    // validación html5, porque el campo es <input type="id" ...>
-    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/checkValidity
-    // se asigna la pseudoclase :invalid
-    const esNombreValido = id.checkValidity();
-    if (esNombreValido) {
+    const esIdValido = id.checkValidity();
+    if (esIdValido) {
         id.parentNode.querySelector('span.error').textContent = ' ';
-        id.parentNode.querySelector('span.feedback').textContent = '✔';
     } else {
         id.parentNode.querySelector('span.error').textContent = '⚠';
-        id.parentNode.querySelector('span.feedback').textContent = ' ';
     }
     // Muestra el mensaje de validación
     id.reportValidity();

@@ -9,9 +9,11 @@ import { Usuario } from '../Usuario.js';
  *  username: <nombre de usuario>
  * } 
  * 
+ * Devuelve al cliente un booleano indicando si puede usar ese nombre de usuario o no
+ * 
  * @param {*} req 
  * @param {*} res 
- * @returns Un código de estado HTTP indicando el resultado
+ * @returns Un código de estado HTTP indicando el resultado y un booleano 
  */
 export async function checkUsername(req, res) {
     const result = validationResult(req);
