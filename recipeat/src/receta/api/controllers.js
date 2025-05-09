@@ -27,7 +27,7 @@ export async function checkReceta(req, res) {
 }
 
 /**
- * Busca las recetas que el cliente pida según los filtros elegidos 
+ * Busca las recetas que el cliente pida según los filtros elegidos en la barra de búsqueda
  * 
  * @param {*} req 
  * @param {*} res 
