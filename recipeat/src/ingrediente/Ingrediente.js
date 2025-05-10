@@ -21,7 +21,7 @@ export class Ingrediente {
         this.#getAllStmt = db.prepare('SELECT * FROM Ingredientes');
 
         //*Eliminar ingredientes
-        this.#deleteStmt = db.prepare('DELETE FROM Ingredientes WHERE nombre = @nombre');
+        this.#deleteStmt = db.prepare('DELETE FROM Ingredientes WHERE id = @id');
 
         //*Cambiar el precio del ingrediente
         this.#changePrecioStmt = db.prepare('UPDATE Ingredientes SET precio = @precio WHERE nombre = @nombre');
@@ -48,10 +48,10 @@ export class Ingrediente {
         if (result.changes === 0) throw new Error(`No se encontró el ingrediente con nombre ${ingrediente.nombre}`);
     }
 
-    static deleteIngrediente(nombre) {
-        Contiene.deleteAllByIngrediente(nombre);
-        const result = this.#deleteStmt.run({ nombre });
-        if (result.changes === 0) throw new Error(`No se encontró el ingrediente con nombre ${nombre}`);
+    static deleteIngrediente(id) {
+        Contiene.deleteAllByIngrediente(id);
+        const result = this.#deleteStmt.run({ id });
+        if (result.changes === 0) throw new Error(`No se encontró el ingrediente con id ${nombre}`);
     }
 
     // Obtener un ingrediente por nombre

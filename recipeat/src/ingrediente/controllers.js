@@ -42,7 +42,6 @@ export function deleteIngrediente(req, res) {
     const id_ingrediente = req.body;
 
     try{
-        Ingrediente.getIngredienteByName(id_ingrediente);
         Ingrediente.deleteIngrediente(id_ingrediente);
     }
     catch(err){
