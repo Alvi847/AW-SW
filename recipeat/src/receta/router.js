@@ -6,7 +6,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'url';
 import { body, check } from 'express-validator';
 import { autenticado } from '../middleware/auth.js';
-import { apiBuscarRecetas } from './controllers.js';
+import asyncHandler from 'express-async-handler';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const UPLOAD_PATH = join(__dirname, "../../uploads");
@@ -16,15 +16,15 @@ const multerFactory = multer({ dest: join(UPLOAD_PATH) });
 const recetasRouter = express.Router();
 
 //Ruta para ver la lista de recetas
-recetasRouter.get('/listaRecetas', viewRecetas);
+recetasRouter.get('/listaRecetas', asyncHandler(viewRecetas));
 
 //Ruta para ver una receta
-recetasRouter.get('/verReceta/:id', viewReceta);
+recetasRouter.get('/verReceta/:id', asyncHandler(viewReceta));
 
 // Ruta para crear una receta (vista)
 recetasRouter.get('/createReceta'
     , autenticado('/usuarios/login')
-    , createReceta);
+    , asyncHandler(createReceta));
 
 // Ruta para agregar una receta 
 recetasRouter.post('/createReceta'
@@ -90,12 +90,12 @@ recetasRouter.post('/createReceta'
             return false;
         }
     }).withMessage("Sólo se permiten imágenes jpg o png")
-    , doCreateReceta);
+    , asyncHandler(doCreateReceta));
 
 // Ruta para actualizar una receta (vista)
 recetasRouter.get('/updateReceta/:id'
     , autenticado('/receta/listaRecetas')
-    , viewUpdateReceta);
+    , asyncHandler(viewUpdateReceta));
 
 // Ruta para procesar la actualización de una receta
 recetasRouter.post('/updateReceta/:id'
@@ -132,20 +132,20 @@ recetasRouter.post('/updateReceta/:id'
             return false;
         }
     }).withMessage("Sólo se permiten imágenes jpg o png")
-    , updateReceta);
+    , asyncHandler(updateReceta));
 
 // Ruta para eliminar una receta
 recetasRouter.post('/removeReceta'
     , body('id', 'Id inválido').notEmpty()
     , autenticado('/receta/listaRecetas')
-    , deleteReceta);
+    , asyncHandler(deleteReceta));
 
 // Ruta para cuando se da like a una receta
 recetasRouter.post('/like'
     , autenticado('/receta/listaRecetas')
-    , likeReceta);
+    , asyncHandler(likeReceta));
 
-recetasRouter.get('/misRecetas', viewMisRecetas);
+recetasRouter.get('/misRecetas', asyncHandler(viewMisRecetas));
 
 
 //recetasRouter.get('/buscar', apiBuscarRecetas);

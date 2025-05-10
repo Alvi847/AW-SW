@@ -147,11 +147,11 @@ export class Contiene {
     }
 
     static deleteAllByReceta(id_receta) {
-        /*const result = this.#deleteAllByRecetaStmt.run({  TODO: descomentar cuando los ingredientes funcionen bien
+        const result = this.#deleteAllByRecetaStmt.run({
             id_receta,
         });
-        if (result.changes === 0) throw new Error(`No se encontró la receta ${id_receta}`);
-        */
+        //if (result.changes === 0) throw new Error(`No se encontró la receta ${id_receta}`); 
+        
     }
 
     static getIngredientesByReceta(id_receta){
