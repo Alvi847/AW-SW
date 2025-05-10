@@ -136,3 +136,10 @@
     display: none !important;
   }
   
+  .tippy-box {
+    max-width: 320px !important;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  
