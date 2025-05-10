@@ -14,13 +14,13 @@ export function doCreateIngrediente(req, res) {
         });
     }
 
-    const { nombre, unidad, precio } = req.body;
+    const { id_ingrediente, unidad, precio } = req.body;
 
-    let ingrediente = new Ingrediente(nombre, precio, unidad);
+    let ingrediente = new Ingrediente(id_ingrediente, precio, unidad);
 
     Ingrediente.insertIngrediente(ingrediente);
 
-    req.log.info("Ingrediente '%s' registrado (Precio/unidad: %f/%s)", nombre, precio, unidad);
+    req.log.info("Ingrediente '%i' registrado (Precio/unidad: %f/%s)", id_ingrediente, precio, unidad);
 
     // Redirigir al finalizar
     res.redirect(`paginas/index`);  //TODO: CAMBIAR URL
@@ -39,14 +39,14 @@ export function deleteIngrediente(req, res) {
         });
     }
 
-    const nombre = req.body;
+    const id_ingrediente = req.body;
 
     try{
-        Ingrediente.getIngredienteByName(nombre);
-        Ingrediente.deleteIngrediente(nombre);
+        Ingrediente.getIngredienteByName(id_ingrediente);
+        Ingrediente.deleteIngrediente(id_ingrediente);
     }
     catch(err){
-        req.log.error("Error al eliminar el ingrediente '%s': %s ", nombre, err.message);
+        req.log.error("Error al eliminar el ingrediente '%i': %s ", id_ingrediente, err.message);
     }
 
     // Redirigir al finalizar
@@ -65,14 +65,14 @@ export function addIngrediente(req, res){
         });
     }
 
-    const {nombre, id_receta, cantidad} = req.body;
+    const {id_ingrediente, id_receta, cantidad} = req.body;
 
     try{
-        Ingrediente.getIngredienteByName(nombre);
-        Contiene.insert(nombre, id_receta, cantidad);
+        Ingrediente.getIngredienteByName(id_ingrediente);
+        Contiene.insert(id_ingrediente, id_receta, cantidad);
     }
     catch(err){
-        req.log.error("Error al eliminar el ingrediente '%s': %s ", nombre, err.message);
+        req.log.error("Error al añadir el ingrediente '%i': %s a la receta '%i'", id_ingrediente, err.message, id_receta);
     }
 
     // Redirigir al finalizar

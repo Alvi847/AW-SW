@@ -105,7 +105,7 @@ export class Receta {
     /**
      * Insertar una nueva receta
      * @param {Receta} receta Una receta con los datos que se tienen que insertar en la tabla  
-     * @returns 
+     * @returns {Receta} El objeto de la receta nueva con su id
      */
     static insertReceta(receta) {
         let result;

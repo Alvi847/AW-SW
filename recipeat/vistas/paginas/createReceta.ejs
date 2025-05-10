@@ -19,6 +19,15 @@
 					<span class="error"></span><span class="feedback"></span>
 				</div>
 
+				<div class="ingredientes">
+					<p class="error" id="errorIngredientes"><%- helpers.error(errores, 'modo_preparacion' ) %></p>
+					<div class="lista-ingredientes" id="lista-ingredientes">
+					</div>
+					<button name="addIngrediente" type="button">+</button>
+					<button name="removeIngrediente" type="button">-</button>
+					<span class="error"></span><span class="feedback"></span>
+				</div>
+
 				<div class="preparacion">
 					<p class="error" id="errorPreparacion"><%- helpers.error(errores, 'modo_preparacion' ) %></p>
 					<textarea name="modo_preparacion" placeholder="Modo de preparación"><%= locals.modo_preparacion ? locals.modo_preparacion : '' %></textarea>
@@ -28,7 +37,7 @@
 				<div class="receta-imagen">
 					<label for="imagen">Imagen:</label>
 					<p class="error" id="errorImagen"><%- helpers.error(errores, 'imagen' ) %></p>
-					<input type="file" name="imagen" value="<%= locals.foto ? locals.foto : '' %>">
+					<input type="file" name="imagen" id="imagen" value="<%= locals.foto ? locals.foto : '' %>">
 					<span class="error"></span><span class="feedback"></span>
 				</div>
 				<button type="submit">Subir receta</button>

@@ -94,28 +94,32 @@ export class Contiene {
     static #deleteStmt = null;
     static #deleteAllByIngredienteStmt = null;
     static #deleteAllByRecetaStmt = null;
+    static #getAllByRecetaStmt = null;
 
     static initStatements(db) {
-        if (this.#deleteAllByRecetaStmt !== null) return;
+        if (this.#getAllByRecetaStmt !== null) return;
 
         // Añadir un ingrediente a una receta
-        this.#insertStmt = db.prepare('INSERT INTO Contiene (id_receta, nombre_ingrediente, cantidad) VALUES (@id_receta, @nombre_ingrediente, @cantidad)');
+        this.#insertStmt = db.prepare('INSERT INTO Contiene (id_receta, id_ingrediente, cantidad) VALUES (@id_receta, @id_ingrediente, @cantidad)');
 
         // Borrar un ingrediente de una receta
-        this.#deleteStmt = db.prepare('DELETE FROM Contiene WHERE id_receta = @id_receta AND nombre_ingrediente = @nombre_ingrediente');
+        this.#deleteStmt = db.prepare('DELETE FROM Contiene WHERE id_receta = @id_receta AND id_ingrediente = @id_ingrediente');
 
         // Borrar todas las recetas a las que pertenece un ingrediente
-        this.#deleteAllByIngredienteStmt = db.prepare('DELETE FROM Contiene WHERE nombre_ingrediente = @nombre_ingrediente');
+        this.#deleteAllByIngredienteStmt = db.prepare('DELETE FROM Contiene WHERE id_ingrediente = @id_ingrediente');
 
         // Borrar todos los ingredientes que pertenecen a la receta
         this.#deleteAllByRecetaStmt = db.prepare('DELETE FROM Contiene WHERE id_receta = @id_receta');
+
+        // Obtiene los ingredientes de una receta
+        this.#getAllByRecetaStmt = db.prepare('SELECT i.nombre, i.unidad, c.cantidad FROM Ingredientes i JOIN Contiene c ON i.id = c.id_ingrediente WHERE c.id_receta = @id_receta');
     }
 
-    static insert(n_ingrediente, id_receta, cantidad) {
+    static insert(id_ingrediente, id_receta, cantidad) {
         try {
             this.#insertStmt.run({
                 id_receta: id_receta,
-                nombre_ingrediente: n_ingrediente,
+                id_ingrediente: id_ingrediente,
                 cantidad: cantidad
             });
         }
@@ -123,21 +127,21 @@ export class Contiene {
             console.log("Error al insertar en la tabla Contiene");
             if (this.#insertStmt == null)
                 console.log("insert result null");
-            throw new ErrorInsertContiene(n_ingrediente, id_receta, { cause: e });
+            throw new ErrorInsertContiene(id_ingrediente, id_receta, { cause: e });
         }
     }
 
-    static delete(n_ingrediente, id_receta) {
+    static delete(id_ingrediente, id_receta) {
         const result = this.#deleteStmt.run({
-            nombre_ingrediente: n_ingrediente,
+            id_ingrediente: id_ingrediente,
             id_receta: id_receta
         });
         if (result.changes === 0) throw new Error(`No se encontró el ingrediente con nombre ${nombre} en la receta ${id_receta}`);
     }
 
-    static deleteAllByIngrediente(n_ingrediente) {
+    static deleteAllByIngrediente(id_ingrediente) {
         const result = this.#deleteAllByIngredienteStmt.run({
-            nombre_ingrediente: n_ingrediente,
+            id_ingrediente: id_ingrediente,
         });
         if (result.changes === 0) throw new Error(`No se encontró el ingrediente con nombre ${nombre}`);
     }
@@ -148,6 +152,12 @@ export class Contiene {
         });
         if (result.changes === 0) throw new Error(`No se encontró la receta ${id_receta}`);
         */
+    }
+
+    static getIngredientesByReceta(id_receta){
+        const ingredientes = this.#getAllByRecetaStmt.all({id_receta});
+
+        return ingredientes;
     }
 
     cantidad; // Cantidad del ingrediente
@@ -169,12 +179,12 @@ export class ErrorInsertIngrediente extends Error {
 export class ErrorInsertContiene extends Error {
     /**
      * 
-     * @param {string} n_ingrediente
+     * @param {string} id_ingrediente
      * @param {int} id_receta 
      * @param {ErrorOptions} [options]
      */
-    constructor(n_ingrediente, id_receta, options) {
-        super(`El ingrediente ${n_ingrediente} no pudo ser adjuntado a la receta ${id_receta}`, options);
+    constructor(id_ingrediente, id_receta, options) {
+        super(`El ingrediente ${id_ingrediente} no pudo ser adjuntado a la receta ${id_receta}`, options);
         this.name = 'ErrorInsertContiene';
     }
 }
