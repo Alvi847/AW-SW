@@ -1,3 +1,4 @@
+@import url('/css/evento.css');
 .perfil-card {
   max-width: 1200px;
   min-height: 600px;
@@ -15,7 +16,6 @@
   border: 1px solid #ffffff;
 }
 
-/* Menú lateral */
 .menu-lateral {
   width: 220px;
   border-right: 1px solid #333;
@@ -60,7 +60,6 @@
   color: #ffbd3a;
 }
 
-/* Contenido del perfil */
 .contenido-perfil {
   flex: 1;
   display: flex;
@@ -85,7 +84,6 @@
   width: 100%;
 }
 
-/* Foto de perfil */
 .perfil-foto {
   display: flex;
   justify-content: center;
@@ -100,7 +98,6 @@
   border: 4px solid #ffbd3a;
 }
 
-/* Detalles del perfil */
 .perfil-detalles {
   flex: 2;
   display: flex;
@@ -108,12 +105,6 @@
   text-align: left;
   align-items: flex-start;
   overflow: visible;
-}
-
-.perfil-detalles h1 {
-  font-size: 26px;
-  margin-bottom: 20px;
-  color: #fff;
 }
 
 .perfil-detalles h2 {
@@ -128,7 +119,6 @@
   color: #ccc;
 }
 
-/* Botones perfil */
 .botones-perfil {
   display: flex;
   gap: 10px;
@@ -136,7 +126,8 @@
   margin-left: 5px;
 }
 
-.editar, .logout {
+.editar,
+.logout {
   padding: 12px 18px;
   font-size: 16px;
   color: #fff;
@@ -161,53 +152,6 @@
   background-color: #c85f23;
 }
 
-/* Formularios */
-.form-editar label {
-  display: block;
-  margin-bottom: 15px;
-  color: #fff;
-  font-size: 16px;
-}
-
-.form-editar input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-top: 5px;
-  background-color: #2c2c2c;
-  color: white;
-}
-
-.guardar {
-  background-color: #007bff;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 8px;
-  border: none;
-  font-size: 16px;
-  transition: background-color 0.3s;
-}
-
-.guardar:hover {
-  background-color: #0056b3;
-}
-
-.cancelar {
-  background-color: #dc3545;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 8px;
-  font-size: 16px;
-  text-decoration: none;
-  transition: background-color 0.3s;
-}
-
-.cancelar:hover {
-  background-color: #b02a37;
-}
-
-/* Calendario */
 #calendar {
   background-color: white;
   color: black;
@@ -224,13 +168,6 @@
 .fc {
   max-width: 100%;
   box-sizing: border-box;
-}
-
-.fc-daygrid-day-frame,
-.fc-timegrid-slot {
-  min-width: 0;
-  max-width: 100%;
-  overflow: hidden;
 }
 
 .fc-timegrid {
@@ -268,67 +205,6 @@
   overflow: visible !important;
 }
 
-/* Tooltip personalizado para FullCalendar (con Tippy.js) */
-.tippy-box[data-theme~='light'] {
-  background-color: #353535 !important;
-  color: #ffbd3a !important;
-  border: 2.5px solid #ffbd3a;
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
-  padding: 25px;
-  border-radius: 8px;
-  min-width: 50px;
-  line-height: 1.4;
-  text-align: justify;
-  word-spacing: normal;
-}
-
-
-/* Evento con botón eliminar */
-.fc-event-custom {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 5px;
-  gap: 5px;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.fc-event-custom span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.event-delete {
-  font-size: 11px;
-  color: white;
-  background-color: #dc3545;
-  border: none;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  text-align: center;
-  line-height: 18px;
-  cursor: pointer;
-  font-weight: bold;
-  flex-shrink: 0;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
-}
-
-.event-delete:hover {
-  background-color: #b02a37;
-}
-
-.fc-event-custom:hover .event-delete {
-  opacity: 1;
-  pointer-events: auto;
-}
-
 .crear-evento {
   background-color: #2c2c2c;
   border: 1px solid #444;
@@ -361,6 +237,8 @@
 
 .crear-evento input,
 .crear-evento textarea {
+  margin-bottom: 0px !important;
+  margin-top: 0px !important;
   padding: 10px 12px;
   border-radius: 6px;
   border: 1px solid #555;
@@ -393,7 +271,6 @@
   background-color: #e67e22;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   #calendar {
     max-width: 100%;

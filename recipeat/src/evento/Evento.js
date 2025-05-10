@@ -2,6 +2,7 @@ export class Evento {
   static #insertStmt;
   static #selectByUserStmt;
   static #deleteStmt;
+  static #updateStmt;
 
   static initStatements(db) {
     if (this.#insertStmt) return;
@@ -18,6 +19,8 @@ export class Evento {
     this.#deleteStmt = db.prepare(`
       DELETE FROM Eventos WHERE id = ? AND user = ?
     `);
+
+    this.#updateStmt = db.prepare(`UPDATE Eventos SET titulo = @titulo, fecha = @fecha, descripcion = @descripcion WHERE id = @id AND user = @user`);
   }
 
   static crearEvento({ titulo, fecha, descripcion, user }) {
@@ -30,5 +33,9 @@ export class Evento {
 
   static eliminarEvento(id, user) {
     return this.#deleteStmt.run(id, user);
+  }
+
+  static actualizarEvento({ id, titulo, fecha, descripcion, user }) {
+    return this.#updateStmt.run({ id, titulo, fecha, descripcion, user });
   }
 }
