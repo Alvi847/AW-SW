@@ -37,7 +37,6 @@ export function viewRecetas(req, res) {
             .sort((a, b) => b.likes - a.likes)                   // 📈 Ordenar por likes descendente
             .slice(0, 6);                                        // 🎯 Tomar las 5 recetas más populares
     }
-
     return render(req, res, contenido, {
         recetas,
         login,
@@ -71,7 +70,7 @@ export function viewReceta(req, res) {
     let hayComentarios = true;
     if (comentarios.length == 0)
         hayComentarios = false;
-
+    
     return render(req, res, 'paginas/verReceta', {
         receta,
         ingredientes,
