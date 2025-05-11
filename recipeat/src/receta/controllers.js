@@ -1,5 +1,6 @@
 import { Receta } from './Receta.js';
 import { Comentario } from '../comentario/Comentario.js';
+import { Preferencias } from '../usuarios/Usuario.js';
 import { validationResult, matchedData } from 'express-validator';
 import { render } from '../utils/render.js';
 import { UPLOAD_PATH } from './router.js';
@@ -18,32 +19,57 @@ import sanitizeHtml from 'sanitize-html';
 import * as fs from 'node:fs/promises';
 
 // Ver las recetas (página de inicio de recetas)
+
 export function viewRecetas(req, res) {
     let contenido = 'paginas/listaRecetas';
-
-    const recetas = Receta.getAllRecetas();
     const login = req.session.login;
     const user = req.session.username;
 
+    const { gusto, nivel, dieta } = req.query;
+    let preferencias = {};
+
+    if (gusto || nivel || dieta) {
+        // Filtros enviados por el usuario
+        preferencias = { gusto, nivel, dieta };
+    } else if (login && user) {
+        // Preferencias guardadas del usuario
+        preferencias = Preferencias.getPreferenciasUsuario(user);
+    }
+
+    // Obtener recetas según filtros o preferencias
+    let recetas = Receta.getAllRecetas();
+
+    if (preferencias.gusto)
+        recetas = recetas.filter(r => r.gusto === preferencias.gusto);
+    if (preferencias.nivel)
+        recetas = recetas.filter(r => r.nivel === preferencias.nivel);
+    if (preferencias.dieta)
+        recetas = recetas.filter(r => r.dieta === preferencias.dieta);
+
+    // Favoritos y recomendaciones
     let favoritos = [];
     let recomendadas = [];
 
-    if (login) {
+    if (login && user) {
         favoritos = Receta.getFavoritosPorUsuario(user);
 
         recomendadas = recetas
-            .filter(r => !favoritos.some(fav => fav.id === r.id)) // ❌ No mostrar favoritos
-            .sort((a, b) => b.likes - a.likes)                   // 📈 Ordenar por likes descendente
-            .slice(0, 6);                                        // 🎯 Tomar las 5 recetas más populares
+            .filter(r => !favoritos.some(fav => fav.id === r.id))   // ❌ No mostrar favoritos
+            .sort((a, b) => b.likes - a.likes)                      // 📈 Ordenar por likes descendente
+            .slice(0, 6);                                           // 🎯 Tomar las 5 recetas más populares
     }
 
     render(req, res, contenido, {
         recetas,
         login,
         favoritos,
-        recomendadas
+        recomendadas,
+        preferencias
     });
 }
+
+
+
 
 // Ver una receta
 export function viewReceta(req, res) {
@@ -115,7 +141,7 @@ export async function doCreateReceta(req, res) {
 
 
 
-    const { nombre, descripcion, modo_preparacion } = req.body;
+    const { nombre, descripcion, modo_preparacion, gusto, nivel, dieta } = req.body;
     const imagen = req.file;
 
     console.log("Archivo recibido: ", req.file);
@@ -142,10 +168,10 @@ export async function doCreateReceta(req, res) {
             }
         });
         
-        const nuevaReceta = new Receta(nombre, descripcionSegura, modoPreparacionSeguro, null, null, req.session.username, false, imagen.filename);
-
+        const nuevaReceta = new Receta(nombre, descripcionSegura, modoPreparacionSeguro, null, null, req.session.username, false, imagen.filename, gusto, nivel, dieta);
+        console.log("Insertando receta...");
         Receta.insertReceta(nuevaReceta);
-
+        console.log("Receta insertada correctamente");
         // Redirigir o devolver un mensaje de éxito
 
         if (esAjax) {
@@ -178,7 +204,7 @@ export function viewUpdateReceta(req, res) {
 
 // Procesar la actualización de la receta
 export async function updateReceta(req, res) {
-
+    console.log("Body recibido:", req.body);
     const id = req.params.id;
     const recetaExistente = Receta.getRecetaById(id);
 
@@ -189,6 +215,7 @@ export async function updateReceta(req, res) {
         req.log.debug("Petición AJAX recibida para updateReceta()");
 
     const result = validationResult(req);
+    
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
@@ -205,7 +232,7 @@ export async function updateReceta(req, res) {
         });
     }
 
-    const { nombre, descripcion, modo_preparacion } = req.body;
+    const { nombre, descripcion, modo_preparacion, gusto, nivel, dieta } = req.body;
     const imagen = req.file;
     const user = req.session.username;
 
@@ -215,6 +242,9 @@ export async function updateReceta(req, res) {
         recetaExistente.nombre = nombre;
         recetaExistente.descripcion = descripcion;
         recetaExistente.modo_preparacion = modo_preparacion;
+        recetaExistente.gusto = gusto || null;
+        recetaExistente.nivel = nivel || null;
+        recetaExistente.dieta = dieta ||null;
 
         if (recetaExistente.imagen) {
             try {

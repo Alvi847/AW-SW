@@ -381,6 +381,17 @@
         border-top: 1px solid #ddd;
     }
 
+    .receta-vista .receta-extra {
+            margin-top: 1rem;
+            font-size: 1rem;
+            line-height: 1.6;
+    }
+    
+    .receta-vista .receta-extra p {
+            margin: 0.3rem 0;
+    }
+
+
     .receta-vista .receta-botones {
         width: 25%;
         margin-left: 37.5%;
@@ -797,6 +808,29 @@
     .buscador {
         width: 90%;
     }
+
+    .contenedor-filtros {
+       display: flex;
+       flex-direction: column;
+       margin-top: 1rem;
+       gap: 0.5rem;
+    }
+        
+    .filtros-preferencias {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+                
+    .filtros-preferencias select,
+    .filtros-preferencias button {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.95rem;
+    }
+    
+       
+
 
     .recetas-container {
         margin-left: 0;

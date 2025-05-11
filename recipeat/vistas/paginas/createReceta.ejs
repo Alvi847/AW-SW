@@ -31,6 +31,39 @@
 					<input type="file" name="imagen" value="<%= locals.foto ? locals.foto : '' %>">
 					<span class="error"></span><span class="feedback"></span>
 				</div>
+
+				<div class="gusto">
+					<label for="gusto">Gusto:</label>
+					<select name="gusto">
+						<option value="">Seleccione un gusto</option>
+						<option value="dulce" <%=locals.gusto==='dulce' ? 'selected' : '' %>>Dulce</option>
+						<option value="salado" <%=locals.gusto==='salado' ? 'selected' : '' %>>Salado</option>
+					</select>
+					<p class="error"><%- helpers.error(errores, 'gusto' ) %></p>
+				</div>
+				
+				<div class="nivel">
+					<label for="nivel">Nivel:</label>
+					<select name="nivel">
+						<option value="">Seleccione un nivel</option>
+						<option value="fácil" <%=locals.nivel==='fácil' ? 'selected' : '' %>>Fácil</option>
+						<option value="medio" <%=locals.nivel==='medio' ? 'selected' : '' %>>Medio</option>
+						<option value="difícil" <%=locals.nivel==='difícil' ? 'selected' : '' %>>Difícil</option>
+					</select>
+					<p class="error"><%- helpers.error(errores, 'nivel' ) %></p>
+				</div>
+				
+				<div class="dieta">
+					<label for="dieta">Dieta:</label>
+					<select name="dieta">
+						<option value="">Seleccione una dieta</option>
+						<option value="vegana" <%=locals.dieta==='vegana' ? 'selected' : '' %>>Vegana</option>
+						<option value="vegetariana" <%=locals.dieta==='vegetariana' ? 'selected' : '' %>>Vegetariana</option>
+						<option value="sin gluten" <%=locals.dieta==='sin gluten' ? 'selected' : '' %>>Sin gluten</option>
+					</select>
+					<p class="error"><%- helpers.error(errores, 'dieta' ) %></p>
+				</div>
+
 				<button type="submit">Subir receta</button>
 	</fieldset>
 </div>

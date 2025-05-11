@@ -1,4 +1,4 @@
-import { Usuario } from "./usuarios/Usuario.js";
+import { Usuario, Preferencias } from "./usuarios/Usuario.js";
 import { Receta, Like } from "./receta/Receta.js";
 import { Comentario, Valoracion } from "./comentario/Comentario.js"
 import { Evento } from "./evento/Evento.js";
@@ -11,5 +11,6 @@ export function inicializaModelos(db) {
     Comentario.initStatements(db);
     Valoracion.initStatements(db);
     Evento.initStatements(db);
+    Preferencias.initStatements(db);   
 }
 

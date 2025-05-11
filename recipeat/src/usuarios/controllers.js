@@ -1,4 +1,4 @@
-import { Usuario, UsuarioYaExiste } from './Usuario.js';
+import { Usuario, Preferencias, UsuarioYaExiste } from './Usuario.js';
 import { render } from '../utils/render.js';
 import { validationResult, matchedData } from 'express-validator';
 import { Receta } from '../receta/Receta.js';
@@ -350,6 +350,91 @@ export async function cambiarRolUsuario(req, res) {
 
     return res.redirect('/usuarios/administrar');
 }
+
+/**
+ * Mostrar la vista de preferencias para el usuario logueado
+ */
+export async function viewPreferencias(req, res) {
+    const user = req.session.username;
+
+    if (!user) {
+        return res.redirect('/login');
+    }
+
+    try {
+        const preferencias = await Preferencias.getPreferenciasUsuario(user);
+        return render(req, res, 'paginas/misPreferencias', {
+            preferencias,
+            errores: {}
+        });
+    } catch (e) {
+        req.log.error("Error al obtener preferencias para '%s': %s", user, e.message);
+        return res.status(500).send("Error interno del servidor");
+    }
+}
+
+/**
+ * Procesar y guardar las preferencias del usuario
+ */
+export function guardarPreferencias(req, res) {
+    const result = validationResult(req);
+    const esAjax = ['xmlhttprequest', 'fetch'].includes((req.get('X-Requested-With') || '').toLowerCase());
+    const user = req.session.username;
+
+    if (!user) {
+        return res.redirect('/login');
+    }
+
+    if (esAjax)
+        req.log.debug("Petición AJAX recibida para guardarPreferencias()");
+
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+        const datos = matchedData(req);
+
+        if (esAjax) {
+            req.log.debug("Errores de validación: %o", errores);
+            return res.status(400).json({ status: 400, errores });
+        }
+
+        return render(req, res, 'paginas/misPreferencias', {
+            preferencias: datos,
+            errores
+        });
+    }
+
+    const datos = matchedData(req);
+
+    try {
+        // Borrar preferencias anteriores si existen
+        Preferencias.deletePreferencias(user);
+
+        // Crear y guardar nuevas preferencias
+        const nuevaPreferencia = new Preferencias(user, datos.gusto, datos.nivel, datos.dieta);
+        Preferencias.insertPreferencia(nuevaPreferencia);
+
+        req.log.info("Preferencias actualizadas para '%s'", user);
+
+        if (esAjax) {
+            return res.status(200).json({ ok: true });
+        }
+
+        return res.redirect('/usuarios/misPreferencias');
+    } catch (e) {
+        req.log.error("Error al guardar preferencias para '%s': %s", user, e.message);
+
+        if (esAjax) {
+            return res.status(500).json({ status: 500, error: 'Error interno del servidor' });
+        }
+
+        return render(req, res, 'paginas/misPreferencias', {
+            preferencias: datos,
+            errores: { general: { msg: 'No se pudieron guardar las preferencias' } }
+        });
+    }
+}
+
+
 
 
 

@@ -1,6 +1,6 @@
 import express from 'express';
 
-import {viewReceta, viewRecetas, createReceta, doCreateReceta, viewUpdateReceta, updateReceta, deleteReceta, likeReceta, viewMisRecetas } from './controllers.js';
+import {viewReceta, viewRecetas, createReceta, doCreateReceta, viewUpdateReceta, updateReceta, deleteReceta, likeReceta, viewMisRecetas, /*filtrarRecetas*/ } from './controllers.js';
 import multer from 'multer';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'url'; 
@@ -17,6 +17,7 @@ const recetasRouter = express.Router();
 
 //Ruta para ver la lista de recetas
 recetasRouter.get('/listaRecetas', viewRecetas);
+recetasRouter.post('/listaRecetas', autenticado('/receta/listaRecetas'), viewRecetas);
 
 //Ruta para ver una receta
 recetasRouter.get('/verReceta/:id', viewReceta);
@@ -37,6 +38,10 @@ recetasRouter.post('/createReceta'
     , body('descripcion', 'Máximo 200 caracteres').trim().isLength({ min: 1, max: 200 })
     , body('modo_preparacion', 'No puede ser vacío').trim().notEmpty()
     , body('modo_preparacion', 'Máximo 1000 caracteres').trim().isLength({ min: 1, max: 1000 })
+    , body('gusto').optional({ checkFalsy: true }).isIn(['dulce', 'salado', 'picante'])
+    , body('nivel').optional({ checkFalsy: true }).isIn(['fácil', 'medio', 'difícil'])
+    , body('dieta').optional({ checkFalsy: true }).isIn(['vegana', 'vegetariana', 'sin gluten'])
+
     , check('imagen', "Archivo inválido").custom((value, {req}) =>{
         /**
          * Validador custom para comprobar la subida de la imagen al formulario
@@ -80,6 +85,9 @@ recetasRouter.post('/updateReceta/:id'
     , body('descripcion', 'Máximo 200 caracteres').isLength({ min: 1, max: 200 })
     , body('modo_preparacion', 'No puede ser vacío').notEmpty()
     , body('modo_preparacion', 'Máximo 1000 caracteres').isLength({ min: 1, max: 1000 })
+    , body('gusto').optional({ checkFalsy: true }).isIn(['dulce', 'salado', 'picante'])
+    , body('nivel').optional({ checkFalsy: true }).isIn(['fácil', 'medio', 'difícil'])
+    , body('dieta').optional({ checkFalsy: true }).isIn(['vegana', 'vegetariana', 'sin gluten'])
     , check('imagen', "Archivo inválido").custom((value, {req}) =>{
         /**
          * Validador custom para comprobar la subida de la imagen al formulario
@@ -122,5 +130,7 @@ recetasRouter.get('/misRecetas', viewMisRecetas);
 
 
 recetasRouter.get('/api/buscar', apiBuscarRecetas);
+
+//recetasRouter.get('/filtrar', filtrarRecetas);
 
 export default recetasRouter;
