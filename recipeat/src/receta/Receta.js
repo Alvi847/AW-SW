@@ -99,6 +99,12 @@ export class Receta {
     static getAllRecetas() {
 
         const recetas = this.#getAllStmt.all();
+
+        recetas.forEach(r => {
+            const ingredientes = Contiene.getIngredientesByReceta(r.id);
+            r.ingredientes = ingredientes.map(i => i.nombre.toLowerCase());
+        });
+        
         return recetas;
     }
 

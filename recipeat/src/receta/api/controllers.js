@@ -49,5 +49,9 @@ export function buscarRecetas(req, res) {
         return false;
     });
 
+    console.log("Filtrando por:", tipo, "→", filtro);
+console.log("Recetas encontradas:", recetasFiltradas.map(r => r.nombre));
+
+
     res.json(recetasFiltradas);
 }
