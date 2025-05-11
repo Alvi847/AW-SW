@@ -79,7 +79,7 @@
 .contenido-info {
   display: flex;
   flex-direction: row;
-  gap: 30px;
+  gap: 40px;
   align-items: center;
   width: 100%;
 }
@@ -91,11 +91,12 @@
 }
 
 .perfil-foto img {
-  width: 210px;
-  height: 210px;
+  width: 270px;
+  height: 270px;
   object-fit: cover;
   border-radius: 50%;
   border: 4px solid #ffbd3a;
+  margin-left: 55px;
 }
 
 .perfil-detalles {
@@ -110,20 +111,21 @@
 .perfil-detalles h2 {
   font-size: 22px;
   margin-bottom: 10px;
+  margin-left: 25px;
   color: #ffbd3a;
 }
 
 .perfil-detalles p {
   font-size: 18px;
-  margin: 0 0 5px 0;
+  margin: 0 0 5px 40px;
   color: #ccc;
 }
 
 .botones-perfil {
   display: flex;
   gap: 10px;
-  margin-top: 15px;
-  margin-left: 5px;
+  margin-top: 20px;
+  margin-left: 55px;
 }
 
 .editar,
@@ -153,12 +155,12 @@
 }
 
 #calendar {
-  background-color: white;
-  color: black;
+  background-color: rgb(62, 62, 62);
+  color: rgb(255, 255, 255);
   padding: 20px;
   border-radius: 12px;
   margin-top: 20px;
-  width: 100%;
+  width: 700px;
   font-family: 'Montserrat', sans-serif;
   min-height: 600px;
   overflow-x: auto;
@@ -200,8 +202,14 @@
 
 .fc .fc-col-header-cell-cushion,
 .fc .fc-daygrid-day-number {
-  color: black;
+  color: rgb(255, 255, 255);
   font-weight: 600;
+}
+
+.fc .fc-button-primary:disabled {
+  background-color: #0a1723;
+  border-color: var(--fc-button-border-color);
+  color: var(--fc-button-text-color);
 }
 
 .fc-scroller-harness,
@@ -214,9 +222,8 @@
   border: 1px solid #444;
   padding: 30px;
   border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  margin-left: 10px;
+  width: 700px;
+  margin-left:9px;
   color: #fff;
 }
 
