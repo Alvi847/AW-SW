@@ -274,7 +274,7 @@
         overflow-y: hidden;
     }
 
-    form .error {
+    .error {
         color: red;
     }
 

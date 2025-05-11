@@ -19,10 +19,13 @@
     </div>
     <div class="receta-ingredientes">
         <h2>INGREDIENTES</h2>
-        <p>
-            <!-- Aquí van los ingredientes de la receta -->             
-        
-        </p>
+        <% if (ingredientes.length > 0) { %>
+            <% ingredientes.forEach((i)=> { %>      
+                <span><%= i.nombre %>: <%= i.cantidad %><%= i.unidad %></span>
+            <% }) %>
+        <% } else { %>
+            <span class="error">Error obteniendo los ingredientes. Por favor, contacta con un administrador</span>
+        <% } %>
     </div>
     <div class="receta-preparacion">
         <h2>MODO DE PREPARACIÓN</h2>
