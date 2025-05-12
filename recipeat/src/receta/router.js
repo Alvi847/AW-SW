@@ -1,10 +1,6 @@
 import express from 'express';
 
-<<<<<<< HEAD
-import {viewReceta, viewRecetas, createReceta, doCreateReceta, viewUpdateReceta, updateReceta, deleteReceta, likeReceta, viewMisRecetas, /*filtrarRecetas*/ } from './controllers.js';
-=======
 import { viewReceta, viewRecetas, createReceta, doCreateReceta, viewUpdateReceta, updateReceta, deleteReceta, likeReceta, viewMisRecetas } from './controllers.js';
->>>>>>> 5831375a749eb14aaf0a8ff1768244c544f672e8
 import multer from 'multer';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'url';
@@ -20,12 +16,8 @@ const multerFactory = multer({ dest: join(UPLOAD_PATH) });
 const recetasRouter = express.Router();
 
 //Ruta para ver la lista de recetas
-<<<<<<< HEAD
-recetasRouter.get('/listaRecetas', viewRecetas);
-recetasRouter.post('/listaRecetas', autenticado('/receta/listaRecetas'), viewRecetas);
-=======
 recetasRouter.get('/listaRecetas', asyncHandler(viewRecetas));
->>>>>>> 5831375a749eb14aaf0a8ff1768244c544f672e8
+recetasRouter.post('/listaRecetas', autenticado('/receta/listaRecetas'), viewRecetas);
 
 //Ruta para ver una receta
 recetasRouter.get('/verReceta/:id', asyncHandler(viewReceta));
@@ -75,15 +67,11 @@ recetasRouter.post('/createReceta'
     ]
     , body('modo_preparacion', 'No puede ser vacío').trim().notEmpty()
     , body('modo_preparacion', 'Máximo 1000 caracteres').trim().isLength({ min: 1, max: 1000 })
-<<<<<<< HEAD
     , body('gusto').optional({ checkFalsy: true }).isIn(['dulce', 'salado', 'picante'])
     , body('nivel').optional({ checkFalsy: true }).isIn(['fácil', 'medio', 'difícil'])
     , body('dieta').optional({ checkFalsy: true }).isIn(['vegana', 'vegetariana', 'sin gluten'])
 
-    , check('imagen', "Archivo inválido").custom((value, {req}) =>{
-=======
     , check('imagen').custom((value, { req }) => {
->>>>>>> 5831375a749eb14aaf0a8ff1768244c544f672e8
         /**
          * Validador custom para comprobar la subida de la imagen al formulario
          * Crédito: https://stackoverflow.com/questions/39703624/express-how-to-validate-file-input-with-express-validator
@@ -125,14 +113,10 @@ recetasRouter.post('/updateReceta/:id'
     , body('descripcion', 'Máximo 200 caracteres').isLength({ min: 1, max: 200 })
     , body('modo_preparacion', 'No puede ser vacío').notEmpty()
     , body('modo_preparacion', 'Máximo 1000 caracteres').isLength({ min: 1, max: 1000 })
-<<<<<<< HEAD
     , body('gusto').optional({ checkFalsy: true }).isIn(['dulce', 'salado', 'picante'])
     , body('nivel').optional({ checkFalsy: true }).isIn(['fácil', 'medio', 'difícil'])
     , body('dieta').optional({ checkFalsy: true }).isIn(['vegana', 'vegetariana', 'sin gluten'])
-    , check('imagen', "Archivo inválido").custom((value, {req}) =>{
-=======
     , check('imagen', "Archivo inválido").custom((value, { req }) => {
->>>>>>> 5831375a749eb14aaf0a8ff1768244c544f672e8
         /**
          * Validador custom para comprobar la subida de la imagen al formulario
          * Crédito: https://stackoverflow.com/questions/39703624/express-how-to-validate-file-input-with-express-validator
