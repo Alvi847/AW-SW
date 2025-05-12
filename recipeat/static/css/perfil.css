@@ -243,6 +243,7 @@
 .crear-evento label {
   margin-bottom: 8px;
   font-size: 15px;
+  text-align: left;
   color: #ddd;
 }
 
@@ -283,24 +284,54 @@
 }
 
 @media (max-width: 768px) {
-  #calendar {
-    max-width: 100%;
-    padding: 10px;
-  }
-
   .perfil-card {
     flex-direction: column;
+    align-items: center;
+    min-width: unset;
+    padding: 5px;
+    gap: 10px;
   }
 
   .contenido-perfil {
-    flex-direction: column;
     align-items: center;
     text-align: center;
+    gap: 20px;
+  }
+
+  .titulo-perfil {
+    font-size: 24px;
+    margin-bottom: 10px;
   }
 
   .contenido-info {
     flex-direction: column;
     align-items: center;
+    gap: 20px;
+  }
+
+  .perfil-foto img {
+    width: 180px;
+    height: 180px;
+    margin-left: 0;
+  }
+
+  .perfil-detalles {
+    text-align: left !important;
+  }
+
+  .perfil-detalles h2 {
+    margin-left: 0;
+    font-size: 20px;
+  }
+
+  .perfil-detalles p {
+    margin: 0 0 10px 10px;
+  }
+
+  .botones-perfil {
+    flex-direction: row;
+    align-items: center;
+    margin-left: 20px;
   }
 
   .menu-lateral {
@@ -312,6 +343,72 @@
 
   .menu-lateral ul {
     display: flex;
+    flex-direction: column;
+    text-align: center;
     justify-content: space-around;
+  }
+
+  .menu-lateral li {
+    margin-bottom: 10px;
+  }
+
+  #calendar {
+    max-width: 360px;
+    min-height: 540px;
+    margin-left: 0;
+    margin-top: 5px;
+  }
+
+  .crear-evento {
+    padding: 20px;
+    max-width: 350px;
+    margin-left: 0;
+    margin-bottom: 15px;
+  }
+
+  .crear-evento h3 {
+    font-size: 20px;
+  }
+
+  .crear-evento label {
+    font-size: 14px;
+  }
+
+  .crear-evento input,
+  .crear-evento textarea {
+    font-size: 14px;
+  }
+
+  .btn-enviar {
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+
+  .menu-lateral ul {
+    margin-top: 15px;
+}
+
+ .fc .fc-toolbar {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .fc .fc-toolbar-title {
+    font-size: 1.1em;
+    text-align: center;
+  }
+
+  .fc .fc-button {
+    font-size: 10px;
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+
+  .fc .fc-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
   }
 }
