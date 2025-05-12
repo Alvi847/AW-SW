@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       },
       events: async function (info, successCallback, failureCallback) {
         try {
-          const res = await fetch("/eventos/<%= usuario.username %>");
+          const res = await fetch(`/eventos/${USERNAME}`);
           const data = await res.json();
 
           const eventos = data.map((e) => ({
