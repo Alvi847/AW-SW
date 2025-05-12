@@ -235,6 +235,7 @@
 
     .tipos-usuarios li {
         font-size: 14px; /* Reducir tamaño de fuente de la lista */
+        padding-right: 3px;
     }
 
     .tipos-usuarios ul{
@@ -243,7 +244,7 @@
 
     .btn-reg {
         font-size: 16px; /* Reducir tamaño de fuente del botón */
-        margin-left: 96px; /* Centrar el botón */
+        margin-left: 111px; /* Centrar el botón */
         margin-top: 20px; /* Ajustar margen superior */
     }
 
