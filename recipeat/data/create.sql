@@ -13,17 +13,28 @@ CREATE TABLE "Comentarios" (
 DROP TABLE IF EXISTS "Contiene";
 CREATE TABLE "Contiene" (
 	"id_receta"	INTEGER,
-	"nombre_ingrediente"	TEXT,
+	"id_ingrediente"	INTEGER,
 	"cantidad"	INTEGER NOT NULL,
-	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id"),
-	FOREIGN KEY("nombre_ingrediente") REFERENCES "Ingredientes"("nombre")
+	FOREIGN KEY("id_ingrediente") REFERENCES "Ingredientes"("id"),
+	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id")
+);
+DROP TABLE IF EXISTS "Eventos";
+CREATE TABLE "Eventos" (
+	"id"	INTEGER,
+	"titulo"	TEXT NOT NULL,
+	"fecha"	TEXT NOT NULL,
+	"descripcion"	TEXT,
+	"user"	TEXT NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("user") REFERENCES "Usuarios"("username")
 );
 DROP TABLE IF EXISTS "Ingredientes";
 CREATE TABLE "Ingredientes" (
+	"id"	INTEGER NOT NULL,
 	"nombre"	TEXT,
 	"unidad"	TEXT NOT NULL DEFAULT 'g',
 	"precio"	NUMERIC NOT NULL DEFAULT 0.01,
-	PRIMARY KEY("nombre")
+	PRIMARY KEY("id" AUTOINCREMENT)
 );
 DROP TABLE IF EXISTS "Likes";
 CREATE TABLE "Likes" (

@@ -1,5 +1,6 @@
 import { Comentario } from "../comentario/Comentario.js";
-import { Contiene } from "../ingrediente/Ingrediente.js"
+import { Contiene } from "../ingrediente/Ingrediente.js";
+import { logger } from "../logger.js";
 
 export class Receta {
     static #getAllStmt = null;
@@ -28,7 +29,7 @@ export class Receta {
         //*eliminar like del usuario sobre una receta 
         this.#removeLikeStmt = db.prepare('UPDATE Recetas SET likes = likes - 1 WHERE id = @id');
         //*seleccionar la receta por id (unica)
-        this.#getByIdStmt = db.prepare('SELECT * FROM Recetas WHERE id = @id'); 
+        this.#getByIdStmt = db.prepare('SELECT * FROM Recetas WHERE id = @id');
         //seleccionar favoritos 
         this.#getFavoritosByUserStmt = db.prepare(`
             SELECT r.* FROM Recetas r
@@ -52,7 +53,7 @@ export class Receta {
         const favoritos = this.#getFavoritosByUserStmt.all({ username });
         return favoritos;
     }
-    
+
     /**
      * Obtener una receta por ID
      * 
@@ -74,19 +75,42 @@ export class Receta {
     }
 
     /**
+     * Mira si el id de receta existe en la base de datos
+     * 
+     * @param {int} id id de la receta
+     * @returns { boolean } true si existe, false si no
+     */
+    static exists(id) {
+        try {
+            Receta.getRecetaById(id, null);
+            return true;
+        }
+        catch (e) {
+            logger.error(e.message);
+            return false;
+        }
+    }
+
+    /**
      *Obtener todas las recetas
      * @returns Una lista con todas las recetas
      */
     static getAllRecetas() {
 
         const recetas = this.#getAllStmt.all();
+
+        recetas.forEach(r => {
+            const ingredientes = Contiene.getIngredientesByReceta(r.id);
+            r.ingredientes = ingredientes.map(i => i.nombre.toLowerCase());
+        });
+        
         return recetas;
     }
 
     /**
      * Insertar una nueva receta
      * @param {Receta} receta Una receta con los datos que se tienen que insertar en la tabla  
-     * @returns 
+     * @returns {Receta} El objeto de la receta nueva con su id
      */
     static insertReceta(receta) {
         let result;
@@ -225,7 +249,7 @@ export class Receta {
             Comentario.deleteAllComentarios(id);
             Like.retiraTodosLikes(id);
             const result = this.#deleteStmt.run({ id });
-            if (result.changes === 0) throw new Error(`No se encontró la receta con ID ${id}`); 
+            if (result.changes === 0) throw new Error(`No se encontró la receta con ID ${id}`);
         });
     }
 
@@ -306,7 +330,7 @@ export class Like {
      * @param {string} username username del usuario
      * @returns lista de ids de recetas
      */
-    static getAllLikedPorUsuario(username){
+    static getAllLikedPorUsuario(username) {
         const result = this.#getAllByUserStmt.get({
             username
         });

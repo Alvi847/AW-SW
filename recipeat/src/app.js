@@ -21,6 +21,8 @@ import pinoHttp  from 'pino-http';
 const pinoMiddleware = pinoHttp(config.logger.http(logger));
 import { flashMessages } from './middleware/flash.js';
 import { errorHandler } from './middleware/error.js';
+import apiRouter from './apiRouter.js';
+import ingredientesRouter from './ingrediente/router.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -50,6 +52,7 @@ app.use('/contenido', contenidoRouter);
 app.use('/receta', recetasRouter);
 app.use('/comentario', comentariosRouter);
 app.use('/eventos', eventoRouter);
+app.use('/ingrediente', ingredientesRouter);
 
 app.get("/imagen/:id", (request, response) => {
     const __filename = fileURLToPath(import.meta.url);  // He visto que esto es necesario para poder obtener la ruta del script en ES
@@ -57,5 +60,7 @@ app.get("/imagen/:id", (request, response) => {
     request.log.debug("Recibida peticion para la foto: '%s'", pathImg);
     response.sendFile(pathImg);
 });
+
+app.use('/api', apiRouter);
 
 app.use(errorHandler);

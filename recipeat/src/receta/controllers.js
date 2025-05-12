@@ -17,6 +17,7 @@ import sanitizeHtml from 'sanitize-html';
  * 
  */
 import * as fs from 'node:fs/promises';
+import { Contiene } from '../ingrediente/Ingrediente.js';
 
 // Ver las recetas (página de inicio de recetas)
 
@@ -58,8 +59,7 @@ export function viewRecetas(req, res) {
             .sort((a, b) => b.likes - a.likes)                      // 📈 Ordenar por likes descendente
             .slice(0, 6);                                           // 🎯 Tomar las 5 recetas más populares
     }
-
-    render(req, res, contenido, {
+    return render(req, res, contenido, {
         recetas,
         login,
         favoritos,
@@ -90,14 +90,19 @@ export function viewReceta(req, res) {
     const user = req.session.username // El usuario que quiere ver la receta (usado para ver si le ha dado like o no)
     const receta = Receta.getRecetaById(id, user); // Método para obtener la receta por ID
     const comentarios = Comentario.getAllComentarios(id, user);
+
+    const ingredientes = Contiene.getIngredientesByReceta(id);
+
     let hayComentarios = true;
     if (comentarios.length == 0)
         hayComentarios = false;
-
+    
     return render(req, res, 'paginas/verReceta', {
         receta,
+        ingredientes,
         comentarios,
-        hayComentarios
+        hayComentarios,
+        errores: {}
     });
 }
 
@@ -138,15 +143,10 @@ export async function doCreateReceta(req, res) {
         });
     }
 
-
-
-
     const { nombre, descripcion, modo_preparacion, gusto, nivel, dieta } = req.body;
+    const { ingredientes_id, ingredientes_cantidad } = req.body;
+
     const imagen = req.file;
-
-    console.log("Archivo recibido: ", req.file);
-
-    //const nuevaReceta = new Receta(nombre, descripcion, modo_preparacion, null, null, req.session.username, false, imagen.filename);
 
     // Insertar la receta en la base de datos
     try {
@@ -168,10 +168,17 @@ export async function doCreateReceta(req, res) {
             }
         });
         
+
         const nuevaReceta = new Receta(nombre, descripcionSegura, modoPreparacionSeguro, null, null, req.session.username, false, imagen.filename, gusto, nivel, dieta);
-        console.log("Insertando receta...");
-        Receta.insertReceta(nuevaReceta);
-        console.log("Receta insertada correctamente");
+        
+        const id_receta = Receta.insertReceta(nuevaReceta).id;
+        
+        // Introducimos todos los ingredientes en la nueva receta
+        for(let i = 0; i < ingredientes_id.length; i++){
+            Contiene.insert(ingredientes_id[i], id_receta, ingredientes_cantidad[i]);
+        }
+
+
         // Redirigir o devolver un mensaje de éxito
 
         if (esAjax) {

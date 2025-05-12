@@ -44,3 +44,14 @@ export async function eliminarEventoUsuario(req, res) {
   }
 }
 
+export async function actualizarEventoUsuario(req, res) {
+  try {
+    const { id, titulo, fecha, descripcion } = req.body;
+    await Evento.actualizarEvento({ id, titulo, fecha, descripcion, user: req.session.username });
+    res.json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Error al actualizar evento' });
+  }
+}
+

@@ -54,12 +54,12 @@ export class Usuario {
      * Consulta la base de datos para ver si ya existe un usuario con ese nombre de usuario
      * 
      * @param {string} username Nombre de usuario que se intenta buscar
-     * @returns { boolean }
+     * @returns { boolean } 
      */
-    static existe(username){
+    static exists(username){
         try{
-            this.getUsuarioByUsername(username);
-            return false;
+            Usuario.getUsuarioByUsername(username);
+            return true;
         }
         catch(e){
             return false;
