@@ -3,7 +3,6 @@ import { Contiene } from "../ingrediente/Ingrediente.js";
 import { logger } from "../logger.js";
 
 export class Receta {
-
     static #getAllStmt = null;
     static #insertStmt = null;
     static #updateStmt = null;
@@ -20,9 +19,9 @@ export class Receta {
         //*seleccionar todas las recetas de la tabla
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas');
         //*insertar nueva receta
-        this.#insertStmt = db.prepare('INSERT INTO Recetas (nombre, descripcion, modo_preparacion, user, imagen) VALUES (@nombre, @descripcion, @modo_preparacion, @user, @imagen)');
+        this.#insertStmt = db.prepare('INSERT INTO Recetas (nombre, descripcion, modo_preparacion, user, imagen, gusto, nivel, dieta) VALUES (@nombre, @descripcion, @modo_preparacion, @user, @imagen, @gusto, @nivel, @dieta)');
         //*modificar receta del usuario 
-        this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, modo_preparacion = @modo_preparacion, likes = @likes, imagen = @imagen WHERE id = @id');
+        this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, modo_preparacion = @modo_preparacion, likes = @likes, imagen = @imagen, gusto = @gusto, nivel = @nivel, dieta = @dieta WHERE id = @id');
         //*eliminar recetas del usuario
         this.#deleteStmt = db.prepare('DELETE FROM Recetas WHERE id = @id');
         //*actualizar likes de la receta
@@ -71,7 +70,7 @@ export class Receta {
             if (user)
                 user_liked = Like.usuarioYaHaDadoLike(id, user);
 
-            return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion, receta.likes, receta.id, receta.user, user_liked, receta.imagen);
+            return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion, receta.likes, receta.id, receta.user, user_liked, receta.imagen, receta.gusto, receta.nivel, receta.dieta);
         }
     }
 
@@ -119,13 +118,32 @@ export class Receta {
             let user = receta.user;
             if (user == null)
                 user = "admin";
+            const safeGusto = receta.gusto && receta.gusto.trim() !== '' ? receta.gusto : null;
+            const safeNivel = receta.nivel && receta.nivel.trim() !== '' ? receta.nivel : null;
+            const safeDieta = receta.dieta && receta.dieta.trim() !== '' ? receta.dieta : null;
+            
+            console.log("⏳ Insertando receta con los datos:");
+            console.log({
+                nombre: receta.nombre,
+                descripcion: receta.descripcion,
+                modo_preparacion: receta.modo_preparacion,
+                user: user, // ojo: estabas usando receta.user, pero defines arriba `user = receta.user`
+                imagen: receta.imagen,
+                gusto: safeGusto,
+                nivel: safeNivel,
+                dieta: safeDieta
+            });
             result = this.#insertStmt.run({
                 nombre: receta.nombre,
                 descripcion: receta.descripcion,
                 modo_preparacion: receta.modo_preparacion,
-                user: receta.user,
-                imagen: receta.imagen
+                user: user,
+                imagen: receta.imagen,
+                gusto: receta.gusto,
+                nivel: receta.nivel,
+                dieta: receta.dieta
             });
+            console.log("✅ Resultado del insert:", result);
         }
         catch (e) {
             e.message += "Error al crear la receta";
@@ -135,7 +153,7 @@ export class Receta {
         }
 
         return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion,
-            receta.likes, result.lastInsertRowid, null, false, receta.imagen);
+            receta.likes, result.lastInsertRowid, null, false, receta.imagen, receta.gusto, receta.nivel, receta.dieta);
     }
 
     /**
@@ -190,7 +208,10 @@ export class Receta {
                 modo_preparacion: receta.modo_preparacion,
                 descripcion: receta.descripcion,
                 likes: receta.likes,
-                imagen: receta.imagen
+                imagen: receta.imagen,
+                gusto: receta.gusto,
+                nivel: receta.nivel,
+                dieta: receta.dieta
             });
         }
         catch (e) {
@@ -241,8 +262,11 @@ export class Receta {
     modo_preparacion;   // Pasos a seguir para realizar la receta
     imagen; // RUTA de la imagen de la receta
     ingredientes; // Ingredientes de la receta (array de ingredientes)
+    gusto;  // gusto: dulce o salado
+    nivel;  // nivel: fácil, medio, difícil
+    dieta;  // tipo de dieta: vegana, sin gluten, carnívora
 
-    constructor(nombre, descripcion, modo_preparacion, likes = null, id = null, user, user_liked = false, filename = null) {
+    constructor(nombre, descripcion, modo_preparacion, likes = null, id = null, user, user_liked = false, filename = null, gusto = null, nivel = null, dieta = null) {
         this.nombre = nombre.toUpperCase();
         this.descripcion = descripcion;
         this.modo_preparacion = modo_preparacion;
@@ -251,6 +275,9 @@ export class Receta {
         this.user = user;
         this.user_liked = user_liked;
         this.imagen = filename;
+        this.gusto = gusto;
+        this.nivel = nivel;
+        this.dieta = dieta;
     }
 
     get id() {

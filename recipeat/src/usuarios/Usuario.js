@@ -278,3 +278,53 @@ export class UsuarioYaExiste extends Error {
         this.name = 'UsuarioYaExiste';
     }
 }
+
+
+export class Preferencias {
+    static #getAllStmt = null;
+    static #getByUserStmt = null;
+    static #insertStmt = null;
+    static #deleteStmt = null;
+
+    static initStatements(db) {
+        if (this.#getAllStmt !== null) return;
+
+        // Obtener todas las preferencias
+        this.#getAllStmt = db.prepare('SELECT * FROM Preferencias');
+        // Obtener preferencias por usuario
+        this.#getByUserStmt = db.prepare('SELECT * FROM Preferencias WHERE user = @user');
+        // Insertar una nueva preferencia
+        this.#insertStmt = db.prepare('INSERT INTO Preferencias (user, gusto, nivel, dieta) VALUES (@user, @gusto, @nivel, @dieta)');
+        // Eliminar las preferencias del usuario
+        this.#deleteStmt = db.prepare('DELETE FROM Preferencias WHERE user = @user');
+    }
+
+    static getAllPreferencias() {
+        return this.#getAllStmt.all();
+    }
+
+    static getPreferenciasUsuario(user) {
+        return this.#getByUserStmt.get({ user });
+    }
+
+    static insertPreferencia(preferencia) {
+        return this.#insertStmt.run({
+            user: preferencia.user,
+            gusto: preferencia.gusto,
+            nivel: preferencia.nivel,
+            dieta: preferencia.dieta
+        });
+    }
+
+    static deletePreferencias(user) {
+        return this.#deleteStmt.run({ user });
+    }
+
+    constructor(user, gusto, nivel, dieta) {
+        this.user = user;
+        this.gusto = gusto;
+        this.nivel = nivel;
+        this.dieta = dieta;
+    }
+}
+

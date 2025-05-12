@@ -53,6 +53,9 @@ CREATE TABLE "Recetas" (
 	"user"	TEXT DEFAULT NULL,
 	"modo_preparacion"	TEXT,
 	"imagen"	VARCHAR(255),
+	"gusto" TEXT CHECK (gusto IN ('dulce', 'salado')) DEFAULT NULL,
+	"nivel" TEXT CHECK (nivel IN ('fácil', 'medio', 'difícil')) DEFAULT NULL,
+	"dieta" TEXT CHECK (dieta IN ('vegana', 'sin gluten', 'carnívora')) DEFAULT NULL,
 	PRIMARY KEY("id" AUTOINCREMENT),
 	FOREIGN KEY("user") REFERENCES "Usuarios"("username")
 );
@@ -76,4 +79,22 @@ CREATE TABLE "Valoraciones_Comentarios" (
 	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id"),
 	FOREIGN KEY("user") REFERENCES "Usuarios"("username")
 );
+DROP TABLE IF EXISTS "Eventos";
+CREATE TABLE "Eventos" (
+  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "titulo" TEXT NOT NULL,
+  "fecha" TEXT NOT NULL,
+  "descripcion" TEXT,
+  "user" TEXT NOT NULL,
+  FOREIGN KEY("user") REFERENCES "Usuarios"("username")
+);
+DROP TABLE IF EXISTS "Preferencias";
+CREATE TABLE "Preferencias" (
+    "user" TEXT PRIMARY KEY,
+    "gusto" TEXT CHECK ("gusto" IN ("dulce", "salado")),
+    "nivel" TEXT CHECK ("nivel" IN ("fácil", "medio", "difícil")),
+    "dieta" TEXT CHECK ("dieta" IN ("vegana", "sin gluten", "carnívora")),
+    FOREIGN KEY ("user") REFERENCES "Usuarios"("username") ON DELETE CASCADE
+);
+
 COMMIT;

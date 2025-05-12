@@ -40,6 +40,18 @@
                 <%= receta.likes %>
             </span></p>
     </div>
+    <div class="receta-extra">
+        <p><strong>Gusto:</strong>
+            <%= receta.gusto || "No especificado" %>
+        </p>
+        <p><strong>Nivel:</strong>
+            <%= receta.nivel || "No especificado" %>
+        </p>
+        <p><strong>Dieta:</strong>
+            <%= receta.dieta || "No especificada" %>
+        </p>
+    </div>
+
     <div class="receta-botones">
         <p>
             <% if (session.login) { %>

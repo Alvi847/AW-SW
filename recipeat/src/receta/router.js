@@ -17,6 +17,7 @@ const recetasRouter = express.Router();
 
 //Ruta para ver la lista de recetas
 recetasRouter.get('/listaRecetas', asyncHandler(viewRecetas));
+recetasRouter.post('/listaRecetas', autenticado('/receta/listaRecetas'), viewRecetas);
 
 //Ruta para ver una receta
 recetasRouter.get('/verReceta/:id', asyncHandler(viewReceta));
@@ -66,6 +67,10 @@ recetasRouter.post('/createReceta'
     ]
     , body('modo_preparacion', 'No puede ser vacío').trim().notEmpty()
     , body('modo_preparacion', 'Máximo 1000 caracteres').trim().isLength({ min: 1, max: 1000 })
+    , body('gusto').optional({ checkFalsy: true }).isIn(['dulce', 'salado', 'picante'])
+    , body('nivel').optional({ checkFalsy: true }).isIn(['fácil', 'medio', 'difícil'])
+    , body('dieta').optional({ checkFalsy: true }).isIn(['vegana', 'vegetariana', 'sin gluten'])
+
     , check('imagen').custom((value, { req }) => {
         /**
          * Validador custom para comprobar la subida de la imagen al formulario
@@ -108,6 +113,9 @@ recetasRouter.post('/updateReceta/:id'
     , body('descripcion', 'Máximo 200 caracteres').isLength({ min: 1, max: 200 })
     , body('modo_preparacion', 'No puede ser vacío').notEmpty()
     , body('modo_preparacion', 'Máximo 1000 caracteres').isLength({ min: 1, max: 1000 })
+    , body('gusto').optional({ checkFalsy: true }).isIn(['dulce', 'salado', 'picante'])
+    , body('nivel').optional({ checkFalsy: true }).isIn(['fácil', 'medio', 'difícil'])
+    , body('dieta').optional({ checkFalsy: true }).isIn(['vegana', 'vegetariana', 'sin gluten'])
     , check('imagen', "Archivo inválido").custom((value, { req }) => {
         /**
          * Validador custom para comprobar la subida de la imagen al formulario
@@ -149,5 +157,7 @@ recetasRouter.get('/misRecetas', asyncHandler(viewMisRecetas));
 
 
 //recetasRouter.get('/buscar', apiBuscarRecetas);
+
+//recetasRouter.get('/filtrar', filtrarRecetas);
 
 export default recetasRouter;

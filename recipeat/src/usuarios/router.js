@@ -1,6 +1,6 @@
 import { body } from 'express-validator';
 import express from 'express';
-import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil, deleteUsuario, viewAdministrar, cambiarRolUsuario, viewPerfilUser, viewFavoritosUser, viewRecetasUser } from './controllers.js';
+import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil, deleteUsuario, viewAdministrar, cambiarRolUsuario, viewPerfilUser, viewFavoritosUser, viewRecetasUser, viewPreferencias, guardarPreferencias } from './controllers.js';
 import { autenticado } from '../middleware/auth.js';
 import asyncHandler from 'express-async-handler';
 import multer from 'multer';
@@ -48,7 +48,14 @@ usuariosRouter.post('/removeUsuario', autenticado('/usuarios/home'), asyncHandle
 usuariosRouter.get('/administrar', autenticado('/usuarios/home'), asyncHandler(viewAdministrar));
 usuariosRouter.post('/cambiarRol', autenticado('/usuarios/home'), asyncHandler(cambiarRolUsuario));
 
-
+usuariosRouter.get('/misPreferencias', autenticado('/login'), asyncHandler(viewPreferencias));
+usuariosRouter.post('/misPreferencias',
+  autenticado('/login'),
+  body('gusto').trim().optional({ checkFalsy: true }),
+  body('nivel').trim().optional({ checkFalsy: true }),
+  body('dieta').trim().optional({ checkFalsy: true }),
+  asyncHandler(guardarPreferencias)
+);
 
 usuariosRouter.get('/:username/recetas', autenticado('/usuarios/home'), asyncHandler(viewRecetasUser));
 usuariosRouter.get('/:username/favoritos', autenticado('/usuarios/home'), asyncHandler(viewFavoritosUser));

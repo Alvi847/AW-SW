@@ -12,4 +12,5 @@ INSERT INTO "Usuarios" ("id","username","password","rol","nombre","email") VALUE
 INSERT INTO "Usuarios" ("id","username","password","rol","nombre","email") VALUES (5,'alexg','$2b$10$XJ2TWKEP1LHn/3PBHfzwFe5hTUWE2jZzilPnZ1L/zFNpTIGG6qa3e','U','alex','alex@gmail.com');
 INSERT INTO "Usuarios" ("id","username","password","rol","nombre","email") VALUES (6,'Alvi47','$2b$10$n3LaZllX1I3If5S3baNM9eAuHqQdkL852gwWlm9ZwCfVJ9KGI5VtO','U','Álvaro','alvi@alvi.com');
 INSERT INTO "Usuarios" ("id","username","password","rol","nombre","email") VALUES (7,'a','$2b$10$piTQJYWYDpNOLRIm899/H.QUES2kYVDiFJCJLR.EoF2/lTAPmLzte','A','a',NULL);
+INSERT INTO "Recetas" ("id","nombre","descripcion","likes","user","modo_preparacion","imagen", "gusto", "nivel", "dieta") VALUES (50,'caca','Una forma sencilla pero muy sabrosa de hacer pasta',1,'user','Cocer los macarrones durante 8 minutos, después filtrar el agua y añadir tomate al gusto. Se puede condimentar con orégano, queso y se le puede añadir carne picada o incluso beicon',NULL, 'salado', 'medio', 'sin gluten');
 COMMIT;
