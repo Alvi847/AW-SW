@@ -52,42 +52,45 @@ async function displayErrores(response) {
         }
     }
 }
-
-function compruebaUsername(e) {
+async function compruebaUsername(e) {
     const username = e.target;
+    const trimmed = username.value.trim();
 
-    const validity = usernameValido(username.value)
-    if (validity == "") {
-        username.setCustomValidity('');
-    } else {
-        username.setCustomValidity(validity);
-    }
-
-    // validación html5, porque el campo es <input type="text" ...>
-    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/checkValidity
-    // se asigna la pseudoclase :invalid
-    const esNombreValido = username.checkValidity();
-    if (esNombreValido) {
-        username.parentNode.querySelector('span.error').textContent = ' ';
-        username.parentNode.querySelector('span.feedback').textContent = '✔';
-    } else {
-        username.parentNode.querySelector('span.error').textContent = '⚠';
-        username.parentNode.querySelector('span.feedback').textContent = ' ';
-    }
-    // Muestra el mensaje de validación
-    username.reportValidity();
-}
-
-function usernameValido(username) {
+    // Validación local sincrónica
+    /*
+        -^ Inicio de la cadena
+        -[A-Z0-9]  Cualquier carácter que sea una letra mayúscula (A-Z) o un dígito (0-9)
+        -*    	Cero o más repeticiones del patrón anterior
+        -$ Fin de la cadena
+     */
     const regex = /^[A-Z0-9]*$/i;
-    const trimmed = username.trim();
-    if (trimmed === "")
-        return "El nombre de usuario no puede ser vacío";
-    if (!regex.test(trimmed))
-        return "Sólo puede contener números y letras";
-    if(usernameDisponible(username))
-        return "Nombre de usuario no disponible";
-    return "";
+    if (trimmed === "") {
+        username.setCustomValidity("El nombre de usuario no puede ser vacío");
+    } else if (!regex.test(trimmed)) {
+        username.setCustomValidity("Sólo puede contener números y letras");
+    } else {
+        // Validación asíncrona
+        const disponible = await usernameDisponible(trimmed);
+        if (!disponible) {
+            username.setCustomValidity("Nombre de usuario no disponible");
+        } else {
+            username.setCustomValidity('');
+        }
+    }
+
+    const esValido = username.checkValidity();
+    const errorSpan = username.parentNode.querySelector('span.error');
+    const feedbackSpan = username.parentNode.querySelector('span.feedback');
+
+    if (esValido) {
+        errorSpan.textContent = ' ';
+        feedbackSpan.textContent = '✔';
+    } else {
+        errorSpan.textContent = '⚠';
+        feedbackSpan.textContent = ' ';
+    }
+
+    username.reportValidity();
 }
 
 async function usernameDisponible(username){
