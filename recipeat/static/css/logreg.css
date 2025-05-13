@@ -41,8 +41,8 @@ form fieldset {
     backdrop-filter: blur(10px); /* Efecto de desenfoque */
     color: white;
     box-shadow: 0 8px 32px rgba(255, 255, 255, 0.12);
-    width: 350px;
     height: 500px;
+    width: 350px;
     margin-bottom: 90px;
 }
 
@@ -74,6 +74,21 @@ form button {
 form button:hover {
     background-color: #f2862e;
 }
+
+.form-registro div {
+  position: relative;
+}
+
+.form-registro span.error,
+.form-registro span.feedback {
+  position: absolute;
+  right: 10px;
+  top: 35%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  pointer-events: none;
+}
+
 
 .new-customer {
     margin-top: 25px;
