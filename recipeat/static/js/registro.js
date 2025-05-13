@@ -62,6 +62,7 @@ async function compruebaUsername(e) {
         -[A-Z0-9]  Cualquier carácter que sea una letra mayúscula (A-Z) o un dígito (0-9)
         -*    	Cero o más repeticiones del patrón anterior
         -$ Fin de la cadena
+        -/i Flag de insensibilidad a mayúsculas/minúsculas (ignora si pones a o A)
      */
     const regex = /^[A-Z0-9]*$/i;
     if (trimmed === "") {
