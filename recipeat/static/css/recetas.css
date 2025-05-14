@@ -397,7 +397,10 @@
             margin: 0 !important;
         }
 
-
+        .detalle-valor {
+    margin-left: 6px; /* ajusta el valor según lo que quieras */
+    display: inline-block;
+}
         .receta-vista .receta-botones {
             width: 25%;
             margin-left: 37.5%;
