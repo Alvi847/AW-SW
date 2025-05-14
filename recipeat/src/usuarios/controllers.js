@@ -115,6 +115,14 @@ export async function doRegistro(req, res) {
 
     try {
         const usuario = await Usuario.creaUsuario(username, password, nombre, email, imagen);
+
+        Preferencias.insertPreferencia({
+            user: usuario.username, 
+            gusto: null,
+            nivel: null,
+            dieta: null
+        });
+        
         req.session.login = true;
         req.session.nombre = usuario.nombre;
         req.session.rol = usuario.rol;
