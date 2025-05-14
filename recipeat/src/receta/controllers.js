@@ -40,6 +40,21 @@ export function viewRecetas(req, res) {
     // Obtener recetas según filtros o preferencias
     let recetas = Receta.getAllRecetas();
 
+    // LOG COMPLETO DE TODAS LAS RECETAS
+console.log("📦 Todas las recetas cargadas:");
+recetas.forEach(r => {
+    console.log({
+        id: r.id,
+        nombre: r.nombre,
+        ingredientes: r.ingredientes,
+        gusto: r.gusto,
+        nivel: r.nivel,
+        dieta: r.dieta,
+        imagen: r.imagen,
+        likes: r.likes
+    });
+});
+
     if (preferencias.gusto)
         recetas = recetas.filter(r => r.gusto === preferencias.gusto);
     if (preferencias.nivel)
@@ -51,34 +66,10 @@ export function viewRecetas(req, res) {
     let favoritos = [];
     let recomendadas = [];
 
-    if (login && user) {
+    if (login && user) {    
     favoritos = Receta.getFavoritosPorUsuario(user);
-
-    // 1. Obtén ingredientes de favoritos
-    const ingredientesFavoritos = favoritos.flatMap(r => r.ingredientes || []);
-
-    // 2. Recetas que comparten ingredientes y no están en favoritos
-    const recetasPorIngredientes = recetas.filter(r =>
-        !favoritos.some(fav => fav.id === r.id) &&
-        (r.ingredientes || []).some(i => ingredientesFavoritos.includes(i))
-    );
-
-    // 3. Recetas populares (ordenadas por likes, no en favoritos)
-    const recetasPopulares = recetas
-        .filter(r => !favoritos.some(fav => fav.id === r.id))
-        .sort((a, b) => b.likes - a.likes);
-
-    // 4. Combinar ambas listas sin duplicados (por ID)
-    const recetasCombinadas = [
-        ...new Map(
-            [...recetasPorIngredientes, ...recetasPopulares].map(r => [r.id, r])
-        ).values()
-    ];
-
-    // 5. Limita a 6 recomendaciones
-    recomendadas = recetasCombinadas.slice(0, 6);
-}
-
+    recomendadas = Receta.getRecomendadasPersonalizadas(user);
+    }
 
     return render(req, res, contenido, {
         recetas,
@@ -88,9 +79,6 @@ export function viewRecetas(req, res) {
         preferencias
     });
 }
-
-
-
 
 // Ver una receta
 export function viewReceta(req, res) {

@@ -49,32 +49,61 @@ export class Receta {
         return recetas;
     }
 
-    static getFavoritosPorUsuario(username) {
-        const favoritos = this.#getFavoritosByUserStmt.all({ username });
-        return favoritos;
-    }
+   static getFavoritosPorUsuario(username) {
+    const favoritos = this.#getFavoritosByUserStmt.all({ username });
 
-    static getRecomendadasPorIngredientes(username) {
+    favoritos.forEach(f => {
+        const ingredientes = Contiene.getIngredientesByReceta(f.id);
+        f.ingredientes = ingredientes.map(i => i.nombre.toLowerCase());
+    });
+
+    return favoritos;
+}
+
+static getTopRecetas(limit = 10) {
+    const todas = this.getAllRecetas();
+    // Ordena por número de likes descendente y toma las primeras `limit`
+    return todas
+        .sort((a, b) => (b.likes ?? 0) - (a.likes ?? 0))
+        .slice(0, limit);
+}
+
+
+static getRecomendadasPersonalizadas(username) {
     const favoritas = this.getFavoritosPorUsuario(username);
     const idsFavoritas = favoritas.map(r => r.id);
 
-    // Recoger todos los ingredientes de recetas favoritas
+    // Ingredientes de recetas favoritas
     const ingredientesFavoritos = new Set();
     for (const receta of favoritas) {
         const ings = Contiene.getIngredientesByReceta(receta.id);
         ings.forEach(i => ingredientesFavoritos.add(i.nombre.toLowerCase()));
     }
 
-    // Buscar recetas distintas a las favoritas que compartan al menos un ingrediente
+    // Todas las recetas
     const todas = this.getAllRecetas();
-    const recomendadas = todas.filter(r => {
+
+    // Recomendadas por ingredientes similares
+    const porIngredientes = todas.filter(r => {
         if (idsFavoritas.includes(r.id)) return false;
         return (r.ingredientes || []).some(i => ingredientesFavoritos.has(i));
     });
 
-    // Opcional: ordenar por número de coincidencias o limitar resultados
-    return recomendadas.slice(0, 10);
+    // Top recetas con muchos likes (y que no estén ya en favoritas o en la lista anterior)
+    const yaIncluidas = new Set([...idsFavoritas, ...porIngredientes.map(r => r.id)]);
+    
+    const MIN_LIKES = 10; 
+    const topLikes = todas
+        .filter(r => !yaIncluidas.has(r.id) && (r.likes ?? 0) >= MIN_LIKES)
+        .sort((a, b) => (b.likes ?? 0) - (a.likes ?? 0))
+        .slice(0, 10);
+
+    // Unimos y quitamos duplicados si fuera el caso
+    const recomendadas = [...porIngredientes, ...topLikes];
+
+    return recomendadas.slice(0, 10); // la seccion de recomendados mostrara 10 recetas
 }
+
 
     /**
      * Obtener una receta por ID

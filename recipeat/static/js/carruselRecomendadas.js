@@ -4,6 +4,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const btnRight = document.querySelector('.carrusel-btn.right');
     const carrusel = document.querySelector('.recomendadas-carrusel');
 
+    // Si alguno de estos no existe, no sigas
+    if (!track || !btnLeft || !btnRight || !carrusel) {
+        console.warn("⚠️ No hay recomendaciones, carrusel no cargado.");
+        return;
+    }
+
     const cardWidth = track.querySelector('.receta-recomendada-card')?.offsetWidth || 300;
     let autoplayTimer;
 
