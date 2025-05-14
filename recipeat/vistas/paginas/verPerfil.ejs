@@ -13,9 +13,10 @@
           >
         </li>
         <li>
-          <a href="/usuarios/misPreferencias"
-            >Mis Preferencias</a
-          >
+          <% if (session.username===usuario.username) { %>
+            <a href="/usuarios/misPreferencias">Mis Preferencias</a>
+            <% } %>
+        
         </li>
       </ul>
     </div>
