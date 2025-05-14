@@ -54,6 +54,28 @@ export class Receta {
         return favoritos;
     }
 
+    static getRecomendadasPorIngredientes(username) {
+    const favoritas = this.getFavoritosPorUsuario(username);
+    const idsFavoritas = favoritas.map(r => r.id);
+
+    // Recoger todos los ingredientes de recetas favoritas
+    const ingredientesFavoritos = new Set();
+    for (const receta of favoritas) {
+        const ings = Contiene.getIngredientesByReceta(receta.id);
+        ings.forEach(i => ingredientesFavoritos.add(i.nombre.toLowerCase()));
+    }
+
+    // Buscar recetas distintas a las favoritas que compartan al menos un ingrediente
+    const todas = this.getAllRecetas();
+    const recomendadas = todas.filter(r => {
+        if (idsFavoritas.includes(r.id)) return false;
+        return (r.ingredientes || []).some(i => ingredientesFavoritos.has(i));
+    });
+
+    // Opcional: ordenar por número de coincidencias o limitar resultados
+    return recomendadas.slice(0, 10);
+}
+
     /**
      * Obtener una receta por ID
      * 

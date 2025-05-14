@@ -52,13 +52,34 @@ export function viewRecetas(req, res) {
     let recomendadas = [];
 
     if (login && user) {
-        favoritos = Receta.getFavoritosPorUsuario(user);
+    favoritos = Receta.getFavoritosPorUsuario(user);
 
-        recomendadas = recetas
-            .filter(r => !favoritos.some(fav => fav.id === r.id))   // ❌ No mostrar favoritos
-            .sort((a, b) => b.likes - a.likes)                      // 📈 Ordenar por likes descendente
-            .slice(0, 6);                                           // 🎯 Tomar las 5 recetas más populares
-    }
+    // 1. Obtén ingredientes de favoritos
+    const ingredientesFavoritos = favoritos.flatMap(r => r.ingredientes || []);
+
+    // 2. Recetas que comparten ingredientes y no están en favoritos
+    const recetasPorIngredientes = recetas.filter(r =>
+        !favoritos.some(fav => fav.id === r.id) &&
+        (r.ingredientes || []).some(i => ingredientesFavoritos.includes(i))
+    );
+
+    // 3. Recetas populares (ordenadas por likes, no en favoritos)
+    const recetasPopulares = recetas
+        .filter(r => !favoritos.some(fav => fav.id === r.id))
+        .sort((a, b) => b.likes - a.likes);
+
+    // 4. Combinar ambas listas sin duplicados (por ID)
+    const recetasCombinadas = [
+        ...new Map(
+            [...recetasPorIngredientes, ...recetasPopulares].map(r => [r.id, r])
+        ).values()
+    ];
+
+    // 5. Limita a 6 recomendaciones
+    recomendadas = recetasCombinadas.slice(0, 6);
+}
+
+
     return render(req, res, contenido, {
         recetas,
         login,
