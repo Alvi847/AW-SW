@@ -12,10 +12,26 @@
                     <% } else { %>
                          <p>Admin</p>
                                 <% } %>
+    <div class="receta-extra">
+        <p><strong>Gusto: </strong>
+            <%= receta.gusto || "No especificado" %>
+        </p>
+        <p><strong>Nivel: </strong>
+            <%= receta.nivel || "No especificado" %>
+        </p>
+        <p><strong>Dieta: </strong>
+            <%= receta.dieta || "No especificada" %>
+        </p>
+    </div>
                                     <h2>INFORMACIÓN</h2>
                                     <p><%= receta.descripcion %></p>
 
                 </div>
+    </div>
+    <div class="receta-likes">
+        <p>Likes: <span id="likeCount">
+                <%= receta.likes %>
+            </span></p>
     </div>
     <div class="receta-ingredientes">
         <h2>INGREDIENTES</h2>
@@ -26,32 +42,13 @@
         <% } else { %>
             <span class="error">Error obteniendo los ingredientes. Por favor, contacta con un administrador</span>
         <% } %>
-    </div>
+    </div>    
     <div class="receta-preparacion">
         <h2>MODO DE PREPARACIÓN</h2>
         <p>
             <%= receta.modo_preparacion %>
         </p>
     </div>
-
-
-    <div class="receta-likes">
-        <p>Likes: <span id="likeCount">
-                <%= receta.likes %>
-            </span></p>
-    </div>
-    <div class="receta-extra">
-        <p><strong>Gusto:</strong>
-            <%= receta.gusto || "No especificado" %>
-        </p>
-        <p><strong>Nivel:</strong>
-            <%= receta.nivel || "No especificado" %>
-        </p>
-        <p><strong>Dieta:</strong>
-            <%= receta.dieta || "No especificada" %>
-        </p>
-    </div>
-
     <div class="receta-botones">
         <p>
             <% if (session.login) { %>
