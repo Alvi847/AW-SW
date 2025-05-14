@@ -16,14 +16,14 @@
       <form class="form-editar" method="POST" action="/usuarios/misPreferencias" style="width: 100%; max-width: 600px;">
         <label for="gusto">Gusto:</label>
         <select name="gusto" id="gusto">
-          <option value="">-- Elige una opción (opcional) --</option>
+          <option value="">-- TODOS --</option>
           <option value="dulce" <%=preferencias.gusto==='dulce' ? 'selected' : '' %>>Dulce</option>
           <option value="salado" <%=preferencias.gusto==='salado' ? 'selected' : '' %>>Salado</option>
         </select><br />
 
         <label for="nivel">Nivel de dificultad:</label>
         <select name="nivel" id="nivel">
-          <option value="">-- Elige una opción (opcional) --</option>
+          <option value="">-- TODOS --</option>
           <option value="fácil" <%=preferencias.nivel==='fácil' ? 'selected' : '' %>>Fácil</option>
           <option value="medio" <%=preferencias.nivel==='medio' ? 'selected' : '' %>>Medio</option>
           <option value="difícil" <%=preferencias.nivel==='difícil' ? 'selected' : '' %>>Difícil</option>
@@ -31,7 +31,7 @@
 
         <label for="dieta">Dieta:</label>
         <select name="dieta" id="dieta">
-          <option value="">-- Elige una opción (opcional) --</option>
+          <option value="">-- TODAS --</option>
           <option value="vegana" <%=preferencias.dieta==='vegana' ? 'selected' : '' %>>Vegana</option>
           <option value="sin gluten" <%=preferencias.dieta==='sin gluten' ? 'selected' : '' %>>Sin gluten</option>
           <option value="carnívora" <%=preferencias.dieta==='carnívora' ? 'selected' : '' %>>Carnívora</option>
