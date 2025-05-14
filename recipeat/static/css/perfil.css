@@ -76,6 +76,58 @@
   width: 100%;
 }
 
+.form-editar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.form-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-campo label {
+  font-size: 16px;
+  color: #ffbd3a;
+}
+
+.form-campo select {
+  padding: 8px 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background-color: #2b2b2b;
+  color: #fff;
+  appearance: none;
+  cursor: pointer;
+}
+
+.form-campo select:focus {
+  outline: none;
+  border-color: #ffbd3a;
+  box-shadow: 0 0 5px rgba(255, 189, 58, 0.5);
+}
+
+button.guardar-preferencias {
+  margin-top: 20px;
+  align-self: center;
+  padding: 8px 20px;
+  font-size: 14px;
+  background-color: #e67e22;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+button.guardar-preferencias:hover {
+  background-color: #e6a500;
+}
+
 .contenido-info {
   display: flex;
   flex-direction: row;
