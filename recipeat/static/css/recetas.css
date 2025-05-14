@@ -223,10 +223,9 @@
         margin-bottom: 10px;
     }
 
-    .receta-info p{
-        font-family: 'Poppins', sans-serif;
+    .creador{
+        font-size: 12px;
     }
-
     .receta-card {
         position: relative;
         display: flex;
@@ -244,7 +243,6 @@
         font-family: 'Montserrat', sans-serif;
         font-size: 1.5em;
     }
-
 
     .receta-card a {
         text-decoration: none;
@@ -276,7 +274,9 @@
 
     .error {
         color: red;
+        margin-top: 5px;
     }
+
 
     fieldset textarea{
         width: 100%;
@@ -381,6 +381,9 @@
         border-top: 1px solid #ddd;
     }
 
+    .receta-likes{
+        margin-left: 20px;
+    }
     .receta-vista .receta-extra {
             margin-top: 1rem;
             font-size: 1rem;
@@ -389,6 +392,10 @@
     
     .receta-vista .receta-extra p {
             margin: 0.3rem 0;
+    }
+
+    .receta-extra{
+        margin-left: 20px;
     }
 
 
@@ -424,6 +431,7 @@
         flex-direction: column;
         margin-top: 15px;
         padding-top: 10px;
+        margin-left: 20px;
         border-top: 1px solid #ddd;
     }
 
