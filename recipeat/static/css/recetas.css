@@ -21,6 +21,10 @@
             color: white;
         }
 
+         .receta-ingredientes .error{
+            color: red;
+        }
+
         .create-receta, .update-receta{
             font-family: 'Montserrat', sans-serif;
         }
@@ -276,10 +280,6 @@
             overflow-y: hidden;
         }
 
-        .error {
-            color: red;
-            margin-top: 5px;
-        }
 
         fieldset textarea{
             width: 100%;
