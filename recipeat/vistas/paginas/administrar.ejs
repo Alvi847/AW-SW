@@ -18,7 +18,7 @@
                     <td data-label="Nombre"><%= u.nombre %></td>
                     <td data-label="Email"><%= u.email %></td>
                     <td data-label="Rol">
-                        <% if (u.username !== session.username) { %>
+                        <% if (u.username !== session.username && u.rol !== 'A') { %>
                             <form action="/usuarios/cambiarRol" method="post">
                                 <input type="hidden" name="username" value="<%= u.username %>">
                                 <label>
@@ -34,7 +34,7 @@
                         <% } %>
                     </td>
                     <td data-label="Acciones">
-                        <% if (u.username !== session.username) { %>
+                        <% if (u.username !== session.username && u.rol !== 'A') { %>
                             <form action="/usuarios/removeUsuario" method="post"
                                 onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
                                 <input type="hidden" name="username" value="<%= u.username %>">
