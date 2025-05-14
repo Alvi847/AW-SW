@@ -293,7 +293,7 @@ static getRecomendadasPersonalizadas(username) {
      * @param { Usuario } username 
      */
     static deleteAllRecetas(username) {
-        const recetas = getRecetasPorUsuario(username);
+        const recetas = this.getRecetasPorUsuario(username);
         recetas.forEach(element => {
             const id = element.id;
             Contiene.deleteAllByReceta(id);
