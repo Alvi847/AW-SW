@@ -32,7 +32,7 @@ CREATE TABLE "Eventos" (
 DROP TABLE IF EXISTS "Ingredientes";
 CREATE TABLE "Ingredientes" (
 	"id"	INTEGER NOT NULL,
-	"nombre"	TEXT UNIQUE,
+	"nombre"	TEXT,
 	"unidad"	TEXT NOT NULL DEFAULT 'g',
 	"precio"	NUMERIC NOT NULL DEFAULT 0.01,
 	PRIMARY KEY("id" AUTOINCREMENT)
