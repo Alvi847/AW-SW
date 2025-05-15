@@ -1,9 +1,10 @@
 import { validationResult, matchedData } from 'express-validator';
 import { render } from '../utils/render.js';
-import { Contiene, Ingrediente } from './Ingrediente.js';
+import { Pedido, PedidoContiene } from './Pedidos.js';
+import { Ingrediente } from '../ingrediente/Ingrediente.js';
 
-// Agregar un nuevo ingrediente
-export function doCreateIngrediente(req, res, next) {
+// Agregar un nuevo pedido
+export function doCreatePedido(req, res, next) {
     const result = validationResult(req);
     if (!result.isEmpty()) {
         const errores = result.mapped();
@@ -14,31 +15,28 @@ export function doCreateIngrediente(req, res, next) {
         });
     }
 
-    const { id_ingrediente, unidad, precio } = matchedData(req);
-
-    let ingrediente = new Ingrediente(id_ingrediente, precio, unidad);
-
+    const { username } = matchedData(req);
     try{
-        Ingrediente.insertIngrediente(ingrediente);
+        const newPedido = Pedido.insertPedido(username);
     }
     catch(e){
-        req.log.error("Error al crear el ingrediente: %s", e.message);
+        req.log.error(e.message);
         
         const err = {};
 
         err.statusCode = 500;
-        err.message = "Error al crear el ingrediente";
+        err.message = "Error al crear el pedido";
 
         next(err, req, res);
     }
-    req.log.info("Ingrediente '%i' registrado (Precio/unidad: %f/%s)", id_ingrediente, precio, unidad);
+    req.log.info("Pedido '%i' registrado para el usuario %s. Fecha de creación: %s)", newPedido.id, newPedido.user, newPedido.fecha);
 
     // Redirigir al finalizar
     res.redirect(`paginas/index`);  //TODO: CAMBIAR URL
 }
 
-// Eliminar un ingrediente
-export function deleteIngrediente(req, res, next) {
+// Eliminar un pedido
+export function deletePedido(req, res, next) {
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -50,27 +48,28 @@ export function deleteIngrediente(req, res, next) {
         });
     }
 
-    const id_ingrediente = matchedData(req);
+    const username = matchedData(req);
 
     try{
-        Ingrediente.deleteIngrediente(id_ingrediente);
+        const id_pedido = Pedido.getPedidoByUsername(username).id;
+        Pedido.deletePedido(id_pedido);
     }
     catch(e){
-        req.log.error("Error al eliminar el ingrediente '%i': %s ", id_ingrediente, e.message);
-                
+        req.log.error("Error al eliminar el pedido '%i': %s ", id_pedido, e.message);
+    
         const err = {};
 
         err.statusCode = 500;
-        err.message = "Error al borrar el ingrediente";
+        err.message = "Error al borrar el pedido";
 
         next(err, req, res);
-    
     }
 
     // Redirigir al finalizar
     res.redirect(`paginas/index`);  //TODO: CAMBIAR URL
 }
 
+// Añadir un ingrediente a un pedido
 export function addIngrediente(req, res, next){
 
     const result = validationResult(req);
@@ -83,20 +82,20 @@ export function addIngrediente(req, res, next){
         });
     }
 
-    const {nombre, id_receta, cantidad} = matchedData(req);
+    const {nombre_ingrediente, username, cantidad} = matchedData(req);
 
     try{
-        const id_ingrediente = Ingrediente.getIngredienteByName(nombre).id;
-        Contiene.insertContiene(id_ingrediente, id_receta, cantidad);
+        const id_ingrediente = Ingrediente.getIngredienteByName(nombre_ingrediente).id;
+        const id_pedido = Pedido.getPedidoByUsername(username);
+        PedidoContiene.insertaIngredienteEnPedido(id_ingrediente, id_pedido, cantidad);
     }
     catch(e){
         req.log.error("Error al añadir el ingrediente '%i': %s a la receta '%i'", id_ingrediente, e.message, id_receta);
     
-                
         const err = {};
 
         err.statusCode = 500;
-        err.message = "Error al añadir el ingrediente a la receta";
+        err.message = "Error al añadir el ingrediente al pedido el pedido";
 
         next(err, req, res);
     }

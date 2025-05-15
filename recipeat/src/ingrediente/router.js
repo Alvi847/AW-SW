@@ -15,6 +15,7 @@ const ingredientesRouter = express.Router();
 ingredientesRouter.post('/createIngrediente'
     , autenticado('/') // TODO: CAMBIAR URL
     , body('nombre', 'No puede ser vacío').notEmpty()
+    , body('nombre', 'Sólo puede contener letras').trim().matches(/^[A-Z]*$/i)
     , body('unidad', 'No puede ser vacío').notEmpty()
     , body('precio', 'No puede ser vacío').notEmpty()
     , body('precio', 'Debe ser un número').isNumeric()
@@ -30,8 +31,10 @@ ingredientesRouter.post('/removeIngrediente'
 ingredientesRouter.post('/addIngredienteToReceta'
     , autenticado('/') // TODO: CAMBIAR URL
     , body('nombre', 'No puede ser vacío').notEmpty()
+    , body('nombre', 'Sólo puede contener letras').trim().matches(/^[A-Z]*$/i)
     , body('id_receta', 'No puede ser vacío').notEmpty()
     , body('cantidad', 'No puede ser vacío').notEmpty()
+    , body('cantidad', 'Debe ser un número').isNumeric()
     , asyncHandler(addIngrediente));
 
 export default ingredientesRouter;

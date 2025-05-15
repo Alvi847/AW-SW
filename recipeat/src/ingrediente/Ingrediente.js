@@ -8,7 +8,7 @@ export class Ingrediente {
     static #getAllStmt = null;
     static #getByNameStmt = null;
     static #deleteStmt = null;
-    static #changePrecioStmt = null;
+    static #updateStmt = null;
 
     static initStatements(db) {
         if (this.#getAllStmt !== null) return;
@@ -25,8 +25,8 @@ export class Ingrediente {
         //*Eliminar ingredientes
         this.#deleteStmt = db.prepare('DELETE FROM Ingredientes WHERE id = @id');
 
-        //*Cambiar el precio del ingrediente
-        this.#changePrecioStmt = db.prepare('UPDATE Ingredientes SET precio = @precio WHERE nombre = @nombre');
+        //*Cambiar el precio y/o unidad del ingrediente
+        this.#updateStmt = db.prepare('UPDATE Ingredientes SET precio = @precio, unidad = @unidad WHERE id = @id');
     }
 
     static #insert(ingrediente) {
@@ -45,19 +45,37 @@ export class Ingrediente {
         }
     }
 
-    static insertIngrediente(ingrediente){
-        try{
+    static insertIngrediente(ingrediente) {
+        try {
             Ingrediente.#insert(ingrediente);
         }
-        catch(e){
+        catch (e) {
             logger.error(e.message);
-            throw new Error("Error al insertar ingrediente en la base de datos");
+            throw new Error("Error al insertar el ingrediente en la base de datos");
         }
     }
 
-    static cambiaPrecio(ingrediente) {
-        const result = this.#changePrecioStmt.run({ precio: ingrediente.precio, nombre: ingrediente.nombre });
-        if (result.changes === 0) throw new Error(`No se encontró el ingrediente con nombre ${ingrediente.nombre}`);
+    static #update(precio, unidad, id) {
+        const result = this.#updateStmt.run({ precio, unidad, id });
+        if (result.changes === 0) throw new Error(`No se encontró el ingrediente con id ${id}`);
+    }
+
+    /**
+     * Función para actualizar un ingrediente en la base de datos desde fuera
+     * @param {Ingrediente} ingrediente El objeto del ingrediente ya existente en la base de datos con sus nuevos datos 
+     * @returns {boolean} true si éxito
+     * @throws {Error} Un error de acceso a la base de datos
+     */
+    static cambiaIngrediente(ingrediente) {
+        try {
+            Ingrediente.#update(ingrediente.precio, ingrediente.unidad, ingrediente.id)
+            return true;
+        }
+        catch (e) {
+            logger.error(e.message);
+            throw new Error("Error al actualizar el ingrediente en la base de datos");
+        }
+
     }
 
     static deleteIngrediente(id) {
@@ -84,7 +102,7 @@ export class Ingrediente {
 
         for (const rawIngrediente of arrayIngredientes) {
             const { id, nombre, precio, unidad } = rawIngrediente;
-            const ingrediente = new Ingrediente( nombre, precio, unidad, id);
+            const ingrediente = new Ingrediente(nombre, precio, unidad, id);
             ingredientes.push(ingrediente);
         }
 
@@ -120,6 +138,7 @@ export class Contiene {
     static #deleteStmt = null;
     static #deleteAllByIngredienteStmt = null;
     static #deleteAllByRecetaStmt = null;
+    static #updateStmt = null;
     static #getAllByRecetaStmt = null;
 
     static initStatements(db) {
@@ -139,6 +158,9 @@ export class Contiene {
 
         // Obtiene los ingredientes de una receta
         this.#getAllByRecetaStmt = db.prepare('SELECT i.nombre, i.unidad, c.cantidad FROM Ingredientes i JOIN Contiene c ON i.id = c.id_ingrediente WHERE c.id_receta = @id_receta');
+
+        //Cambia la cantidad de un ingrediente en una receta
+        this.#updateStmt = db.prepare('UPDATE Contiene SET cantidad = @cantidad WHERE id_receta = @id_receta AND id_ingrediente = @id_ingrediente');
     }
 
     static #insert(id_ingrediente, id_receta, cantidad) {
@@ -156,29 +178,61 @@ export class Contiene {
         }
     }
 
-    static insertContiene(id_ingrediente, id_receta, cantidad){
-        try{
+    static insertContiene(id_ingrediente, id_receta, cantidad) {
+        try {
             Contiene.#insert(id_ingrediente, id_receta, cantidad);
         }
-        catch(e){
+        catch (e) {
             logger.error(e.message);
             throw new Error("Error al insertar en la tabla Contiene");
         }
     }
+
+    /**
+     * Cambia la cantidad de un ingrediente en una receta
+     * @param {int} cantidad
+     * @param {int} id_ingrediente
+     * @param {int} id_receta 
+     * @throws {Error} Un error de acceso a la base de datos 
+     */
+    static #update(cantidad, id_ingrediente, id_receta) {
+        const result = this.#updateStmt.run({ cantidad, id_ingrediente, id_receta });
+        if (result.changes === 0) throw new Error(`No se encontró el ingrediente con id ${id_ingrediente} en la receta ${id_receta}`);
+    }
+
+    /**
+     * Función para cambiar la cantidad de un ingrediente en una receta desde fuera
+     * @param {int} cantidad 
+     * @param {int} id_ingrediente 
+     * @param {int} id_receta
+     * @returns {boolean} true si éxito
+     * @throws {Error} Un error de acceso a la base de datos 
+     */
+    static cambiaCantidad(cantidad, id_ingrediente, id_receta) {
+        try {
+            Contiene.#update(cantidad, id_ingrediente, id_receta)
+            return true;
+        }
+        catch (e) {
+            logger.error(e.message);
+            throw new Error(`Error al actualizar la cantidad del ingrediente en la receta ${id_receta} de la base de datos`);
+        }
+    }
+
 
     static delete(id_ingrediente, id_receta) {
         const result = this.#deleteStmt.run({
             id_ingrediente: id_ingrediente,
             id_receta: id_receta
         });
-        if (result.changes === 0) throw new Error(`No se encontró el ingrediente con nombre ${nombre} en la receta ${id_receta}`);
+        if (result.changes === 0) throw new Error(`No se encontró el ingrediente con id ${id} en la receta ${id_receta}`);
     }
 
     static deleteAllByIngrediente(id_ingrediente) {
         const result = this.#deleteAllByIngredienteStmt.run({
             id_ingrediente: id_ingrediente,
         });
-        if (result.changes === 0) throw new Error(`No se encontró el ingrediente con nombre ${nombre}`);
+        if (result.changes === 0) throw new Error(`No se encontró el ingrediente con id ${id}`);
     }
 
     static deleteAllByReceta(id_receta) {
@@ -187,6 +241,11 @@ export class Contiene {
         });
     }
 
+    /**
+     * Obtiene todos los ingredientes contenidos en una receta
+     * @param {int} id_receta
+     * @returns {PedidoContiene[]} Un array de ingredientes de la receta con sus cantidades
+     */
     static getIngredientesByReceta(id_receta) {
         const arrayIngredientes = this.#getAllByRecetaStmt.all({ id_receta });
 
@@ -194,7 +253,7 @@ export class Contiene {
 
         for (const rawIngrediente of arrayIngredientes) {
             const { cantidad, nombre, unidad } = rawIngrediente;
-            const contingencia = new Contiene( nombre, unidad, cantidad);
+            const contingencia = new Contiene(nombre, unidad, cantidad);
             ingredientesContenidos.push(contingencia);
         }
 
