@@ -69,7 +69,7 @@ app.use(errorHandler);
 
 // Un middleware que se encarga de notificar al usuario de que no se ha encontrado la página que busca
 app.use('*', (req, res) => {
-    res.status(404).render('pagina',
+    res.render('pagina',
         {
             contenido: "paginas/error",
             session: req.session,
