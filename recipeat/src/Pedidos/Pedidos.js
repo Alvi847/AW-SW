@@ -277,7 +277,6 @@ export class PedidoContiene {
             id_pedido,
         });
         if (result.changes === 0) throw new Error(`No se encontró el pedido ${id_pedido}`);
-
     }
 
     /**

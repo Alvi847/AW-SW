@@ -1,4 +1,5 @@
 import { logger } from "../logger.js";
+import { PedidoContiene } from "../Pedidos/Pedidos.js";
 
 /**
  * Clase de los ingredientes de las recetas, tambien se utiliza en los pedidos de ingredientes
@@ -80,6 +81,7 @@ export class Ingrediente {
 
     static deleteIngrediente(id) {
         Contiene.deleteAllByIngrediente(id);
+        PedidoContiene.deleteAllByIngrediente(id);
         const result = this.#deleteStmt.run({ id });
         if (result.changes === 0) throw new Error(`No se encontró el ingrediente con id ${nombre}`);
     }
