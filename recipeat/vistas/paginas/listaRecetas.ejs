@@ -26,29 +26,39 @@
 
   <div class="contenedor-filtros">
     <form class="filtros-preferencias" method="GET" action="/receta/listaRecetas">
-      <select name="gusto">
-        <option value="" <%=!preferencias.gusto ? 'selected' : '' %>>Todas</option>
-        <option value="dulce" <%=preferencias.gusto==='dulce' ? 'selected' : '' %>>Dulce</option>
-        <option value="salado" <%=preferencias.gusto==='salado' ? 'selected' : '' %>>Salado</option>
-      </select>
-      
-      <select name="nivel">
-        <option value="" <%=!preferencias.nivel ? 'selected' : '' %>>Todos</option>
-        <option value="fácil" <%=preferencias.nivel==='fácil' ? 'selected' : '' %>>Fácil</option>
-        <option value="medio" <%=preferencias.nivel==='medio' ? 'selected' : '' %>>Medio</option>
-        <option value="difícil" <%=preferencias.nivel==='difícil' ? 'selected' : '' %>>Difícil</option>
-      </select>
-      
-      <select name="dieta">
-        <option value="" <%=!preferencias.dieta ? 'selected' : '' %>>Todas</option>
-        <option value="vegana" <%=preferencias.dieta==='vegana' ? 'selected' : '' %>>Vegana</option>
-        <option value="vegetariana" <%=preferencias.dieta==='vegetariana' ? 'selected' : '' %>>Vegetariana</option>
-        <option value="sin gluten" <%=preferencias.dieta==='sin gluten' ? 'selected' : '' %>>Sin gluten</option>
-      </select>
-
+      <div class="filtro">
+        <label for="gusto">Gusto</label>
+        <select id="gusto" name="gusto">
+          <option value="" <%=!preferencias.gusto ? 'selected' : '' %>>Todos</option>
+          <option value="dulce" <%=preferencias.gusto==='dulce' ? 'selected' : '' %>>Dulce</option>
+          <option value="salado" <%=preferencias.gusto==='salado' ? 'selected' : '' %>>Salado</option>
+        </select>
+      </div>
+  
+      <div class="filtro">
+        <label for="nivel">Nivel</label>
+        <select id="nivel" name="nivel">
+          <option value="" <%=!preferencias.nivel ? 'selected' : '' %>>Todos</option>
+          <option value="fácil" <%=preferencias.nivel==='fácil' ? 'selected' : '' %>>Fácil</option>
+          <option value="medio" <%=preferencias.nivel==='medio' ? 'selected' : '' %>>Medio</option>
+          <option value="difícil" <%=preferencias.nivel==='difícil' ? 'selected' : '' %>>Difícil</option>
+        </select>
+      </div>
+  
+      <div class="filtro">
+        <label for="dieta">Dieta</label>
+        <select id="dieta" name="dieta">
+          <option value="" <%=!preferencias.dieta ? 'selected' : '' %>>Todas</option>
+          <option value="vegana" <%=preferencias.dieta==='vegana' ? 'selected' : '' %>>Vegana</option>
+          <option value="vegetariana" <%=preferencias.dieta==='vegetariana' ? 'selected' : '' %>>Vegetariana</option>
+          <option value="sin gluten" <%=preferencias.dieta==='sin gluten' ? 'selected' : '' %>>Sin gluten</option>
+        </select>
+      </div>
+  
       <button type="submit" class="aplicar-filtros">Aplicar filtros</button>
     </form>
   </div>
+
 
   <div class="recetas-container">
     <% recetas.forEach((r)=> { %>
