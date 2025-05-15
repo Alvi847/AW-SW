@@ -69,7 +69,7 @@ app.use(errorHandler);
 
 // Un middleware que se encarga de notificar al usuario de que no se ha encontrado la página que busca
 app.use('*', (req, res) => {
-    res.render('pagina',
+    res.render('pagina',    //No devuelvo el código 404 porque si lo hago, en el VPS se muestra una página predeterminada
         {
             contenido: "paginas/error",
             session: req.session,
