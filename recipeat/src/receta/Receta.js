@@ -160,7 +160,7 @@ export class Receta {
 
     /**
      *Obtener todas las recetas
-     * @returns Una lista con todas las recetas
+     * @returns {Receta[]} Una lista con todas las recetas
      */
     static getAllRecetas() {
 
@@ -423,7 +423,7 @@ export class Like {
     /**
      * Obtén una lista de ids de recetas a las que el usuario ha dado like
      * @param {string} username username del usuario
-     * @returns lista de ids de recetas
+     * @returns {int[]} lista de ids de recetas
      */
     static getAllLikedPorUsuario(username) {
         const result = this.#getAllByUserStmt.get({

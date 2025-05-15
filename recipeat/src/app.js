@@ -24,6 +24,7 @@ import { errorHandler } from './middleware/error.js';
 import apiRouter from './apiRouter.js';
 import ingredientesRouter from './ingrediente/router.js';
 import { render } from './utils/render.js';
+import pedidosRouter from './Pedidos/router.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -55,6 +56,7 @@ app.use('/comentario', comentariosRouter);
 app.use('/eventos', eventoRouter);
 app.use('/ingrediente', ingredientesRouter);
 app.use('/api', apiRouter);
+app.use('/pedido', pedidosRouter);
 
 app.get("/imagen/:id", (request, response) => {
     const __filename = fileURLToPath(import.meta.url);  // He visto que esto es necesario para poder obtener la ruta del script en ES
@@ -67,7 +69,7 @@ app.use(errorHandler);
 
 // Un middleware que se encarga de notificar al usuario de que no se ha encontrado la página que busca
 app.use('*', (req, res) => {
-    res.status(404).render('pagina',
+    res.render('pagina',    //No devuelvo el código 404 porque si lo hago, en el VPS se muestra una página predeterminada
         {
             contenido: "paginas/error",
             session: req.session,
