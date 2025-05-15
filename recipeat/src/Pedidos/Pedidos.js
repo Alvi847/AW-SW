@@ -1,5 +1,4 @@
-import { EventEmitterAsyncResource } from "node:stream";
-import { logger } from "../logger";
+import { logger } from "../logger.js";
 
 /**
  * Clase para los pedidos
