@@ -174,20 +174,16 @@ export class Ingrediente {
         return ingredientes;
     }
 
-    #nombre; // Nombre del ingrediente
+    nombre; // Nombre del ingrediente
     precio; // Precio del ingrediente
     unidad; // Cadena que indica en qué unidad se mide el ingrediente, DE MOMENTO LO DEJO EN GRAMOS POR DEFECTO
     #id; // Id del ingrediente
 
     constructor(nombre, precio, unidad = 'g', id = null) {
-        this.#nombre = nombre;
+        this.nombre = nombre;
         this.precio = precio;
         this.unidad = unidad;
         this.#id = id;
-    }
-
-    get nombre() {
-        return this.#nombre;
     }
 
     get id() {
