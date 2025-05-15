@@ -21,7 +21,7 @@ import { Contiene } from '../ingrediente/Ingrediente.js';
 
 // Ver las recetas (página de inicio de recetas)
 
-export function viewRecetas(req, res) {
+export function viewRecetas(req, res, next) {
     let contenido = 'paginas/listaRecetas';
     const login = req.session.login;
     const user = req.session.username;
@@ -40,21 +40,6 @@ export function viewRecetas(req, res) {
     // Obtener recetas según filtros o preferencias
     let recetas = Receta.getAllRecetas();
 
-    // LOG COMPLETO DE TODAS LAS RECETAS
-console.log("📦 Todas las recetas cargadas:");
-recetas.forEach(r => {
-    console.log({
-        id: r.id,
-        nombre: r.nombre,
-        ingredientes: r.ingredientes,
-        gusto: r.gusto,
-        nivel: r.nivel,
-        dieta: r.dieta,
-        imagen: r.imagen,
-        likes: r.likes
-    });
-});
-
     if (preferencias.gusto)
         recetas = recetas.filter(r => r.gusto === preferencias.gusto);
     if (preferencias.nivel)
@@ -66,9 +51,9 @@ recetas.forEach(r => {
     let favoritos = [];
     let recomendadas = [];
 
-    if (login && user) {    
-    favoritos = Receta.getFavoritosPorUsuario(user);
-    recomendadas = Receta.getRecomendadasPersonalizadas(user);
+    if (login && user) {
+        favoritos = Receta.getFavoritosPorUsuario(user);
+        recomendadas = Receta.getRecomendadasPersonalizadas(user);
     }
 
     return render(req, res, contenido, {
@@ -81,58 +66,62 @@ recetas.forEach(r => {
 }
 
 // Ver una receta
-export function viewReceta(req, res) {
-    
-    /*
+export function viewReceta(req, res, next) {
+
     const result = validationResult(req);
+    const err = {};
 
     if (!result.isEmpty()) {
         const errores = result.mapped();
-        const datos = matchedData(req);
-        
-        return render(req, res, 'paginas/listaRecetas', {
-            datos,
-            errores
+
+        err.statusCode = 400;
+        err.message = errores['id'].msg;
+
+        return next(err, req, res); // Mostramos al usuario el error correspondiente (En este caso que el id debe ser un entero)
+    }
+
+    try {
+        const id = req.params.id; // Ahora toma el id correctamente desde la URL
+        const user = (req.session.username || null) // El usuario que quiere ver la receta (usado para ver si le ha dado like o no)
+        const receta = Receta.getRecetaById(id, user); // Método para obtener la receta por ID
+        const comentarios = Comentario.getAllComentarios(id, user);
+
+
+        const ingredientes = Contiene.getIngredientesByReceta(id);
+
+        let hayComentarios = true;
+        if (comentarios.length == 0)
+            hayComentarios = false;
+
+        return render(req, res, 'paginas/verReceta', {
+            receta,
+            ingredientes,
+            comentarios,
+            hayComentarios,
+            errores: {}
         });
-    }*/
-    const id = req.params.id; // Ahora toma el id correctamente desde la URL
-    const user = req.session.username // El usuario que quiere ver la receta (usado para ver si le ha dado like o no)
-    const receta = Receta.getRecetaById(id, user); // Método para obtener la receta por ID
-    const comentarios = Comentario.getAllComentarios(id, user);
-
-    const ingredientes = Contiene.getIngredientesByReceta(id);
-
-    let hayComentarios = true;
-    if (comentarios.length == 0)
-        hayComentarios = false;
-    
-    return render(req, res, 'paginas/verReceta', {
-        receta,
-        ingredientes,
-        comentarios,
-        hayComentarios,
-        errores: {}
-    });
+    }
+    catch (e) {
+        e.statusCode = 500;
+        next(e, req, res);
+    }
 }
 
 // Crear una receta (mostrar el formulario de creación)
-export function createReceta(req, res) {
+export function createReceta(req, res, next) {
     let contenido = 'paginas/createReceta';
-    if (req.session == null || !req.session.login) {
-        contenido = 'paginas/home';
-    }
     return render(req, res, contenido, {
         errores: {}
     });
 }
 
 // Agregar una nueva receta (procesar el formulario)
-export async function doCreateReceta(req, res) {
+export async function doCreateReceta(req, res, next) {
 
     const result = validationResult(req);
     const requestWith = req.get('X-Requested-With');
     const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
-    if(esAjax)
+    if (esAjax)
         req.log.debug("Petición AJAX recibida para doCreateReceta()");
 
     if (!result.isEmpty()) {
@@ -145,15 +134,15 @@ export async function doCreateReceta(req, res) {
             req.log.debug("Devuelto código 400 a la petición AJAX");
             return res.status(400).json({ status: 400, errores });
         }
-        
+
         return render(req, res, 'paginas/createReceta', {
             datos,
             errores
         });
     }
 
-    const { nombre, descripcion, modo_preparacion, gusto, nivel, dieta } = req.body;
-    const { ingredientes_id, ingredientes_cantidad } = req.body;
+    const { nombre, descripcion, modo_preparacion, gusto, nivel, dieta
+        , ingredientes_id, ingredientes_cantidad } = matchedData(req)
 
     const imagen = req.file;
 
@@ -161,30 +150,30 @@ export async function doCreateReceta(req, res) {
     try {
 
         const descripcionSegura = sanitizeHtml(descripcion, {
-            allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img', 'h1', 'h2' ]),
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2']),
             allowedAttributes: {
                 a: ['href', 'name', 'target'],
                 img: ['src', 'alt', 'width', 'height'],
                 '*': ['style'] // Si quieres permitir estilos en línea
             }
         });
-        
+
         const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
-            allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img', 'ul', 'li', 'h1', 'h2' ]),
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'ul', 'li', 'h1', 'h2']),
             allowedAttributes: {
                 img: ['src', 'alt'],
                 '*': ['style']
             }
         });
-        
+
 
         const nuevaReceta = new Receta(nombre, descripcionSegura, modoPreparacionSeguro, null, null, req.session.username, false, imagen.filename, gusto, nivel, dieta);
-        
+
         const id_receta = Receta.insertReceta(nuevaReceta).id;
-        
+
         // Introducimos todos los ingredientes en la nueva receta
-        for(let i = 0; i < ingredientes_id.length; i++){
-            Contiene.insert(ingredientes_id[i], id_receta, ingredientes_cantidad[i]);
+        for (let i = 0; i < ingredientes_id.length; i++) {
+            Contiene.insertContiene(ingredientes_id[i], id_receta, ingredientes_cantidad[i]);
         }
 
 
@@ -207,31 +196,53 @@ export async function doCreateReceta(req, res) {
 }
 
 // Mostrar el formulario de actualización con los datos actuales
-export function viewUpdateReceta(req, res) {
-    const id = req.params.id;
-    const receta = Receta.getRecetaById(id); // Obtener la receta por ID
+export function viewUpdateReceta(req, res, next) {
+    const result = validationResult(req);
+    const err = {};
 
-    return render(req, res, 'paginas/updateReceta', {
-        receta,
-        errores: {},
-        datos: {}
-    });
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+
+        err.statusCode = 400;
+        err.message = errores['id'].msg;
+
+        return next(err, req, res); // Mostramos al usuario el error correspondiente
+    }
+
+    try {
+        const id = req.params.id;
+        const receta = Receta.getRecetaById(id); // Obtener la receta por ID
+
+        if (req.session.username != receta.user) {
+            err.message = "No puedes editar una receta que no es tuya";
+            err.statusCode = 403;
+            return next(err, req, res);
+        }
+
+        return render(req, res, 'paginas/updateReceta', {
+            receta,
+            errores: {},
+            datos: {}
+        });
+    }
+    catch (e) {
+        e.statusCode = 500;
+        return next(e, req, res);
+    }
 }
 
 // Procesar la actualización de la receta
-export async function updateReceta(req, res) {
-    console.log("Body recibido:", req.body);
-    const id = req.params.id;
-    const recetaExistente = Receta.getRecetaById(id);
+export async function updateReceta(req, res, next) {
 
     const requestWith = req.get('X-Requested-With');
     const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
 
-    if(esAjax)
+    if (esAjax)
         req.log.debug("Petición AJAX recibida para updateReceta()");
 
     const result = validationResult(req);
-    
+    const err = {};
+
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
@@ -242,38 +253,50 @@ export async function updateReceta(req, res) {
             return res.status(400).json({ status: 400, errores });
         }
         return render(req, res, `paginas/updateReceta`, {
-            datos,
             errores,
-            receta: recetaExistente
+            receta: datos
         });
     }
 
-    const { nombre, descripcion, modo_preparacion, gusto, nivel, dieta } = req.body;
+    const id = req.params.id;
+    const recetaExistente = Receta.getRecetaById(id);
+
+    const { nombre, descripcion, modo_preparacion, gusto, nivel, dieta } = matchedData(req);
     const imagen = req.file;
     const user = req.session.username;
 
     if (recetaExistente.user === user || req.session.rol === 'A') {
-        if(!recetaExistente.user) // En caso de un administrador estar editando una receta que fue colocada sin dueño (las recetas que colocamos al principio), el administrador que la esté editando pasará a ser su dueño
+        if (!recetaExistente.user) // En caso de un administrador estar editando una receta que fue colocada sin dueño (las recetas que colocamos al principio), el administrador que la esté editando pasará a ser su dueño
             recetaExistente.user = user;
         recetaExistente.nombre = nombre;
         recetaExistente.descripcion = descripcion;
         recetaExistente.modo_preparacion = modo_preparacion;
         recetaExistente.gusto = gusto || null;
         recetaExistente.nivel = nivel || null;
-        recetaExistente.dieta = dieta ||null;
+        recetaExistente.dieta = dieta || null;
+        try {
+            if (recetaExistente.imagen) {
 
-        if (recetaExistente.imagen) {
-            try {
                 await fs.unlink(join(UPLOAD_PATH, "/", recetaExistente.imagen)); // Hay que borrar la foto anterior en caso de haber alguna
             }
-            catch (err) {
-                req.log.error(err.message);
-            }
-        }
-        recetaExistente.imagen = imagen.filename;
+            recetaExistente.imagen = imagen.filename;
 
-        req.log.debug("Actualizando receta con id '%i'", id);
-        Receta.updateReceta(recetaExistente);
+            req.log.debug("Actualizando receta con id '%i'", id);
+
+            Receta.updateReceta(recetaExistente);
+        }
+        catch (e) {
+            req.log.error(e.message);
+
+            if (esAjax) {
+                req.log.debug("Devuelto código 500 a la petición AJAX");
+                return res.status(500).json({ ok: false });
+            }   
+
+            err.message = "Ha ocurrido un error al editar la receta";
+            err.statusCode = 500;
+            return next(err, req, res);
+        }
         req.log.info("Receta '%i', editada con éxito por '%s'", id, user);
 
         if (esAjax) {
@@ -283,11 +306,14 @@ export async function updateReceta(req, res) {
     }
     else
         req.log.error("La receta '%i',no puede ser editada por '%s'", id, user);
+
     res.redirect(`/receta/verReceta/${id}`);
 }
 
 // Eliminar una receta
-export async function deleteReceta(req, res) {
+export async function deleteReceta(req, res, next) {
+
+    const err = {};
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -299,39 +325,42 @@ export async function deleteReceta(req, res) {
         });
     }
 
-    const { id } = req.body;
+    const { id } = matchedData(req)
     const user = req.session.username;
     let receta = null;
 
     try {
         receta = Receta.getRecetaById(id, null);
+
+        if (receta != null && (user === receta.user || req.session.rol === "A")) {
+            Receta.deleteReceta(id); // Elimina la receta por ID
+            await fs.unlink(join(UPLOAD_PATH, receta.imagen));  // Se borra la imagen de la receta del disco
+            req.log.info("Receta '%i' eliminada con exito", id);
+        }
     }
     catch (e) {
         req.log.error("Error interno al intentar eliminar la receta '%i': '%s'", id, e.message);
-        res.status(500).send(); // Usar AJAX
-        //return res.redirect('/receta/listaRecetas'); //TODO: Poner otro mensaje
-    }
-    if (receta != null && (user === receta.user || req.session.rol === "A")) {
-        try {
-            Receta.deleteReceta(id);
-            await fs.unlink(join(UPLOAD_PATH, receta.imagen));  // Se borra la imagen de la receta del disco
-            req.log.info("Receta '%i' eliminada con exito", id);
-            res.redirect('/receta/listaRecetas'); // Redirige a la lista de recetas
-        } // Elimina la receta por ID
-        catch (e) {
-            req.log.error("Error interno al intentar eliminar la receta '%i': '%s'", id, e.message);
-            res.status(500).send(); //Usar AJAX
-            //return res.redirect('/receta/listaRecetas'); //TODO: Poner otro mensaje
-        }
-    }
-    else if (receta != null) {
-        res.status(403).send();
-        req.log.debug("Para borrar la receta, el usuario '%s' tiene que ser '%s' o administrador", user, receta.user);
+        err.message = "Ha ocurrido un error al intentar eliminar la receta";
+        return next(err, req, res);
     }
 
+    res.redirect('/receta/listaRecetas'); // Redirige a la lista de recetas
 }
 
-export function likeReceta(req, res) {
+export function likeReceta(req, res, next) {
+
+    const result = validationResult(req);
+    const err = {};
+
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+
+        err.statusCode = 400;
+        err.message = errores['id'].msg;
+
+        return next(err, req, res); // Mostramos al usuario el error correspondiente
+    }
+
     const { id } = req.body;
     const user = req.session.username
 
@@ -344,22 +373,22 @@ export function likeReceta(req, res) {
             res.redirect(`/receta/verReceta/${id_num}`);
         }
         catch (e) {
-            res.status(500).send();
             req.log.error("No se ha podido añadir el like de '%s' a la receta '%i'", user, id);
+            err.message = "Ha ocurrido un error al intentar dar like a la receta";
+            err.statusCode = 500;
+            return next(err, req, res);
         }
     }
     else if (!id) {
-        res.status(400).send();
         req.log.error("Receta '%i' no existe", id);
-    }
-    else {
-        res.status(403).send();
-        req.log.error("Usuario no logueado");
+        err.message = "Ha ocurrido un error al intentar dar like a la receta";
+        err.statusCode = 400;
+        return next(err, req, res);
     }
 }
 
 // Ver las recetas del usuario logueado
-export function viewMisRecetas(req, res) {
+export function viewMisRecetas(req, res, next) {
     let contenido = 'paginas/misRecetas';
     const user = req.session.username;
 
@@ -375,27 +404,11 @@ export function viewMisRecetas(req, res) {
         });
     } catch (e) {
         req.log.error("Error al obtener las recetas del usuario '%s': %s", user, e.message);
-        res.status(500).send("Error interno del servidor");
+        const err = {};
+
+        err.statusCode = 500;
+        err.message = "Error al obtener las recetas";
+        
+        next(err, req, res);
     }
 }
-
-export function apiBuscarRecetas(req, res) {
-    const { tipo, q } = req.query;
-    const recetas = Receta.getAllRecetas();
-
-    const filtro = q.toLowerCase().trim();
-
-    const recetasFiltradas = recetas.filter(r => {
-        if (tipo === 'nombre') {
-            return r.nombre.toLowerCase().includes(filtro);
-        } else if (tipo === 'ingrediente') {
-            // Si quieres más realismo tendrías que buscar en r.ingredientes
-            return (r.ingredientes || []).some(ing => ing.toLowerCase().includes(filtro));
-        }
-        return false;
-    });
-
-    res.json(recetasFiltradas);
-}
-
-

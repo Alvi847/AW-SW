@@ -15,14 +15,15 @@ import comentariosRouter from './comentario/router.js';
 import eventoRouter from './evento/router.js';
 
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'url';  
+import { fileURLToPath } from 'url';
 import { logger } from './logger.js';
-import pinoHttp  from 'pino-http';
+import pinoHttp from 'pino-http';
 const pinoMiddleware = pinoHttp(config.logger.http(logger));
 import { flashMessages } from './middleware/flash.js';
 import { errorHandler } from './middleware/error.js';
 import apiRouter from './apiRouter.js';
 import ingredientesRouter from './ingrediente/router.js';
+import { render } from './utils/render.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -53,14 +54,23 @@ app.use('/receta', recetasRouter);
 app.use('/comentario', comentariosRouter);
 app.use('/eventos', eventoRouter);
 app.use('/ingrediente', ingredientesRouter);
+app.use('/api', apiRouter);
 
 app.get("/imagen/:id", (request, response) => {
     const __filename = fileURLToPath(import.meta.url);  // He visto que esto es necesario para poder obtener la ruta del script en ES
-    let pathImg = join( dirname(__filename), "../uploads", request.params.id);
+    let pathImg = join(dirname(__filename), "../uploads", request.params.id);
     request.log.debug("Recibida peticion para la foto: '%s'", pathImg);
     response.sendFile(pathImg);
 });
 
-app.use('/api', apiRouter);
-
 app.use(errorHandler);
+
+// Un middleware que se encarga de notificar al usuario de que no se ha encontrado la página que busca
+app.use('*', (req, res) => {
+    res.status(404).render('pagina',
+        {
+            contenido: "paginas/error",
+            session: req.session,
+            message: `La página que buscas no existe`
+        })
+});

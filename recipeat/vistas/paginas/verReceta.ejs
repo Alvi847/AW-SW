@@ -115,7 +115,7 @@
         <% if(session.login) { %>
             <form id="create-comentario" action="/comentario/createComentario" method="POST" name="form-create-comentario">
                 <label>Escribe aquí tu comentario:</label><textarea type="text"
-                    name="descripcion"></textarea><%- helpers.error(errores, 'descripcion') %><span class="error"></span>
+                    name="descripcion" required></textarea><%- helpers.error(errores, 'descripcion') %><span class="error"></span>
                 <input type="hidden" name="id" value="<%= receta.id %>">
                 <button type="submit" id="comentario-create-button">
                     Escribe un comentario

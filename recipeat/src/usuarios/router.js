@@ -1,4 +1,4 @@
-import { body } from 'express-validator';
+import { body, param } from 'express-validator';
 import express from 'express';
 import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil, deleteUsuario, viewAdministrar, cambiarRolUsuario, viewPerfilUser, viewFavoritosUser, viewRecetasUser, viewPreferencias, guardarPreferencias } from './controllers.js';
 import { autenticado } from '../middleware/auth.js';
@@ -14,10 +14,6 @@ export const UPLOAD_PATH = join(__dirname, "../../uploads");
 const multerFactory = multer({ dest: join(UPLOAD_PATH) });
 
 const usuariosRouter = express.Router();
-
-
-
-
 
 usuariosRouter.get('/login', autenticado(null), asyncHandler(viewLogin)); //TODO: Si estás logueado no deberia mostrar el formulario de inicio de sesión autenticado(null, '/usuarios/home')
 usuariosRouter.post('/login', autenticado(null, '/usuarios/home')
@@ -44,11 +40,20 @@ usuariosRouter.post('/updatePerfil', multerFactory.single("imagen")
     , body('email', 'No es un email válido').isEmail()
     , asyncHandler(updatePerfil));
 
-usuariosRouter.post('/removeUsuario', autenticado('/usuarios/home'), asyncHandler(deleteUsuario));
+usuariosRouter.post('/removeUsuario'
+    , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
+    , body('username', 'No puede ser vacío').trim().notEmpty()
+    , autenticado('/usuarios/home'), asyncHandler(deleteUsuario));
+
 usuariosRouter.get('/administrar', autenticado('/usuarios/home'), asyncHandler(viewAdministrar));
-usuariosRouter.post('/cambiarRol', autenticado('/usuarios/home'), asyncHandler(cambiarRolUsuario));
+
+usuariosRouter.post('/cambiarRol'
+    , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
+    , body('username', 'No puede ser vacío').trim().notEmpty()
+    , autenticado('/usuarios/home'), asyncHandler(cambiarRolUsuario));
 
 usuariosRouter.get('/misPreferencias', autenticado('/login'), asyncHandler(viewPreferencias));
+
 usuariosRouter.post('/misPreferencias',
   autenticado('/login'),
   body('gusto').trim().optional({ checkFalsy: true }),
@@ -57,9 +62,18 @@ usuariosRouter.post('/misPreferencias',
   asyncHandler(guardarPreferencias)
 );
 
-usuariosRouter.get('/:username/recetas', autenticado('/usuarios/home'), asyncHandler(viewRecetasUser));
-usuariosRouter.get('/:username/favoritos', autenticado('/usuarios/home'), asyncHandler(viewFavoritosUser));
-usuariosRouter.get('/:username', autenticado('/usuarios/home'), asyncHandler(viewPerfilUser)); //ver perfil de users dinamico
+usuariosRouter.get('/:username/recetas', autenticado('/usuarios/home')
+, param('username', 'El nombre de usuario no puede ser vacío').trim().notEmpty()
+, param('username', 'El nombre de usuario sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
+, asyncHandler(viewRecetasUser));
+usuariosRouter.get('/:username/favoritos', autenticado('/usuarios/home')
+, param('username', 'El nombre de usuario no puede ser vacío').trim().notEmpty()
+, param('username', 'El nombre de usuario sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
+, asyncHandler(viewFavoritosUser));
+usuariosRouter.get('/:username', autenticado('/usuarios/home')
+, param('username', 'El nombre de usuario no puede ser vacío').trim().notEmpty()
+, param('username', 'El nombre de usuario sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
+, asyncHandler(viewPerfilUser)); //ver perfil de users dinamico
   
 
 export default usuariosRouter;

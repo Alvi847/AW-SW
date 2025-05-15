@@ -2,22 +2,23 @@ import { Usuario, Preferencias, UsuarioYaExiste } from './Usuario.js';
 import { render } from '../utils/render.js';
 import { validationResult, matchedData } from 'express-validator';
 import { Receta } from '../receta/Receta.js';
+import { logger } from '../logger.js';
 
-export function viewLogin(req, res) {
+export function viewLogin(req, res, next) {
     render(req, res, 'paginas/login', {
         datos: {},
         errores: {}
     });
 }
 
-export function viewHome(req, res) {
+export function viewHome(req, res, next) {
     return render(req, res, 'paginas/home');
 }
 
-export async function doLogin(req, res) {
+export async function doLogin(req, res, next) {
     const result = validationResult(req);
 
-    if (! result.isEmpty()) {
+    if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
         return render(req, res, 'paginas/login', {
@@ -38,7 +39,7 @@ export async function doLogin(req, res) {
 
         res.setFlash(`Encantado de verte de nuevo: ${usuario.nombre}`);
 
-        return res.redirect('/'); 
+        return res.redirect('/');
 
     } catch (e) {
         const datos = matchedData(req);
@@ -75,23 +76,23 @@ export function doLogout(req, res, next) {
     })
 }
 
-export function viewRegistro(req, res) {
+export function viewRegistro(req, res, next) {
     render(req, res, 'paginas/registro', {
         datos: {},
         errores: {}
     });
 }
 
-export async function doRegistro(req, res) {
+export async function doRegistro(req, res, next) {
     const result = validationResult(req);
 
-    
+
     const requestWith = req.get('X-Requested-With');
     const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
-    if(esAjax)
+    if (esAjax)
         req.log.debug("Petición AJAX recibida para doRegistro()");
 
-    if (! result.isEmpty()) {
+    if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
 
@@ -117,12 +118,12 @@ export async function doRegistro(req, res) {
         const usuario = await Usuario.creaUsuario(username, password, nombre, email, imagen);
 
         Preferencias.insertPreferencia({
-            user: usuario.username, 
+            user: usuario.username,
             gusto: null,
             nivel: null,
             dieta: null
         });
-        
+
         req.session.login = true;
         req.session.nombre = usuario.nombre;
         req.session.rol = usuario.rol;
@@ -156,83 +157,114 @@ export async function doRegistro(req, res) {
     }
 }
 
-export async function viewPerfil(req, res) {
-  
+export async function viewPerfil(req, res, next) {
+
     try {
-        
+
         const usuario = await Usuario.getUsuarioByUsername(req.session.username);
 
-        if (!usuario) {
-            return res.redirect('/usuarios/login');  // Si no se encuentra el usuario, redirigir al login
-        }
-
-         render(req, res, 'paginas/verPerfil', { usuario });
+        render(req, res, 'paginas/verPerfil', { usuario });
 
     } catch (error) {
-        console.error(error);
-        render(req, res, 'paginas/perfil', {
-            error: 'Hubo un problema al cargar tu perfil',
-            usuario: {},
-            errores: {}
-        });
+        req.log.error(error);
+
+        const err = {};
+
+        err.statusCode = 500;
+        err.message = 'Hubo un problema al cargar tu perfil';
+
+        return next(err, req, res);
     }
 }
 
-export async function viewPerfilUser(req, res) {  // ver perfil de usuario concreto, pasado por params en url
+export async function viewPerfilUser(req, res, next) {  // ver perfil de usuario concreto, pasado por params en url
+    const result = validationResult(req);
+    const err = {};
+
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+
+        err.statusCode = 400;
+        err.message = errores['username'].msg;
+
+        return next(err, req, res); // Mostramos al usuario el error correspondiente
+    }
+
     try {
         const { username } = req.params;
 
         const usuario = await Usuario.getUsuarioByUsername(username);
-        if (!usuario) {
-            return res.redirect('/');  // Si no se encuentra el usuario, redirigir al login
-        }
-
-        
 
         render(req, res, 'paginas/verPerfil', {
             usuario
         });
 
     } catch (error) {
-        console.error(error);
-        render(req, res, 'paginas/misRecetas', {
-            error: 'Hubo un problema al cargar el perfil del usuario',
-            usuario: {},
-            errores: {}
-        });
+        req.log.error(error);
+        err.statusCode = 400;
+        err.message = 'Hubo un problema al cargar el perfil del usuario';
+
+        return next(err, req, res); // Mostramos al usuario el error correspondiente
+
     }
 }
 
-export async function viewFavoritosUser(req, res) {
+export async function viewFavoritosUser(req, res, next) {
+
+    const result = validationResult(req);
+    const err = {};
+
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+
+        err.statusCode = 400;
+        err.message = errores['username'].msg;
+
+        return next(err, req, res); // Mostramos al usuario el error correspondiente 
+    }
+
     const { username } = req.params;
-  
+
     if (!username) {
-      return render(req, res , 'paginas/home', { error: 'Usuario no encontrado' });
+        return render(req, res, 'paginas/home', { error: 'Usuario no encontrado' });
     }
     const usuario = await Usuario.getUsuarioByUsername(username);
     const recetas = await Receta.getFavoritosPorUsuario(username);
-  
+
     render(req, res, 'paginas/misRecetas', {
         recetas,
         usuario
     });
 }
 
-export async function viewRecetasUser(req, res) {
+export async function viewRecetasUser(req, res, next) {
+
+    const result = validationResult(req);
+    const err = {};
+
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+
+        err.statusCode = 400;
+        err.message = errores['username'].msg;
+
+        return next(err, req, res); // Mostramos al usuario el error correspondiente 
+    }
+
     const { username } = req.params;
-  
+
     try {
-      const usuario = await Usuario.getUsuarioByUsername(username);
-      if (!usuario) {
-        return res.redirect('/usuarios/login');  // Si no se encuentra el usuario, redirigir al login
-         }
-  
-      const recetas = await Receta.getRecetasPorUsuario(username);
-  
-      render(req, res, 'paginas/misRecetas', {
-        usuario,
-        recetas,
-      });
+        const usuario = await Usuario.getUsuarioByUsername(username);
+        if (!usuario) {
+            return res.redirect('/usuarios/login');  // Si no se encuentra el usuario, redirigir al login
+        }
+
+        const recetas = await Receta.getRecetasPorUsuario(username);
+
+        render(req, res, 'paginas/misRecetas', {
+            usuario,
+            recetas,
+        });
     } catch (error) {
         console.error(error);
         render(req, res, 'paginas/perfil', {
@@ -241,9 +273,9 @@ export async function viewRecetasUser(req, res) {
             errores: {}
         });
     }
-  }
+}
 
-export async function viewUpdatePerfil(req, res) {
+export async function viewUpdatePerfil(req, res, next) {
     try {
         const usuario = await Usuario.getUsuarioByUsername(req.session.username);
         if (!usuario) {
@@ -261,12 +293,12 @@ export async function viewUpdatePerfil(req, res) {
     }
 }
 
-export async function updatePerfil(req, res) {
+export async function updatePerfil(req, res, next) {
     const result = validationResult(req);
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
-        if(req.file)
+        if (req.file)
             await fs.unlink(req.file.path); // En la actualización también borramos la foto si el usuario ha subido alguna
         return render(req, res, 'paginas/updatePerfil', {
             usuario: datos,
@@ -291,7 +323,7 @@ export async function updatePerfil(req, res) {
         if (req.file) {
             usuario.imagen = req.file.filename;
         }
-      
+
         if (password && password.trim() !== '') {
             await usuario.cambiaPassword(password);
         }
@@ -314,7 +346,7 @@ export async function updatePerfil(req, res) {
     }
 }
 
-export async function viewAdministrar(req, res) {
+export async function viewAdministrar(req, res, next) {
     try {
         const usuarios = Usuario.getAllUsuarios();
         render(req, res, 'paginas/administrar', { usuarios });
@@ -326,7 +358,22 @@ export async function viewAdministrar(req, res) {
     }
 }
 
-export async function deleteUsuario(req, res) {
+export async function deleteUsuario(req, res, next) {
+
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+        const datos = matchedData(req);
+
+        const err = {};
+
+        err.statusCode = 400;
+        err.message = "El nombre de usuario debe no estar vacío y estar contenido solo por letras y números";
+
+        return next(err, req, res);
+    }
+
     const { username } = req.body;
     try {
         Usuario.delete(username);
@@ -338,7 +385,22 @@ export async function deleteUsuario(req, res) {
     }
 }
 
-export async function cambiarRolUsuario(req, res) {
+export async function cambiarRolUsuario(req, res, next) {
+
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+        const datos = matchedData(req);
+
+        const err = {};
+
+        err.statusCode = 400;
+        err.message = "El nombre de usuario debe no estar vacío y estar contenido solo por letras y números";
+
+        return next(err, req, res);
+    }
+
     const { username, rol } = req.body;
 
     if (!['U', 'A'].includes(rol)) {
@@ -362,7 +424,7 @@ export async function cambiarRolUsuario(req, res) {
 /**
  * Mostrar la vista de preferencias para el usuario logueado
  */
-export async function viewPreferencias(req, res) {
+export async function viewPreferencias(req, res, next) {
     const user = req.session.username;
 
     if (!user) {
@@ -384,7 +446,7 @@ export async function viewPreferencias(req, res) {
 /**
  * Procesar y guardar las preferencias del usuario
  */
-export function guardarPreferencias(req, res) {
+export function guardarPreferencias(req, res, next) {
     const result = validationResult(req);
     const esAjax = ['xmlhttprequest', 'fetch'].includes((req.get('X-Requested-With') || '').toLowerCase());
     const user = req.session.username;
@@ -446,4 +508,4 @@ export function guardarPreferencias(req, res) {
 
 
 
-  
+

@@ -44,14 +44,14 @@ async function crearLineaIngrediente() {
     const selectIngredientes = document.createElement('select');
     await cambiaIngredientes(selectIngredientes);
 
-    selectIngredientes.name = `ingredientes_id`;
+    selectIngredientes.name = `ingredientes_id[]`;
     selectIngredientes.id = `${numIngredientes}`; // Usamos también el número de ingredientes como indice para identificar cada select (sirve para cuando hacemos la comprobación de repetidos)
 
     const input = document.createElement('input');
     input.type = 'number';
     input.min = 0;
     input.placeholder = 'Cantidad';
-    input.name = `ingredientes_cantidad`; // Usando el mismo nombre se envía como un array
+    input.name = `ingredientes_cantidad[]`; // Usando el mismo nombre se envía como un array
     input.addEventListener("change", compruebaCantidad);
 
     const unidadSpan = document.createElement('span');
@@ -123,6 +123,8 @@ function crearCamposDeValidacionCantidad(div){
 // Eliminamos la última línea de ingredientes
 function eliminaLineaIngrediente(){
     const div = document.getElementById(`linea_ingrediente_${numIngredientes - 1}`);
+    const selectIngredientes = document.getElementById(`${numIngredientes - 1}`);
+    ingredientes_seleccionados[Number(selectIngredientes.id)] = selectIngredientes.options[selectIngredientes.selectedIndex].value = -1
     div.remove();
     numIngredientes--;
 }

@@ -332,6 +332,13 @@ body::-webkit-scrollbar-thumb:hover {
     /* Color del thumb cuando se pasa el mouse */
 }
 
+.pagina-error {
+    position: relative;
+    margin-top: 100px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+
 @media (max-width: 767px) {
     /* Header adjustments */
     .header {

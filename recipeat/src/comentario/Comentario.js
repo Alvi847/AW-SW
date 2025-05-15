@@ -1,3 +1,5 @@
+import { logger } from "../logger.js";
+
 export class Comentario {
     static #insertStmt = null;
     static #getAllStmt = null;
@@ -32,30 +34,35 @@ export class Comentario {
 
 
     }
-    static insertComentario(comentario) {
+
+    static #insert(comentario) {
 
         try {
-            if (comentario.valoracion)
-                this.#insertStmt.run({
-                    valoracion: comentario.valoracion,
-                    descripcion: comentario.descripcion,
-                    id_receta: comentario.id_receta,
-                    user: comentario.user
-                });
-            else
-                this.#insertStmt.run({
-                    valoracion: 0,
-                    descripcion: comentario.descripcion,
-                    id_receta: comentario.id_receta,
-                    user: comentario.user
-                });
+            this.#insertStmt.run({
+                valoracion: (comentario.valoracion || 0),
+                descripcion: comentario.descripcion,
+                id_receta: comentario.id_receta,
+                user: comentario.user
+            });
         }
         catch (e) {
-            console.log("Error al insertar comentario");
             if (this.#insertStmt == null)
                 console.log("insert result null");
-            throw new ErrorInsertComentario(comentario.id, { cause: e });
+            const id = comentario.id;
+            throw new ErrorInsertComentario(id, "Error al insertar el comentario");
         }
+    }
+
+    static insertComentario(comentario){
+        try{
+            Comentario.#insert(comentario);
+        }
+        catch(e){
+            logger.error(e.message);
+            throw new Error("Error al insertar el comentario en la base de datos");
+
+        }
+
     }
 
     // Añade un like al comentario
@@ -113,14 +120,19 @@ export class Comentario {
     // Obtener todos los comentarios
     static getAllComentarios(id_receta, user) {
 
-        const comentarios = this.#getAllStmt.all({ id_receta });
+        const arrayComentarios = this.#getAllStmt.all({ id_receta });
+        let comentarios = [];
 
-        comentarios.forEach(comentario => {
+        for(const rawComentario of arrayComentarios){
+            const { id, creador, id_receta, valoracion, descripcion} = rawComentario;
+            let user_liked = false;
             if (user)
-                comentario.user_liked = Valoracion.usuarioYaHaValorado(comentario.id, user); // En este caso, hay que devolver si el usuario ha dado like porque, a diferencia de las recetas, 
-            //a los comentarios se le puede dar like desede la misma lista
-
-        });
+                user_liked = Valoracion.usuarioYaHaValorado(id, user);
+            // En este caso, hay que devolver si el usuario ha dado like porque, a diferencia de las recetas, 
+            //a los comentarios se le puede dar like desde la misma lista
+            const comentario = new Comentario(creador, id_receta, valoracion, descripcion, id, user_liked);
+            comentarios.push(comentario);
+        }
 
         return comentarios;
     }

@@ -2,19 +2,21 @@ document.addEventListener('DOMContentLoaded', init);
 
 function init() {
     const formComentario = document.forms.namedItem("form-create-comentario");
-    formComentario.addEventListener("submit", createSubmit);
+    if (formComentario) {
+        formComentario.addEventListener("submit", createSubmit);
 
-    const id = formComentario.elements.namedItem("id"); //Si por lo que sea, se cambia el id. Aunque en circunstancias normales no pasa
-    id.addEventListener("input", compruebaId);
+        const id = formComentario.elements.namedItem("id"); //Si por lo que sea, se cambia el id. Aunque en circunstancias normales no pasa
+        id.addEventListener("input", compruebaId);
 
-    const descripcion = formComentario.elements.namedItem("descripcion");
-    descripcion.addEventListener("input", compruebaDescripcion);
+        const descripcion = formComentario.elements.namedItem("descripcion");
+        descripcion.addEventListener("input", compruebaDescripcion);
+    }
 }
 
 async function createSubmit(e) {
     e.preventDefault();
     const formComentario = e.target;
-    const id =  formComentario.elements.namedItem("id").value;
+    const id = formComentario.elements.namedItem("id").value;
     try {
         const formData = new FormData(formComentario);
         const response = await postData('/comentario/createComentario', formData);
@@ -89,7 +91,7 @@ function compruebaDescripcion(e) {
     if (!esDescripcionValida) {
         descripcion.parentNode.querySelector('span.error').textContent = '⚠';
     }
-    else{
+    else {
         descripcion.parentNode.querySelector('span.error').textContent = '';
     }
 

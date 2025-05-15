@@ -3,7 +3,7 @@ import { render } from '../utils/render.js';
 import { Contiene, Ingrediente } from './Ingrediente.js';
 
 // Agregar un nuevo ingrediente
-export function doCreateIngrediente(req, res) {
+export function doCreateIngrediente(req, res, next) {
     const result = validationResult(req);
     if (!result.isEmpty()) {
         const errores = result.mapped();
@@ -27,7 +27,7 @@ export function doCreateIngrediente(req, res) {
 }
 
 // Eliminar un ingrediente
-export function deleteIngrediente(req, res) {
+export function deleteIngrediente(req, res, next) {
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -52,7 +52,7 @@ export function deleteIngrediente(req, res) {
     res.redirect(`paginas/index`);  //TODO: CAMBIAR URL
 }
 
-export function addIngrediente(req, res){
+export function addIngrediente(req, res, next){
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -68,7 +68,7 @@ export function addIngrediente(req, res){
 
     try{
         Ingrediente.getIngredienteByName(id_ingrediente);
-        Contiene.insert(id_ingrediente, id_receta, cantidad);
+        Contiene.insertContiene(id_ingrediente, id_receta, cantidad);
     }
     catch(err){
         req.log.error("Error al añadir el ingrediente '%i': %s a la receta '%i'", id_ingrediente, err.message, id_receta);

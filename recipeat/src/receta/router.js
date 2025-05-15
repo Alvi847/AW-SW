@@ -4,7 +4,7 @@ import { viewReceta, viewRecetas, createReceta, doCreateReceta, viewUpdateReceta
 import multer from 'multer';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'url';
-import { body, check } from 'express-validator';
+import { body, check, param } from 'express-validator';
 import { autenticado } from '../middleware/auth.js';
 import asyncHandler from 'express-async-handler';
 
@@ -17,10 +17,12 @@ const recetasRouter = express.Router();
 
 //Ruta para ver la lista de recetas
 recetasRouter.get('/listaRecetas', asyncHandler(viewRecetas));
-recetasRouter.post('/listaRecetas', autenticado('/receta/listaRecetas'), viewRecetas);
+recetasRouter.post('/listaRecetas', autenticado('/receta/listaRecetas'), asyncHandler(viewRecetas));
 
 //Ruta para ver una receta
-recetasRouter.get('/verReceta/:id', asyncHandler(viewReceta));
+recetasRouter.get('/verReceta/:id'
+    , param('id', "El id debe ser un número entero").isNumeric()
+    , asyncHandler(viewReceta));
 
 // Ruta para crear una receta (vista)
 recetasRouter.get('/createReceta'
@@ -37,25 +39,29 @@ recetasRouter.post('/createReceta'
     , body('descripcion', 'No puede ser vacío').trim().notEmpty()
     , body('descripcion', 'Máximo 200 caracteres').trim().isLength({ min: 1, max: 200 })
     , [
-        body('ingredientes_id', 'Añade ingredientes').isArray({ min: 1 })
+        body('ingredientes_id', 'Añade ingredientes').isArray({min: 1})
             .custom((value, { req }) => {
-                // Aquí comprobamos si los arrays de ids y cantidades tienen la misma longitud, para saber si cada ingrediente tiene su correpondiente cantidad
-                if (value.length !== req.body.ingredientes_cantidad.length) {
-                    throw new Error('Cada ingrediente debe tener asociada una cantidad');
-                }
-                return true;
+                    // Aquí comprobamos si los arrays de ids y cantidades tienen la misma longitud, para saber si cada ingrediente tiene su correpondiente cantidad
+                    if (value.length !== req.body.ingredientes_cantidad.length) {
+                        throw new Error('Cada ingrediente debe tener asociada una cantidad');
+                    }
+                    return true;
+                
             })
             .custom((value, { req }) => {
-                // Aquí nos aseguramos de que no se ha seleccionado un ingrediente varias veces
-                // Usamos un Set auxiliar (almacena valores y no permite que estos se repitan) para encontrar ingredientes duplicados en tiempo lineal con respecto al número de ingredientes
-                const set = new Set();
-                for (let i = 0; i < value.length; i++) {
-                    if (set.has(value[i])) {
-                       throw new Error('Añade cada ingrediente sólo 1 vez');  // Se ha encontrado un duplicado
+                if (Array.isArray(value) && Array.isArray(req.body.ingredientes_cantidad)) {
+                    // Aquí nos aseguramos de que no se ha seleccionado un ingrediente varias veces
+                    // Usamos un Set auxiliar (almacena valores y no permite que estos se repitan) para encontrar ingredientes duplicados en tiempo lineal con respecto al número de ingredientes
+                    const set = new Set();
+                    for (let i = 0; i < value.length; i++) {
+                        if (set.has(value[i])) {
+                            throw new Error('Añade cada ingrediente sólo 1 vez');  // Se ha encontrado un duplicado
+                        }
+                        set.add(value[i]);
                     }
-                    set.add(value[i]);
+                    return true;  // No hay duplicados
                 }
-                return true;  // No hay duplicados
+                return Number.isFinite(Number(value)); // Si no son arrays, entonces miramos si son enteros
             }),
         body('ingredientes.*')
             .isNumeric().withMessage('Cada ingrediente debe ser un número')
@@ -100,6 +106,7 @@ recetasRouter.post('/createReceta'
 // Ruta para actualizar una receta (vista)
 recetasRouter.get('/updateReceta/:id'
     , autenticado('/receta/listaRecetas')
+    , param('id', "El id debe ser un número entero").isNumeric()
     , asyncHandler(viewUpdateReceta));
 
 // Ruta para procesar la actualización de una receta
@@ -150,6 +157,7 @@ recetasRouter.post('/removeReceta'
 
 // Ruta para cuando se da like a una receta
 recetasRouter.post('/like'
+    , body('id', 'Debe ser un entero').isNumeric()
     , autenticado('/receta/listaRecetas')
     , asyncHandler(likeReceta));
 

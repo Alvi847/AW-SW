@@ -52,9 +52,9 @@ import { render } from '../utils/render.js';
 }*/
 
 // Agregar un nuevo comentario
-export function doCreateComentario(req, res) {
+export function doCreateComentario(req, res, next) {
     const result = validationResult(req);
-
+    const err = {};
     const requestWith = req.get('X-Requested-With');
     const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
     if (esAjax)
@@ -62,81 +62,51 @@ export function doCreateComentario(req, res) {
 
     if (!result.isEmpty()) {
         const errores = result.mapped();
-        const datos = matchedData(req);
-
-        const { id } = req.body;
-
-        console.log("Body: ", req.body);
 
         if (esAjax) {
             req.log.debug("Devuelto código 400 a la petición AJAX");
             return res.status(400).json({ status: 400, errores });
         }
+        
+        err.statusCode = 400;
+        err.message = "El contenido del comentario no debe ser vacío y el id de receta debe ser el correcto";
 
-        if (id && Receta.exists(id)) {
-
-            console.log("Id: ", id);
-            console.log("Devolviendo errores de descripción...");
-
-            const user = req.session.username;
-            const receta = Receta.getRecetaById(id, user); // Método para obtener la receta por ID
-            const comentarios = Comentario.getAllComentarios(id, user);
-
-            let hayComentarios = true;
-            if (comentarios.length == 0)
-                hayComentarios = false;
-
-
-            console.log("Errores", errores);
-            return render(req, res, 'paginas/verReceta', {
-                receta,
-                comentarios,
-                hayComentarios,
-                errores,
-                datos,
-            });
-        }
-        else {
-            console.log("Volviendo al index...");
-            return render(req, res, 'paginas/index', {
-                datos,
-                errores,
-            });
-        }
+        return next(err, req, res);
     }
 
-    const { descripcion, id } = req.body;
+    const { descripcion, id } = matchedData(req);
     const user = req.session.username;
-    if (req.session == null || req.session.login === undefined) {
-        req.log.error("El usuario no esta logueado, no se puede crear un comentario");
+
+    const nuevoComentario = new Comentario(user, id, null, descripcion, null);
+
+    try {
+        // Insertar comentario en la base de datos
+        Comentario.insertComentario(nuevoComentario);
+        if (esAjax) {
+            req.log.debug("Devuelto código 200 a la petición AJAX");
+            return res.status(200).json({ ok: true });
+        }
+    }
+    catch (e) {
+        req.log.error(e);
 
         if (esAjax) {
-            req.log.debug("Devuelto código 401 a la petición AJAX");
-            return res.status(401).json({ ok: true });
+            req.log.debug("Devuelto código 500 a la petición AJAX");
+            return res.status(500).json({ ok: true });
         }
-    }
-    else {
-        const nuevoComentario = new Comentario(user, id, null, descripcion, null);
 
-        try {
-            // Insertar comentario en la base de datos
-            Comentario.insertComentario(nuevoComentario);
-            if (esAjax) {
-                req.log.debug("Devuelto código 200 a la petición AJAX");
-                return res.status(200).json({ ok: true });
-            }
-        }
-        catch (e) {
-            req.log.error(e);
-        }
+        err.message = "Error al crear el comentario";
+        err.statusCode = 500;
+        next(err, req, res);
     }
+
 
     // Redirigir al finalizar
     res.redirect(`/receta/verReceta/${id}`);
 }
 
 // Eliminar un comentario
-export function deleteComentario(req, res) {
+export function deleteComentario(req, res, next) {
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -148,48 +118,52 @@ export function deleteComentario(req, res) {
         });
     }
 
-    const { id } = req.body;
+    const { id } = matchedData(req);
     const user = req.session.username;
+    const err = {};
 
     let comentario = null
 
-    if (id != null && req.session.login) {
+    if (id != null) {
         try {
             comentario = Comentario.getComentarioById(id, null);
+
+            if (comentario != null && (user === comentario.user || req.session.rol === "A")) {
+                Comentario.deleteComentario(id); // Elimina el comentario por ID
+                req.log.info("Comentario '%i' eliminado con exito", id);
+                res.redirect(`/receta/verReceta/${comentario.id_receta}`); // Ahora redirige a la página de la receta  
+            }
+            else if (receta != null) {
+                req.log.error("Error al elminar el comentario '%i', de '%s': acceso no permitido al usuario '%s'", id, comentario.user, user);
+                err.message = "Acceso no permitido";
+                next(err, req, res);
+            }
         }
         catch (e) {
             req.log.error("Error interno al intentar eliminar el comentario '%i': '%s'", id, e.message);
-            res.status(500).send();
-        }
-        if (comentario != null && (user === comentario.user || req.session.rol === "A")) {
-
-            try {
-                Comentario.deleteComentario(id); // Elimina el comentario por ID
-                req.log.info("Comentario '%i' eliminado con exito", id);
-            }
-            catch (e) {
-                req.log.error("Error interno al intentar eliminar el comentario '%i': '%s'", id, e.message);
-                res.status(500).send();
-            }
-            res.redirect(`/receta/verReceta/${comentario.id_receta}`); // Ahora redirige a la página de la receta  
-        }
-        else if (receta != null) {
-            req.log.error("Error al elminar el comentario '%i', de '%s': acceso no permitido al usuario '%s'", id, comentario.user, user);
-            res.status(403);
+            err.message = "Error interno al intentar eliminar el comentario";
+            next(err, req, res);
         }
     }
     else if (!id) {
         req.log.error("Error al elminar un comentario: id inválido");
-        res.status(400).send();
-    }
-    else {
-        req.log.error("Error al eliminar el comentario '%i': Usuario no registrado", id);
-        res.status(403).send();
+        err.message = "Error interno al intentar eliminar el comentario";
+        next(err, req, res);
     }
 }
 
 // Añadir una valoración al comentario (He usado un formato de likes, pero si queremos poner estrellas ponemos estrellas)
-export function valorarComentario(req, res) {
+export function valorarComentario(req, res, next) {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+        const datos = matchedData(req);
+        return render(req, res, `paginas/listaRecetas`, {
+            datos,
+            errores,
+        });
+    }
+
     const { id } = req.body;
     const user = req.session.username
 

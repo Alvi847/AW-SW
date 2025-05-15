@@ -1,3 +1,5 @@
+import { logger } from "../logger.js";
+
 /**
  * Clase de los ingredientes de las recetas, tambien se utiliza en los pedidos de ingredientes
  */
@@ -27,7 +29,7 @@ export class Ingrediente {
         this.#changePrecioStmt = db.prepare('UPDATE Ingredientes SET precio = @precio WHERE nombre = @nombre');
     }
 
-    static insertIngrediente(ingrediente) {
+    static #insert(ingrediente) {
         try {
             this.#insertStmt.run({
                 nombre: ingrediente.nombre,
@@ -36,10 +38,20 @@ export class Ingrediente {
             });
         }
         catch (e) {
-            console.log("Error al insertar ingrediente");
             if (this.#insertStmt == null)
                 console.log("insert result null");
-            throw new ErrorInsertIngrediente(ingrediente.nombre, { cause: e });
+            const nombre = ingrediente.nombre;
+            throw new ErrorInsertIngrediente(nombre, { cause: e });
+        }
+    }
+
+    static insertIngrediente(ingrediente){
+        try{
+            Ingrediente.#insert(ingrediente);
+        }
+        catch(e){
+            logger.error(e.message);
+            throw new Error("Error al insertar ingrediente en la base de datos");
         }
     }
 
@@ -66,7 +78,15 @@ export class Ingrediente {
     // Obtener todos los ingredientes
     static getAllIngredientes() {
 
-        const ingredientes = this.#getAllStmt.all();
+        const arrayIngredientes = this.#getAllStmt.all();
+
+        let ingredientes = [];
+
+        for (const rawIngrediente of arrayIngredientes) {
+            const { id, nombre, precio, unidad } = rawIngrediente;
+            const ingrediente = new Ingrediente( nombre, precio, unidad, id);
+            ingredientes.push(ingrediente);
+        }
 
         return ingredientes;
     }
@@ -74,15 +94,21 @@ export class Ingrediente {
     #nombre; // Nombre del ingrediente
     precio; // Precio del ingrediente
     unidad; // Cadena que indica en qué unidad se mide el ingrediente, DE MOMENTO LO DEJO EN GRAMOS POR DEFECTO
+    #id; // Id del ingrediente
 
-    constructor(nombre, precio, unidad = 'g') {
-        this.nombre = nombre;
+    constructor(nombre, precio, unidad = 'g', id = null) {
+        this.#nombre = nombre;
         this.precio = precio;
         this.unidad = unidad;
+        this.#id = id;
     }
 
     get nombre() {
         return this.#nombre;
+    }
+
+    get id() {
+        return this.#id;
     }
 }
 
@@ -115,7 +141,7 @@ export class Contiene {
         this.#getAllByRecetaStmt = db.prepare('SELECT i.nombre, i.unidad, c.cantidad FROM Ingredientes i JOIN Contiene c ON i.id = c.id_ingrediente WHERE c.id_receta = @id_receta');
     }
 
-    static insert(id_ingrediente, id_receta, cantidad) {
+    static #insert(id_ingrediente, id_receta, cantidad) {
         try {
             this.#insertStmt.run({
                 id_receta: id_receta,
@@ -124,10 +150,19 @@ export class Contiene {
             });
         }
         catch (e) {
-            console.log("Error al insertar en la tabla Contiene");
             if (this.#insertStmt == null)
                 console.log("insert result null");
             throw new ErrorInsertContiene(id_ingrediente, id_receta, { cause: e });
+        }
+    }
+
+    static insertContiene(id_ingrediente, id_receta, cantidad){
+        try{
+            Contiene.#insert(id_ingrediente, id_receta, cantidad);
+        }
+        catch(e){
+            logger.error(e.message);
+            throw new Error("Error al insertar en la tabla Contiene");
         }
     }
 
@@ -150,17 +185,35 @@ export class Contiene {
         const result = this.#deleteAllByRecetaStmt.run({
             id_receta,
         });
-        //if (result.changes === 0) throw new Error(`No se encontró la receta ${id_receta}`); 
-        
     }
 
-    static getIngredientesByReceta(id_receta){
-        const ingredientes = this.#getAllByRecetaStmt.all({id_receta});
+    static getIngredientesByReceta(id_receta) {
+        const arrayIngredientes = this.#getAllByRecetaStmt.all({ id_receta });
 
-        return ingredientes;
+        let ingredientesContenidos = [];
+
+        for (const rawIngrediente of arrayIngredientes) {
+            const { cantidad, nombre, unidad } = rawIngrediente;
+            const contingencia = new Contiene( nombre, unidad, cantidad);
+            ingredientesContenidos.push(contingencia);
+        }
+
+        return ingredientesContenidos;
     }
 
-    cantidad; // Cantidad del ingrediente
+    cantidad; // Cantidad del ingrediente contenido
+    #nombre; // Nombre del ingrediente contenido
+    unidad; // Unidad del ingrediente contenido
+
+    constructor(nombre, unidad, cantidad) {
+        this.#nombre = nombre;
+        this.cantidad = cantidad;
+        this.unidad = unidad;
+    }
+
+    get nombre() {
+        return this.#nombre;
+    }
 
 }
 

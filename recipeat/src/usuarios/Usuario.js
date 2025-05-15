@@ -2,6 +2,7 @@
 import bcrypt from "bcryptjs";
 import { ErrorDatos } from "../db.js";
 import { Receta } from "../receta/Receta.js";
+import { logger } from "../logger.js";
 
 export const RolesEnum = Object.freeze({
     USUARIO: 'U',
@@ -21,7 +22,7 @@ export class Usuario {
         this.#getByUsernameStmt = db.prepare('SELECT * FROM Usuarios WHERE username = @username');
         this.#insertStmt = db.prepare('INSERT INTO Usuarios(username, password, nombre, rol, email, imagen) VALUES (@username, @password, @nombre, @rol, @email, @imagen)');
         this.#updateStmt = db.prepare('UPDATE Usuarios SET username = @username, password = @password, rol = @rol, nombre = @nombre, email = @email, imagen = @imagen WHERE id = @id');
-        this.#getUserByIdStmt = db.prepare( 'SELECT * FROM Usuarios WHERE id = @id');
+        this.#getUserByIdStmt = db.prepare('SELECT * FROM Usuarios WHERE id = @id');
         this.#getAllStmt = db.prepare('SELECT id, username, nombre, email, rol FROM Usuarios');
         this.#deleteStmt = db.prepare('DELETE FROM Usuarios WHERE username = @username');
     }
@@ -31,7 +32,17 @@ export class Usuario {
      * @returns { Usuario[] } Un array de usuarios sin la contraseña
      */
     static getAllUsuarios() {
-        return this.#getAllStmt.all();
+        const arrayUsuarios = this.#getAllStmt.all();
+
+        let usuarios = [];
+
+        for (const rawUsuario of arrayUsuarios) {
+            const { username, nombre, rol, id, email, imagen } = rawUsuario;
+            const usuario = new Usuario(username, null, nombre, email, rol, id, imagen);
+            usuarios.push(usuario);
+        }
+
+        return usuarios;
     }
 
     /**
@@ -56,12 +67,12 @@ export class Usuario {
      * @param {string} username Nombre de usuario que se intenta buscar
      * @returns { boolean } 
      */
-    static exists(username){
-        try{
+    static exists(username) {
+        try {
             Usuario.getUsuarioByUsername(username);
             return true;
         }
-        catch(e){
+        catch (e) {
             return false;
         }
     }
@@ -73,7 +84,7 @@ export class Usuario {
      * @returns { Usuario } El usuario con ese id en la base de datos
      * @throws { UsuarioNoEncontrado } Error si el usuario no existe en la base de datos
      */
-    static getUsuarioById( iduser ) {
+    static getUsuarioById(iduser) {
         const usuario = this.#getUserByIdStmt.get({ iduser });
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
 
@@ -98,12 +109,12 @@ export class Usuario {
             const rol = usuario.rol;
             const email = usuario.#email;
             const imagen = usuario.imagen;
-            const datos = {username, password, nombre, email, rol, imagen};
+            const datos = { username, password, nombre, email, rol, imagen };
 
             result = this.#insertStmt.run(datos);
 
             usuario.#id = result.lastInsertRowid;
-        } catch(e) { // SqliteError: https://github.com/WiseLibs/better-sqlite3/blob/master/docs/api.md#class-sqliteerror
+        } catch (e) { // SqliteError: https://github.com/WiseLibs/better-sqlite3/blob/master/docs/api.md#class-sqliteerror
             if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') {
                 throw new UsuarioYaExiste(usuario.#username);
             }
@@ -127,7 +138,7 @@ export class Usuario {
         const rol = usuario.rol;
         const email = usuario.#email;
         const imagen = usuario.imagen;
-        const datos = {username, password, nombre, email, rol, id, imagen};
+        const datos = { username, password, nombre, email, rol, id, imagen };
 
         const result = this.#updateStmt.run(datos);
         if (result.changes === 0) throw new UsuarioNoEncontrado(username);
@@ -139,20 +150,20 @@ export class Usuario {
      * Borra un usuario de la base de dato, junto con sus recetas
      * 
      * @param { Usuario } username 
-     * @returns El resultado de la operacion
+     * @returns { boolean } true si la operación tiene éxito
      * @throws { UsuarioNoEncontrado } Si el usuario no existe
      * @throws { Error } Si ha habido algún error borrando las recetas
      */
     static delete(username) {
-        try{
+        try {
             Receta.deleteAllRecetas(username);
         }
-        catch(e){
+        catch (e) {
             throw new Error(e.message);
         }
         const result = this.#deleteStmt.run({ username });
         if (result.changes === 0) throw new UsuarioNoEncontrado(username);
-        return result;
+        return true;
     }
 
     /**
@@ -172,7 +183,7 @@ export class Usuario {
         }
 
         const passwordMatch = await bcrypt.compare(password, usuario.#password);
-        if ( ! passwordMatch ) throw new UsuarioOPasswordNoValido(username);
+        if (!passwordMatch) throw new UsuarioOPasswordNoValido(username);
 
         return usuario;
     }
@@ -214,13 +225,13 @@ export class Usuario {
 
     get email() {
         return this.#email;
-      }
-    
+    }
+
     set email(valor) {
         this.#email = valor;
     }
-      
-      
+
+
     get id() {
         return this.#id;
     }
@@ -229,7 +240,7 @@ export class Usuario {
         /* Nota: este método reemplaza set password() { } ya 
         que no se pueden hacer asíncronos los métodos get / set
         */
-        this.#password = bcrypt.hashSync(nuevoPassword);    
+        this.#password = bcrypt.hashSync(nuevoPassword);
     }
 
     get username() {
@@ -300,25 +311,56 @@ export class Preferencias {
     }
 
     static getAllPreferencias() {
-        return this.#getAllStmt.all();
+        const arrayPreferencias = this.#getAllStmt.all();
+
+        let preferencias = [];
+
+        for (const rawPreferencia of arrayPreferencias) {
+            const { user, gusto, nivel, dieta } = rawPreferencia;
+            const preferencia = new Preferencias(user, gusto, nivel, dieta);
+            preferencias.push(preferencia);
+        }
+
+        return preferencias;
     }
 
     static getPreferenciasUsuario(user) {
-        return this.#getByUserStmt.get({ user });
+        const rawPreferencia = this.#getByUserStmt.get({ user });
+        const { gusto, nivel, dieta } = rawPreferencia;
+        return new Preferencias(user, gusto, nivel, dieta);
     }
 
     static insertPreferencia(preferencia) {
-        return this.#insertStmt.run({
-            user: preferencia.user,
-            gusto: preferencia.gusto,
-            nivel: preferencia.nivel,
-            dieta: preferencia.dieta
-        });
+        try {
+            this.#insertStmt.run({
+                user: preferencia.user,
+                gusto: preferencia.gusto,
+                nivel: preferencia.nivel,
+                dieta: preferencia.dieta
+            });
+            return preferencia;
+        }
+        catch (e) {
+            logger.error("Error al insertar la preferencia en la base de datos: %s", e.cause);
+            throw new Error("Error al insertar la preferencia en la base de datos");
+        }
     }
 
     static deletePreferencias(user) {
-        return this.#deleteStmt.run({ user });
+        try{ 
+            this.#deleteStmt.run({ user });
+            return true;
+        }
+        catch(e){
+            logger.error("Error al borrar la preferencia de la base de datos: %s", e.cause);
+            throw new Error("Error al borrar la preferencia de la base de datos");
+        }
     }
+
+    user; // Usuario que ha establecido las preferencias
+    gusto; // Filtro según el gusto
+    nivel; // Filtro según el nivel de dificultad
+    dieta; // Filtro según la dieta
 
     constructor(user, gusto, nivel, dieta) {
         this.user = user;
@@ -326,5 +368,6 @@ export class Preferencias {
         this.nivel = nivel;
         this.dieta = dieta;
     }
+
 }
 

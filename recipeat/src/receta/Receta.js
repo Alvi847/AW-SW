@@ -45,64 +45,80 @@ export class Receta {
 
     // Obtener recetas por usuario
     static getRecetasPorUsuario(username) {
-        const recetas = this.#getRecetasByUserStmt.all({ username });
+        const arrayRecetas = this.#getRecetasByUserStmt.all({ username });
+
+        let recetas = [];
+
+        for (const rawReceta of arrayRecetas) {
+            const { nombre, descripcion, modo_preparacion, likes, id, user, imagen, gusto, nivel, dieta } = rawReceta;
+            let receta = new Receta(nombre, descripcion, modo_preparacion, likes, id, user, false, imagen, gusto, nivel, dieta);
+            const ingredientes = Contiene.getIngredientesByReceta(id);
+            receta.ingredientes = ingredientes.map(i => i.nombre.toLowerCase());
+            recetas.push(receta);
+        }
+
         return recetas;
     }
 
-   static getFavoritosPorUsuario(username) {
-    const favoritos = this.#getFavoritosByUserStmt.all({ username });
+    static getFavoritosPorUsuario(username) {
+        const arrayFavoritos = this.#getFavoritosByUserStmt.all({ username });
 
-    favoritos.forEach(f => {
-        const ingredientes = Contiene.getIngredientesByReceta(f.id);
-        f.ingredientes = ingredientes.map(i => i.nombre.toLowerCase());
-    });
+        let recetas = [];
 
-    return favoritos;
-}
+        for (const rawReceta of arrayFavoritos) {
+            const { nombre, descripcion, modo_preparacion, likes, id, user, imagen, gusto, nivel, dieta } = rawReceta;
+            let receta = new Receta(nombre, descripcion, modo_preparacion, likes, id, user, false, imagen, gusto, nivel, dieta);
+            const ingredientes = Contiene.getIngredientesByReceta(id);
+            receta.ingredientes = ingredientes.map(i => i.nombre.toLowerCase());
+            recetas.push(receta);
+        }
 
-static getTopRecetas(limit = 10) {
-    const todas = this.getAllRecetas();
-    // Ordena por número de likes descendente y toma las primeras `limit`
-    return todas
-        .sort((a, b) => (b.likes ?? 0) - (a.likes ?? 0))
-        .slice(0, limit);
-}
-
-
-static getRecomendadasPersonalizadas(username) {
-    const favoritas = this.getFavoritosPorUsuario(username);
-    const idsFavoritas = favoritas.map(r => r.id);
-
-    // Ingredientes de recetas favoritas
-    const ingredientesFavoritos = new Set();
-    for (const receta of favoritas) {
-        const ings = Contiene.getIngredientesByReceta(receta.id);
-        ings.forEach(i => ingredientesFavoritos.add(i.nombre.toLowerCase()));
+        return recetas;
     }
 
-    // Todas las recetas
-    const todas = this.getAllRecetas();
+    static getTopRecetas(limit = 10) {
+        const todas = this.getAllRecetas();
+        // Ordena por número de likes descendente y toma las primeras `limit`
+        return todas
+            .sort((a, b) => (b.likes ?? 0) - (a.likes ?? 0))
+            .slice(0, limit);
+    }
 
-    // Recomendadas por ingredientes similares
-    const porIngredientes = todas.filter(r => {
-        if (idsFavoritas.includes(r.id)) return false;
-        return (r.ingredientes || []).some(i => ingredientesFavoritos.has(i));
-    });
 
-    // Top recetas con muchos likes (y que no estén ya en favoritas o en la lista anterior)
-    const yaIncluidas = new Set([...idsFavoritas, ...porIngredientes.map(r => r.id)]);
-    
-    const MIN_LIKES = 10; 
-    const topLikes = todas
-        .filter(r => !yaIncluidas.has(r.id) && (r.likes ?? 0) >= MIN_LIKES)
-        .sort((a, b) => (b.likes ?? 0) - (a.likes ?? 0))
-        .slice(0, 10);
+    static getRecomendadasPersonalizadas(username) {
+        const favoritas = this.getFavoritosPorUsuario(username);
+        const idsFavoritas = favoritas.map(r => r.id);
 
-    // Unimos y quitamos duplicados si fuera el caso
-    const recomendadas = [...porIngredientes, ...topLikes];
+        // Ingredientes de recetas favoritas
+        const ingredientesFavoritos = new Set();
+        for (const receta of favoritas) {
+            const ings = Contiene.getIngredientesByReceta(receta.id);
+            ings.forEach(i => ingredientesFavoritos.add(i.nombre.toLowerCase()));
+        }
 
-    return recomendadas.slice(0, 10); // la seccion de recomendados mostrara 10 recetas
-}
+        // Todas las recetas
+        const todas = this.getAllRecetas();
+
+        // Recomendadas por ingredientes similares
+        const porIngredientes = todas.filter(r => {
+            if (idsFavoritas.includes(r.id)) return false;
+            return (r.ingredientes || []).some(i => ingredientesFavoritos.has(i));
+        });
+
+        // Top recetas con muchos likes (y que no estén ya en favoritas o en la lista anterior)
+        const yaIncluidas = new Set([...idsFavoritas, ...porIngredientes.map(r => r.id)]);
+
+        const MIN_LIKES = 10;
+        const topLikes = todas
+            .filter(r => !yaIncluidas.has(r.id) && (r.likes ?? 0) >= MIN_LIKES)
+            .sort((a, b) => (b.likes ?? 0) - (a.likes ?? 0))
+            .slice(0, 10);
+
+        // Unimos y quitamos duplicados si fuera el caso
+        const recomendadas = [...porIngredientes, ...topLikes];
+
+        return recomendadas.slice(0, 10); // la seccion de recomendados mostrara 10 recetas
+    }
 
 
     /**
@@ -148,13 +164,18 @@ static getRecomendadasPersonalizadas(username) {
      */
     static getAllRecetas() {
 
-        const recetas = this.#getAllStmt.all();
+        const arrayRecetas = this.#getAllStmt.all();
 
-        recetas.forEach(r => {
-            const ingredientes = Contiene.getIngredientesByReceta(r.id);
-            r.ingredientes = ingredientes.map(i => i.nombre.toLowerCase());
-        });
-        
+        let recetas = [];
+
+        for (const rawReceta of arrayRecetas) {
+            const { nombre, descripcion, modo_preparacion, likes, id, user, imagen, gusto, nivel, dieta } = rawReceta;
+            let receta = new Receta(nombre, descripcion, modo_preparacion, likes, id, user, false, imagen, gusto, nivel, dieta);
+            const ingredientes = Contiene.getIngredientesByReceta(id);
+            receta.ingredientes = ingredientes.map(i => i.nombre.toLowerCase());
+            recetas.push(receta);
+        }
+
         return recetas;
     }
 
@@ -163,7 +184,7 @@ static getRecomendadasPersonalizadas(username) {
      * @param {Receta} receta Una receta con los datos que se tienen que insertar en la tabla  
      * @returns {Receta} El objeto de la receta nueva con su id
      */
-    static insertReceta(receta) {
+    static #insert(receta) {
         let result;
         try {
             let user = receta.user;
@@ -172,18 +193,8 @@ static getRecomendadasPersonalizadas(username) {
             const safeGusto = receta.gusto && receta.gusto.trim() !== '' ? receta.gusto : null;
             const safeNivel = receta.nivel && receta.nivel.trim() !== '' ? receta.nivel : null;
             const safeDieta = receta.dieta && receta.dieta.trim() !== '' ? receta.dieta : null;
-            
-            console.log("⏳ Insertando receta con los datos:");
-            console.log({
-                nombre: receta.nombre,
-                descripcion: receta.descripcion,
-                modo_preparacion: receta.modo_preparacion,
-                user: user, // ojo: estabas usando receta.user, pero defines arriba `user = receta.user`
-                imagen: receta.imagen,
-                gusto: safeGusto,
-                nivel: safeNivel,
-                dieta: safeDieta
-            });
+
+            logger.debug("⏳ Insertando receta con los datos: ", receta);
             result = this.#insertStmt.run({
                 nombre: receta.nombre,
                 descripcion: receta.descripcion,
@@ -194,7 +205,9 @@ static getRecomendadasPersonalizadas(username) {
                 nivel: receta.nivel,
                 dieta: receta.dieta
             });
-            console.log("✅ Resultado del insert:", result);
+            logger.debug("✅ Resultado del insert corercto");
+            return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion,
+                receta.likes, result.lastInsertRowid, null, false, receta.imagen, receta.gusto, receta.nivel, receta.dieta);
         }
         catch (e) {
             e.message += "Error al crear la receta";
@@ -203,8 +216,17 @@ static getRecomendadasPersonalizadas(username) {
             throw new ErrorInsertReceta(receta.id, { cause: e });
         }
 
-        return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion,
-            receta.likes, result.lastInsertRowid, null, false, receta.imagen, receta.gusto, receta.nivel, receta.dieta);
+    }
+
+    // Función que se llama desde fuera para hacer el insert
+    static insertReceta(receta) {
+        try {
+            return Receta.#insert(receta);
+        }
+        catch (e) {
+            logger.error(e.message);
+            throw new Error("Error al insertar la receta en la base de datos");
+        }
     }
 
     /**
@@ -250,7 +272,7 @@ static getRecomendadasPersonalizadas(username) {
      *
      * @param {Receta} receta receta DE MISMO ID con los nuevos datos
      */
-    static updateReceta(receta) {
+    static #update(receta) {
         let result
         try {
             result = this.#updateStmt.run({
@@ -274,6 +296,17 @@ static getRecomendadasPersonalizadas(username) {
 
         if (result.changes === 0) throw new Error(`No se encontró la receta con ID ${receta.id}`);
         return receta;
+    }
+
+    // Método para acceder al update desde fuera
+    static updateReceta(receta){
+        try{
+            return Receta.#update(receta);
+        }
+        catch(e){
+            logger.error(e);
+            throw new Error("Error al actualizar la receta en la base de datos");
+        }
     }
 
     /**
@@ -360,7 +393,7 @@ export class Like {
      * @param {int} id_receta id de la receta
      * @param {string} username username del usuario
      */
-    static addLike(id_receta, username) {
+    static #insert(id_receta, username) {
         try {
             this.#insertLikeStmt.run({
                 id_receta,
@@ -376,8 +409,19 @@ export class Like {
             throw new ErrorInsertLike(id_receta, { cause: e });
         }
     }
+
+    // Se llama desde fuera para insertar el like
+    static addLike(id_receta, username) {
+        try {
+            Like.#insert(id_receta, username);
+        }
+        catch (e) {
+            logger.error(e.message);
+            throw new Error("Error al insertar el like en la base de datos");
+        }
+    }
     /**
-     * Obtén una lista de recetas a las que el usuario ha dado like
+     * Obtén una lista de ids de recetas a las que el usuario ha dado like
      * @param {string} username username del usuario
      * @returns lista de ids de recetas
      */
@@ -386,7 +430,14 @@ export class Like {
             username
         });
 
-        return result;
+        let likes = [];
+
+        for (const rawLike of result) {
+            const { id_receta } = rawLike;
+            likes.push(id_receta);
+        }
+
+        return likes;
     }
 
     /**
