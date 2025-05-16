@@ -124,13 +124,13 @@ export class Comentario {
         let comentarios = [];
 
         for(const rawComentario of arrayComentarios){
-            const { id, creador, id_receta, valoracion, descripcion} = rawComentario;
+            const { id, user, id_receta, valoracion, descripcion} = rawComentario;
             let user_liked = false;
             if (user)
                 user_liked = Valoracion.usuarioYaHaValorado(id, user);
             // En este caso, hay que devolver si el usuario ha dado like porque, a diferencia de las recetas, 
             //a los comentarios se le puede dar like desde la misma lista
-            const comentario = new Comentario(creador, id_receta, valoracion, descripcion, id, user_liked);
+            const comentario = new Comentario(user, id_receta, valoracion, descripcion, id, user_liked);
             comentarios.push(comentario);
         }
 
