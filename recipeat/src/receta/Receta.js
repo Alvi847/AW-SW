@@ -7,6 +7,7 @@ export class Receta {
     static #insertStmt = null;
     static #updateStmt = null;
     static #deleteStmt = null;
+    static #deleteAllByUserStmt = null;
     static #addLikeStmt = null;
     static #removeLikeStmt = null;
     static #getByIdStmt = null;
@@ -22,8 +23,10 @@ export class Receta {
         this.#insertStmt = db.prepare('INSERT INTO Recetas (nombre, descripcion, modo_preparacion, user, imagen, gusto, nivel, dieta) VALUES (@nombre, @descripcion, @modo_preparacion, @user, @imagen, @gusto, @nivel, @dieta)');
         //*modificar receta del usuario 
         this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, modo_preparacion = @modo_preparacion, likes = @likes, imagen = @imagen, gusto = @gusto, nivel = @nivel, dieta = @dieta WHERE id = @id');
-        //*eliminar recetas del usuario
+        //*eliminar receta
         this.#deleteStmt = db.prepare('DELETE FROM Recetas WHERE id = @id');
+        //*Borrar recetas del usuario
+        this.#deleteAllByUserStmt = db.prepare('DELETE FROM Recetas WHERE user = @user');
         //*actualizar likes de la receta
         this.#addLikeStmt = db.prepare('UPDATE Recetas SET likes = likes + 1 WHERE id = @id');
         //*eliminar like del usuario sobre una receta 
@@ -207,13 +210,13 @@ export class Receta {
             });
             logger.debug("✅ Resultado del insert corercto");
             return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion,
-                receta.likes, result.lastInsertRowid, null, false, receta.imagen, receta.gusto, receta.nivel, receta.dieta);
+                receta.likes, result.lastInsertRowid, user, false, receta.imagen, receta.gusto, receta.nivel, receta.dieta);
         }
         catch (e) {
             e.message += "Error al crear la receta";
             if (this.#insertStmt == null)
-                e.message += "insert result null";
-            throw new ErrorInsertReceta(receta.id, { cause: e });
+                e.message += "insert stmt null";
+            throw new ErrorInsertReceta(receta.nombre, receta.user, { cause: e });
         }
 
     }
@@ -299,11 +302,11 @@ export class Receta {
     }
 
     // Método para acceder al update desde fuera
-    static updateReceta(receta){
-        try{
+    static updateReceta(receta) {
+        try {
             return Receta.#update(receta);
         }
-        catch(e){
+        catch (e) {
             logger.error(e);
             throw new Error("Error al actualizar la receta en la base de datos");
         }
@@ -314,27 +317,17 @@ export class Receta {
      * @param {int} id 
      */
     static deleteReceta(id) {
-        Contiene.deleteAllByReceta(id);
-        Comentario.deleteAllComentarios(id);
-        Like.retiraTodosLikes(id);
         const result = this.#deleteStmt.run({ id });
         if (result.changes === 0) throw new Error(`No se encontró la receta con ID ${id}`);
     }
 
     /**
-     * Elimina todas las recetas de un usuario, no es muy eficiente
+     * Elimina todas las recetas de un usuario
      * @param { Usuario } username 
      */
     static deleteAllRecetas(username) {
-        const recetas = this.getRecetasPorUsuario(username);
-        recetas.forEach(element => {
-            const id = element.id;
-            Contiene.deleteAllByReceta(id);
-            Comentario.deleteAllComentarios(id);
-            Like.retiraTodosLikes(id);
-            const result = this.#deleteStmt.run({ id });
-            if (result.changes === 0) throw new Error(`No se encontró la receta con ID ${id}`);
-        });
+        const result = this.#deleteAllByUserStmt.run({ user: username });
+        if (result.changes === 0) throw new Error(`No se encontró la receta con ID ${id}`);
     }
 
     #id; // El id de la receta
@@ -486,11 +479,12 @@ export class Like {
 export class ErrorInsertReceta extends Error {
     /**
      * 
-     * @param {int} id 
+     * @param {string} nombre 
+     * @param {string} username
      * @param {ErrorOptions} [options]
      */
-    constructor(id, options) {
-        super(`La receta ${id} no pudo ser insertada en la base de datos`, options);
+    constructor(nombre, username, options) {
+        super(`La receta ${nombre} de ${username} no pudo ser insertada en la base de datos`, options);
         this.name = 'ErrorInsertReceta';
     }
 }

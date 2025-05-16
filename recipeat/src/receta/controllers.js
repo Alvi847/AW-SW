@@ -18,6 +18,7 @@ import sanitizeHtml from 'sanitize-html';
  */
 import * as fs from 'node:fs/promises';
 import { Contiene } from '../ingrediente/Ingrediente.js';
+import { logger } from '../logger.js';
 
 // Ver las recetas (página de inicio de recetas)
 
@@ -122,7 +123,7 @@ export async function doCreateReceta(req, res, next) {
     const requestWith = req.get('X-Requested-With');
     const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
     if (esAjax)
-        req.log.debug("Petición AJAX recibida para doCreateReceta()");
+        logger.debug("Petición AJAX recibida para doCreateReceta()");
 
     if (!result.isEmpty()) {
         const errores = result.mapped();
@@ -131,7 +132,7 @@ export async function doCreateReceta(req, res, next) {
         const datos = matchedData(req);
 
         if (esAjax) {
-            req.log.debug("Devuelto código 400 a la petición AJAX");
+            logger.debug("Devuelto código 400 a la petición AJAX");
             return res.status(400).json({ status: 400, errores });
         }
 
@@ -176,11 +177,10 @@ export async function doCreateReceta(req, res, next) {
             Contiene.insertContiene(ingredientes_id[i], id_receta, ingredientes_cantidad[i]);
         }
 
-
         // Redirigir o devolver un mensaje de éxito
 
         if (esAjax) {
-            req.log.debug("Devuelto código 200 a la petición AJAX");
+            logger.debug("Devuelto código 200 a la petición AJAX");
             return res.status(200).json({ ok: true });
         }
 

@@ -71,7 +71,6 @@ export class Pedido {
      * @throws {Error} Un error de borrado
      */
     static deletePedido(id) {
-        PedidoContiene.deleteAllByPedido(id);
         const result = this.#deleteStmt.run({ id });
         if (result.changes === 0) {
             logger.error("Error al borrar pedido de la base de datos");
@@ -155,7 +154,7 @@ export class PedidoContiene {
         if (this.#getAllByPedidoStmt !== null) return;
 
         // Añadir un ingrediente a un pedido
-        this.#insertStmt = db.prepare('INSERT INTO Pedidos_Contiene (id_PEDIDO, id_ingrediente, cantidad) VALUES (@id_pedido, @id_ingrediente, @cantidad)');
+        this.#insertStmt = db.prepare('INSERT INTO Pedidos_Contiene (id_pedido, id_ingrediente, cantidad) VALUES (@id_pedido, @id_ingrediente, @cantidad)');
 
         // Borrar un ingrediente de un pedido
         this.#deleteStmt = db.prepare('DELETE FROM Pedidos_Contiene WHERE id_pedido = @id_pedido AND id_ingrediente = @id_ingrediente');
@@ -258,19 +257,17 @@ export class PedidoContiene {
     /**
      * Borra el ingrediente dado de todos los pedidos en los que está
      * @param {int} id_ingrediente 
-     * @throws {Error} Un error de acceso a la base de datos
      */
     static deleteAllByIngrediente(id_ingrediente) {
         const result = this.#deleteAllByIngredienteStmt.run({
             id_ingrediente: id_ingrediente,
         });
-        if (result.changes === 0) throw new Error(`No se encontró el ingrediente con id ${id}`);
     }
 
     /**
      * Borra todos los ingredientes contenidos en el pedido dado
      * @param {int} id_pedido 
-     * @throws {Error} Un error de acceso a la base de datos
+     * @throws {Error} Un error de acceso a la base de datos o si el pedido está vacío
      */
     static deleteAllByPedido(id_pedido) {
         const result = this.#deleteAllByPedidoStmt.run({

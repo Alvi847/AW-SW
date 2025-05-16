@@ -147,7 +147,7 @@ export class Usuario {
     }
 
     /**
-     * Borra un usuario de la base de dato, junto con sus recetas
+     * Borra un usuario de la base de datos
      * 
      * @param { Usuario } username 
      * @returns { boolean } true si la operación tiene éxito
@@ -155,12 +155,6 @@ export class Usuario {
      * @throws { Error } Si ha habido algún error borrando las recetas
      */
     static delete(username) {
-        try {
-            Receta.deleteAllRecetas(username);
-        }
-        catch (e) {
-            throw new Error(e.message);
-        }
         const result = this.#deleteStmt.run({ username });
         if (result.changes === 0) throw new UsuarioNoEncontrado(username);
         return true;

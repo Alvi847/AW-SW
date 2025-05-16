@@ -4,13 +4,14 @@ import { Contiene, Ingrediente } from './Ingrediente.js';
 
 // Agregar un nuevo ingrediente
 export function doCreateIngrediente(req, res, next) {
-    const result = validationResult(req);
 
     const requestWith = req.get('X-Requested-With');
     const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
     if (esAjax)
         req.log.debug("Petición AJAX recibida para doCreateIngrediente()");
 
+
+    const result = validationResult(req);
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
@@ -19,7 +20,6 @@ export function doCreateIngrediente(req, res, next) {
             req.log.debug("Devuelto código 400 a la petición AJAX");
             return res.status(400).json({ status: 400, errores });
         }
-
         return render(req, res, 'paginas/index', { //TODO: CAMBIAR URL
             datos,
             errores,
@@ -33,7 +33,7 @@ export function doCreateIngrediente(req, res, next) {
     try {
         Ingrediente.insertIngrediente(ingrediente);
 
-        req.log.info("Ingrediente '%s' registrado (Precio/unidad: %f/%s)", nombre, precio, unidad);
+        req.log.info("Ingrediente '%i' registrado (Precio/unidad: %f/%s)", nombre, precio, unidad);
 
         if (esAjax) {
             req.log.debug("Devuelto código 200 a la petición AJAX");
@@ -41,7 +41,7 @@ export function doCreateIngrediente(req, res, next) {
         }
 
         // Redirigir al finalizar
-        return res.redirect(`/usuarios/administrar`);
+        return res.redirect(`/usuarios/administrar`);  //TODO: CAMBIAR URL
     }
     catch (e) {
         req.log.error("Error al crear el ingrediente: %s", e.message);
@@ -51,54 +51,68 @@ export function doCreateIngrediente(req, res, next) {
         err.statusCode = 500;
         err.message = "Error al crear el ingrediente";
 
-        next(err, req, res);
+        return next(err, req, res);
     }
 }
 
 // Eliminar un ingrediente
 export function deleteIngrediente(req, res, next) {
 
+    const requestWith = req.get('X-Requested-With');
+    const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
+    if (esAjax)
+        req.log.debug("Petición AJAX recibida para deleteIngrediente()");
+
     const result = validationResult(req);
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
+
+        if (esAjax) {
+            req.log.debug("Devuelto código 400 a la petición AJAX");
+            return res.status(400).json({ status: 400, errores });
+        }
         return render(req, res, `paginas/index`, { //TODO: CAMBIAR URL
             datos,
             errores,
         });
     }
 
-    const id_ingrediente = matchedData(req);
+    const { id } = matchedData(req);
 
     try {
-        Ingrediente.deleteIngrediente(id_ingrediente);
+        Ingrediente.deleteIngrediente(Number(id));
+
+        req.log.info("Se ha borrado el ingrediente con id: %i", id);
+
+        if (esAjax) {
+            req.log.debug("Devuelto código 200 a la petición AJAX");
+            return res.status(200).json({ ok: true });
+        }
+        // Redirigir al finalizar
+        return res.redirect(`/usuarios/administrar`);  //TODO: CAMBIAR URL
     }
     catch (e) {
-        req.log.error("Error al eliminar el ingrediente '%i': %s ", id_ingrediente, e.message);
+        req.log.error("Error al eliminar el ingrediente '%i': %s", id, e.message);
 
         const err = {};
 
         err.statusCode = 500;
         err.message = "Error al borrar el ingrediente";
 
-        next(err, req, res);
-
+        return next(err, req, res);
     }
-
-    // Redirigir al finalizar
-    res.redirect(`paginas/index`);  //TODO: CAMBIAR URL
 }
 
 // Cambiar los datos de un ingrdiente
 export function updateIngrediente(req, res, next) {
-    const result = validationResult(req);
 
     const requestWith = req.get('X-Requested-With');
     const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
     if (esAjax)
         req.log.debug("Petición AJAX recibida para updateIngrediente()");
 
-
+    const result = validationResult(req);
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
@@ -159,12 +173,11 @@ export function updateIngrediente(req, res, next) {
         err.statusCode = 500;
         err.message = "Se produjo un error al actualizar el ingrediente";
 
-        next(err, req, res);
+        return next(err, req, res);
     }
 
 }
 
-// Añade un ingrediente a una receta
 export function addIngrediente(req, res, next) {
 
     const result = validationResult(req);
@@ -180,7 +193,7 @@ export function addIngrediente(req, res, next) {
     const { nombre, id_receta, cantidad } = matchedData(req);
 
     try {
-        const id_ingrediente = Ingrediente.getIngredienteById(nombre).id;
+        const id_ingrediente = Ingrediente.getIngredienteByName(nombre).id;
         Contiene.insertContiene(id_ingrediente, id_receta, cantidad);
     }
     catch (e) {

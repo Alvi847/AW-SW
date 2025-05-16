@@ -31,7 +31,7 @@ export class Ingrediente {
         this.#deleteStmt = db.prepare('DELETE FROM Ingredientes WHERE id = @id');
 
         //*Cambiar el precio y/o unidad del ingrediente
-        this.#updateStmt = db.prepare('UPDATE Ingredientes SET precio = @precio, unidad = @unidad WHERE id = @id');
+        this.#updateStmt = db.prepare('UPDATE Ingredientes SET nombre = @nombre, precio = @precio, unidad = @unidad WHERE id = @id');
     }
 
     /**
@@ -79,7 +79,7 @@ export class Ingrediente {
      * @throws {Error} Un error si no existe el ingrediente
      */
     static #update(precio, unidad, id, nombre) {
-        const result = this.#updateStmt.run({ precio, unidad, id });
+        const result = this.#updateStmt.run({ nombre, precio, unidad, id });
         if (result.changes === 0) throw new Error(`No se encontró el ingrediente con id ${id}`);
     }
 
@@ -107,34 +107,29 @@ export class Ingrediente {
      * @throws {Error} Un error de acceso a la base de datos
      */
     static deleteIngrediente(id) {
-        Contiene.deleteAllByIngrediente(id);
-        PedidoContiene.deleteAllByIngrediente(id);
         const result = this.#deleteStmt.run({ id });
-        if (result.changes === 0) throw new Error(`No se encontró el ingrediente con id ${nombre}`);
+        if (result.changes === 0) throw new Error(`No se encontró el ingrediente con id ${id}`);
     }
 
     /**
      * Obtiene todos los ingredientes de la base de datos con el nombre dado PUEDE HABER VARIOS
      * @param {string} nombre 
-     * @returns {Ingrediente[]} Una lista con los ingredientes
-     * @throws {Error} Un error si no existen ingredientes con ese nombre
+     * @returns {Ingrediente[]} Una lista con los ingredientes, puede ser vacía
      */
     static getIngredientesByName(nombre) {
         const arrayIngredientes = this.#getByNameStmt.all({ nombre });
-        if (arrayIngredientes.length === 0)
-            throw new Error(`No se encontró un ingrediente con nombre ${nombre}`);
-        else {
 
-            let ingredientes = [];
 
-            for (const rawIngrediente of arrayIngredientes) {
-                const { id, nombre, precio, unidad } = rawIngrediente;
-                const ingrediente = new Ingrediente(nombre, precio, unidad, id);
-                ingredientes.push(ingrediente);
-            }
+        let ingredientes = [];
 
-            return ingredientes;
+        for (const rawIngrediente of arrayIngredientes) {
+            const { id, nombre, precio, unidad } = rawIngrediente;
+            const ingrediente = new Ingrediente(nombre, precio, unidad, id);
+            ingredientes.push(ingrediente);
         }
+
+        return ingredientes;
+
     }
 
     /**
@@ -153,15 +148,11 @@ export class Ingrediente {
 
     /**
      * Obtiene todos los ingredientes de la base de datos
-     * @returns {Ingrediente[]} Una lista con todos los ingredientes
-     * @throws {Error} Un error si no hay ingredientes en la base de datos
+     * @returns {Ingrediente[]} Una lista con todos los ingredientes, puede ser vacía
      */
     static getAllIngredientes() {
 
         const arrayIngredientes = this.#getAllStmt.all();
-
-        if (arrayIngredientes.length === 0)
-            throw new Error(`No hay ingredientes en la base de datos`);
 
         let ingredientes = [];
 
@@ -311,25 +302,21 @@ export class Contiene {
     /**
      * Elimina un ingrediente de todas las recetas a las que pertenece
      * @param {int} id_ingrediente 
-     * @throws {Error} Un error si el ingrediente no está en ninguna receta
      */
     static deleteAllByIngrediente(id_ingrediente) {
         const result = this.#deleteAllByIngredienteStmt.run({
             id_ingrediente: id_ingrediente,
         });
-        if (result.changes === 0) throw new Error(`No se encontró el ingrediente con id ${id_ingrediente}`);
     }
 
     /**
      * Elimina todos los ingredientes de una receta dada
      * @param {int} id_receta 
-     * @throws {Error} Un error si se produce
      */
     static deleteAllByReceta(id_receta) {
         const result = this.#deleteAllByRecetaStmt.run({
             id_receta,
         });
-        if (result.changes === 0) throw new Error(`Se ha producido un error al intentar eliminar los ingredientes de la receta ${id_receta}`);
     }
 
     /**

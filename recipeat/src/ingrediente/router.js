@@ -14,10 +14,12 @@ const ingredientesRouter = express.Router();
 // Ruta para agregar un ingrediente
 ingredientesRouter.post('/createIngrediente'
     , autenticado('/') // TODO: CAMBIAR URL
-    , tieneRol()
     , body('nombre', 'No puede ser vacío').notEmpty()
     , body('nombre', 'Sólo puede contener letras').trim().matches(/^[\p{L}\s]*$/u)
-    , body('unidad', 'No puede ser vacío').notEmpty()
+    , body('nombre', 'Máximo 50 caracteres').isLength({min:1, max:50})
+    , body('unidad', 'No puede ser vacía').notEmpty()
+    , body('unidad', 'La unidad contiene caracteres no permitidos').trim().matches(/^[\p{L}/]*$/u)
+    , body('unidad', 'Máximo 15 caracteres').isLength({min:1, max:15}) // Por si se quiere poner la palabra entera, en vez de una abreviación
     , body('precio', 'No puede ser vacío').notEmpty()
     , body('precio', 'Debe ser un número').isNumeric()
     , asyncHandler(doCreateIngrediente));
@@ -36,7 +38,10 @@ ingredientesRouter.post('/updateIngrediente'
     , body('id', 'Id inválido').notEmpty().isNumeric()
     , body('nombre', 'No puede ser vacío').notEmpty()
     , body('nombre', 'Sólo puede contener letras').trim().matches(/^[\p{L}\s]*$/u)
+    , body('nombre', 'Máximo 50 caracteres').isLength({min:1, max:50})
     , body('unidad', 'No puede ser vacío').notEmpty()
+    , body('unidad', 'La unidad contiene caracteres no permitidos').trim().matches(/^[\p{L}/]*$/u)
+    , body('unidad', 'Máximo 15 caracteres').isLength({min:1, max:15})
     , body('precio', 'No puede ser vacío').notEmpty()
     , body('precio', 'Debe ser un número').isNumeric()
     , asyncHandler(updateIngrediente));
@@ -46,6 +51,7 @@ ingredientesRouter.post('/addIngredienteToReceta'
     , autenticado('/') // TODO: CAMBIAR URL
     , body('nombre', 'No puede ser vacío').notEmpty()
     , body('nombre', 'Sólo puede contener letras').trim().matches(/^[\p{L}\s]*$/u)
+    , body('nombre', 'Máximo 50 caracteres').isLength({min:1, max:50})
     , body('id_receta', 'No puede ser vacío').notEmpty()
     , body('cantidad', 'No puede ser vacío').notEmpty()
     , body('cantidad', 'Debe ser un número').isNumeric()
