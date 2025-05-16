@@ -188,10 +188,13 @@ export async function doCreateReceta(req, res, next) {
     }
     catch (e) {
         req.log.error("No se ha podido crear la receta: '%s'", e.message);
-        let contenido = 'paginas/createReceta';
-        render(req, res, contenido, {
-            errores: {}
-        });
+
+        const err = {};
+        
+        err.statusCode = 500;
+        err.message = "Se produjo un error al crear la receta";
+
+        next(err, req, res);
     }
 }
 
@@ -291,7 +294,7 @@ export async function updateReceta(req, res, next) {
             if (esAjax) {
                 req.log.debug("Devuelto código 500 a la petición AJAX");
                 return res.status(500).json({ ok: false });
-            }   
+            }
 
             err.message = "Ha ocurrido un error al editar la receta";
             err.statusCode = 500;
@@ -408,7 +411,7 @@ export function viewMisRecetas(req, res, next) {
 
         err.statusCode = 500;
         err.message = "Error al obtener las recetas";
-        
+
         next(err, req, res);
     }
 }

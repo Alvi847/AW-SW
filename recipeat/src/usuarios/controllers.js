@@ -3,6 +3,7 @@ import { render } from '../utils/render.js';
 import { validationResult, matchedData } from 'express-validator';
 import { Receta } from '../receta/Receta.js';
 import { logger } from '../logger.js';
+import { Ingrediente } from '../ingrediente/Ingrediente.js';
 
 export function viewLogin(req, res, next) {
     render(req, res, 'paginas/login', {
@@ -349,12 +350,17 @@ export async function updatePerfil(req, res, next) {
 export async function viewAdministrar(req, res, next) {
     try {
         const usuarios = Usuario.getAllUsuarios();
-        render(req, res, 'paginas/administrar', { usuarios });
+        const ingredientes = Ingrediente.getAllIngredientes();
+        render(req, res, 'paginas/administrar', { usuarios, ingredientes });
     } catch (error) {
-        console.error(error);
-        render(req, res, 'paginas/home', {
-            error: 'No se pudo cargar la vista de administración'
-        });
+        req.log.error(error.message);
+        
+        const err = {};
+
+        err.statusCode = 500;
+        err.message = 'No se pudo cargar la vista de administración';
+
+        next(err, req, res);
     }
 }
 

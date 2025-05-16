@@ -49,6 +49,7 @@ async function crearLineaIngrediente() {
 
     const input = document.createElement('input');
     input.type = 'number';
+    input.step = "0.01";
     input.min = 0;
     input.placeholder = 'Cantidad';
     input.name = `ingredientes_cantidad[]`; // Usando el mismo nombre se envía como un array

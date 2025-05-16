@@ -1,7 +1,7 @@
 import { memoryStorage } from 'multer';
 import { render } from '../utils/render.js';
 
-export function errorHandler (err, req, res, next) {
+export function errorHandler(err, req, res, next) {
 
     if (res.headersSent) {
         req.logger.error(err, 'An error occurred after request was sent')
@@ -37,6 +37,16 @@ export function errorHandler (err, req, res, next) {
             message
         });
     }
+
+    // Si es una petición AJAX se genera un json con el mensaje
+    const requestWith = req.get('X-Requested-With');
+    const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
+    
+    if (esAjax) {
+        req.log.debug(`Devuelto código ${statusCode} a la petición AJAX`);
+        return res.status(statusCode).json({ ok: false, message });
+    }
+
     // Si es otro tipo de petición (e.g generada por el usuario) mostramos página de error
     render(req, res, 'paginas/error', {
         message
