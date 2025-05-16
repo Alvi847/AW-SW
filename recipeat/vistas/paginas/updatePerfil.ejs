@@ -17,38 +17,52 @@
         <div class="perfil-detalles">
           <h1>Editar tu perfil</h1>
   
-          <form class="form-editar" action="/usuarios/updatePerfil" method="POST" enctype="multipart/form-data"  class="form-registro">
-
+          <form class="form-editar" action="/usuarios/updatePerfil" method="POST" name="form-actualizar-perfil" enctype="multipart/form-data">
+          
             <div class="perfil-foto">
-              <label for="Imagen">Imagen:</label>             
-              <p class="error"><%- helpers.error(errores, 'imagen' ) %></p>
+              <label for="Imagen">Imagen:</label>
               <input type="file" name="imagen" value="<%= locals.foto ? locals.foto : '' %>">
+              <span class="error"></span>
+              <span class="feedback"></span>
             </div>
-
+          
             <label>Nombre:
               <input type="text" name="nombre" value="<%= usuario.nombre %>" required>
+              <span class="error"></span>
+              <span class="feedback"></span>
             </label>
-  
+          
             <label>Username:
               <input type="text" name="username" value="<%= usuario.username %>" readonly>
+              <span class="error"></span>
+              <span class="feedback"></span>
             </label>
-  
+          
             <label>Email:
               <input type="email" name="email" value="<%= usuario.email %>" required>
+              <span class="error"></span>
+              <span class="feedback"></span>
             </label>
-  
+          
             <label>Nueva contraseña:
               <input type="password" name="password" placeholder="Dejar en blanco si no quieres cambiarla">
+              <span class="error"></span>
+              <span class="feedback"></span>
             </label>
-  
+          
             <div class="botones-perfil">
               <button type="submit" class="guardar">Guardar cambios</button>
               <a href="/usuarios/verPerfil" class="cancelar">Cancelar</a>
             </div>
           </form>
+
         </div>
       </div>  
     </div>
   </div>
+
+  <script src="/js/updatePerfil.js" defer></script>
+  <script src="/js/fetch.js" defer></script>
+
   
   
