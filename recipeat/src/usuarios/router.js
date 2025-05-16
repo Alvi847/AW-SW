@@ -1,7 +1,7 @@
 import { body, param } from 'express-validator';
 import express from 'express';
 import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil, deleteUsuario, viewAdministrar, cambiarRolUsuario, viewPerfilUser, viewFavoritosUser, viewRecetasUser, viewPreferencias, guardarPreferencias } from './controllers.js';
-import { autenticado } from '../middleware/auth.js';
+import { autenticado, tieneRol } from '../middleware/auth.js';
 import asyncHandler from 'express-async-handler';
 import multer from 'multer';
 import { join, dirname } from 'node:path';
@@ -43,14 +43,18 @@ usuariosRouter.post('/updatePerfil', multerFactory.single("imagen")
 usuariosRouter.post('/removeUsuario'
     , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
     , body('username', 'No puede ser vacío').trim().notEmpty()
-    , autenticado('/usuarios/home'), asyncHandler(deleteUsuario));
+    , autenticado('/usuarios/home')
+    , tieneRol()
+    , asyncHandler(deleteUsuario));
 
-usuariosRouter.get('/administrar', autenticado('/usuarios/home'), asyncHandler(viewAdministrar));
+usuariosRouter.get('/administrar', autenticado('/usuarios/home'), tieneRol(), asyncHandler(viewAdministrar));
 
 usuariosRouter.post('/cambiarRol'
     , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
     , body('username', 'No puede ser vacío').trim().notEmpty()
-    , autenticado('/usuarios/home'), asyncHandler(cambiarRolUsuario));
+    , autenticado('/usuarios/home')
+    , tieneRol()
+    , asyncHandler(cambiarRolUsuario));
 
 usuariosRouter.get('/misPreferencias', autenticado('/login'), asyncHandler(viewPreferencias));
 

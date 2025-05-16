@@ -332,7 +332,7 @@ body::-webkit-scrollbar-thumb:hover {
     /* Color del thumb cuando se pasa el mouse */
 }
 
-.pagina-error {
+.pagina-error, .pagina-permisos {
     position: relative;
     margin-top: 100px;
     color: white;

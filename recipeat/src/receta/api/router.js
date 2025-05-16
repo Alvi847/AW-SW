@@ -17,6 +17,6 @@ recetasApiRouter.post('/existe'
     , body('id', 'Falta el id')
     , asyncHandler(checkReceta));
 
-recetasApiRouter.get('/buscar', buscarRecetas);
+recetasApiRouter.get('/buscar', buscarRecetas); //TODO: validación
     
 export default recetasApiRouter;
