@@ -1,3 +1,4 @@
+import { Ingrediente } from "../ingrediente/Ingrediente.js";
 import { logger } from "../logger.js";
 
 /**
@@ -41,10 +42,9 @@ export class Pedido {
             return new Pedido(usuario, result.lastInsertRowid, creacionPedido);
         }
         catch (e) {
-            console.log("Error al insertar pedido");
             if (this.#insertStmt == null)
-                console.log("insert result null");
-            throw new ErrorInsertPedido(pedido.id, { cause: e });
+                console.log("insert stmt null");
+            throw new ErrorInsertPedido(usuario, { cause: e });
         }
     }
 
@@ -56,12 +56,12 @@ export class Pedido {
      */
     static insertPedido(usuario) {
         try {
-            const creacionPedido = new Date();
+            const creacionPedido = new Date().toLocaleString();
             return Pedido.#insert(usuario, creacionPedido);
         }
         catch (e) {
-            logger.error(e.message);
-            throw new Error("Error al insertar el pedido en la base de datos");
+            logger.error(e.cause);
+            throw new Error(`Error al insertar el pedido en la base de datos: ${e.message}`);
         }
     }
 
@@ -82,16 +82,31 @@ export class Pedido {
      * Devuelve el pedido actual del usuario dado 
      * @param {string} usuario 
      * @returns {Pedido} Una instancia del pedido en la base de datos
-     * @throws {Error} Un error de acceso a la base de datos
+     * @throws {Error} Un error de acceso a la base de datos (p. e. no existe el pedido)
      */
     static getPedidoByUsername(usuario) {
         try {
-            const result = this.#getStmt.get({ usuario });
-            return new Pedido(result.usuario, result.id, result.creacion);
+            const result = this.#getStmt.get({ user: usuario });
+            return new Pedido(result.user, result.id, result.creacion);
         }
         catch (e) {
             logger.error(e.message);
             throw new Error("Error al obtener el pedido de la base de datos");
+        }
+    }
+
+    /**
+     * Devuelve un booleano dependiendo de si el usuario dado tiene un pedido en la base de datos o no
+     * @param {string} usuario 
+     * @returns {boolean} true si el usuario tiene un pedido, false en caso contrario 
+     */
+    static exists(usuario){
+        try{
+            Pedido.getPedidoByUsername(usuario);
+            return true;
+        }
+        catch(e){
+            return false;
         }
     }
 
@@ -149,6 +164,7 @@ export class PedidoContiene {
     static #deleteAllByPedidoStmt = null;
     static #getAllByPedidoStmt = null;
     static #updateStmt = null;
+    static #sumaCantidadStmt = null;
 
     static initStatements(db) {
         if (this.#getAllByPedidoStmt !== null) return;
@@ -166,10 +182,13 @@ export class PedidoContiene {
         this.#deleteAllByPedidoStmt = db.prepare('DELETE FROM Pedidos_Contiene WHERE id_pedido = @id_pedido');
 
         // Obtiene los ingredientes de un pedido
-        this.#getAllByPedidoStmt = db.prepare('SELECT i.nombre, i.unidad, c.cantidad FROM Ingredientes i JOIN Pedidos_Contiene c ON i.id = c.id_ingrediente WHERE c.id_pedido = @id_pedido');
+        this.#getAllByPedidoStmt = db.prepare('SELECT i.nombre, i.unidad, i.id, i.precio, c.cantidad FROM Ingredientes i JOIN Pedidos_Contiene c ON i.id = c.id_ingrediente WHERE c.id_pedido = @id_pedido');
 
-        //Cambia la cantidad de un ingrediente en un pedido
+        // Cambia la cantidad de un ingrediente en un pedido
         this.#updateStmt = db.prepare('UPDATE Pedidos_Contiene SET cantidad = @cantidad WHERE id_pedido = @id_pedido AND id_ingrediente = @id_ingrediente');
+    
+        // Incrementa la cantidad de un ingrediente en un pedido
+        this.#sumaCantidadStmt = db.prepare('UPDATE Pedidos_Contiene SET cantidad = cantidad + @cantidad WHERE id_pedido = @id_pedido AND id_ingrediente = @id_ingrediente');
     }
 
     /**
@@ -188,6 +207,8 @@ export class PedidoContiene {
             });
         }
         catch (e) {
+            if(e.code === 'SQLITE_CONSTRAINT_PRIMARYKEY')
+                throw new ErrorIngredienteYaContenido(id_pedido, id_ingrediente, { cause: e });
             throw new ErrorInsertPedidoContiene(id_pedido, id_ingrediente, { cause: e });
         }
     }
@@ -204,8 +225,19 @@ export class PedidoContiene {
             PedidoContiene.#insert(id_ingrediente, id_pedido, cantidad);
         }
         catch (e) {
-            logger.error(e.message);
-            throw Error("Error al insertar el ingrediente en el pedido");
+            if(e instanceof ErrorIngredienteYaContenido){ // Si el ingrediente ya está incrementamos su cantidad
+                try{
+                    PedidoContiene.#incrementaCantidad(cantidad, id_ingrediente, id_pedido);
+                }
+                catch(e){
+                    logger.error(e.cause);
+                    throw Error("Error al incrementar la cantidad del ingrediente en el pedido");
+                }
+            }
+            else{
+                logger.error(e.cause);
+                throw Error("Error al insertar el ingrediente en el pedido");
+            }
         }
     }
 
@@ -219,6 +251,18 @@ export class PedidoContiene {
     static #update(cantidad, id_ingrediente, id_pedido) {
         const result = this.#updateStmt.run({cantidad, id_ingrediente, id_pedido});
         if (result.changes === 0) throw new Error(`No se encontró el ingrediente con id ${id_ingrediente} en el pedido ${id_pedido}`);
+    }
+
+    /**
+     * Incrementa la cantidad de un ingrediente en un pedido
+     * @param {int} cantidad  // la cantidad a sumar a la que ya tenía el ingrediente
+     * @param {int} id_ingrediente
+     * @param {int} id_pedido 
+     * @throws {Error} Un error de acceso a la base de datos 
+     */
+    static #incrementaCantidad(cantidad, id_ingrediente, id_pedido) {
+        const result = this.#sumaCantidadStmt.run({cantidad, id_ingrediente, id_pedido});
+        if (result.changes === 0) throw new Error(`No pudo incrementar la cantidad en ${cantidad} del ingrediente con id ${id_ingrediente} en el pedido ${id_pedido}`);
     }
 
     /**
@@ -287,8 +331,9 @@ export class PedidoContiene {
         let ingredientesContenidos = [];
 
         for (const rawIngrediente of arrayIngredientes) {
-            const { cantidad, nombre, unidad } = rawIngrediente;
-            const contingencia = new PedidoContiene(nombre, unidad, cantidad);
+            const { cantidad, nombre, unidad, id, precio } = rawIngrediente;
+            const ingredienteContenido = new Ingrediente(nombre, precio, unidad, id);
+            const contingencia = new PedidoContiene(ingredienteContenido, cantidad);
             ingredientesContenidos.push(contingencia);
         }
 
@@ -296,28 +341,31 @@ export class PedidoContiene {
     }
 
     cantidad; // Cantidad del ingrediente
-    #nombre_ingrediente // Nombre del ingrediente
-    unidad // Unidad del ingrediente
+    #ingrediente // Instancia del ingrediente contenido
 
-    constructor(nombre_ingrediente, unidad, cantidad) {
-        this.#nombre_ingrediente = nombre_ingrediente;
+    /**
+     * 
+     * @param {Ingrediente} ingrediente 
+     * @param {int} cantidad 
+     */
+    constructor(ingrediente, cantidad) {
+        this.#ingrediente = ingrediente;
         this.cantidad = cantidad;
-        this.unidad = unidad;
     }
 
-    get nombre_ingrediente() {
-        return this.#nombre_ingrediente;
+    get ingrediente() {
+        return this.#ingrediente;
     }
 }
 
 export class ErrorInsertPedido extends Error {
     /**
      * 
-     * @param {id} id 
+     * @param {id} username
      * @param {ErrorOptions} [options]
      */
-    constructor(id, options) {
-        super(`El pedido ${id} no pudo ser insertado en la base de datos`, options);
+    constructor(username, options) {
+        super(`El pedido de ${username} no pudo ser insertado en la base de datos`, options);
         this.name = 'ErrorInsertPedido';
     }
 }
@@ -332,5 +380,18 @@ export class ErrorInsertPedidoContiene extends Error {
     constructor(id_pedido, id_ingrediente, options) {
         super(`El ingrediente ${id_ingrediente} no pudo ser adjuntado al pedido ${id_pedido}`, options);
         this.name = 'ErrorInsertPedidoContiene';
+    }
+}
+
+export class ErrorIngredienteYaContenido extends Error{
+     /**
+     * 
+     * @param {int} id_pedido
+     * @param {int} id_ingrediente 
+     * @param {ErrorOptions} [options]
+     */
+    constructor(id_pedido, id_ingrediente, options) {
+        super(`El ingrediente ${id_ingrediente} ya está contenido en el pedido ${id_pedido}`, options);
+        this.name = 'ErrorIngredienteYaContenido';
     }
 }

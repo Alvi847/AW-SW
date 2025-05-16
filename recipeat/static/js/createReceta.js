@@ -52,7 +52,7 @@ async function crearLineaIngrediente() {
     input.step = "0.01";
     input.min = 0;
     input.placeholder = 'Cantidad';
-    input.name = `ingredientes_cantidad[]`; // Usando el mismo nombre se envía como un array
+    input.name = `ingredientes_cantidad[]`; // Usando "[]" se envía como array
     input.addEventListener("change", compruebaCantidad);
 
     const unidadSpan = document.createElement('span');

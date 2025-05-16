@@ -209,7 +209,7 @@ export class Contiene {
         this.#deleteAllByRecetaStmt = db.prepare('DELETE FROM Contiene WHERE id_receta = @id_receta');
 
         // Obtiene los ingredientes de una receta
-        this.#getAllByRecetaStmt = db.prepare('SELECT i.nombre, i.unidad, c.cantidad FROM Ingredientes i JOIN Contiene c ON i.id = c.id_ingrediente WHERE c.id_receta = @id_receta');
+        this.#getAllByRecetaStmt = db.prepare('SELECT i.nombre, i.id, i.unidad, c.cantidad FROM Ingredientes i JOIN Contiene c ON i.id = c.id_ingrediente WHERE c.id_receta = @id_receta');
 
         //Cambia la cantidad de un ingrediente en una receta
         this.#updateStmt = db.prepare('UPDATE Contiene SET cantidad = @cantidad WHERE id_receta = @id_receta AND id_ingrediente = @id_ingrediente');
@@ -249,7 +249,7 @@ export class Contiene {
             Contiene.#insert(id_ingrediente, id_receta, cantidad);
         }
         catch (e) {
-            logger.error(e.message);
+            logger.error(e.cause);
             throw new Error("Error al insertar en la tabla Contiene");
         }
     }
@@ -330,8 +330,8 @@ export class Contiene {
         let ingredientesContenidos = [];
 
         for (const rawIngrediente of arrayIngredientes) {
-            const { cantidad, nombre, unidad } = rawIngrediente;
-            const contingencia = new Contiene(nombre, unidad, cantidad);
+            const { cantidad, nombre, unidad, id } = rawIngrediente;
+            const contingencia = new Contiene(nombre, unidad, cantidad, id);
             ingredientesContenidos.push(contingencia);
         }
 
@@ -341,15 +341,28 @@ export class Contiene {
     cantidad; // Cantidad del ingrediente contenido
     #nombre; // Nombre del ingrediente contenido
     unidad; // Unidad del ingrediente contenido
+    #id_ingrediente // Id del ingrediente contenido
 
-    constructor(nombre, unidad, cantidad) {
+    /**
+     * 
+     * @param {string} nombre 
+     * @param {int} unidad 
+     * @param {cantidad} cantidad 
+     * @param {int} id_ingrediente 
+     */
+    constructor(nombre, unidad, cantidad, id_ingrediente) {
         this.#nombre = nombre;
         this.cantidad = cantidad;
         this.unidad = unidad;
+        this.#id_ingrediente = id_ingrediente;
     }
 
     get nombre() {
         return this.#nombre;
+    }
+
+    get id_ingrediente() {
+        return this.#id_ingrediente;
     }
 
 }
