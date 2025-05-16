@@ -74,19 +74,19 @@
                         <td data-label="Nombre">
                             <form>
                                 <input id='ingrediente-<%= i.id %>-nombre' type="text" name="nombre"
-                                    value='<%= i.nombre %>'>€<span class="feedback"></span><span class="error"></span>
+                                    value='<%= i.nombre %>'>€<span class="feedback"></span><span class="error"><%- helpers.error(errores, 'nombre' ) %></span>
                             </form>
                         </td>
                         <td data-label="Unidad">
                             <form>
                                 <input id='ingrediente-<%= i.id %>-unidad' type="text" name="unidad"
-                                    value='<%= i.unidad %>'>€<span class="feedback"></span><span class="error"></span>
+                                    value='<%= i.unidad %>'>€<span class="feedback"></span><span class="error"><%- helpers.error(errores, 'unidad' ) %></span>
                             </form>
                         </td>
                         <td data-label="Precio">
                             <form>
                                 <input id='ingrediente-<%= i.id %>-precio' type="number" step="0.01" name="precio"
-                                    value='<%= i.precio %>'>€<span class="feedback"></span><span class="error"></span>
+                                    value='<%= i.precio %>'>€<span class="feedback"></span><span class="error"><%- helpers.error(errores, 'precio' ) %></span>
                             </form>
                         </td>
                         <td data-label="Acciones">
@@ -107,9 +107,9 @@
         <div class="form-create-ingrediente">
             <label for="form-create-ingrediente">Crear un ingrediente:</label>
             <form name="form-create-ingrediente" action="/ingrediente/createIngrediente" method="post">
-                <input type="text" name="nombre" placeholder="nombre"><span class="error"></span>
-                <input type="text" name="unidad" placeholder="unidad"><span class="error"></span>
-                <input type="number" step="0.01" name="precio" placeholder="precio"><span class="error"></span>
+                <input type="text" name="nombre" placeholder="nombre"><span class="error"><%- helpers.error(errores, 'nombre' ) %></span>
+                <input type="text" name="unidad" placeholder="unidad"><span class="error"><%- helpers.error(errores, 'unidad' ) %></span>
+                <input type="number" step="0.01" name="precio" placeholder="precio"><span class="error"><%- helpers.error(errores, 'precio' ) %></span>
                 <button type="submit">Crear ingrediente</button>
             </form>
         </div>
@@ -120,3 +120,4 @@
 <script src="/js/fetch.js" defer></script>
 <script src="/js/tablaIngredientes.js" defer></script>
 <script src="/js/createIngrediente.js" defer></script>
+<script src="/js/mostrarError.js" defer></script>

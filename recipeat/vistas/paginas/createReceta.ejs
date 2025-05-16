@@ -1,99 +1,94 @@
 <div class="create-receta">
-<h1>CREAR RECETA</h1>
-<form action="/receta/createReceta" method="POST" enctype="multipart/form-data" name="form-create-receta">
-	<fieldset>
-		<legend>Añadir receta</legend>
-		<% if (locals.error) { %>
-			<p><strong>
-					<%= locals.error %>
-				</strong></p>
-			<% } %>
-				<div class="nombre">
-					<p class="error" id="errorNombre"><%- helpers.error(errores, 'nombre' ) %></p>
-					<input type="text" name="nombre" placeholder="Nombre de receta"
-					value="<%= locals.nombre ? locals.nombre : '' %>"><span class="error"></span><span class="feedback"></span>
-				</div>
-				<div class="descripcion">
-					<p class="error" id="errorDescripcion"><%- helpers.error(errores, 'descripcion' ) %></p>
-					<textarea name="descripcion" placeholder="Descripción"><%= locals.descripcion ? locals.descripcion : '' %></textarea>
-					<span class="error"></span><span class="feedback"></span>
-				</div>
+    <h1>CREAR RECETA</h1>
+    <form action="/receta/createReceta" method="POST" enctype="multipart/form-data" name="form-create-receta">
+      <fieldset class="fset-crear">
+        <div class="nombre">
+          <label for="nombre">Nombre de receta:</label>
+          <input type="text" name="nombre" id="nombre" placeholder="Nombre de receta">
+          <span class="error"></span><span class="feedback"></span>
+        </div>
 
-				<div class="ingredientes">
-					<p class="error" id="errorIngredientes"><%- helpers.error(errores, 'modo_preparacion' ) %></p>
-					<div class="lista-ingredientes" id="lista-ingredientes">
-					</div>
-					<button name="addIngrediente" type="button">+</button>
-					<button name="removeIngrediente" type="button">-</button>
-					<span class="error"></span><span class="feedback"></span>
-				</div>
+        <div class="descripcion">
+          <label for="descripcion">Descripción:</label>
+          <textarea name="descripcion" id="descripcion" placeholder="Descripción"></textarea>
+          <span class="error"></span><span class="feedback"></span>
+        </div>	
 
-				<div class="preparacion">
-					<p class="error" id="errorPreparacion"><%- helpers.error(errores, 'modo_preparacion' ) %></p>
-					<textarea name="modo_preparacion" placeholder="Modo de preparación"><%= locals.modo_preparacion ? locals.modo_preparacion : '' %></textarea>
-					<span class="error"></span><span class="feedback"></span>
-				</div>
+        <div class="ingredientes-form">
+          <label>Ingredientes:</label>
+          <div id="lista-ingredientes"></div>
+          <div class="ingredientes-botones">
+            <button name="addIngrediente" type="button">+</button>
+            <button name="removeIngrediente" type="button">-</button>
+          </div>
+        </div>
 
-				<div class="receta-imagen">
-					<label for="imagen">Imagen:</label>
-					<p class="error" id="errorImagen"><%- helpers.error(errores, 'imagen' ) %></p>
-					<input type="file" name="imagen" id="imagen" value="<%= locals.foto ? locals.foto : '' %>">
-					<span class="error"></span><span class="feedback"></span>
-				</div>
+        <div class="preparacion">
+          <label for="modo_preparacion">Modo de preparación:</label>
+          <textarea name="modo_preparacion" id="modo_preparacion" placeholder="Modo de preparación"></textarea>
+          <span class="error"></span><span class="feedback"></span>
+        </div>
 
-				<div class="gusto">
-					<label for="gusto">Gusto:</label>
-					<select name="gusto">
-						<option value="">Seleccione un gusto</option>
-						<option value="dulce" <%=locals.gusto==='dulce' ? 'selected' : '' %>>Dulce</option>
-						<option value="salado" <%=locals.gusto==='salado' ? 'selected' : '' %>>Salado</option>
-					</select>
-					<p class="error"><%- helpers.error(errores, 'gusto' ) %></p>
-				</div>
-				
-				<div class="nivel">
-					<label for="nivel">Nivel:</label>
-					<select name="nivel">
-						<option value="">Seleccione un nivel</option>
-						<option value="fácil" <%=locals.nivel==='fácil' ? 'selected' : '' %>>Fácil</option>
-						<option value="medio" <%=locals.nivel==='medio' ? 'selected' : '' %>>Medio</option>
-						<option value="difícil" <%=locals.nivel==='difícil' ? 'selected' : '' %>>Difícil</option>
-					</select>
-					<p class="error"><%- helpers.error(errores, 'nivel' ) %></p>
-				</div>
-				
-				<div class="dieta">
-					<label for="dieta">Dieta:</label>
-					<select name="dieta">
-						<option value="">Seleccione una dieta</option>
-						<option value="vegana" <%=locals.dieta==='vegana' ? 'selected' : '' %>>Vegana</option>
-						<option value="vegetariana" <%=locals.dieta==='vegetariana' ? 'selected' : '' %>>Vegetariana</option>
-						<option value="sin gluten" <%=locals.dieta==='sin gluten' ? 'selected' : '' %>>Sin gluten</option>
-					</select>
-					<p class="error"><%- helpers.error(errores, 'dieta' ) %></p>
-				</div>
+        <div class="receta-imagen">
+          <label for="imagen">Imagen:</label>
+          <input type="file" name="imagen" id="imagen">
+          <span class="error"></span><span class="feedback"></span>
+        </div>
 
-				<button type="submit">Subir receta</button>
-	</fieldset>
-</div>
-<script src="/js/createReceta.js" defer></script>
-<script src="/js/fetch.js" defer></script>
-<script src="https://cdn.ckeditor.com/4.25.1-lts/standard/ckeditor.js"></script>
+        <div class="gusto">
+          <label for="gusto">Gusto:</label>
+          <select name="gusto" id="gusto">
+            <option value="">Seleccione un gusto</option>
+            <option value="dulce">Dulce</option>
+            <option value="salado">Salado</option>
+          </select>
+        </div>
 
-<script>
-  const toolbarConfig = {
-    toolbar: [
-      { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
-      { name: 'paragraph', items: ['NumberedList', 'BulletedList'] },
-      { name: 'insert', items: ['Image', 'Table'] },
-      { name: 'styles', items: ['Format'] },
-      { name: 'tools', items: ['Maximize'] }
-    ]
-  };
+        <div class="nivel">
+          <label for="nivel">Nivel:</label>
+          <select name="nivel" id="nivel">
+            <option value="">Seleccione un nivel</option>
+            <option value="fácil">Fácil</option>
+            <option value="medio">Medio</option>
+            <option value="difícil">Difícil</option>
+          </select>
+        </div>
 
-  CKEDITOR.replace('descripcion', toolbarConfig);
-  CKEDITOR.replace('modo_preparacion', toolbarConfig);
-</script>
+        <div class="dieta">
+          <label for="dieta">Dieta:</label>
+          <select name="dieta" id="dieta">
+            <option value="">Seleccione una dieta</option>
+            <option value="vegana">Vegana</option>
+            <option value="vegetariana">Vegetariana</option>
+            <option value="sin gluten">Sin gluten</option>
+          </select>
+        </div>
 
-  
+        <button type="submit">Subir receta</button>
+      </fieldset>
+    </form>
+  </div>
 
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+
+  <script>
+   const toolbarConfig = {
+  contentsCss: ['/css/editor-style.css'], // Ruta al CSS personalizado
+  bodyClass: 'editor-dark-body', // (opcional) si quieres estilizar más
+ uiColor: '#ffffff', // color de la interfaz (barra superior)
+  toolbar: [
+    { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
+    { name: 'paragraph', items: ['NumberedList', 'BulletedList'] },
+    { name: 'insert', items: ['Image', 'Table'] },
+    { name: 'styles', items: ['Format'] },
+    { name: 'tools', items: ['Maximize'] }
+  ]
+};
+	
+    CKEDITOR.replace('descripcion', toolbarConfig);
+    CKEDITOR.replace('modo_preparacion', toolbarConfig);
+  </script>
+  <script src="/js/createReceta.js"></script>
+  <script src="/js/fetch.js"></script>
+  <script src="/js/mostrarError.js"></script>

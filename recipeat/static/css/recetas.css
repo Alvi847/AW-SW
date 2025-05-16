@@ -25,129 +25,170 @@
             color: red;
         }
 
-        .create-receta,
-        .update-receta {
-            font-family: 'Montserrat', sans-serif;
-        }
+        /* Contenedor principal crear receta*/
+.create-receta {
+  min-width: 500px;
+  min-height: 600px;
+  margin-top: 130px;
+  margin-bottom: 50px;
+  padding: 40px;
+  background-color: #111;
+  border-radius: 12px;
+  border: 1px solid white;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  
+  /* ✅ Añadido para evitar que se salga el contenido */
+  overflow: hidden;
+}
 
-        .create-receta input,
-        .update-receta input {
-            font-family: 'Montserrat', sans-serif;
-        }
+.create-receta {
+  overflow-y: auto; /* ✅ Scroll si se desborda verticalmente */
+}
 
-        /*
-        .create-receta textarea, .update-receta textarea {
-        font-family: 'Montserrat', sans-serif;
-        width: 100%;
-        min-height: 300px;          
-        resize: none;
-        padding: 1rem;
-        border-radius: 8px;
-        border: none;
-        background-color: #1c1c1c;
-        color: #ffffff;
-        box-sizing: border-box;  
-        overflow-y: auto;             
-        box-shadow: 0 0 10px rgba(255,255,255,0.1);
-        }
-
-        .create-receta textarea, .update-receta textarea{
-            font-family: 'Montserrat', sans-serif;
-            resize: none;
-            width: 100%;             
-            height: auto;            
-            min-height: 10em;        // Mínimo 20 filas, equivalente a 20em de altura (aproximadamente 20 líneas) 
-            resize: none;            // No se puede redimensionar 
-            box-sizing: border-box;  // Incluye el padding y borde en el cálculo de ancho y altura 
-        }
-
-        .create-receta fieldset, .update-receta fieldset{
-            height: auto;
-        }
-    */
-        .create-receta form fieldset {
-            width: 100% !important;
-            height: auto !important;
-        }
+.create-receta button[type="submit"] {
+  margin-bottom: 30px; /* nuevo */
+}
 
 
-        .create-receta {
-            max-height: calc(100vh - 120px);
-            /* espacio para el header */
-            overflow-y: auto;
-            margin-top: 100px;
-            padding: 20px;
-            width: 90%;
-            max-width: 1200px;
-            background-color: #111;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            position: relative;
-            /* necesario para el contenedor de scroll */
-        }
 
-        .create-receta form {
-            width: 100%;
-            max-width: 1200px;
-            background-color: rgba(255, 255, 255, 0.03);
-            /* fondo sutilmente translúcido */
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.08);
+        .create-receta h1{
+            text-align: center;
             color: white;
-            font-family: 'Montserrat', sans-serif;
         }
-
-        .create-receta form fieldset {
-            border: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .create-receta fieldset .update-receta fieldset {
-            width: 100%;
-            padding: 2rem;
-            background-color: #121212;
-            border-radius: 12px;
-            border: 1px solid #333;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            margin: 0;
-        }
+        
+        /* Formulario */
+.create-receta form {
+  width: 100%;
+}
 
 
 
+/* Grupos de campo (nombre, descripción, etc.) */
+.create-receta .nombre,
+.create-receta .descripcion,
+.create-receta .ingredientes-form,
+.create-receta .preparacion,
+.create-receta .receta-imagen,
+.create-receta .gusto,
+.create-receta .nivel,
+.create-receta .dieta {
+  display: flex;
+  flex-direction: column;
+}
+
+.gusto , .nivel, .dieta{
+    margin-top: 10px;
+}
+
+.ingredientes-form{
+    margin-top: 10px;
+}
+/* Diferencia visual */
+.create-receta .error {
+  color: #ff4d4d;
+}
+.create-receta .feedback {
+  color: #00cc66;
+}
 
 
-        /* Asegura que el fieldset no limite el ancho 
-    .create-receta fieldset, .update-receta fieldset {
-        width: 100%;
-        padding: 2rem;
-        background-color: #121212;
-        border-radius: 12px;
-        border: 1px solid #333;
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-    }*/
+/* Etiquetas */
+.create-receta label {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #d4af37;
+}
+
+/* Inputs y selects */
+.create-receta input[type="text"],
+.create-receta input[type="file"],
+.create-receta textarea,
+.create-receta select {
+  background-color: #1c1c1c;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.create-receta input[type="number"] {
+  width: 100px; 
+  height: 42px;
+  display: inline-block;
+  margin-left: 18px;
+  margin-top: 12px;
+  vertical-align: middle;
+}
 
 
-        .create-receta::-webkit-scrollbar {
-            width: 10px;
-        }
 
-        .create-receta::-webkit-scrollbar-track {
-            background: #222;
-        }
-
-        .create-receta::-webkit-scrollbar-thumb {
-            background: #555;
-            border-radius: 5px;
-        }
-
-        .create-receta::-webkit-scrollbar-thumb:hover {
-            background: #888;
-        }
+/* Textareas específicos */
+.create-receta textarea {
+  resize: vertical;
+  min-height: 120px;
+  margin-bottom: 10px;
+}
 
 
+/* Lista de ingredientes */
+.lista-ingredientes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
+/* Botones + y - */
+.ingredientes-botones {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.ingredientes-botones button {
+  background-color: #333;
+  color: white;
+  font-weight: bold;
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ingredientes-botones button:hover {
+  background-color: #d4af37;
+  color: black;
+}
+
+/* Botón enviar */
+.create-receta button[type="submit"] {
+  background-color: #d4af37;
+  color: black;
+  font-weight: bold;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  align-self: center;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.create-receta button[type="submit"]:hover {
+  background-color: #bfa129;
+}
+
+span.feedback {
+  font-size: 0.85rem;
+  color: #00cc66;
+  margin-top: 5px;
+}
         #create-comentario textarea {
             font-family: 'Montserrat', sans-serif;
             resize: none;
@@ -344,17 +385,50 @@
             overflow-y: hidden;
         }
 
-
-        fieldset textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 6px;
-            margin-bottom: 16px;
+        .fset-crear{
+            margin:0px;
+            background-color: #111;
+            box-shadow: none !important;
             border: none;
-            border-radius: 6px;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
+            height: 80px;
+            padding: 40px;
+        }       
+        
+       .nombre label{
+        margin-bottom: 2px;
+       }
+
+        .create-receta::-webkit-scrollbar {
+  width: 10px;
+}
+
+.create-receta::-webkit-scrollbar-track {
+  background: #1c1c1c;
+  border-radius: 10px;
+}
+
+.create-receta::-webkit-scrollbar-thumb {
+  background: #d4af37;
+  border-radius: 10px;
+  border: 2px solid #1c1c1c;
+}
+
+.create-receta::-webkit-scrollbar-thumb:hover {
+  background: #bfa129;
+}
+
+
+.unidad {
+  margin-left: 8px; /* o lo que necesites para dar aire */
+  font-weight: bold;
+  color: #d4af37;
+}
+
+.linea-ingrediente {
+  margin-left: 45px; /* Ajusta según lo que necesites */
+}
+
+
 
         .receta-card .receta-imagen {
             position: relative;
@@ -362,6 +436,10 @@
             height: 100%;
             max-width: 100%;
             max-height: inherit;
+        }
+
+        .receta-imagen{
+            margin-top: 10px;
         }
 
         .receta-img {
@@ -899,6 +977,8 @@
             margin-left: 20px;
             padding: 3px;
         }
+
+        
 
         /* Móviles (pantallas hasta 768px) */
         @media (max-width: 768px) {

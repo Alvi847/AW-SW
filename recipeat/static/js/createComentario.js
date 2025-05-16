@@ -27,6 +27,9 @@ async function createSubmit(e) {
                 case 400:
                     await displayErrores(err.response);
                     break;
+                default:
+                    mostrarError(err.response.status, await err.response.json());
+                    break;
             }
         }
         console.error(`Error: `, err);

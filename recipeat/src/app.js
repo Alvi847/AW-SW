@@ -61,7 +61,7 @@ app.use('/pedido', pedidosRouter);
 app.get("/imagen/:id", (request, response) => {
     const __filename = fileURLToPath(import.meta.url);  // He visto que esto es necesario para poder obtener la ruta del script en ES
     let pathImg = join(dirname(__filename), "../uploads", request.params.id);
-    request.log.debug("Recibida peticion para la foto: '%s'", pathImg);
+    logger.debug("Recibida peticion para la foto: '%s'", pathImg);
     response.sendFile(pathImg);
 });
 

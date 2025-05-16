@@ -1,6 +1,7 @@
 import { validationResult, matchedData } from 'express-validator';
 import { render } from '../utils/render.js';
 import { Contiene, Ingrediente } from './Ingrediente.js';
+import { errorAjax } from '../middleware/error.js'
 
 // Agregar un nuevo ingrediente
 export function doCreateIngrediente(req, res, next) {
@@ -49,8 +50,10 @@ export function doCreateIngrediente(req, res, next) {
         const err = {};
 
         err.statusCode = 500;
-        err.message = "Error al crear el ingrediente";
+        err.message = "Hubo un error al crear el ingrediente, sentimos las molestias";
 
+        if (esAjax)
+            return errorAjax(err, res);
         return next(err, req, res);
     }
 }
@@ -100,6 +103,8 @@ export function deleteIngrediente(req, res, next) {
         err.statusCode = 500;
         err.message = "Error al borrar el ingrediente";
 
+        if (esAjax)
+            return errorAjax(err, res);
         return next(err, req, res);
     }
 }
@@ -172,7 +177,8 @@ export function updateIngrediente(req, res, next) {
 
         err.statusCode = 500;
         err.message = "Se produjo un error al actualizar el ingrediente";
-
+        if (esAjax)
+            return errorAjax(err, res);
         return next(err, req, res);
     }
 

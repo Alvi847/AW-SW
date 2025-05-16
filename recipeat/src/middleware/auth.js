@@ -1,4 +1,5 @@
 import { RolesEnum } from '../usuarios/Usuario.js'
+import { errorAjax } from './error.js';
 
 export function autenticado(urlNoAutenticado = '/usuarios/login', urlAutenticado) {
     return (req, res, next) => {
@@ -22,11 +23,12 @@ export function tieneRol(rol = RolesEnum.ADMIN) {
 
         if (req.session != null && req.session.rol === rol) return next();
 
-        if (esAjax)
-            res.status(403).render('pagina', {
-                contenido: 'paginas/noPermisos',
-                session: req.session
-            });
+        if (esAjax){
+            const err = {};
+            err.statusCode = 403;
+            err.message = "No tienes permisos para acceder aquí";
+            errorAjax(err, res);
+        }
         else
             res.render('pagina', {
                 contenido: 'paginas/noPermisos',

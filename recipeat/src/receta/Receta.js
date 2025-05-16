@@ -227,7 +227,7 @@ export class Receta {
             return Receta.#insert(receta);
         }
         catch (e) {
-            logger.error(e.message);
+            logger.error(e.cause);
             throw new Error("Error al insertar la receta en la base de datos");
         }
     }

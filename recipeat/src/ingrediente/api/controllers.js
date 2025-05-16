@@ -11,7 +11,6 @@ import { pick } from 'lodash-es';
  */
 export function listaIngredientes(req, res) {
     const result = validationResult(req);
-    const datos = matchedData(req, { includeOptionals: true });
 
     if (!result.isEmpty()) {
         const errores = result.array();

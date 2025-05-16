@@ -1,5 +1,5 @@
-import { memoryStorage } from 'multer';
 import { render } from '../utils/render.js';
+import { logger } from '../logger.js';
 
 export function errorHandler(err, req, res, next) {
 
@@ -38,17 +38,26 @@ export function errorHandler(err, req, res, next) {
         });
     }
 
-    // Si es una petición AJAX se genera un json con el mensaje
-    const requestWith = req.get('X-Requested-With');
-    const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
-    
-    if (esAjax) {
-        req.log.debug(`Devuelto código ${statusCode} a la petición AJAX`);
-        return res.status(statusCode).json({ ok: false, message });
-    }
-
     // Si es otro tipo de petición (e.g generada por el usuario) mostramos página de error
     render(req, res, 'paginas/error', {
         message
     });
+}
+
+/**
+ * Genera un json con el mensaje para la petición AJAX
+ */   
+export function errorAjax(err, res){
+    let statusCode = 500;
+    if ('statusCode' in err) {
+        statusCode = err.statusCode;
+    }
+
+    let message = 'Oops, ha ocurrido un error';
+    if ('message' in err) {
+        message = err.message;
+    }
+
+    logger.debug(`Devuelto código ${statusCode} a la petición AJAX`);
+    return res.status(statusCode).json({ ok: false, message });
 }

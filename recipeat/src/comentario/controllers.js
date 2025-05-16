@@ -1,7 +1,7 @@
 import { validationResult, matchedData } from 'express-validator';
 import { Comentario } from './Comentario.js';
-import { Receta } from '../receta/Receta.js';
 import { render } from '../utils/render.js';
+import {errorAjax} from '../middleware/error.js'
 
 // Ver los comentarios
 // ACTUALMENTE EN DESUSO, el middleware viewReceta ya carga los comentarios
@@ -67,7 +67,7 @@ export function doCreateComentario(req, res, next) {
             req.log.debug("Devuelto código 400 a la petición AJAX");
             return res.status(400).json({ status: 400, errores });
         }
-        
+
         err.statusCode = 400;
         err.message = "El contenido del comentario no debe ser vacío y el id de receta debe ser el correcto";
 
@@ -90,13 +90,11 @@ export function doCreateComentario(req, res, next) {
     catch (e) {
         req.log.error(e);
 
-        if (esAjax) {
-            req.log.debug("Devuelto código 500 a la petición AJAX");
-            return res.status(500).json({ ok: true });
-        }
-
         err.message = "Error al crear el comentario";
         err.statusCode = 500;
+
+        if (esAjax)
+            return errorAjax(err, res);
         next(err, req, res);
     }
 

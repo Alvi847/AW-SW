@@ -6,6 +6,7 @@ import { render } from '../utils/render.js';
 import { UPLOAD_PATH } from './router.js';
 import { join } from 'node:path';
 import sanitizeHtml from 'sanitize-html';
+import { errorAjax } from '../middleware/error.js';
 
 
 /**
@@ -167,13 +168,14 @@ export async function doCreateReceta(req, res, next) {
             }
         });
 
-
         const nuevaReceta = new Receta(nombre, descripcionSegura, modoPreparacionSeguro, null, null, req.session.username, false, imagen.filename, gusto, nivel, dieta);
 
         const id_receta = Receta.insertReceta(nuevaReceta).id;
 
+        const numIngredientes = (ingredientes_id.length || 1);
+
         // Introducimos todos los ingredientes en la nueva receta
-        for (let i = 0; i < ingredientes_id.length; i++) {
+        for (let i = 0; i < numIngredientes; i++) {
             Contiene.insertContiene(ingredientes_id[i], id_receta, ingredientes_cantidad[i]);
         }
 
@@ -190,10 +192,12 @@ export async function doCreateReceta(req, res, next) {
         req.log.error("No se ha podido crear la receta: '%s'", e.message);
 
         const err = {};
-        
+
         err.statusCode = 500;
         err.message = "Se produjo un error al crear la receta";
 
+        if (esAjax)
+            return errorAjax(err, res);
         next(err, req, res);
     }
 }
@@ -291,13 +295,10 @@ export async function updateReceta(req, res, next) {
         catch (e) {
             req.log.error(e.message);
 
-            if (esAjax) {
-                req.log.debug("Devuelto código 500 a la petición AJAX");
-                return res.status(500).json({ ok: false });
-            }
-
             err.message = "Ha ocurrido un error al editar la receta";
             err.statusCode = 500;
+            if (esAjax)
+                return errorAjax(err, res);
             return next(err, req, res);
         }
         req.log.info("Receta '%i', editada con éxito por '%s'", id, user);
@@ -308,7 +309,13 @@ export async function updateReceta(req, res, next) {
         }
     }
     else
-        req.log.error("La receta '%i',no puede ser editada por '%s'", id, user);
+        logger.error("La receta '%i',no puede ser editada por '%s'", id, user);
+
+    if (esAjax){
+        err.message = "No tienes permisos para editar la receta"
+        err.statusCode = 403;
+        return errorAjax(err, res);
+    }
 
     res.redirect(`/receta/verReceta/${id}`);
 }

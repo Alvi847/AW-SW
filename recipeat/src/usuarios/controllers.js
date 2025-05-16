@@ -351,7 +351,7 @@ export async function viewAdministrar(req, res, next) {
     try {
         const usuarios = Usuario.getAllUsuarios();
         const ingredientes = Ingrediente.getAllIngredientes();
-        render(req, res, 'paginas/administrar', { usuarios, ingredientes });
+        render(req, res, 'paginas/administrar', { errores: [], usuarios, ingredientes });
     } catch (error) {
         req.log.error(error.message);
         
@@ -500,7 +500,7 @@ export function guardarPreferencias(req, res, next) {
         req.log.error("Error al guardar preferencias para '%s': %s", user, e.message);
 
         if (esAjax) {
-            return res.status(500).json({ status: 500, error: 'Error interno del servidor' });
+            return res.status(500).json({ status: 500, message: 'Error interno del servidor' });
         }
 
         return render(req, res, 'paginas/misPreferencias', {
