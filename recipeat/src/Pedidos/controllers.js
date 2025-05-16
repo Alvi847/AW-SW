@@ -82,10 +82,9 @@ export function addIngrediente(req, res, next){
         });
     }
 
-    const {nombre_ingrediente, username, cantidad} = matchedData(req);
+    const {id_ingrediente, username, cantidad} = matchedData(req);
 
     try{
-        const id_ingrediente = Ingrediente.getIngredienteByName(nombre_ingrediente).id;
         const id_pedido = Pedido.getPedidoByUsername(username);
         PedidoContiene.insertaIngredienteEnPedido(id_ingrediente, id_pedido, cantidad);
     }

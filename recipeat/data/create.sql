@@ -7,8 +7,8 @@ CREATE TABLE "Comentarios" (
 	"valoracion"	INTEGER NOT NULL DEFAULT 0,
 	"descripcion"	TEXT NOT NULL,
 	PRIMARY KEY("id" AUTOINCREMENT),
-	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id"),
-	FOREIGN KEY("user") REFERENCES "Usuarios"("username")
+	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id") ON DELETE CASCADE,
+	FOREIGN KEY("user") REFERENCES "Usuarios"("username") ON DELETE CASCADE
 );
 DROP TABLE IF EXISTS "Contiene";
 CREATE TABLE "Contiene" (
@@ -16,8 +16,8 @@ CREATE TABLE "Contiene" (
 	"id_ingrediente"	INTEGER,
 	"cantidad"	INTEGER NOT NULL,
 	PRIMARY KEY("id_receta","id_ingrediente"),
-	FOREIGN KEY("id_ingrediente") REFERENCES "Ingredientes"("id"),
-	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id")
+	FOREIGN KEY("id_ingrediente") REFERENCES "Ingredientes"("id") ON DELETE CASCADE,
+	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id") ON DELETE CASCADE
 );
 DROP TABLE IF EXISTS "Eventos";
 CREATE TABLE "Eventos" (
@@ -58,8 +58,8 @@ CREATE TABLE "Pedidos_Contiene" (
 	"id_ingrediente"	INTEGER,
 	"cantidad"	INTEGER NOT NULL DEFAULT 1,
 	PRIMARY KEY("id_pedido","id_ingrediente"),
-	FOREIGN KEY("id_ingrediente") REFERENCES "id",
-	FOREIGN KEY("id_pedido") REFERENCES "id"
+	FOREIGN KEY("id_ingrediente") REFERENCES "Ingredientes"("id") ON DELETE CASCADE,
+	FOREIGN KEY("id_pedido") REFERENCES "Pedidos"("id") ON DELETE CASCADE
 );
 DROP TABLE IF EXISTS "Preferencias";
 CREATE TABLE "Preferencias" (
@@ -83,7 +83,7 @@ CREATE TABLE "Recetas" (
 	"nivel"	TEXT DEFAULT NULL CHECK("nivel" IN ('fácil', 'medio', 'difícil')),
 	"dieta"	TEXT DEFAULT NULL CHECK("dieta" IN ('vegana', 'sin gluten', 'carnívora')),
 	PRIMARY KEY("id" AUTOINCREMENT),
-	FOREIGN KEY("user") REFERENCES "Usuarios"("username")
+	FOREIGN KEY("user") REFERENCES "Usuarios"("username") ON DELETE CASCADE
 );
 DROP TABLE IF EXISTS "Usuarios";
 CREATE TABLE "Usuarios" (
@@ -101,8 +101,8 @@ CREATE TABLE "Valoraciones_Comentarios" (
 	"id_comentario"	INTEGER,
 	"user"	TEXT,
 	"id_receta"	INTEGER,
-	FOREIGN KEY("id_comentario") REFERENCES "Comentarios"("id"),
-	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id"),
-	FOREIGN KEY("user") REFERENCES "Usuarios"("username")
+	FOREIGN KEY("id_comentario") REFERENCES "Comentarios"("id") ON DELETE CASCADE,
+	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id") ON DELETE CASCADE,
+	FOREIGN KEY("user") REFERENCES "Usuarios"("username") ON DELETE CASCADE
 );
 COMMIT;

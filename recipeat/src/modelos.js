@@ -3,6 +3,7 @@ import { Receta, Like } from "./receta/Receta.js";
 import { Comentario, Valoracion } from "./comentario/Comentario.js"
 import { Evento } from "./evento/Evento.js";
 import { Contiene, Ingrediente } from "./ingrediente/Ingrediente.js";
+import { Pedido, PedidoContiene } from "./Pedidos/Pedidos.js";
 
 
 
@@ -16,5 +17,7 @@ export function inicializaModelos(db) {
     Preferencias.initStatements(db);   
     Ingrediente.initStatements(db);
     Contiene.initStatements(db);
+    Pedido.initStatements(db);
+    PedidoContiene.initStatements(db);
 }
 

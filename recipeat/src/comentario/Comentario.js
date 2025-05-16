@@ -91,14 +91,14 @@ export class Comentario {
         });
     }
 
+    // Elimina un comentario
     static deleteComentario(id) {
-        Valoracion.retiraTodosValoracionesComentario(id);
         const result = this.#deleteStmt.run({ id });
         if (result.changes === 0) throw new Error(`No se encontró el comentario con ID ${id}`);
     }
 
+    // Elimina todos los comentarios de una receta
     static deleteAllComentarios(id_receta) {
-        Valoracion.retiraTodosValoracionesReceta(id_receta);
         this.#deleteAllStmt.run({ id_receta });
     }
 

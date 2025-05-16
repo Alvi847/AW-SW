@@ -47,6 +47,7 @@ form fieldset {
 }
 
 form input[type="text"],
+form input[type="number"],
 form input[type="password"],
 form input[type="email"]{
     width: 100%;
@@ -57,6 +58,13 @@ form input[type="email"]{
     border-radius: 6px;
     background-color: rgba(255, 255, 255, 0.2);
     color: white;
+}
+
+/* Para aumentar el tamaño de las flechas, no funciona en firefox */
+input[type="number"]::-webkit-inner-spin-button {
+  width: 20px;
+  height: 20px;
+  margin-left: 4px;
 }
 
 form button {

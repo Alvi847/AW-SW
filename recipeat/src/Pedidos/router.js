@@ -28,8 +28,7 @@ pedidosRouter.post('/removePedido'
 // Ruta para añadir un ingrediente a un pedido
 pedidosRouter.post('/addIngredienteToPedido'
     , autenticado('/') // TODO: CAMBIAR URL
-    , body('nombre_ingrediente', 'No puede ser vacío').notEmpty()
-    , body('nombre_ingrediente', 'Sólo puede contener letras').trim().matches(/^[A-Z]*$/i)
+    , body('id_ingrediente', 'Id de ingrediente inválido').notEmpty().isNumeric()
     , body('username', 'No puede ser vacío').notEmpty()
     , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
     , body('cantidad', 'No puede ser vacío').notEmpty()
