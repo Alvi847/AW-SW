@@ -20,6 +20,13 @@ export function doCreatePedido(req, res, next) {
     if (username !== req.session.username && req.session.rol !== RolesEnum.ADMIN)
         return render(req, res, "paginas/noPermisos");
 
+    if (Pedido.exists(username)) {
+        const err = {};
+        err.statusCode = 403;
+        err.message = "El usuario ya tiene un pedido creado";
+        return next(err, req, res);
+    }
+
     try {
         const newPedido = Pedido.insertPedido(username);
         logger.info("Pedido '%i' registrado para el usuario %s. Fecha de creación: %s)", newPedido.id, newPedido.user, newPedido.fecha);
@@ -56,6 +63,13 @@ export function deletePedido(req, res, next) {
 
     if (username !== req.session.username && req.session.rol !== RolesEnum.ADMIN)
         return render(req, res, "paginas/noPermisos");
+
+    if (!Pedido.exists(username)) {
+        const err = {};
+        err.statusCode = 403;
+        err.message = "El usuario no tiene un pedido creado";
+        return next(err, req, res);
+    }
 
     try {
         const id_pedido = Pedido.getPedidoByUsername(username).id;
@@ -95,8 +109,17 @@ export function addIngredientes(req, res, next) {
     if (username !== req.session.username && req.session.rol !== RolesEnum.ADMIN)
         return render(req, res, "paginas/noPermisos");
 
+    
+    
     try {
-        const pedido = Pedido.getPedidoByUsername(username);
+        let pedido;
+
+        if(!Pedido.exists(username)){ // Si el usuario no tiene un pedido, se crea uno nuevo
+            pedido = Pedido.insertPedido(username);
+        }
+        else
+            pedido = Pedido.getPedidoByUsername(username);
+
         const id_pedido = pedido.id;
 
         const longitud = (ingredientes_id.length || 1);
@@ -104,7 +127,7 @@ export function addIngredientes(req, res, next) {
         for (let i = 0; i < longitud; i++) {
             const id_ingrediente = ingredientes_id[i];
             const cantidad = ingredientes_cantidad[i];
-            
+
             PedidoContiene.insertaIngredienteEnPedido(id_ingrediente, id_pedido, cantidad);
 
             logger.debug("El usuario %s ha añadido el ingrediente %i a su pedido (cantidad añadida: %i)", username, id_ingrediente, cantidad);
