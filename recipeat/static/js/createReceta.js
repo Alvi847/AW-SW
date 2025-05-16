@@ -289,13 +289,8 @@ async function cambiaIngredientes(select) {
  * @returns un array de json con los ingredientes, de la forma: [{id: "id_ingrediente", unidad: "unidad de medida"}]
  */
 async function pedirIngredientes() {
-    const response = await postJson('/api/ingredientes/lista', {
-        /* TODO: Dejar como json, por si podemos en el futuro implementar filtros para no tener que enviar toda la lista de ingredientes al cliente */
-    });
-    const jsonData = await response.json();
-    return jsonData;
+    return await postJson('/api/ingredientes/lista', {});
 }
-
 
 function actualizarUnidadEvent(e) {
     const selectIngredientes = e.target;
@@ -421,3 +416,19 @@ function imagenValida(files) {
     }
     return "";
 } 
+
+async function postJson(url, data) {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+
+  if (!res.ok) {
+    throw new Error(`Error ${res.status}: ${res.statusText}`);
+  }
+
+  return await res.json();
+}
