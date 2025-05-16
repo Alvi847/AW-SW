@@ -63,12 +63,12 @@ recetasRouter.post('/createReceta'
                 }
                 return Number.isFinite(Number(value)); // Si no son arrays, entonces miramos si son enteros
             }),
-        body('ingredientes.*')
+        body('ingredientes_id.*')
             .isNumeric().withMessage('Cada ingrediente debe ser un número')
     ]
     , [
         body('ingredientes_cantidad', 'Añade cantidades correctas a cada ingrediente').isArray({ min: 1 }),
-        body('ingredientes.*')
+        body('ingredientes_cantidad.*')
             .isNumeric().withMessage('Cada cantidad debe ser un número')
     ]
     , body('modo_preparacion', 'No puede ser vacío').trim().notEmpty()

@@ -351,7 +351,7 @@ export async function viewAdministrar(req, res, next) {
     try {
         const usuarios = Usuario.getAllUsuarios();
         const ingredientes = Ingrediente.getAllIngredientes();
-        render(req, res, 'paginas/administrar', { usuarios, ingredientes });
+        render(req, res, 'paginas/administrar', { errores: [], usuarios, ingredientes });
     } catch (error) {
         req.log.error(error.message);
         
