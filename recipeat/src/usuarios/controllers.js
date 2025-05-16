@@ -500,7 +500,7 @@ export function guardarPreferencias(req, res, next) {
         req.log.error("Error al guardar preferencias para '%s': %s", user, e.message);
 
         if (esAjax) {
-            return res.status(500).json({ status: 500, error: 'Error interno del servidor' });
+            return res.status(500).json({ status: 500, message: 'Error interno del servidor' });
         }
 
         return render(req, res, 'paginas/misPreferencias', {

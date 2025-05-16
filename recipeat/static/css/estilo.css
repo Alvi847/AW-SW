@@ -338,6 +338,26 @@ body::-webkit-scrollbar-thumb:hover {
     margin-top: 100px;
     color: white;
     font-family: 'Montserrat', sans-serif;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.pagina-error button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: rgb(0, 0, 0);
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagina-error button:hover {
+    background-color: #f2862e;
 }
 
 @media (max-width: 767px) {
