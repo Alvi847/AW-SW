@@ -110,12 +110,12 @@ export function addIngredientes(req, res, next) {
     if (username !== req.session.username && req.session.rol !== RolesEnum.ADMIN)
         return render(req, res, "paginas/noPermisos");
 
-    
-    
+
+
     try {
         let pedido;
 
-        if(!Pedido.exists(username)){ // Si el usuario no tiene un pedido, se crea uno nuevo
+        if (!Pedido.exists(username)) { // Si el usuario no tiene un pedido, se crea uno nuevo
             pedido = Pedido.insertPedido(username);
         }
         else
@@ -150,9 +150,12 @@ export function addIngredientes(req, res, next) {
 }
 
 export function mostrarPagarPedido(req, res, next) {
-    return render(req, res, 'paginas/pagarPedido', {
-        errores: []
-    });
+    if (Pedido.exists(req.session.username)) // Si el usuario tiene pedido se muestra el formulario de pago
+        return render(req, res, 'paginas/pagarPedido', {
+            errores: []
+        });
+    else
+        return res.redirect('/'); // Si no tiene pedido se envía al index
 }
 
 export function doPagarPedido(req, res, next) {

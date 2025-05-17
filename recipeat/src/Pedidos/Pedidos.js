@@ -102,8 +102,8 @@ export class Pedido {
      */
     static exists(usuario){
         try{
-            Pedido.getPedidoByUsername(usuario);
-            return true;
+            const result = this.#getStmt.get({ user: usuario });
+            return result != null;
         }
         catch(e){
             return false;

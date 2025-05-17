@@ -71,7 +71,7 @@ pedidosRouter.get('/pay'
     , asyncHandler(mostrarPagarPedido));
 
 // Ruta para pagar un pedido
-// Me he inventado que el usuario tiene que poner su username para pagar
+// Me he inventado que el usuario tiene que poner "pagar" para pagar
 pedidosRouter.post('/pay'
     , autenticado('/') // TODO: CAMBIAR URL
     , body('pagar', 'Tienes que escribir "pagar"').custom((value) => {return value === "pagar"})
