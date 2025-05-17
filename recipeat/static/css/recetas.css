@@ -1092,7 +1092,10 @@ span.feedback {
   }
 
   .ingredientes-botones button {
-    width: 100%;
+    width: 50%;
+    margin-top: 5px;
+    margin-left: 70px;
+    align-items: center;
   }
 
   .linea-ingrediente {
@@ -1101,6 +1104,38 @@ span.feedback {
 
    fieldset.fset-crear {
     padding: 0px !important;
+  }
+
+  .nombre label{
+    margin-top: 15px;
+  }
+
+  .nombre, .descripcion, .preparacion{
+    margin-right: 50px;
+  }
+
+  .create-receta label{
+    margin-bottom: 10px;
+  }
+
+  .create-receta input[type="text"]{
+    margin-top: 2px;
+  }
+
+  .create-receta button[type="submit"] {
+    width: 200px;
+    margin-left: 62px;
+  }
+
+ .receta-imagen, .gusto{
+  max-width: 53%; /* para que no se pase */
+}
+
+.input
+  .gusto,
+  .nivel,
+  .dieta {
+    align-items: flex-start;
   }
 }
 
