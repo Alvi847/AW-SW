@@ -43,6 +43,10 @@ function mostrarSaludo(session){
 
 		<li><a href="/receta/listaRecetas">RECETAS</a></li>
 		<%- mostrarOpsRecetas(session)%>
+
+		<% if (session.hasPedido) { %>
+			<li><a href="/pedido/verPedido">MI PEDIDO</a></li>
+		<% } %>
 	</ul>
 	</nav>
 		<div class="saludo">
