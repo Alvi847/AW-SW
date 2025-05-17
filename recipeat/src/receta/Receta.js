@@ -208,7 +208,7 @@ export class Receta {
                 nivel: receta.nivel,
                 dieta: receta.dieta
             });
-            logger.debug("✅ Resultado del insert corercto");
+            logger.debug("✅ Resultado del insert correcto");
             return new Receta(receta.nombre, receta.descripcion, receta.modo_preparacion,
                 receta.likes, result.lastInsertRowid, user, false, receta.imagen, receta.gusto, receta.nivel, receta.dieta);
         }
