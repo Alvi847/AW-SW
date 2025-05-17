@@ -142,31 +142,38 @@ export async function doCreateReceta(req, res, next) {
             errores
         });
     }
+    const datos = matchedData(req);
 
-    const { nombre, descripcion, modo_preparacion, gusto, nivel, dieta
-        , ingredientes_id, ingredientes_cantidad } = matchedData(req)
+const nombre = datos.nombre;
+const gusto = datos.gusto;
+const nivel = datos.nivel;
+const dieta = datos.dieta;
+const ingredientes_id = datos.ingredientes_id;
+const ingredientes_cantidad = datos.ingredientes_cantidad;
+    const descripcionRaw = req.body.descripcion;
+const modoPreparacionRaw = req.body.modo_preparacion;
 
     const imagen = req.file;
 
     // Insertar la receta en la base de datos
     try {
 
-        const descripcionSegura = sanitizeHtml(descripcion, {
-            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2']),
+       const descripcionSegura = sanitizeHtml(descripcion, {
+            allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
             allowedAttributes: {
-                a: ['href', 'name', 'target'],
-                img: ['src', 'alt', 'width', 'height'],
-                '*': ['style'] // Si quieres permitir estilos en línea
+            a: ['href', 'name', 'target'],
+             img: ['src', 'alt', 'width', 'height'],
+            '*': ['style']
             }
         });
 
-        const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
-            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'ul', 'li', 'h1', 'h2']),
-            allowedAttributes: {
-                img: ['src', 'alt'],
-                '*': ['style']
-            }
-        });
+const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
+  allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
+  allowedAttributes: {
+    img: ['src', 'alt'],
+    '*': ['style']
+  }
+});
 
         const nuevaReceta = new Receta(nombre, descripcionSegura, modoPreparacionSeguro, null, null, req.session.username, false, imagen.filename, gusto, nivel, dieta);
 
