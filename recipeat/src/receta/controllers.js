@@ -152,13 +152,13 @@ export async function doCreateReceta(req, res, next) {
     try {
 
        const descripcionSegura = sanitizeHtml(descripcion, {
-  allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
-  allowedAttributes: {
-    a: ['href', 'name', 'target'],
-    img: ['src', 'alt', 'width', 'height'],
-    '*': ['style']
-  }
-});
+            allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
+            allowedAttributes: {
+            a: ['href', 'name', 'target'],
+             img: ['src', 'alt', 'width', 'height'],
+            '*': ['style']
+            }
+        });
 
 const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
   allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
