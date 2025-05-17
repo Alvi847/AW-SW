@@ -20,8 +20,8 @@
           <form class="form-editar" action="/usuarios/updatePerfil" method="POST" name="form-actualizar-perfil" enctype="multipart/form-data">
           
             <div class="perfil-foto">
-              <label for="Imagen">Imagen:</label>
-              <input type="file" name="imagen" value="<%= locals.foto ? locals.foto : '' %>">
+              <label for="imagen">Imagen:</label>
+              <input type="file" name="imagen" id="imagen" value="<%= locals.foto ? locals.foto : '' %>">
               <span class="error"></span>
               <span class="feedback"></span>
             </div>

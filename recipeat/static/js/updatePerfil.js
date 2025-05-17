@@ -12,6 +12,9 @@ function initPerfil() {
 
     const password = formEditar.elements.namedItem("password");
     password.addEventListener("input", compruebaPassword);
+
+    const imagen = formEditar.elements.namedItem("imagen");
+    imagen.addEventListener("input", compruebaImagen);
 }
 
 async function editarPerfilSubmit(e) {
@@ -36,7 +39,7 @@ async function editarPerfilSubmit(e) {
 
 async function displayErroresPerfil(response) {
     const { errores } = await response.json();
-    const formEditar = document.querySelector('form-actualizar-perfil');
+    const formEditar = document.querySelector('form[name="form-actualizar-perfil"]');
 
     for (const input of formEditar.elements) {
         if (!input.name) continue;
@@ -133,4 +136,41 @@ function passwordValida(pswd) {
         return "La contraseña debe tener entre 6 y 10 caracteres";
     return "";
 }
+
+function compruebaImagen(e) {
+    const imagen = e.target;
+
+    const validity = imagenValida(imagen.files)
+    if (validity == "") {
+        imagen.setCustomValidity('');
+    } else {
+        imagen.setCustomValidity(validity);
+    }
+
+    const esImagenValida = imagen.checkValidity();
+    if (esImagenValida) {
+        imagen.parentNode.querySelector('span.error').textContent = ' ';
+        imagen.parentNode.querySelector('span.feedback').textContent = '✔';
+    } else {
+        imagen.parentNode.querySelector('span.error').textContent = '⚠';
+        imagen.parentNode.querySelector('span.feedback').textContent = ' ';
+    }
+    // Muestra el mensaje de validación
+    imagen.reportValidity();
+}
+
+function imagenValida(files) {
+    if (files.length === 0)
+        return ""; // No es obligatorio subir una imagen
+
+    const imagen = files[0];
+    const tipo = imagen.type;
+    const tiposPermitidos = ["image/jpeg", "image/png"];
+
+    if (!tiposPermitidos.includes(tipo)) {
+        imagen = "";
+        return "Sólo los tipos jpeg y png están permitidos";
+    }
+    return "";
+} 
 

@@ -1,4 +1,4 @@
-import { body, param } from 'express-validator';
+import { body, check, param } from 'express-validator';
 import express from 'express';
 import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil, deleteUsuario, viewAdministrar, cambiarRolUsuario, viewPerfilUser, viewFavoritosUser, viewRecetasUser, viewPreferencias, guardarPreferencias } from './controllers.js';
 import { autenticado, tieneRol } from '../middleware/auth.js';
@@ -29,6 +29,30 @@ usuariosRouter.post('/registro', multerFactory.single("imagen")
     , body('username', 'No puede ser vacío').trim().notEmpty()
     , body('nombre', 'No puede ser vacío').trim().notEmpty()
     , body('password', 'La contraseña no tiene entre 6 y 10 caracteres').trim().isLength({ min: 6, max: 10 })
+    , check('imagen', "Archivo inválido").custom((value, { req }) => {
+        /**
+         * Validador custom para comprobar la subida de la imagen al formulario
+         * Crédito: https://stackoverflow.com/questions/39703624/express-how-to-validate-file-input-with-express-validator
+         */
+
+        if (req.file) {
+            return true;
+        } else {
+            return false;
+        }
+    }).withMessage("Proporciona una imagen para el usuario")
+    , check('imagen', "Archivo inválido").custom((value, { req }) => {
+        /**
+         * Validador custom para comprobar la subida de una imagen con el tipo MIME correcto
+         */
+        const tiposPermitidos = ["image/jpeg", "image/png"];
+
+        if (tiposPermitidos.includes(req.file.mimetype)) {
+            return true;
+        } else {
+            return false;
+        }
+    }).withMessage("Sólo se permiten imágenes jpg o png")
     , asyncHandler(doRegistro));
 
 usuariosRouter.get('/verPerfil', autenticado('/usuarios/home'), asyncHandler(viewPerfil));
@@ -38,6 +62,11 @@ usuariosRouter.post('/updatePerfil', multerFactory.single("imagen")
     , body('username', 'No puede ser vacío').trim().notEmpty()
     , body('nombre', 'No puede ser vacío').trim().notEmpty()
     , body('email', 'No es un email válido').isEmail()
+    , check('imagen', "Archivo inválido").custom((value, { req }) => {
+        if (!req.file) return true; 
+        const tiposPermitidos = ["image/jpeg", "image/png"];
+        return tiposPermitidos.includes(req.file.mimetype);
+    }).withMessage("Sólo se permiten imágenes jpg o png")
     , asyncHandler(updatePerfil));
 
 usuariosRouter.post('/removeUsuario'
