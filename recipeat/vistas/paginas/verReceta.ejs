@@ -32,9 +32,9 @@
                                     </p>
                                 </div>
                                 <h2>INFORMACIÓN</h2>
-                               
-                                    <div><%- receta.descripcion %></div>
-                                
+
+                                <div><%- receta.descripcion %></div>
+
 
                 </div>
     </div>
@@ -52,26 +52,29 @@
                             <%= i.unidad %>
                 </span>
                 <% }) %>
-                    <form action="/pedido/addIngredientesToPedido" method="POST" name="form-send-ingredientes"
-                        class="add-ingredientes-form">
-                        <input type="hidden" name="username" value="<%= session.username %>">
+                    <% if (session.login> 0) { %>
+                        <form action="/pedido/addIngredientesToPedido" method="POST" name="form-send-ingredientes"
+                            class="add-ingredientes-form">
+                            <input type="hidden" name="username" value="<%= session.username %>">
 
-                        <% ingredientes.forEach((i, index)=> { %>
-                            <input type="hidden" name='ingredientes_id[]' value="<%= i.id %>">
-                            <input type="hidden" name='ingredientes_cantidad[]' value="<%= i.cantidad %>">
-                            <% }) %>
-                                <div class="receta-botones">
-                                    <button type="submit">🛒</button><span class="feedback"></span><span class="error"></span>
-                                </div>
-                    </form>
-                    <% } else { %>
-                        <span class="error">Error obteniendo los ingredientes. Por favor, contacta con un
-                            administrador</span>
+                            <% ingredientes.forEach((i, index)=> { %>
+                                <input type="hidden" name='ingredientes_id[]' value="<%= i.id %>">
+                                <input type="hidden" name='ingredientes_cantidad[]' value="<%= i.cantidad %>">
+                                <% }) %>
+                                    <div class="receta-botones">
+                                        <button type="submit">🛒</button><span class="feedback"></span><span
+                                            class="error"></span>
+                                    </div>
+                        </form>
                         <% } %>
+                            <% } else { %>
+                                <span class="error">Error obteniendo los ingredientes. Por favor, contacta con un
+                                    administrador</span>
+                                <% } %>
     </div>
     <div class="receta-preparacion">
         <h2>MODO DE PREPARACIÓN</h2>
-       <div><%- receta.modo_preparacion %></div>
+        <div><%- receta.modo_preparacion %></div>
     </div>
     <div class="receta-botones">
         <p>
