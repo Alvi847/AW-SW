@@ -1,16 +1,38 @@
 BEGIN TRANSACTION;
-INSERT INTO "Likes" ("id_receta","user") VALUES (21,'Alvi47');
-INSERT INTO "Likes" ("id_receta","user") VALUES (4,'Alvi47');
-INSERT INTO "Recetas" ("id","nombre","descripcion","likes","user","modo_preparacion","imagen") VALUES (4,'TACOS AL PASTOR','Tortillas rellenas de cerdo marinado con piña y especias.',21,NULL,'Corta carne de cerdo en filetes delgados. En un bol, mezcla achiote, chiles guajillo hidratados, ajo, vinagre blanco, jugo de piña, comino, orégano, sal y pimienta; licúa todo hasta formar una marinada. Cubre la carne con esta mezcla y deja reposar al menos 4 horas (mejor si es toda la noche). Asa la carne en una sartén o parrilla caliente hasta que esté bien cocida y dorada. Corta en tiras pequeñas. Calienta tortillas de maíz y sirve la carne encima. Añade piña asada en trocitos, cebolla picada, cilantro fresco y unas gotas de limón. Acompaña con salsa al gusto.','a401cf7b7e311522b78c3c824a0b514b');
-INSERT INTO "Recetas" ("id","nombre","descripcion","likes","user","modo_preparacion","imagen") VALUES (5,'SUSHI ROLL','Rollos de sushi con salmón, aguacate y arroz.',15,'admin','Lavar el arroz hasta eliminar el almidón y cocerlo. Mezclar en un bol con vinagre azúcar y sal. Poner un trozo de film transparente sobre la esterilla de bambú y poner una lámina de alga nori. Extender el arroz sobre el alga y espolvorear sésamo. Por último, enrollar con el salmón ahumado y el aguacate','082deb2d96a29563859083679070a438');
-INSERT INTO "Recetas" ("id","nombre","descripcion","likes","user","modo_preparacion","imagen") VALUES (6,'ENSALADA CESAR','Ensalada con lechuga, pollo, crutones y aderezo César.',8,NULL,'Lava y seca bien hojas de lechuga romana. Tuesta pan en cubos con aceite de oliva, ajo y sal hasta que estén crujientes (croutons). Para la salsa: mezcla yema de huevo, jugo de limón, mostaza, ajo picado, salsa Worcestershire, sal, pimienta y un poco de anchoas (opcional). Bate y añade aceite de oliva poco a poco hasta emulsionar, luego un poco de queso parmesano rallado. Mezcla la lechuga con la salsa y los croutons, espolvorea más parmesano por encima. Puedes añadir pollo a la plancha si quieres hacerla más completa. Servir fría','cc49e6ef0b0bf75988895eeb07148cab');
-INSERT INTO "Recetas" ("id","nombre","descripcion","likes","user","modo_preparacion","imagen") VALUES (9,'LASAÑA','Una lasaña muy buena y sabrosa',4,'user','Preparar sofrito de carne picada, zanahoria y cebolla. Juntar con láminas de pasta de lasaña y meter al horno','6cf9f9c188f3546e09d1b4285aec1a03');
-INSERT INTO "Recetas" ("id","nombre","descripcion","likes","user","modo_preparacion","imagen") VALUES (18,'MUSAKA','La receta tradicional de musaka se hace con carne picada de cordero, si lo preferís lo podéis hacer con carne picada de ternera o de cerdo, aunque en este caso vuestra receta tendrá menos sabor.',0,NULL,'Corta berenjenas en rodajas finas, espolvorea sal y deja reposar 30 min para quitar el amargor; luego enjuaga y seca. Fríelas o ásalas ligeramente. En una sartén, sofríe cebolla y ajo, añade carne picada de cordero o ternera, salpimenta, y cocina hasta dorar. Incorpora tomate triturado, canela y orégano; cocina hasta que espese. Para la bechamel, derrite mantequilla, añade harina, cocina 1 min y agrega leche poco a poco, removiendo hasta espesar; añade nuez moscada, sal y queso rallado. En una fuente, pon capas de berenjena, carne y bechamel. Termina con una capa gruesa de bechamel y más queso. Hornea a 180 °C unos 40 min hasta dorar. Deja reposar antes de servir.','094462a7f3f4a83104e90a7eb6eca53b');
-INSERT INTO "Recetas" ("id","nombre","descripcion","likes","user","modo_preparacion","imagen") VALUES (21,'MACARRONES CON TOMATE','Una forma sencilla pero muy sabrosa de hacer pasta',1,'Alvi47','Cocer los macarrones durante 8 minutos, después filtrar el agua y añadir tomate al gusto. Se puede condimentar con orégano, queso y se le puede añadir carne picada o incluso beicon','195b3ae00b7049c9f3cf4756fa11ae8a');
-INSERT INTO "Usuarios" ("id","username","password","rol","nombre","email") VALUES (1,'admin','adminpass','A','Admin','admin@recipeat.com');
-INSERT INTO "Usuarios" ("id","username","password","rol","nombre","email") VALUES (2,'user','$2b$10$JdCg8yL3rRkkr.hhx1rjqOe30F9lhBlqA1sjYJW6ymzYExvQFHyjy','U','Usuario',NULL);
-INSERT INTO "Usuarios" ("id","username","password","rol","nombre","email") VALUES (5,'alexg','$2b$10$XJ2TWKEP1LHn/3PBHfzwFe5hTUWE2jZzilPnZ1L/zFNpTIGG6qa3e','U','alex','alex@gmail.com');
-INSERT INTO "Usuarios" ("id","username","password","rol","nombre","email") VALUES (6,'Alvi47','$2b$10$n3LaZllX1I3If5S3baNM9eAuHqQdkL852gwWlm9ZwCfVJ9KGI5VtO','U','Álvaro','alvi@alvi.com');
-INSERT INTO "Usuarios" ("id","username","password","rol","nombre","email") VALUES (7,'a','$2b$10$piTQJYWYDpNOLRIm899/H.QUES2kYVDiFJCJLR.EoF2/lTAPmLzte','A','a',NULL);
-INSERT INTO "Recetas" ("id","nombre","descripcion","likes","user","modo_preparacion","imagen", "gusto", "nivel", "dieta") VALUES (50,'caca','Una forma sencilla pero muy sabrosa de hacer pasta',1,'user','Cocer los macarrones durante 8 minutos, después filtrar el agua y añadir tomate al gusto. Se puede condimentar con orégano, queso y se le puede añadir carne picada o incluso beicon',NULL, 'salado', 'medio', 'sin gluten');
+INSERT INTO "Comentarios" ("id","id_receta","user","valoracion","descripcion") VALUES (1,3,'Alvi47',1,'Muy weno el gato');
+INSERT INTO "Contiene" ("id_receta","id_ingrediente","cantidad") VALUES (3,5,2);
+INSERT INTO "Contiene" ("id_receta","id_ingrediente","cantidad") VALUES (3,6,3);
+INSERT INTO "Contiene" ("id_receta","id_ingrediente","cantidad") VALUES (4,5,1);
+INSERT INTO "Contiene" ("id_receta","id_ingrediente","cantidad") VALUES (5,5,40);
+INSERT INTO "Contiene" ("id_receta","id_ingrediente","cantidad") VALUES (5,7,0.01);
+INSERT INTO "Contiene" ("id_receta","id_ingrediente","cantidad") VALUES (5,6,20);
+INSERT INTO "Contiene" ("id_receta","id_ingrediente","cantidad") VALUES (6,5,40);
+INSERT INTO "Contiene" ("id_receta","id_ingrediente","cantidad") VALUES (6,7,20);
+INSERT INTO "Contiene" ("id_receta","id_ingrediente","cantidad") VALUES (6,6,10);
+INSERT INTO "Eventos" ("id","titulo","fecha","descripcion","user") VALUES (1,'Comprar pan','2025-05-21','Compra pan 👍','user');
+INSERT INTO "Ingredientes" ("id","nombre","unidad","precio") VALUES (5,'azúcar','gr',25);
+INSERT INTO "Ingredientes" ("id","nombre","unidad","precio") VALUES (6,'sal','uds',1);
+INSERT INTO "Ingredientes" ("id","nombre","unidad","precio") VALUES (7,'pimienta','gr',0.01);
+INSERT INTO "Ingredientes" ("id","nombre","unidad","precio") VALUES (9,'Patata','gr',0.5);
+INSERT INTO "Likes" ("id_receta","user") VALUES (3,'Alvi47');
+INSERT INTO "Pedidos" ("id","usuario","creacion") VALUES (12,'Alvi47','17/5/2025, 14:20:46');
+INSERT INTO "Pedidos_Contiene" ("id_pedido","id_ingrediente","cantidad") VALUES (12,5,100);
+INSERT INTO "Preferencias" ("user","gusto","nivel","dieta") VALUES ('Alvi47','dulce','fácil',NULL);
+INSERT INTO "Preferencias" ("user","gusto","nivel","dieta") VALUES ('user',NULL,NULL,NULL);
+INSERT INTO "Recetas" ("id","nombre","descripcion","likes","user","modo_preparacion","imagen","gusto","nivel","dieta") VALUES (1,'HABICHUELAS','123',0,'Alvi47','123','ba1026e12d9da08a1abd391a2ffde2af','dulce','medio','vegana');
+INSERT INTO "Recetas" ("id","nombre","descripcion","likes","user","modo_preparacion","imagen","gusto","nivel","dieta") VALUES (3,'ASD','asd',1,'Alvi47','asd','9b1115e567c2954ebc31443fc512da22','dulce','fácil','vegana');
+INSERT INTO "Recetas" ("id","nombre","descripcion","likes","user","modo_preparacion","imagen","gusto","nivel","dieta") VALUES (4,'UNO','1',0,'Alvi47','1','6b9b63ebd57a120b3751f3755ad65738','dulce','fácil','vegana');
+INSERT INTO "Recetas" ("id","nombre","descripcion","likes","user","modo_preparacion","imagen","gusto","nivel","dieta") VALUES (5,'HABICHUELAS','<p>Unas habichuelas bien wenas </p>
+
+<p>jejejejeje</p>',0,'Alvi47','<p>Bueno, lo del bol, la sal y el azúcar</p>
+
+<p>Y luego eso, la pimienta :D</p>','54b94a4ce7dd5a995ff95815325ed105','dulce','difícil','sin gluten');
+INSERT INTO "Recetas" ("id","nombre","descripcion","likes","user","modo_preparacion","imagen","gusto","nivel","dieta") VALUES (6,'HABICHUELAS','<p>Hola</p>
+
+<p>adiós</p>',0,'Alvi47','<p>Hola</p>
+
+<p>Adiós</p>','261caac48d17ecdef0fffc5c471a749d','dulce','difícil','sin gluten');
+INSERT INTO "Usuarios" ("id","username","password","rol","nombre","email","imagen") VALUES (1,'Alvi47','$2b$10$XSg2gVUni0me.Z2NfR1KAu2vwilA0Rwi4Z3IcQPHKLRiAfew98zgK','A','Álvaro','alvi@alvi.com',NULL);
+INSERT INTO "Usuarios" ("id","username","password","rol","nombre","email","imagen") VALUES (2,'user','$2b$10$JpCymbAe3/cTSO.AuHDOae8hP3l267UVvFM8Cum3CRom4cdY80t1W','U','Usuario','usuario@usuario.com',NULL);
+INSERT INTO "Valoraciones_Comentarios" ("id_comentario","user","id_receta") VALUES (1,'Alvi47',3);
 COMMIT;
