@@ -150,13 +150,16 @@ const nivel = datos.nivel;
 const dieta = datos.dieta;
 const ingredientes_id = datos.ingredientes_id;
 const ingredientes_cantidad = datos.ingredientes_cantidad;
-    const descripcionRaw = req.body.descripcion;
-const modoPreparacionRaw = req.body.modo_preparacion;
+const descripcion = req.body.descripcion;
+const modo_preparacion = req.body.modo_preparacion;
 
     const imagen = req.file;
 
     // Insertar la receta en la base de datos
     try {
+
+        console.log("🔍 Contenido original recibido:", req.body.modo_preparacion);
+
 
        const descripcionSegura = sanitizeHtml(descripcion, {
             allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
