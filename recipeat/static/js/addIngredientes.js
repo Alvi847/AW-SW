@@ -15,36 +15,16 @@ async function sendSubmit(e) {
     try {
         const data = dataToJson(formSendArray); // convertimos los datos que queremos a formato json
         const response = await postJson('/pedido/addIngredientesToPedido', data);
-        window.location.assign('/receta/listaRecetas');
-        //mostrarConfirmacion(formData, response);
+        mostrarConfirmacion(formSendArray);
     } catch (err) {
         if (err instanceof ResponseError) {
             switch (err.response.status) {
-                case 400:
-                    await displayErrores(err.response, formSendArray);
-                    break;
                 default:
-                    mostrarError(err.response.status, await err.response.json());
+                    spanError(formSendArray);
                     break;
             }
         }
         console.error(`Error: `, err);
-    }
-}
-
-async function displayErrores(response, formUpdate) {
-    const { errores } = await response.json();
-    for (const input of formUpdate.elements) {
-        if (input.name == undefined || input.name === '') continue;
-        const feedback = formUpdate.querySelector(`*[name="${input.name}"] ~ span.error`);
-        if (feedback == undefined) continue;
-
-        feedback.textContent = '';
-
-        const error = errores[input.name];
-        if (error) {
-            feedback.textContent = error.msg;
-        }
     }
 }
 
@@ -74,15 +54,14 @@ function dataToJson(formSendArray) {
     data.ingredientes_id = ids_values;
     data.ingredientes_cantidad = cantidades_values;
 
-    return data
+    return data;
 }
 
-async function mostrarConfirmacion(formData, response) {
-    const id_ingrediente = formData.get("id");
-    const json = await response.json();
-    const nuevoPrecio = json.precio;
+async function mostrarConfirmacion(formSendArray) {
 
-    document.querySelector(`input#ingrediente-${id_ingrediente}-cantidad ~ span.feedback`).textContent = '✔';
+    formSendArray.querySelector(`button[type="submit"] ~ span.feedback`).textContent = 'Ingredientes añadidos al pedido';
+}
 
-    document.querySelector(`input#ingrediente-${id_ingrediente}-cantidad`).value = nuevoPrecio;
+async function spanError(formSendArray){
+    formSendArray.querySelector(`button[type="submit"] ~ span.error`).textContent = 'Hubo un error al añadir los ingredientes. ¡Lo sentimos! D:';
 }

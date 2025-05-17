@@ -61,7 +61,7 @@
                             <input type="hidden" name='ingredientes_cantidad[]' value="<%= i.cantidad %>">
                             <% }) %>
                                 <div class="receta-botones">
-                                    <button type="submit">🛒</button>
+                                    <button type="submit">🛒</button><span class="feedback"></span><span class="error"></span>
                                 </div>
                     </form>
                     <% } else { %>
@@ -157,3 +157,4 @@
 <script src="/js/createComentario.js" defer></script>
 <script src="/js/fetch.js" defer></script>
 <script src="/js/addIngredientes.js" defer></script>
+<script src="/js/mostrarError.js" defer></script>
