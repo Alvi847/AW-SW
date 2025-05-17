@@ -8,23 +8,33 @@
                         <%=receta.nombre%>
                     </h1>
                     <% if (receta.user) { %>
-                        <p class="creador">Creada por <a href="/usuarios/<%= receta.user %>"><%= receta.user %></a></p>
-                    <% } else { %>
-                         <p>Admin</p>
-                                <% } %>
-    <div class="receta-extra">
-        <p><strong>Gusto: </strong>
-            <span class="detalle-valor"><%= receta.gusto || "No especificado" %></span>
-        </p>
-        <p><strong>Nivel: </strong>
-           <span class="detalle-valor"> <%= receta.nivel || "No especificado" %></span>
-        </p>
-        <p><strong>Dieta: </strong>
-           <span class="detalle-valor"><%= receta.dieta || "No especificada" %></span>
-        </p>
-    </div>
-                                    <h2>INFORMACIÓN</h2>
-                                    <p><%= receta.descripcion %></p>
+                        <p class="creador">Creada por <a href="/usuarios/<%= receta.user %>">
+                                <%= receta.user %>
+                            </a></p>
+                        <% } else { %>
+                            <p>Admin</p>
+                            <% } %>
+                                <div class="receta-extra">
+                                    <p><strong>Gusto: </strong>
+                                        <span class="detalle-valor">
+                                            <%= receta.gusto || "No especificado" %>
+                                        </span>
+                                    </p>
+                                    <p><strong>Nivel: </strong>
+                                        <span class="detalle-valor">
+                                            <%= receta.nivel || "No especificado" %>
+                                        </span>
+                                    </p>
+                                    <p><strong>Dieta: </strong>
+                                        <span class="detalle-valor">
+                                            <%= receta.dieta || "No especificada" %>
+                                        </span>
+                                    </p>
+                                </div>
+                                <h2>INFORMACIÓN</h2>
+                                <p>
+                                    <%= receta.descripcion %>
+                                </p>
 
                 </div>
     </div>
@@ -35,14 +45,30 @@
     </div>
     <div class="receta-ingredientes">
         <h2>INGREDIENTES</h2>
-        <% if (ingredientes.length > 0) { %>
-            <% ingredientes.forEach((i)=> { %>      
-                <span class="ingredientes"><%= i.nombre %>: <%= i.cantidad %><%= i.unidad %></span>
-            <% }) %>
-        <% } else { %>
-            <span class="error">Error obteniendo los ingredientes. Por favor, contacta con un administrador</span>
-        <% } %>
-    </div>    
+        <% if (ingredientes.length> 0) { %>
+            <% ingredientes.forEach((i)=> { %>
+                <span class="ingredientes">
+                    <%= i.nombre %>: <%= i.cantidad %>
+                            <%= i.unidad %>
+                </span>
+                <% }) %>
+                    <form action="/pedido/addIngredientesToPedido" method="POST" name="form-send-ingredientes"
+                        class="add-ingredientes-form">
+                        <input type="hidden" name="username" value="<%= session.username %>">
+
+                        <% ingredientes.forEach((i, index)=> { %>
+                            <input type="hidden" name='ingredientes_id[]' value="<%= i.id %>">
+                            <input type="hidden" name='ingredientes_cantidad[]' value="<%= i.cantidad %>">
+                            <% }) %>
+                                <div class="receta-botones">
+                                    <button type="submit">🛒</button>
+                                </div>
+                    </form>
+                    <% } else { %>
+                        <span class="error">Error obteniendo los ingredientes. Por favor, contacta con un
+                            administrador</span>
+                        <% } %>
+    </div>
     <div class="receta-preparacion">
         <h2>MODO DE PREPARACIÓN</h2>
         <p>
@@ -60,7 +86,7 @@
                 </form>
                 <% } %>
                     <!-- Mostrar Modificar y Borrar solo si el usuario actual es el creador -->
-                    <% if (session.username && (session.username===receta.user || session.rol === 'A')) { %>
+                    <% if (session.username && (session.username===receta.user || session.rol==='A' )) { %>
                         <a href="/receta/updateReceta/<%= receta.id %>">✏️</a>
                         <!-- TODO hacer la modificación-->
                         <form id="deleteForm" action="/receta/removeReceta" method="POST">
@@ -79,47 +105,50 @@
                     <% comentarios.forEach((comentario)=> { %>
                         <div class="comentario-card">
                             <h3>
-                                <a href="/usuarios/<%= comentario.user %>"><%= comentario.user %></a> dice:
+                                <a href="/usuarios/<%= comentario.user %>">
+                                    <%= comentario.user %>
+                                </a> dice:
                             </h3>
                             <p class="comentario-descripcion">
                                 <%= comentario.descripcion %>
                             </p>
-                            <% if( comentario.valoracion != 1) { %>
+                            <% if( comentario.valoracion !=1) { %>
                                 <p class="comentario-valoracion">Valoración: <%= comentario.valoracion %> likes</p>
-                            <% } else { %>
-                                <p class="comentario-valoracion">Valoración: <%= comentario.valoracion %> like</p>
-                            <% } %>
-                            <% if(session.login) { %>
-                                <div class="comentario-botones">
-                                    <form id="comentario-like-form" action="/comentario/like" method="POST">
-                                        <input type="hidden" name="id" value="<%= comentario.id %>">
-                                        <button type="submit" id="comentario-like-button">
-                                            <%= comentario.user_liked ? '💔' : '❤️' %>
-                                        </button>
-                                    </form>
-                                    <% if(session.username===comentario.user || session.rol === "A") { %>
-                                        <form id="comentario-remove-form" action="/comentario/removeComentario"
-                                            method="POST">
-                                            <input type="hidden" name="id" value="<%= comentario.id %>">
-                                            <button type="submit" id="comentario-remove-button">
-                                                🗑️
-                                            </button>
-                                        </form>
-                                        <% } %>
-                                </div>
-                                <% } %>
+                                <% } else { %>
+                                    <p class="comentario-valoracion">Valoración: <%= comentario.valoracion %> like</p>
+                                    <% } %>
+                                        <% if(session.login) { %>
+                                            <div class="comentario-botones">
+                                                <form id="comentario-like-form" action="/comentario/like" method="POST">
+                                                    <input type="hidden" name="id" value="<%= comentario.id %>">
+                                                    <button type="submit" id="comentario-like-button">
+                                                        <%= comentario.user_liked ? '💔' : '❤️' %>
+                                                    </button>
+                                                </form>
+                                                <% if(session.username===comentario.user || session.rol==="A" ) { %>
+                                                    <form id="comentario-remove-form"
+                                                        action="/comentario/removeComentario" method="POST">
+                                                        <input type="hidden" name="id" value="<%= comentario.id %>">
+                                                        <button type="submit" id="comentario-remove-button">
+                                                            🗑️
+                                                        </button>
+                                                    </form>
+                                                    <% } %>
+                                            </div>
+                                            <% } %>
                         </div>
                         <% }) %>
                             <% } %>
         </div>
         <% if(session.login) { %>
-            <form id="create-comentario" action="/comentario/createComentario" method="POST" name="form-create-comentario">
-                <label>Escribe aquí tu comentario:</label><textarea type="text"
-                    name="descripcion" required></textarea><%- helpers.error(errores, 'descripcion') %><span class="error"></span>
-                <input type="hidden" name="id" value="<%= receta.id %>">
-                <button type="submit" id="comentario-create-button">
-                    Escribe un comentario
-                </button>
+            <form id="create-comentario" action="/comentario/createComentario" method="POST"
+                name="form-create-comentario">
+                <label>Escribe aquí tu comentario:</label><textarea type="text" name="descripcion"
+                    required></textarea><%- helpers.error(errores, 'descripcion' ) %><span class="error"></span>
+                    <input type="hidden" name="id" value="<%= receta.id %>">
+                    <button type="submit" id="comentario-create-button">
+                        Escribe un comentario
+                    </button>
             </form>
             <% } %>
     </div>
@@ -127,3 +156,4 @@
 
 <script src="/js/createComentario.js" defer></script>
 <script src="/js/fetch.js" defer></script>
+<script src="/js/addIngredientes.js" defer></script>
