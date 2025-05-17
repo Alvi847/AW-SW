@@ -1067,4 +1067,41 @@ span.feedback {
             .carrusel-btn {
                 display: none;
             }
+
+           
         }
+
+        @media (max-width: 768px) {
+  .create-receta {
+    min-width: unset !important;
+    max-width: 100%;
+    width: 95vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .create-receta input,
+  .create-receta textarea,
+  .create-receta select {
+    font-size: 1rem;
+  }
+
+  .ingredientes-botones {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ingredientes-botones button {
+    width: 100%;
+  }
+
+  .linea-ingrediente {
+    margin-left: 0; /* para que no se desplace en móviles */
+  }
+
+   fieldset.fset-crear {
+    padding: 0px !important;
+  }
+}
+
+        
