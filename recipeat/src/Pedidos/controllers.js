@@ -2,6 +2,7 @@ import { validationResult, matchedData } from 'express-validator';
 import { render } from '../utils/render.js';
 import { Pedido, PedidoContiene } from './Pedidos.js';
 import { logger } from '../logger.js';
+import { RolesEnum } from '../usuarios/Usuario.js';
 
 // Agregar un nuevo pedido
 export function doCreatePedido(req, res, next) {
