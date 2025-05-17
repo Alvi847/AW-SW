@@ -1,8 +1,6 @@
-function mostrarError(statusCode, responseJson){
+function mostrarError(statusCode, message){
   const main = document.querySelector('main');
   main.innerHTML = '';
-
-  console.log(responseJson);
 
   const contenedor = document.createElement('div');
   contenedor.className = 'pagina-error';
@@ -15,8 +13,8 @@ function mostrarError(statusCode, responseJson){
     titulo.textContent = 'Ha ocurrido un error';
 
   const mensaje = document.createElement('p');
-  if(responseJson.message)
-    mensaje.textContent = responseJson.message;
+  if(message)
+    mensaje.textContent = message;
   else
     mensaje.textContent = 'Ha ocurrido un error desconocido, sentimos las molestias';
 

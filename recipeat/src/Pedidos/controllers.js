@@ -3,6 +3,7 @@ import { render } from '../utils/render.js';
 import { Pedido, PedidoContiene } from './Pedidos.js';
 import { logger } from '../logger.js';
 import { RolesEnum } from '../usuarios/Usuario.js';
+import { Ingrediente } from '../ingrediente/Ingrediente.js';
 
 // Agregar un nuevo pedido
 export function doCreatePedido(req, res, next) {
@@ -25,12 +26,15 @@ export function doCreatePedido(req, res, next) {
         const err = {};
         err.statusCode = 403;
         err.message = "El usuario ya tiene un pedido creado";
+        req.session.hasPedido = true;
         return next(err, req, res);
     }
 
     try {
         const newPedido = Pedido.insertPedido(username);
         logger.info("Pedido '%i' registrado para el usuario %s. Fecha de creación: %s)", newPedido.id, newPedido.user, newPedido.fecha);
+
+        req.session.hasPedido = true; //Guardo en la sesión que el usuario tiene un pedido, para el enlace de pedidos en la cabecera
 
         // Redirigir al finalizar
         return res.redirect(`paginas/index`);  //TODO: CAMBIAR URL
@@ -69,6 +73,7 @@ export function deletePedido(req, res, next) {
         const err = {};
         err.statusCode = 403;
         err.message = "El usuario no tiene un pedido creado";
+        req.session.hasPedido = false;
         return next(err, req, res);
     }
 
@@ -92,13 +97,95 @@ export function deletePedido(req, res, next) {
     }
 }
 
-// Añadir un ingrediente a un pedido
-export function addIngredientes(req, res, next) {
+export function updatePedido(req, res, next) {
+
+    const requestWith = req.get('X-Requested-With');
+    const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
+    if (esAjax)
+        logger.debug("Petición AJAX recibida para updatePedido()");
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
+
+        if (esAjax) {
+            logger.debug("Devuelto código 400 a la petición AJAX");
+            return res.status(400).json({ status: 400, errores });
+        }
+
+        return render(req, res, `paginas/index`, {
+            datos,
+            errores,
+        });
+    }
+
+    const username = req.session.username;
+
+    if (!Pedido.exists(username)) {
+        const err = {};
+        err.statusCode = 403;
+        err.message = "El usuario no tiene un pedido creado";
+        req.session.hasPedido = true;
+        return next(err, req, res);
+    }
+
+    const { id, cantidad } = matchedData(req);
+
+    try {
+        const pedido = Pedido.getPedidoByUsername(username);
+
+        const id_pedido = pedido.id;
+
+        PedidoContiene.cambiaCantidad(cantidad, id, id_pedido);
+
+        logger.debug("El usuario %s ha cambiado la cantidad del ingrediente %i de su pedido (nueva cantidad: %i)", username, id, cantidad);
+
+        if (esAjax) {
+            const ingrediente = Ingrediente.getIngredienteById(id);
+            const nuevoPrecio = ingrediente.precio * cantidad;
+            logger.debug("Devuelto código 200 a la petición AJAX");
+            return res.status(200).json({ ok: true , nuevoPrecio });
+        }
+
+        // Redirigir al finalizar
+        return res.redirect(`/pedido/verPedido`);  //TODO: CAMBIAR URL
+    }
+    catch (e) {
+        logger.error("Error al cambiar la cantidad del ingrediente %i del pedido de %s: %s'", id,  username, e.message);
+
+        const err = {};
+
+        err.statusCode = 500;
+        err.message = "Error al cambiar la cantidade del ingrediente del pedido";
+
+        if (esAjax)
+            return errorAjax(err, res);
+
+        return next(err, req, res);
+    }
+}
+
+// Añadir un ingrediente a un pedido
+export function addIngredientes(req, res, next) {
+
+    const requestWith = req.get('X-Requested-With');
+    const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
+    if (esAjax)
+        logger.debug("Petición AJAX recibida para addIngredientes(Pedidos)");
+
+
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+        const datos = matchedData(req);
+
+
+        if (esAjax) {
+            logger.debug("Devuelto código 400 a la petición AJAX");
+            return res.status(400).json({ status: 400, errores });
+        }
+
         return render(req, res, `paginas/index`, { //TODO: CAMBIAR URL
             datos,
             errores,
@@ -107,16 +194,16 @@ export function addIngredientes(req, res, next) {
 
     const { ingredientes_id, username, ingredientes_cantidad } = matchedData(req);
 
-    if (username !== req.session.username && req.session.rol !== RolesEnum.ADMIN)
+    if (username !== req.session.username)
         return render(req, res, "paginas/noPermisos");
-
-
 
     try {
         let pedido;
 
         if (!Pedido.exists(username)) { // Si el usuario no tiene un pedido, se crea uno nuevo
             pedido = Pedido.insertPedido(username);
+            logger.info("Pedido '%i' registrado para el usuario %s. Fecha de creación: %s)", pedido.id, pedido.user, pedido.fecha);
+            req.session.hasPedido = true;
         }
         else
             pedido = Pedido.getPedidoByUsername(username);
@@ -134,6 +221,12 @@ export function addIngredientes(req, res, next) {
             logger.debug("El usuario %s ha añadido el ingrediente %i a su pedido (cantidad añadida: %i)", username, id_ingrediente, cantidad);
 
         }
+
+        if (esAjax) {
+            logger.debug("Devuelto código 200 a la petición AJAX");
+            return res.status(200).json({ ok: true });
+        }
+
         // Redirigir al finalizar
         return res.redirect(`paginas/index`);  //TODO: CAMBIAR URL
     }
@@ -144,6 +237,9 @@ export function addIngredientes(req, res, next) {
 
         err.statusCode = 500;
         err.message = "Error al añadir los ingredientes al pedido";
+
+        if (esAjax)
+            return errorAjax(err, res);
 
         return next(err, req, res);
     }
@@ -193,6 +289,8 @@ export function doPagarPedido(req, res, next) {
             //Se elimina el pedido
             Pedido.deletePedido(pedido.id);
 
+            req.session.hasPedido = false;
+
             return res.redirect("/");
 
         }
@@ -204,6 +302,38 @@ export function doPagarPedido(req, res, next) {
             err.statusCode = 500;
             return next(err, req, res);
         }
+    }
+    else {
+        const err = {};
+        err.statusCode = 400;
+        err.message = "No tienes pedido";
+        return next(err, req, res);
+    }
+}
+
+
+export function viewPedido(req, res, next) {
+    const username = req.session.username;
+    if (Pedido.exists(username)) {
+        const pedido = Pedido.getPedidoByUsername(username);
+
+        const arrayIngredientes = PedidoContiene.getIngredientesByPedido(pedido.id);
+
+        let precioTotal = 0;
+
+        for (let ingredienteContenido of arrayIngredientes) {
+            precioTotal += ingredienteContenido.cantidad * ingredienteContenido.ingrediente.precio;
+            ingredienteContenido.ingrediente.precio = ingredienteContenido.cantidad * ingredienteContenido.ingrediente.precio;
+        }
+
+        //Truncamos el precio del pedido a sólo dos decimales
+        precioTotal = Math.trunc(precioTotal * 100) / 100;
+
+        return render(req, res, 'paginas/miPedido', {
+            pedido,
+            arrayIngredientes,
+            precioTotal
+        });
     }
     else {
         const err = {};

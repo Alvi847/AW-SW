@@ -5,6 +5,7 @@
 @import url('/css/perfil.css');
 @import url('/css/home.css');
 @import url('/css/administrar.css');
+@import url('/css/pedido.css');
 
 * {
     margin: 0;

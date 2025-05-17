@@ -55,7 +55,7 @@ async function postData(url = '', data = {}, options = {}) {
                     break;
             }
         }
-        defaultErrorHandler(err);
+        defaultErrorHandler(err, await err.response.json());
     }
 }
 
@@ -103,7 +103,7 @@ async function postJson(url = '', data = {}, options = {}) {
                     break;
             }
         }
-        defaultErrorHandler(err);
+        defaultErrorHandler(err, await err.response.json());
     }
 }
 
@@ -141,7 +141,7 @@ async function post(url = '', data = new FormData(), options = {}) {
                     break;
             }
         }
-        defaultErrorHandler(err);
+        defaultErrorHandler(err, await err.response.json());
     }
 }
 
@@ -174,19 +174,19 @@ async function getData(url = '', options = {}) {
                     break;
             }
         }
-        defaultErrorHandler(err);
+        defaultErrorHandler(err, await err.response.json());
     }
 }
 
-function defaultErrorHandler(err) {
+function defaultErrorHandler(err, responseJson) {
     if (err instanceof ResponseError) {
         switch (err.response.status) {
             case 401:
-                // Usuario no logado
+                window.assign('/usuarios/login'); // Mandar al usuario al formulario de login
                 ;
                 break;
             case 500:
-                // Mostrar un diálogo piendo disculpas
+                mostrarError(500, responseJson.message)
                 ;
                 break;
             default:

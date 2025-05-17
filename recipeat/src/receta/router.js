@@ -69,7 +69,7 @@ recetasRouter.post('/createReceta'
     , [
         body('ingredientes_cantidad', 'Añade cantidades correctas a cada ingrediente').isArray({ min: 1 }),
         body('ingredientes_cantidad.*')
-            .isNumeric().withMessage('Cada cantidad debe ser un número')
+            .isFloat({min: 0.01}).withMessage('Cada cantidad debe ser un número')
     ]
     , body('modo_preparacion', 'No puede ser vacío').trim().notEmpty()
     , body('modo_preparacion', 'Máximo 1000 caracteres').trim().isLength({ min: 1, max: 1000 })

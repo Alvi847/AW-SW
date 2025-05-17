@@ -4,6 +4,7 @@ import { validationResult, matchedData } from 'express-validator';
 import { Receta } from '../receta/Receta.js';
 import { logger } from '../logger.js';
 import { Ingrediente } from '../ingrediente/Ingrediente.js';
+import { Pedido } from '../Pedidos/Pedidos.js';
 
 export function viewLogin(req, res, next) {
     render(req, res, 'paginas/login', {
@@ -37,6 +38,7 @@ export async function doLogin(req, res, next) {
         req.session.nombre = usuario.nombre;
         req.session.username = username; // Se tiene que guardar el nombre de usuario en la sesión, porque este es la clave identificativa
         req.session.rol = usuario.rol;
+        req.session.hasPedido = Pedido.exists(username); // Si el usuario tiene un pedido o no
 
         res.setFlash(`Encantado de verte de nuevo: ${usuario.nombre}`);
 
@@ -131,6 +133,7 @@ export async function doRegistro(req, res, next) {
         req.session.username = usuario.username;
         req.session.email = usuario.email;
         req.session.imagen = usuario.imagen;
+        req.session.hasPedido = false;
 
         if (esAjax) {
             req.log.debug("Devuelto código 200 a la petición AJAX");
