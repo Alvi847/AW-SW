@@ -81,7 +81,7 @@ CREATE TABLE "Recetas" (
 	"imagen"	VARCHAR(255),
 	"gusto"	TEXT DEFAULT NULL CHECK("gusto" IN ('dulce', 'salado')),
 	"nivel"	TEXT DEFAULT NULL CHECK("nivel" IN ('fácil', 'medio', 'difícil')),
-	"dieta"	TEXT DEFAULT NULL CHECK("dieta" IN ('vegana', 'sin gluten', 'carnívora')),
+	"dieta"	TEXT DEFAULT NULL CHECK("dieta" IN ('vegana', 'sin gluten', 'vegetariana')),
 	PRIMARY KEY("id" AUTOINCREMENT),
 	FOREIGN KEY("user") REFERENCES "Usuarios"("username") ON DELETE CASCADE
 );
