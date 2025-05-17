@@ -3,112 +3,124 @@
     <div class="menu-lateral">
       <ul>
         <li>
-          <a href="/usuarios/<%= usuario.username %>/recetas"
-            >Recetas de <%= usuario.nombre %></a
-          >
+          <a href="/usuarios/<%= usuario.username %>/recetas">
+            <%if (usuario.username !==session.username){%>
+              Recetas de <%= usuario.nombre %>
+                <% } else { %>
+                  Mis Recetas
+                  <% } %>
+          </a>
         </li>
         <li>
-          <a href="/usuarios/<%= usuario.username %>/favoritos"
-            >Favoritas de <%= usuario.nombre %></a
-          >
+          <a href="/usuarios/<%= usuario.username %>/favoritos">
+            <%if (usuario.username !==session.username){%>
+              Favoritas de <%= usuario.nombre %>
+                <% } else { %>
+                  Mis Recetas Favoritas
+                  <% } %>
+          </a>
         </li>
         <li>
           <% if (session.username===usuario.username) { %>
             <a href="/usuarios/misPreferencias">Mis Preferencias</a>
             <% } %>
-        
+
         </li>
       </ul>
     </div>
 
     <div class="contenido-perfil">
-      <h1 class="titulo-perfil">Perfil de <%= usuario.nombre %></h1>
+      <h1 class="titulo-perfil">Perfil de <%= usuario.nombre %>
+      </h1>
 
       <div class="contenido-info">
         <div class="perfil-foto">
           <% if (usuario.imagen) { %>
-          <img src="/imagen/<%= usuario.imagen %>" alt="Foto de perfil" />
-          <% } else { %>
-          <p>Este usuario no tiene foto de perfil.</p>
-          <% } %>
+            <img src="/imagen/<%= usuario.imagen %>" alt="Foto de perfil" />
+            <% } else { %>
+              <p>Este usuario no tiene foto de perfil.</p>
+              <% } %>
         </div>
 
         <div class="perfil-detalles">
           <h2>Detalles del usuario:</h2>
-          <p><strong>Nombre:</strong> <%= usuario.nombre %></p>
-          <p><strong>Username:</strong> <%= usuario.username %></p>
-          <p><strong>Email:</strong> <%= usuario.email %></p>
+          <p><strong>Nombre:</strong>
+            <%= usuario.nombre %>
+          </p>
+          <p><strong>Username:</strong>
+            <%= usuario.username %>
+          </p>
+          <p><strong>Email:</strong>
+            <%= usuario.email %>
+          </p>
 
-          <% if (session.username === usuario.username) { %>
-          <div class="botones-perfil">
-            <a href="/usuarios/updatePerfil" class="editar">Editar perfil</a>
-            <a href="/usuarios/logout" class="logout">Cerrar sesión</a>
-          </div>
-          <% } %>
+          <% if (session.username===usuario.username) { %>
+            <div class="botones-perfil">
+              <a href="/usuarios/updatePerfil" class="editar">Editar perfil</a>
+              <a href="/usuarios/logout" class="logout">Cerrar sesión</a>
+            </div>
+            <% } %>
         </div>
       </div>
 
       <div id="calendar"></div>
 
-      <% if (session.username === usuario.username) { %>
-      <div class="crear-evento">
-        <h3>📅  AÑADIR NUEVO EVENTO</h3>
-        <form id="formEvento">
-          <div class="form-group">
-            <label for="titulo">Título del evento</label>
-            <input type="text" id="titulo" required />
-          </div>
+      <% if (session.username===usuario.username) { %>
+        <div class="crear-evento">
+          <h3>📅 AÑADIR NUEVO EVENTO</h3>
+          <form id="formEvento">
+            <div class="form-group">
+              <label for="titulo">Título del evento</label>
+              <input type="text" id="titulo" required />
+            </div>
 
-          <div class="form-group">
-            <label for="fecha">Fecha</label>
-            <input type="date" id="fecha" required />
-          </div>
+            <div class="form-group">
+              <label for="fecha">Fecha</label>
+              <input type="date" id="fecha" required />
+            </div>
 
-          <div class="form-group">
-            <label for="descripcion">Descripción</label>
-            <textarea
-              id="descripcion"
-              rows="3"
-              placeholder="Escribe una breve descripción..."
-            ></textarea>
-          </div>
+            <div class="form-group">
+              <label for="descripcion">Descripción</label>
+              <textarea id="descripcion" rows="3" placeholder="Escribe una breve descripción..."></textarea>
+            </div>
 
-          <button type="submit" class="btn-enviar">Crear evento</button>
-        </form>
-      </div>
-      <% } %>
+            <button type="submit" class="btn-enviar">Crear evento</button>
+          </form>
+        </div>
+        <% } %>
     </div>
     <div id="editModal" class="modal hidden">
       <div class="modal-content">
         <h3 class="modal-titulo">✏️EDITAR EVENTO</h3>
         <form id="editForm">
           <input type="hidden" id="editId" />
-    
+
           <div class="form-group">
             <label for="editTitulo">Título</label>
             <input type="text" id="editTitulo" required />
           </div>
-    
+
           <div class="form-group">
             <label for="editFecha">Fecha</label>
             <input type="date" id="editFecha" required />
           </div>
-    
+
           <div class="form-group">
             <label for="editDescripcion">Descripción</label>
             <textarea id="editDescripcion" rows="3"></textarea>
           </div>
-    
+
           <div class="form-buttons">
-            <button type="button" class="btn-cancelar" onclick="document.getElementById('editModal').classList.add('hidden')">Cancelar</button>
+            <button type="button" class="btn-cancelar"
+              onclick="document.getElementById('editModal').classList.add('hidden')">Cancelar</button>
             <button type="submit" class="btn-guardar">Guardar</button>
           </div>
         </form>
       </div>
-    </div>    
-
     </div>
+
   </div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
