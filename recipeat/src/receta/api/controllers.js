@@ -16,7 +16,7 @@ import { Receta } from '../Receta.js';
 export async function checkReceta(req, res) {
     const result = validationResult(req);
     const datos = matchedData(req, { includeOptionals: true });
-    if (! result.isEmpty()) {
+    if (!result.isEmpty()) {
         const errores = result.array();
         return res.status(400).json({ status: 400, errores });
     }
@@ -49,5 +49,19 @@ export function buscarRecetas(req, res) {
         return false;
     });
 
-    res.json(recetasFiltradas);
+    // Esto porque no se envía el campo id al cliente con res.json(recetasFiltradas) ya que el campo es privado de la clase
+    res.json(recetasFiltradas.map(r => ({
+        id: r.id,
+        nombre: r.nombre,
+        descripcion: r.descripcion,
+        modo_preparacion: r.modo_preparacion,
+        likes: r.likes,
+        user: r.user,
+        user_liked: r.user_liked,
+        imagen: r.imagen,
+        gusto: r.gusto,
+        nivel: r.nivel,
+        dieta: r.dieta,
+        ingredientes: r.ingredientes,
+    })));
 }
