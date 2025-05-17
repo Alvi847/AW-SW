@@ -142,9 +142,16 @@ export async function doCreateReceta(req, res, next) {
             errores
         });
     }
+    const datos = matchedData(req);
 
-    const { nombre, descripcion, modo_preparacion, gusto, nivel, dieta
-        , ingredientes_id, ingredientes_cantidad } = matchedData(req)
+const nombre = datos.nombre;
+const gusto = datos.gusto;
+const nivel = datos.nivel;
+const dieta = datos.dieta;
+const ingredientes_id = datos.ingredientes_id;
+const ingredientes_cantidad = datos.ingredientes_cantidad;
+    const descripcionRaw = req.body.descripcion;
+const modoPreparacionRaw = req.body.modo_preparacion;
 
     const imagen = req.file;
 
