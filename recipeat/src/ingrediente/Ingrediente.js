@@ -322,7 +322,7 @@ export class Contiene {
     /**
      * Obtiene todos los ingredientes contenidos en una receta
      * @param {int} id_receta
-     * @returns {PedidoContiene[]} Un array de ingredientes de la receta con sus cantidades
+     * @returns {Contiene[]} Un array de ingredientes de la receta con sus cantidades
      */
     static getIngredientesByReceta(id_receta) {
         const arrayIngredientes = this.#getAllByRecetaStmt.all({ id_receta });
@@ -341,28 +341,28 @@ export class Contiene {
     cantidad; // Cantidad del ingrediente contenido
     #nombre; // Nombre del ingrediente contenido
     unidad; // Unidad del ingrediente contenido
-    #id_ingrediente // Id del ingrediente contenido
+    #id // Id del ingrediente contenido
 
     /**
      * 
      * @param {string} nombre 
      * @param {int} unidad 
      * @param {cantidad} cantidad 
-     * @param {int} id_ingrediente 
+     * @param {int} id 
      */
-    constructor(nombre, unidad, cantidad, id_ingrediente) {
+    constructor(nombre, unidad, cantidad, id) {
         this.#nombre = nombre;
         this.cantidad = cantidad;
         this.unidad = unidad;
-        this.#id_ingrediente = id_ingrediente;
+        this.#id = id;
     }
 
     get nombre() {
         return this.#nombre;
     }
 
-    get id_ingrediente() {
-        return this.#id_ingrediente;
+    get id() {
+        return this.#id;
     }
 
 }
