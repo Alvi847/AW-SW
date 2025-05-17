@@ -36,8 +36,8 @@ recetasRouter.post('/createReceta'
     , body('nombre', 'No puede ser vacío').trim().notEmpty()
     , body('nombre', 'Sólo puede contener letras').trim().matches(/^[\p{L}\s]*$/u) // Cualquier letra de cualquier idioma
     , body('nombre', 'Máximo 50 caracteres').trim().isLength({ min: 1, max: 50 })
-    , body('descripcion', 'No puede ser vacío').trim().notEmpty()
-    , body('descripcion', 'Máximo 200 caracteres').trim().isLength({ min: 1, max: 200 })
+    , body('descripcion', 'No puede ser vacío').customSanitizer(value => value).notEmpty()
+    , body('descripcion', 'Máximo 200 caracteres').isLength({ max: 200 })
     , [
         body('ingredientes_id', 'Añade ingredientes').isArray({min: 1})
             .custom((value, { req }) => {
@@ -71,8 +71,8 @@ recetasRouter.post('/createReceta'
         body('ingredientes_cantidad.*')
             .isFloat({min: 0.01}).withMessage('Cada cantidad debe ser un número')
     ]
-    , body('modo_preparacion', 'No puede ser vacío').trim().notEmpty()
-    , body('modo_preparacion', 'Máximo 1000 caracteres').trim().isLength({ min: 1, max: 1000 })
+    , body('modo_preparacion', 'No puede ser vacío').customSanitizer(value => value).notEmpty()
+    , body('modo_preparacion', 'Máximo 1000 caracteres').isLength({ max: 1000 })
     , body('gusto').optional({ checkFalsy: true }).isIn(['dulce', 'salado', 'picante'])
     , body('nivel').optional({ checkFalsy: true }).isIn(['fácil', 'medio', 'difícil'])
     , body('dieta').optional({ checkFalsy: true }).isIn(['vegana', 'vegetariana', 'sin gluten'])
