@@ -21,7 +21,9 @@ function mostrarEnlace(session){
             <ul>
                 <li><a href="/">Inicio</a></li>
                 <li><a href="/contenido/normal">Cómo funciona</a></li>
+                <% if (session.rol === 'A') {%>
                 <li><a href="/contenido/admin">Administrar</a></li>
+                <% } %>
                 <li><a href="/receta/listaRecetas">Recetas</a></li>                
 			    <%- mostrarEnlace(session) %>
             </ul>
