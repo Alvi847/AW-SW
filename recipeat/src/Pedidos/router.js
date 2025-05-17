@@ -30,7 +30,7 @@ pedidosRouter.post('/updatePedido'
     , autenticado('/')
     , body('id', 'Id inválido').notEmpty().isNumeric()
     , body('cantidad', 'No puede ser vacío').notEmpty()
-    , body('cantidad', 'Debe ser un número').isNumeric()
+    , body('cantidad', 'Debe ser un número mayor que 0').isNumeric().isFloat({min: 0.01})
     , asyncHandler(updatePedido));
 
 // Ruta para añadir un ingrediente a un pedido
@@ -69,7 +69,7 @@ pedidosRouter.post('/addIngredientesToPedido'
     , [
         body('ingredientes_cantidad', 'Añade cantidades correctas a cada ingrediente').isArray({ min: 1 }),
         body('ingredientes_cantidad.*')
-            .isNumeric().withMessage('Cada cantidad debe ser un número')
+            .isFloat({min: 0.01}).withMessage('Cada cantidad debe ser un número mayor que 0')
     ]
     , asyncHandler(addIngredientes));
 
