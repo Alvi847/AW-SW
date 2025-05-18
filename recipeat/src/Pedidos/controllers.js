@@ -171,7 +171,7 @@ export function removeIngrediente(req, res, next){
     const requestWith = req.get('X-Requested-With');
     const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
     if (esAjax)
-        logger.debug("Petición AJAX recibida para updatePedido()");
+        logger.debug("Petición AJAX recibida para removeIngrediente()");
 
     const result = validationResult(req);
     if (!result.isEmpty()) {

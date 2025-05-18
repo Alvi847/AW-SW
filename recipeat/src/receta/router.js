@@ -15,9 +15,17 @@ const multerFactory = multer({ dest: join(UPLOAD_PATH) });
 
 const recetasRouter = express.Router();
 
+const gustos_permitidos = ['dulce', 'salado'];
+const niveles_permitidos = ['fácil', 'medio', 'difícil'];
+const dietas_permitidas = ['vegana', 'vegetariana', 'sin gluten'];
+
+
 //Ruta para ver la lista de recetas
-recetasRouter.get('/listaRecetas', asyncHandler(viewRecetas));
-//recetasRouter.post('/listaRecetas', autenticado('/receta/listaRecetas'), asyncHandler(viewRecetas));
+recetasRouter.get('/listaRecetas'
+    , param('gusto', 'gusto inválido').custom((value) => {return value == null || gustos_permitidos.includes(value)})
+    , param('nivel', 'nivel inválido').custom((value) => {return value == null || niveles_permitidos.includes(value)})
+    , param('dieta', 'dieta inválida').custom((value) => {return value == null || dietas_permitidas.includes(value)})
+    , asyncHandler(viewRecetas));
 
 //Ruta para ver una receta
 recetasRouter.get('/verReceta/:id'
@@ -63,13 +71,13 @@ recetasRouter.post('/createReceta'
                 }
                 return Number.isFinite(Number(value)); // Si no son arrays, entonces miramos si son enteros
             }),
-        body('ingredientes_id.*')
-            .isNumeric().withMessage('Cada ingrediente debe ser un número')
+        body('ingredientes_id.*') // Comprobamos que cada ingrediente sea un número válido
+            .isInt({min: 1}).withMessage('Cada ingrediente debe ser un número natural')
     ]
     , [
         body('ingredientes_cantidad', 'Añade cantidades correctas a cada ingrediente').isArray({ min: 1 }),
-        body('ingredientes_cantidad.*')
-            .isFloat({min: 0.01}).withMessage('Cada cantidad debe ser un número')
+        body('ingredientes_cantidad.*') // Comprobamos que cada cantidad es un número válido
+            .isFloat({min: 0.01}).withMessage('Cada cantidad debe ser un número positivo')
     ]
     , body('modo_preparacion', 'No puede ser vacío').customSanitizer(value => value).notEmpty()
     , body('modo_preparacion', 'Máximo 1000 caracteres').isLength({ max: 1000 })
@@ -148,6 +156,39 @@ recetasRouter.post('/updateReceta/:id'
             return false;
         }
     }).withMessage("Sólo se permiten imágenes jpg o png")
+    ,[
+        body('ingredientes_id', 'Añade ingredientes').isArray({min: 1})
+            .custom((value, { req }) => {
+                    // Aquí comprobamos si los arrays de ids y cantidades tienen la misma longitud, para saber si cada ingrediente tiene su correpondiente cantidad
+                    if (value.length !== req.body.ingredientes_cantidad.length) {
+                        throw new Error('Cada ingrediente debe tener asociada una cantidad');
+                    }
+                    return true;
+                
+            })
+            .custom((value, { req }) => {
+                if (Array.isArray(value) && Array.isArray(req.body.ingredientes_cantidad)) {
+                    // Aquí nos aseguramos de que no se ha seleccionado un ingrediente varias veces
+                    // Usamos un Set auxiliar (almacena valores y no permite que estos se repitan) para encontrar ingredientes duplicados en tiempo lineal con respecto al número de ingredientes
+                    const set = new Set();
+                    for (let i = 0; i < value.length; i++) {
+                        if (set.has(value[i])) {
+                            throw new Error('Añade cada ingrediente sólo 1 vez');  // Se ha encontrado un duplicado
+                        }
+                        set.add(value[i]);
+                    }
+                    return true;  // No hay duplicados
+                }
+                return Number.isFinite(Number(value)); // Si no son arrays, entonces miramos si son enteros
+            }),
+        body('ingredientes_id.*') // Comprobamos que cada ingrediente sea un número válido
+            .isInt({min: 1}).withMessage('Cada ingrediente debe ser un número natural')
+    ]
+    , [
+        body('ingredientes_cantidad', 'Añade cantidades correctas a cada ingrediente').isArray({ min: 1 }),
+        body('ingredientes_cantidad.*') // Comprobamos que cada cantidad es un número válido
+            .isFloat({min: 0.01}).withMessage('Cada cantidad debe ser un número positivo')
+    ]
     , asyncHandler(updateReceta));
 
 // Ruta para eliminar una receta

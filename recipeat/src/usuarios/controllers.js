@@ -47,7 +47,7 @@ export async function doLogin(req, res, next) {
     } catch (e) {
         const datos = matchedData(req);
         req.log.warn("Problemas al hacer login del usuario '%s'", username);
-        req.log.debug('El usuario %s, no ha podido logarse: %s', username, e.message);
+        logger.debug('El usuario %s, no ha podido logarse: %s', username, e.message);
         render(req, res, 'paginas/login', {
             error: 'El usuario o contraseña no son válidos',
             datos,
@@ -93,14 +93,14 @@ export async function doRegistro(req, res, next) {
     const requestWith = req.get('X-Requested-With');
     const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
     if (esAjax)
-        req.log.debug("Petición AJAX recibida para doRegistro()");
+        logger.debug("Petición AJAX recibida para doRegistro()");
 
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
 
         if (esAjax) {
-            req.log.debug("Devuelto código 400 a la petición AJAX");
+            logger.debug("Devuelto código 400 a la petición AJAX");
             return res.status(400).json({ status: 400, errores });
         }
 
@@ -136,11 +136,11 @@ export async function doRegistro(req, res, next) {
         req.session.hasPedido = false;
 
         if (esAjax) {
-            req.log.debug("Devuelto código 200 a la petición AJAX");
+            logger.debug("Devuelto código 200 a la petición AJAX");
             return res.status(200).json({ ok: true });
         }
 
-        req.log.info("Usuario %s registrado con éxito", usuario.username);
+        logger.info("Usuario %s registrado con éxito", usuario.username);
 
         return res.redirect('/usuarios/home');
     } catch (e) {
@@ -152,7 +152,7 @@ export async function doRegistro(req, res, next) {
         delete datos.password;
         delete datos.passwordConfirmacion;
         req.log.error("Problemas al registrar un nuevo usuario '%s'", username);
-        req.log.debug('El usuario no ha podido registrarse: %s', e);
+        logger.debug('El usuario no ha podido registrarse: %s', e);
         render(req, res, 'paginas/registro', {
             error,
             datos: {},
@@ -465,14 +465,14 @@ export function guardarPreferencias(req, res, next) {
     }
 
     if (esAjax)
-        req.log.debug("Petición AJAX recibida para guardarPreferencias()");
+        logger.debug("Petición AJAX recibida para guardarPreferencias()");
 
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
 
         if (esAjax) {
-            req.log.debug("Errores de validación: %o", errores);
+            logger.debug("Errores de validación: %o", errores);
             return res.status(400).json({ status: 400, errores });
         }
 
@@ -492,7 +492,7 @@ export function guardarPreferencias(req, res, next) {
         const nuevaPreferencia = new Preferencias(user, datos.gusto, datos.nivel, datos.dieta);
         Preferencias.insertPreferencia(nuevaPreferencia);
 
-        req.log.info("Preferencias actualizadas para '%s'", user);
+        logger.info("Preferencias actualizadas para '%s'", user);
 
         if (esAjax) {
             return res.status(200).json({ ok: true });

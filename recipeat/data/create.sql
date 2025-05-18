@@ -27,7 +27,7 @@ CREATE TABLE "Eventos" (
 	"descripcion"	TEXT,
 	"user"	TEXT NOT NULL,
 	PRIMARY KEY("id" AUTOINCREMENT),
-	FOREIGN KEY("user") REFERENCES "Usuarios"("username")
+	FOREIGN KEY("user") REFERENCES "Usuarios"("username") ON DELETE CASCADE
 );
 DROP TABLE IF EXISTS "Ingredientes";
 CREATE TABLE "Ingredientes" (
@@ -50,7 +50,8 @@ CREATE TABLE "Pedidos" (
 	"id"	INTEGER NOT NULL,
 	"usuario"	TEXT NOT NULL UNIQUE,
 	"creacion"	DATE NOT NULL,
-	PRIMARY KEY("id" AUTOINCREMENT)
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("usuario") REFERENCES "Usuarios"("username") ON DELETE CASCADE
 );
 DROP TABLE IF EXISTS "Pedidos_Contiene";
 CREATE TABLE "Pedidos_Contiene" (
@@ -63,10 +64,10 @@ CREATE TABLE "Pedidos_Contiene" (
 );
 DROP TABLE IF EXISTS "Preferencias";
 CREATE TABLE "Preferencias" (
-	"user"	TEXT,
+	"user"	TEXT NOT NULL,
 	"gusto"	TEXT CHECK("gusto" IN ("dulce", "salado")),
 	"nivel"	TEXT CHECK("nivel" IN ("fácil", "medio", "difícil")),
-	"dieta"	TEXT CHECK("dieta" IN ("vegana", "sin gluten", "carnívora")),
+	"dieta"	TEXT CHECK("dieta" IN ("vegana", "sin gluten", "vegetariana")),
 	PRIMARY KEY("user"),
 	FOREIGN KEY("user") REFERENCES "Usuarios"("username") ON DELETE CASCADE
 );
