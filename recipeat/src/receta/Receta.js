@@ -182,14 +182,10 @@ export class Receta {
 
         return recetas;
     }
-    //Obtener recetas con like de @username 
-    static recetasConLike(username) {
-        return this.#getRecetasByIdsStmt.all({ username });
-    }
 
     //obtiene recetas de un user
     static getRecetasFromUser(username){
-        const recetas = this.#getRecetasFromUserStmt.all( {username} );
+        const recetas = this.#getRecetasByUserStmt.all( {username} );
         
         return recetas;
     }
