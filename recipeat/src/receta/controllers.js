@@ -469,6 +469,16 @@ export function viewMisRecetas(req, res, next) {
 
     try {
         const recetas = Receta.getRecetasPorUsuario(user);
+
+        //  Strip de etiquetas HTML en la descripción (podria venir enriquecido por CKEditor) 
+    const stripTags = (input) =>
+        input.replace(/(<([^>]+)>)/gi, "").replace(/&nbsp;/g, " ").trim();
+
+
+    recetas = recetas.map(r => {
+        r.descripcion = stripTags(r.descripcion);
+        return r;
+    });
         render(req, res, contenido, {
             recetas,
             login: true
