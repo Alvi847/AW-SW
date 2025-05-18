@@ -1,6 +1,6 @@
 import { body, check, param } from 'express-validator';
 import express from 'express';
-import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewPerfil, viewUpdatePerfil, updatePerfil, deleteUsuario, viewAdministrar, cambiarRolUsuario, viewPerfilUser, viewFavoritosUser, viewRecetasUser, viewPreferencias, guardarPreferencias } from './controllers.js';
+import { viewLogin, doLogin, doLogout, viewHome, viewRegistro, doRegistro, viewUpdatePerfil, updatePerfil, deleteUsuario, viewAdministrar, cambiarRolUsuario, viewPerfilUser, viewFavoritosUser, viewRecetasUser, viewPreferencias, guardarPreferencias } from './controllers.js';
 import { autenticado, tieneRol } from '../middleware/auth.js';
 import asyncHandler from 'express-async-handler';
 import multer from 'multer';
