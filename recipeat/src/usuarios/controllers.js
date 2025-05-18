@@ -33,7 +33,7 @@ export async function doLogin(req, res, next) {
     const password = req.body.password;
 
     try {
-        const usuario = await Usuario.login(username, password);
+        const usuario = Usuario.login(username, password);
         req.session.login = true;
         req.session.nombre = usuario.nombre;
         req.session.username = username; // Se tiene que guardar el nombre de usuario en la sesión, porque este es la clave identificativa
@@ -197,7 +197,7 @@ export async function viewPerfilUser(req, res, next) {  // ver perfil de usuario
     try {
         const { username } = req.params;
 
-        const usuario = await Usuario.getUsuarioByUsername(username);
+        const usuario = Usuario.getUsuarioByUsername(username);
 
         render(req, res, 'paginas/verPerfil', {
             usuario
@@ -232,8 +232,8 @@ export async function viewFavoritosUser(req, res, next) {
     if (!username) {
         return render(req, res, 'paginas/home', { error: 'Usuario no encontrado' });
     }
-    const usuario = await Usuario.getUsuarioByUsername(username);
-    const recetas = await Receta.getFavoritosPorUsuario(username);
+    const usuario = Usuario.getUsuarioByUsername(username);
+    let recetas = Receta.getFavoritosPorUsuario(username);
 
     //  Strip de etiquetas HTML en la descripción (podria venir enriquecido por CKEditor) 
     const stripTags = (input) =>
@@ -269,7 +269,7 @@ export async function viewRecetasUser(req, res, next) {
     const { username } = req.params;
 
     try {
-        const usuario = await Usuario.getUsuarioByUsername(username);
+        const usuario = Usuario.getUsuarioByUsername(username);
         if (!usuario) {
             return res.redirect('/usuarios/login');  // Si no se encuentra el usuario, redirigir al login
         }
@@ -302,7 +302,7 @@ export async function viewRecetasUser(req, res, next) {
 
 export async function viewUpdatePerfil(req, res, next) {
     try {
-        const usuario = await Usuario.getUsuarioByUsername(req.session.username);
+        const usuario = Usuario.getUsuarioByUsername(req.session.username);
         if (!usuario) {
             return res.redirect('/usuarios/login');
         }
@@ -340,7 +340,7 @@ export async function updatePerfil(req, res, next) {
 
 
     try {
-        const usuario = await Usuario.getUsuarioByUsername(req.session.username);
+        const usuario = Usuario.getUsuarioByUsername(req.session.username);
         usuario.nombre = nombre;
         //usuario.#username = username; 
         usuario.email = email;
@@ -353,7 +353,7 @@ export async function updatePerfil(req, res, next) {
             await usuario.cambiaPassword(password);
         }
 
-        await usuario.persist();
+        usuario.persist();
 
         req.session.username = username;
         req.session.nombre = nombre;
@@ -378,7 +378,7 @@ export async function viewAdministrar(req, res, next) {
         render(req, res, 'paginas/administrar', { errores: [], usuarios, ingredientes });
     } catch (error) {
         req.log.error(error.message);
-        
+
         const err = {};
 
         err.statusCode = 500;
@@ -439,9 +439,9 @@ export async function cambiarRolUsuario(req, res, next) {
     }
 
     try {
-        const usuario = await Usuario.getUsuarioByUsername(username);
+        const usuario = Usuario.getUsuarioByUsername(username);
         usuario.rol = rol;
-        await usuario.persist();
+        usuario.persist();
         res.setFlash('Rol actualizado correctamente');
     } catch (error) {
         console.error(error);
@@ -462,7 +462,7 @@ export async function viewPreferencias(req, res, next) {
     }
 
     try {
-        const preferencias = await Preferencias.getPreferenciasUsuario(user);
+        const preferencias = Preferencias.getPreferenciasUsuario(user);
         return render(req, res, 'paginas/misPreferencias', {
             preferencias,
             errores: {}
