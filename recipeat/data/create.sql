@@ -63,7 +63,7 @@ CREATE TABLE "Pedidos_Contiene" (
 );
 DROP TABLE IF EXISTS "Preferencias";
 CREATE TABLE "Preferencias" (
-	"user"	TEXT,
+	"user"	TEXT NOT NULL,
 	"gusto"	TEXT CHECK("gusto" IN ("dulce", "salado")),
 	"nivel"	TEXT CHECK("nivel" IN ("fácil", "medio", "difícil")),
 	"dieta"	TEXT CHECK("dieta" IN ("vegana", "sin gluten", "carnívora")),
