@@ -50,7 +50,7 @@ export function viewRecetas(req, res, next) {
         recetas = recetas.filter(r => r.dieta === preferencias.dieta);
 
 
-   
+
     // Favoritos y recomendaciones
     let favoritos = [];
     let recomendadas = [];
@@ -59,15 +59,15 @@ export function viewRecetas(req, res, next) {
         favoritos = Receta.getFavoritosPorUsuario(user);
         recomendadas = Receta.getRecomendadasPersonalizadas(user);
     }
-     
-//  Strip de etiquetas HTML en la descripción (podria venir enriquecido por CKEditor) 
+
+    //  Strip de etiquetas HTML en la descripción (podria venir enriquecido por CKEditor) 
     const stripTags = (input) =>
         input.replace(/(<([^>]+)>)/gi, "").replace(/&nbsp;/g, " ").trim();
 
-    
+
     recetas = recetas.map(r => {
-    r.descripcion = stripTags(r.descripcion);
-    return r;
+        r.descripcion = stripTags(r.descripcion);
+        return r;
     });
 
     return render(req, res, contenido, {
@@ -326,10 +326,10 @@ export async function updateReceta(req, res, next) {
             recetaExistente.descripcion = descripcionSegura;
             recetaExistente.modo_preparacion = modoPreparacionSeguro;
             if (recetaExistente.imagen) {
-                try{
+                try {
                     await fs.unlink(join(UPLOAD_PATH, "/", recetaExistente.imagen)); // Hay que borrar la foto anterior en caso de haber alguna
                 }
-                catch(e){
+                catch (e) {
                     logger.error('No se puedo borrar la imagen anterior', e.cause);
                 }
             }
@@ -398,7 +398,13 @@ export async function deleteReceta(req, res, next) {
 
         if (receta != null && (user === receta.user || req.session.rol === RolesEnum.ADMIN)) {
             Receta.deleteReceta(id); // Elimina la receta por ID
-            await fs.unlink(join(UPLOAD_PATH, receta.imagen));  // Se borra la imagen de la receta del disco
+            try {
+                await fs.unlink(join(UPLOAD_PATH, receta.imagen));  // Se borra la imagen de la receta del disco
+            }
+            catch (e) {
+                logger.error('No se pudo borrar la imagen de la receta', e.cause);
+            }
+
             logger.info("Receta '%i' eliminada con exito", id);
         }
         else if (receta != null) {
