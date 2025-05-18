@@ -172,6 +172,20 @@ async function displayErrores(response) {
             feedback.textContent = error.msg;
         }
     }
+    displayErroresIngredientes(errores);
+}
+
+function displayErroresIngredientes(errores) {
+    const spanError = document.getElementById('general-error');
+    if ('ingredientes_id' in errores || 'ingredientes_cantidad' in errores) {
+        spanError.textContent = (errores['ingredientes_id'].msg || errores['ingredientes_cantidad'].msg);
+    }
+    else{
+        for(let i = 0; i < numIngredientes; i++)
+            if (`ingredientes_cantidad[${i}]` in errores)
+                spanError.textContent = errores[`ingredientes_cantidad[${i}]`].msg;
+
+    }
 }
 
 function compruebaNombre(e) {

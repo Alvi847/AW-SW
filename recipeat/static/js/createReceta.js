@@ -64,26 +64,26 @@ async function crearLineaIngrediente() {
         actualizarUnidad(unidadSpan, selectIngredientes);
     }
 
-    
+
     // Creamos span para indicar la validez de los ingredientes
     crearCamposDeValidacionIngrediente(div);
-    
+
     // Se añaden los elementos al div
     div.appendChild(selectIngredientes);
     div.appendChild(input);
     div.appendChild(unidadSpan);
-    
+
     // Creamos span para indicar la validez de las cantidades
     crearCamposDeValidacionCantidad(div);
-    
+
     contenedor.appendChild(div);
-    
+
     // Se comprueban repetidos después de añadir el selct al div
     compruebaRepetidos(selectIngredientes);
 
     // Se marca el elemento como seleccionado
     ingredientes_seleccionados[numIngredientes] = selectIngredientes.options[selectIngredientes.selectedIndex].value;
-    
+
     numIngredientes++;
 }
 
@@ -91,7 +91,7 @@ async function crearLineaIngrediente() {
  * Crea span para indicar la validez de los ingredientes
  * @param {*} div 
  */
-function crearCamposDeValidacionIngrediente(div){
+function crearCamposDeValidacionIngrediente(div) {
     const errorSpanIngrediente = document.createElement('span');
     errorSpanIngrediente.className = 'error';
     errorSpanIngrediente.id = 'ingrediente';
@@ -108,7 +108,7 @@ function crearCamposDeValidacionIngrediente(div){
  * Crea span para indicar la validez de las cantidades
  * @param {*} div 
  */
-function crearCamposDeValidacionCantidad(div){
+function crearCamposDeValidacionCantidad(div) {
     const errorSpanCantidad = document.createElement('span');
     errorSpanCantidad.className = 'error';
     errorSpanCantidad.id = 'cantidad';
@@ -122,7 +122,7 @@ function crearCamposDeValidacionCantidad(div){
 }
 
 // Eliminamos la última línea de ingredientes
-function eliminaLineaIngrediente(){
+function eliminaLineaIngrediente() {
     const div = document.getElementById(`linea_ingrediente_${numIngredientes - 1}`);
     const selectIngredientes = document.getElementById(`${numIngredientes - 1}`);
     ingredientes_seleccionados[Number(selectIngredientes.id)] = selectIngredientes.options[selectIngredientes.selectedIndex].value = -1
@@ -136,8 +136,8 @@ async function createSubmit(e) {
     try {
         const formData = new FormData(formCreate);
 
-        
-         // Comprobar si es actualización o creación
+
+        // Comprobar si es actualización o creación
         const idReceta = formData.get('id_receta');
         const isUpdate = idReceta && idReceta.trim() !== '';
 
@@ -177,8 +177,21 @@ async function displayErrores(response) {
             feedback.textContent = error.msg;
         }
     }
+    displayErroresIngredientes(errores);
 }
 
+function displayErroresIngredientes(errores) {
+    const spanError = document.getElementById('general-error');
+    if ('ingredientes_id' in errores || 'ingredientes_cantidad' in errores) {
+        spanError.textContent = (errores['ingredientes_id'].msg || errores['ingredientes_cantidad'].msg);
+    }
+    else {
+        for (let i = 0; i < numIngredientes; i++)
+            if (`ingredientes_cantidad[${i}]` in errores)
+                spanError.textContent = errores[`ingredientes_cantidad[${i}]`].msg;
+
+    }
+}
 function compruebaNombre(e) {
     const nombre = e.target;
 
@@ -314,13 +327,13 @@ function actualizarUnidadEvent(e) {
     actualizarUnidad(unidadSpan, selectIngredientes);
 };
 
-function actualizarUnidad(unidadSpan, selectIngredientes){
+function actualizarUnidad(unidadSpan, selectIngredientes) {
     const seleccionado = ingredientes.data.find(i => i.id == selectIngredientes.value);
     unidadSpan.textContent = seleccionado?.unidad || '';
 }
 
-function compruebaCantidad(e){
-     const cantidad = e.target;
+function compruebaCantidad(e) {
+    const cantidad = e.target;
 
     const validity = cantidadValida(cantidad.value)
     if (validity == "") {
@@ -330,7 +343,7 @@ function compruebaCantidad(e){
     }
 
     const esCantidadValida = cantidad.checkValidity();
-    
+
     let spanError = cantidad.parentNode.querySelector('span#cantidad.error');
     let spanFeedback = cantidad.parentNode.querySelector('span#cantidad.feedback');
 
@@ -355,12 +368,12 @@ function cantidadValida(cantidad) {
     return "";
 }
 
-function compruebaRepetidosEvent(e){
+function compruebaRepetidosEvent(e) {
     const selectIngredientes = e.target;
     compruebaRepetidos(selectIngredientes);
 }
 
-function compruebaRepetidos(selectIngredientes){
+function compruebaRepetidos(selectIngredientes) {
     const validity = checkIngredienteRepetido(selectIngredientes.options[selectIngredientes.selectedIndex].value)
     if (validity == "") {
         selectIngredientes.setCustomValidity('');
@@ -369,7 +382,7 @@ function compruebaRepetidos(selectIngredientes){
     }
 
     const esRepetido = !selectIngredientes.checkValidity();
-    
+
     let spanError = selectIngredientes.parentNode.querySelector('span#ingrediente.error');
     let spanFeedback = selectIngredientes.parentNode.querySelector('span#ingrediente.feedback');
 
@@ -377,9 +390,9 @@ function compruebaRepetidos(selectIngredientes){
         spanError.textContent = '⚠';
         spanFeedback.textContent = ' ';
     }
-    else{
+    else {
         spanError.textContent = ' ';
-        spanFeedback.textContent = '✔'; 
+        spanFeedback.textContent = '✔';
     }
 
     // Marcamos el ingrediente actual como selccionado
@@ -389,8 +402,8 @@ function compruebaRepetidos(selectIngredientes){
     selectIngredientes.reportValidity();
 }
 
-function checkIngredienteRepetido(ingrediente){
-    if(ingredientes_seleccionados.includes(ingrediente))
+function checkIngredienteRepetido(ingrediente) {
+    if (ingredientes_seleccionados.includes(ingrediente))
         return "Selecciona cada ingrediente una sola vez";
     return "";
 }
@@ -429,5 +442,5 @@ function imagenValida(files) {
         return "Sólo los tipos jpeg y png están permitidos";
     }
     return "";
-} 
+}
 
