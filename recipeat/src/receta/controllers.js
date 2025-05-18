@@ -56,6 +56,7 @@ export function viewRecetas(req, res, next) {
 
     recetas = recetas.map(r => ({
         ...r,
+        id: r.id,
         descripcion: stripTags(r.descripcion)
     }));
 
