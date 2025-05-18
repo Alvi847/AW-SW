@@ -34,8 +34,11 @@ async function deleteSubmit(e) {
                     case 400:
                         await displayErrores(err.response, formDelete);
                         break;
+                    case 401:
+                        window.assign('/usuarios/login'); // Mandar al usuario al formulario de login
+                        break;
                     default:
-                        mostrarError(err.response.status, await err.response.json());
+                        mostrarError(err);
                         break;
                 }
             }
@@ -58,8 +61,11 @@ async function updateSubmit(e) {
                 case 400:
                     await displayErrores(err.response, formUpdate);
                     break;
+                case 401:
+                    window.assign('/usuarios/login'); // Mandar al usuario al formulario de login
+                    break;
                 default:
-                    mostrarError(err.response.status, await err.response.json());
+                    mostrarError(err);
                     break;
             }
         }

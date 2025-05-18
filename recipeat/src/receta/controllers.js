@@ -1,6 +1,6 @@
 import { Receta } from './Receta.js';
 import { Comentario } from '../comentario/Comentario.js';
-import { Preferencias } from '../usuarios/Usuario.js';
+import { Preferencias, RolesEnum } from '../usuarios/Usuario.js';
 import { validationResult, matchedData } from 'express-validator';
 import { render } from '../utils/render.js';
 import { UPLOAD_PATH } from './router.js';
@@ -230,7 +230,7 @@ export function viewUpdateReceta(req, res, next) {
         const id = req.params.id;
         const receta = Receta.getRecetaById(id); // Obtener la receta por ID
 
-        if (req.session.username != receta.user) {
+        if (req.session.username != receta.user && req.session.rol !== RolesEnum.ADMIN) {
             err.message = "No puedes editar una receta que no es tuya";
             err.statusCode = 403;
             return next(err, req, res);
@@ -282,16 +282,34 @@ export async function updateReceta(req, res, next) {
     const imagen = req.file;
     const user = req.session.username;
 
-    if (recetaExistente.user === user || req.session.rol === 'A') {
+    if (recetaExistente.user === user || req.session.rol === RolesEnum.ADMIN) {
         if (!recetaExistente.user) // En caso de un administrador estar editando una receta que fue colocada sin dueño (las recetas que colocamos al principio), el administrador que la esté editando pasará a ser su dueño
             recetaExistente.user = user;
         recetaExistente.nombre = nombre;
-        recetaExistente.descripcion = descripcion;
-        recetaExistente.modo_preparacion = modo_preparacion;
+        
         recetaExistente.gusto = gusto || null;
         recetaExistente.nivel = nivel || null;
         recetaExistente.dieta = dieta || null;
         try {
+
+            const descripcionSegura = sanitizeHtml(descripcion, {
+            allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
+            allowedAttributes: {
+            a: ['href', 'name', 'target'],
+             img: ['src', 'alt', 'width', 'height'],
+            '*': ['style']
+            }
+        });
+
+const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
+  allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
+  allowedAttributes: {
+    img: ['src', 'alt'],
+    '*': ['style']
+  }
+});
+        recetaExistente.descripcion =descripcionSegura;
+        recetaExistente.modo_preparacion = modoPreparacionSeguro;
             if (recetaExistente.imagen) {
 
                 await fs.unlink(join(UPLOAD_PATH, "/", recetaExistente.imagen)); // Hay que borrar la foto anterior en caso de haber alguna
@@ -352,10 +370,15 @@ export async function deleteReceta(req, res, next) {
     try {
         receta = Receta.getRecetaById(id, null);
 
-        if (receta != null && (user === receta.user || req.session.rol === "A")) {
+        if (receta != null && (user === receta.user || req.session.rol === RolesEnum.ADMIN)) {
             Receta.deleteReceta(id); // Elimina la receta por ID
             await fs.unlink(join(UPLOAD_PATH, receta.imagen));  // Se borra la imagen de la receta del disco
             req.log.info("Receta '%i' eliminada con exito", id);
+        }
+        else if(receta != null){
+            err.message = "No puedes editar una receta que no es tuya";
+            err.statusCode = 403;
+            return next(err, req, res);
         }
     }
     catch (e) {

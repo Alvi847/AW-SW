@@ -8,6 +8,13 @@ export function autenticado(urlNoAutenticado = '/usuarios/login', urlAutenticado
             return next();
         }
         if (urlNoAutenticado != undefined) {
+            const requestWith = req.get('X-Requested-With');
+            const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
+
+
+            if (esAjax)
+                return res.status(401).send();
+
             return res.redirect(urlNoAutenticado);
         }
         next();
@@ -23,7 +30,7 @@ export function tieneRol(rol = RolesEnum.ADMIN) {
 
         if (req.session != null && req.session.rol === rol) return next();
 
-        if (esAjax){
+        if (esAjax) {
             const err = {};
             err.statusCode = 403;
             err.message = "No tienes permisos para acceder aquí";

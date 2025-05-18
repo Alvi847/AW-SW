@@ -31,6 +31,12 @@ async function editarPerfilSubmit(e) {
                 case 400:
                     await displayErroresPerfil(err.response);
                     break;
+                case 401:
+                    window.assign('/usuarios/login'); // Mandar al usuario al formulario de login
+                    break;
+                default:
+                    mostrarError(err);
+                    break;
             }
         }
         console.error(`Error al editar perfil:`, err);
@@ -172,5 +178,5 @@ function imagenValida(files) {
         return "Sólo los tipos jpeg y png están permitidos";
     }
     return "";
-} 
+}
 
