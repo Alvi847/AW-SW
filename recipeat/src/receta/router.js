@@ -17,7 +17,7 @@ const recetasRouter = express.Router();
 
 //Ruta para ver la lista de recetas
 recetasRouter.get('/listaRecetas', asyncHandler(viewRecetas));
-recetasRouter.post('/listaRecetas', autenticado('/receta/listaRecetas'), asyncHandler(viewRecetas));
+//recetasRouter.post('/listaRecetas', autenticado('/receta/listaRecetas'), asyncHandler(viewRecetas));
 
 //Ruta para ver una receta
 recetasRouter.get('/verReceta/:id'

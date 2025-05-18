@@ -10,10 +10,6 @@ import {deleteComentario, valorarComentario, doCreateComentario} from './control
  */
 const comentariosRouter = express.Router();
 
-
-// La ruta para ver la lista de comentarios NO SE USA
-//comentariosRouter.get('/listaComentarios/:id', viewComentarios);
-
 // Ruta para agregar un comentario
 comentariosRouter.post('/createComentario'
     , body('id', 'Id inválido').notEmpty().isNumeric()

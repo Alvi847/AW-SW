@@ -11,7 +11,7 @@ import asyncHandler from 'express-async-handler';
  */
 const ingredientesRouter = express.Router();
 
-// Ruta para agregar un ingrediente
+// Ruta para crear un ingrediente
 ingredientesRouter.post('/createIngrediente'
     , autenticado('/') // TODO: CAMBIAR URL
     , body('nombre', 'No puede ser vacío').notEmpty()
@@ -54,7 +54,7 @@ ingredientesRouter.post('/addIngredienteToReceta'
     , body('nombre', 'Máximo 50 caracteres').isLength({min:1, max:50})
     , body('id_receta', 'No puede ser vacío').notEmpty()
     , body('cantidad', 'No puede ser vacío').notEmpty()
-    , body('cantidad', 'Debe ser un número').isNumeric()
+    , body('cantidad', 'Debe ser un número').isFloat({min: 0.01})
     , asyncHandler(addIngrediente));
 
 export default ingredientesRouter;
