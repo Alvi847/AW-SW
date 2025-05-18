@@ -1,6 +1,6 @@
 import { Receta } from './Receta.js';
 import { Comentario } from '../comentario/Comentario.js';
-import { Preferencias } from '../usuarios/Usuario.js';
+import { Preferencias, RolesEnum } from '../usuarios/Usuario.js';
 import { validationResult, matchedData } from 'express-validator';
 import { render } from '../utils/render.js';
 import { UPLOAD_PATH } from './router.js';
@@ -230,7 +230,7 @@ export function viewUpdateReceta(req, res, next) {
         const id = req.params.id;
         const receta = Receta.getRecetaById(id); // Obtener la receta por ID
 
-        if (req.session.username != receta.user) {
+        if (req.session.username != receta.user && req.session.rol !== RolesEnum.ADMIN) {
             err.message = "No puedes editar una receta que no es tuya";
             err.statusCode = 403;
             return next(err, req, res);
@@ -282,7 +282,7 @@ export async function updateReceta(req, res, next) {
     const imagen = req.file;
     const user = req.session.username;
 
-    if (recetaExistente.user === user || req.session.rol === 'A') {
+    if (recetaExistente.user === user || req.session.rol === RolesEnum.ADMIN) {
         if (!recetaExistente.user) // En caso de un administrador estar editando una receta que fue colocada sin dueño (las recetas que colocamos al principio), el administrador que la esté editando pasará a ser su dueño
             recetaExistente.user = user;
         recetaExistente.nombre = nombre;
