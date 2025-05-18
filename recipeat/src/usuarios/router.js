@@ -15,6 +15,8 @@ const multerFactory = multer({ dest: join(UPLOAD_PATH) });
 
 const usuariosRouter = express.Router();
 
+usuariosRouter.get('/perfil/:username', autenticado('/usuarios/home'), asyncHandler(viewPerfilUser)); //ver perfil de users dinamico
+
 usuariosRouter.get('/login', autenticado(null), asyncHandler(viewLogin));
 usuariosRouter.post('/login', autenticado(null, '/usuarios/home')
     , body('username', 'No puede ser vacío').trim().notEmpty()
