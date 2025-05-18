@@ -50,15 +50,7 @@ export function viewRecetas(req, res, next) {
         recetas = recetas.filter(r => r.dieta === preferencias.dieta);
 
 
-    //  Strip de etiquetas HTML en la descripción (podria venir enriquecido por CKEditor) 
-    const stripTags = (input) =>
-        input.replace(/(<([^>]+)>)/gi, "").replace(/&nbsp;/g, " ").trim();
-
-    recetas = recetas.map(r => ({
-        ...r,
-        descripcion: stripTags(r.descripcion)
-    }));
-
+   
     // Favoritos y recomendaciones
     let favoritos = [];
     let recomendadas = [];
@@ -67,6 +59,16 @@ export function viewRecetas(req, res, next) {
         favoritos = Receta.getFavoritosPorUsuario(user);
         recomendadas = Receta.getRecomendadasPersonalizadas(user);
     }
+     
+//  Strip de etiquetas HTML en la descripción (podria venir enriquecido por CKEditor) 
+    const stripTags = (input) =>
+        input.replace(/(<([^>]+)>)/gi, "").replace(/&nbsp;/g, " ").trim();
+
+    
+    recetas = recetas.map(r => {
+    r.descripcion = stripTags(r.descripcion);
+    return r;
+    });
 
     return render(req, res, contenido, {
         recetas,

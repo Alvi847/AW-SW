@@ -239,10 +239,11 @@ export async function viewFavoritosUser(req, res, next) {
     const stripTags = (input) =>
         input.replace(/(<([^>]+)>)/gi, "").replace(/&nbsp;/g, " ").trim();
 
-    recetas = recetas.map(r => ({
-        ...r,
-        descripcion: stripTags(r.descripcion)
-    }));
+    
+    recetas = recetas.map(r => {
+    r.descripcion = stripTags(r.descripcion);
+    return r;
+    });
 
 
     render(req, res, 'paginas/misRecetas', {
@@ -274,15 +275,17 @@ export async function viewRecetasUser(req, res, next) {
         }
 
         const recetas = await Receta.getRecetasPorUsuario(username);
-        //  Strip de etiquetas HTML en la descripción (podria venir enriquecido por CKEditor) 
+       
+
+    //  Strip de etiquetas HTML en la descripción (podria venir enriquecido por CKEditor) 
     const stripTags = (input) =>
         input.replace(/(<([^>]+)>)/gi, "").replace(/&nbsp;/g, " ").trim();
 
-    recetas = recetas.map(r => ({
-        ...r,
-        descripcion: stripTags(r.descripcion)
-    }));
-
+    
+    recetas = recetas.map(r => {
+    r.descripcion = stripTags(r.descripcion);
+    return r;
+    });
         render(req, res, 'paginas/misRecetas', {
             usuario,
             recetas,
