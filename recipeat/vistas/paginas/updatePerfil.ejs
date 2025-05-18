@@ -12,10 +12,11 @@
   
       
       <div class="contenido-perfil">
-        
+        <h1 class="titulo-perfil">Editar Perfil
+        </h1>
   
         <div class="perfil-detalles">
-          <h1>Editar tu perfil</h1>
+          
   
           <form class="form-editar" action="/usuarios/updatePerfil" method="POST" name="form-actualizar-perfil" enctype="multipart/form-data">
           
@@ -52,7 +53,7 @@
           
             <div class="botones-perfil">
               <button type="submit" class="guardar">Guardar cambios</button>
-              <a href="/usuarios/verPerfil" class="cancelar">Cancelar</a>
+              <a href="/usuarios/<%= session.username %>" class="cancelar">Cancelar</a>
             </div>
           </form>
 
