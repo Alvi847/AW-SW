@@ -160,7 +160,7 @@ export async function doRegistro(req, res, next) {
         });
     }
 }
-
+/*      YA NO SE USA
 export async function viewPerfil(req, res, next) {
 
     try {
@@ -179,7 +179,7 @@ export async function viewPerfil(req, res, next) {
 
         return next(err, req, res);
     }
-}
+}*/
 
 export async function viewPerfilUser(req, res, next) {  // ver perfil de usuario concreto, pasado por params en url
     const result = validationResult(req);
@@ -235,6 +235,16 @@ export async function viewFavoritosUser(req, res, next) {
     const usuario = await Usuario.getUsuarioByUsername(username);
     const recetas = await Receta.getFavoritosPorUsuario(username);
 
+    //  Strip de etiquetas HTML en la descripción (podria venir enriquecido por CKEditor) 
+    const stripTags = (input) =>
+        input.replace(/(<([^>]+)>)/gi, "").replace(/&nbsp;/g, " ").trim();
+
+    recetas = recetas.map(r => ({
+        ...r,
+        descripcion: stripTags(r.descripcion)
+    }));
+
+
     render(req, res, 'paginas/misRecetas', {
         recetas,
         usuario
@@ -264,6 +274,14 @@ export async function viewRecetasUser(req, res, next) {
         }
 
         const recetas = await Receta.getRecetasPorUsuario(username);
+        //  Strip de etiquetas HTML en la descripción (podria venir enriquecido por CKEditor) 
+    const stripTags = (input) =>
+        input.replace(/(<([^>]+)>)/gi, "").replace(/&nbsp;/g, " ").trim();
+
+    recetas = recetas.map(r => ({
+        ...r,
+        descripcion: stripTags(r.descripcion)
+    }));
 
         render(req, res, 'paginas/misRecetas', {
             usuario,
