@@ -1,7 +1,7 @@
-<div class="update-receta">
+<div class="create-receta">
 <h1>Actualizar Receta</h1>
 <form action="/receta/updateReceta/<%= receta.id %>" method="POST" enctype="multipart/form-data" name="form-update-receta">
-    <fieldset>
+    <fieldset class="fset-crear">
         <legend>Editar Receta</legend>
 
         <% if (locals.error) { %>
@@ -18,6 +18,15 @@
             <p class="error"><%- helpers.error(errores, 'descripcion' ) %></p>
             <textarea name="descripcion" placeholder="Descripción"><%= receta.descripcion ? receta.descripcion : '' %></textarea>
             <span class="error"></span><span class="feedback"></span>
+        </div>
+
+         <div class="ingredientes-form">
+          <label>Ingredientes:</label>
+          <div id="lista-ingredientes"></div>
+          <div class="ingredientes-botones">
+            <button name="addIngrediente" type="button">+</button>
+            <button name="removeIngrediente" type="button">-</button>
+          </div>
         </div>
 
         <div class="preparacion">
@@ -74,6 +83,61 @@
 </form>
 </div>
 
+
+
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const toolbarConfig = {
+  contentsCss: ['/css/editor-style.css'],
+  bodyClass: 'editor-dark-body',
+  uiColor: '#ffffff',
+  entities: false,
+  basicEntities: false,
+  entities_latin: false,
+  entities_greek: false,
+  toolbar: [
+    { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
+    { name: 'paragraph', items: ['NumberedList', 'BulletedList'] },
+    { name: 'insert', items: ['Image', 'Table'] },
+    { name: 'styles', items: ['Format'] },
+    { name: 'tools', items: ['Maximize'] }
+  ]
+};
+
+
+    // Inicializar CKEditor solo cuando DOM esté listo
+    CKEDITOR.replace('descripcion', toolbarConfig);
+    CKEDITOR.instances.descripcion.config.entities = false;
+    CKEDITOR.instances.descripcion.config.basicEntities = false;
+    CKEDITOR.instances.descripcion.config.entities_latin = false;
+    CKEDITOR.instances.descripcion.config.entities_greek = false;
+
+    CKEDITOR.replace('modo_preparacion', toolbarConfig);
+
+    CKEDITOR.instances.descripcion.config.entities = false;
+CKEDITOR.instances.modo_preparacion.config.basicEntities = false;
+CKEDITOR.instances.modo_preparacion.config.entities_latin = false;
+CKEDITOR.instances.modo_preparacion.config.entities_greek = false;
+
+
+    // 🔄 Forzar actualización del contenido antes del submit
+    const form = document.forms['form-create-receta'];
+    form.addEventListener('submit', function (e) {
+      if (window.CKEDITOR) {
+        for (let instance in CKEDITOR.instances) {
+          CKEDITOR.instances[instance].updateElement();
+        }
+      }
+    
+    });
+  });
+</script>
+
+
+
 <script src="/js/updateReceta.js" defer></script>
 <script src="/js/fetch.js" defer></script>
 <script src="/js/mostrarError.js" defer></script>
+

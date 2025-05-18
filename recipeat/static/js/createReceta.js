@@ -32,7 +32,7 @@ function init() {
 
 }
 
-async function crearLineaIngrediente() {
+export async function crearLineaIngrediente() {
 
     const contenedor = document.getElementById("lista-ingredientes");
 
@@ -91,7 +91,7 @@ async function crearLineaIngrediente() {
  * Crea span para indicar la validez de los ingredientes
  * @param {*} div 
  */
-function crearCamposDeValidacionIngrediente(div){
+export function crearCamposDeValidacionIngrediente(div){
     const errorSpanIngrediente = document.createElement('span');
     errorSpanIngrediente.className = 'error';
     errorSpanIngrediente.id = 'ingrediente';
@@ -108,7 +108,7 @@ function crearCamposDeValidacionIngrediente(div){
  * Crea span para indicar la validez de las cantidades
  * @param {*} div 
  */
-function crearCamposDeValidacionCantidad(div){
+export function crearCamposDeValidacionCantidad(div){
     const errorSpanCantidad = document.createElement('span');
     errorSpanCantidad.className = 'error';
     errorSpanCantidad.id = 'cantidad';
@@ -122,7 +122,7 @@ function crearCamposDeValidacionCantidad(div){
 }
 
 // Eliminamos la última línea de ingredientes
-function eliminaLineaIngrediente(){
+export function eliminaLineaIngrediente(){
     const div = document.getElementById(`linea_ingrediente_${numIngredientes - 1}`);
     const selectIngredientes = document.getElementById(`${numIngredientes - 1}`);
     ingredientes_seleccionados[Number(selectIngredientes.id)] = selectIngredientes.options[selectIngredientes.selectedIndex].value = -1

@@ -1,6 +1,13 @@
 document.addEventListener('DOMContentLoaded', init);
 
 
+
+// Guardamos los ingredientes para no tener que pedirlos al servidor cada vez que queramos verlos
+let ingredientes = [];
+let numIngredientes = 0;
+let ingredientes_seleccionados = [] // Para que no se seleccionen los mismos ingredientes
+
+
 function init() {
     const formUpdate = document.forms.namedItem("form-update-receta");
     formUpdate.addEventListener("submit", updateSubmit);
@@ -16,6 +23,112 @@ function init() {
 
     const imagen = formUpdate.elements.namedItem("imagen");
     imagen.addEventListener("input", compruebaImagen);
+
+    const botonAgregar = formCreate.elements.namedItem('addIngrediente');
+    botonAgregar.addEventListener('click', crearLineaIngrediente);
+
+    const botonEliminar = formCreate.elements.namedItem('removeIngrediente');
+    botonEliminar.addEventListener('click', eliminaLineaIngrediente);
+
+    crearLineaIngrediente();
+}
+
+export async function crearLineaIngrediente() {
+
+    const contenedor = document.getElementById("lista-ingredientes");
+
+    const div = document.createElement('div');
+    div.className = 'linea-ingrediente';
+    div.id = `linea_ingrediente_${numIngredientes}`; // Cada div se marca con el número de ingredientes
+
+    // Puse que los ingredientes se cargan solo cuando se carga el html de la pagina
+    const selectIngredientes = document.createElement('select');
+    await cambiaIngredientes(selectIngredientes);
+
+    selectIngredientes.name = `ingredientes_id[]`;
+    selectIngredientes.id = `${numIngredientes}`; // Usamos también el número de ingredientes como indice para identificar cada select (sirve para cuando hacemos la comprobación de repetidos)
+
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.step = "0.01";
+    input.min = 0;
+    input.placeholder = 'Cantidad';
+    input.name = `ingredientes_cantidad[]`; // Usando "[]" se envía como array
+    input.addEventListener("change", compruebaCantidad);
+
+    const unidadSpan = document.createElement('span');
+    unidadSpan.className = 'unidad';
+    selectIngredientes.addEventListener('change', actualizarUnidadEvent);
+    selectIngredientes.addEventListener('change', compruebaRepetidosEvent);
+
+    if (ingredientes.length != 0) {
+        actualizarUnidad(unidadSpan, selectIngredientes);
+    }
+
+    
+    // Creamos span para indicar la validez de los ingredientes
+    crearCamposDeValidacionIngrediente(div);
+    
+    // Se añaden los elementos al div
+    div.appendChild(selectIngredientes);
+    div.appendChild(input);
+    div.appendChild(unidadSpan);
+    
+    // Creamos span para indicar la validez de las cantidades
+    crearCamposDeValidacionCantidad(div);
+    
+    contenedor.appendChild(div);
+    
+    // Se comprueban repetidos después de añadir el selct al div
+    compruebaRepetidos(selectIngredientes);
+
+    // Se marca el elemento como seleccionado
+    ingredientes_seleccionados[numIngredientes] = selectIngredientes.options[selectIngredientes.selectedIndex].value;
+    
+    numIngredientes++;
+}
+
+/**
+ * Crea span para indicar la validez de los ingredientes
+ * @param {*} div 
+ */
+export function crearCamposDeValidacionIngrediente(div){
+    const errorSpanIngrediente = document.createElement('span');
+    errorSpanIngrediente.className = 'error';
+    errorSpanIngrediente.id = 'ingrediente';
+
+    const feedbackSpanIngrediente = document.createElement('span');
+    feedbackSpanIngrediente.className = 'feedback';
+    feedbackSpanIngrediente.id = 'ingrediente';
+
+    div.appendChild(errorSpanIngrediente);
+    div.appendChild(feedbackSpanIngrediente);
+}
+
+/**
+ * Crea span para indicar la validez de las cantidades
+ * @param {*} div 
+ */
+export function crearCamposDeValidacionCantidad(div){
+    const errorSpanCantidad = document.createElement('span');
+    errorSpanCantidad.className = 'error';
+    errorSpanCantidad.id = 'cantidad';
+
+    const feedbackSpanCantidad = document.createElement('span');
+    feedbackSpanCantidad.className = 'feedback';
+    feedbackSpanCantidad.id = 'cantidad';
+
+    div.appendChild(errorSpanCantidad);
+    div.appendChild(feedbackSpanCantidad);
+}
+
+// Eliminamos la última línea de ingredientes
+export function eliminaLineaIngrediente(){
+    const div = document.getElementById(`linea_ingrediente_${numIngredientes - 1}`);
+    const selectIngredientes = document.getElementById(`${numIngredientes - 1}`);
+    ingredientes_seleccionados[Number(selectIngredientes.id)] = selectIngredientes.options[selectIngredientes.selectedIndex].value = -1
+    div.remove();
+    numIngredientes--;
 }
 
 async function updateSubmit(e) {
