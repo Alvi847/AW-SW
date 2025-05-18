@@ -79,15 +79,20 @@
     margin-left: 30px;
 }
 
+.tipos-usuarios-admin{
+    flex: 1;
+    margin-right: 50px;
+}
+
 /* Estilo para el título de la sección */
-.tipos-usuarios h2 {
+.tipos-usuarios h2, .tipos-usuarios-admin h2 {
     font-size: 23px; /* Tamaño de fuente */
     color: #ffffff; /* Color del texto */
     margin-top: 100px;
     font-family: 'Montserrat', sans-serif;
 }
 
-.tipos-usuarios h3{
+.tipos-usuarios h3, .tipos-usuarios-admin h3{
     
     font-size: 20px; /* Tamaño de fuente */
     margin-top: 20px;
@@ -97,7 +102,7 @@
 }
 
 /* Estilo para la lista */
-.tipos-usuarios ul {
+.tipos-usuarios ul, .tipos-usuarios-admin ul {
     font-family: 'Montserrat',sans-serif;
     margin-top: 20px;
     margin-left: 40px;
@@ -105,7 +110,7 @@
     padding: 0; /* Quitar padding */
 }
 
-.tipos-usuarios li {
+.tipos-usuarios li , .tipos-usuarios-admin li{
     position: relative;
     padding-left: 30px; /* Espacio para el anillo */
     margin-bottom: 10px;
@@ -114,14 +119,14 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-.tipos-usuarios p{
+.tipos-usuarios p, .tipos-usuarios-admin p{
     color: white;
     font-family: 'Montserrat', sans-serif;
     margin-top: 10px;
     margin-left: 30px;
 }
 
-.tipos-usuarios li::before {
+.tipos-usuarios li::before , .tipos-usuarios-admin li::before{
     content: "";
     position: absolute;
     left: 0;
@@ -186,6 +191,7 @@
     display: flex;
     flex-direction: column;
     margin-right: 100px;
+    gap: 20px;
 }
 
 .imagenes-verticales img, .imagenes-verticales-1 img {
