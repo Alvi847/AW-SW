@@ -128,7 +128,7 @@ function calcularPrecioTotal(){
         sumaPrecio += Number(e.value);
     });
 
-    spanPrecioTotal.textContent = `Precio total: ${sumaPrecio}€`;
+    spanPrecioTotal.textContent = `${sumaPrecio}€`;
 }
 
 function compruebaCantidadIngrediente(e) {

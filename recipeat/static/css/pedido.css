@@ -78,9 +78,30 @@
   background-color: #c85f23;
 }
 
-/*.form-update-pedido {
-  margin-top: 10px;
-}*/
+.pagar-container {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.pagar-container a {
+  display: inline-block;
+  padding-top: 3%;
+  padding-bottom: 3%;
+  border: 1px solid #ccc;
+  background-color: rgb(0, 0, 0);
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  text-align: center;
+  width: 20vw;
+}
+
+.pagar-container a:hover {
+  background-color: #e67e22;
+}
 
 @media (max-width: 1300px) {
   .miPedido-panel {

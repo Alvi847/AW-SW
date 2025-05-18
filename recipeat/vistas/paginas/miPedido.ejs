@@ -29,14 +29,16 @@
                             <span id="ingrediente-<%= e.ingrediente.id %>-precio">
                                 <%= e.ingrediente.precio %>€
                             </span>
-                            <input type="hidden" id="hiddenInput-<%= e.ingrediente.id %>-precio" name="span-precio" value="<%= e.ingrediente.precio %>">
+                            <input type="hidden" id="hiddenInput-<%= e.ingrediente.id %>-precio" name="span-precio"
+                                value="<%= e.ingrediente.precio %>">
                         </td>
                         <td data-label="Acciones">
                             <form name="form-update-pedido" action="/pedidos/updatePedido" method="POST">
                                 <input type="hidden" name="id" value="<%= e.ingrediente.id %>">
                                 <button type="submit" name="updatePedidoButton">Actualizar</button>
                             </form>
-                            <form name="form-remove_ingrediente-pedido" action="/pedidos/removeIngrediente" method="POST">
+                            <form name="form-remove_ingrediente-pedido" action="/pedidos/removeIngrediente"
+                                method="POST">
                                 <input type="hidden" name="id" value="<%= e.ingrediente.id %>">
                                 <button type="submit" name="removeIngrediente-PedidoButton">Eliminar</button>
                             </form>
@@ -44,13 +46,25 @@
                     </tr>
                     <% }); %>
             </tbody>
+            <tfoot>
+                <tr class="fila-total">
+                    <td><strong>Total</strong></td>
+                    <td>
+                    </td>
+                    <td>
+                        <span class="precio-total"><%= precioTotal %>€</span>
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
         </table>
-        <span class="precio-total">Precio total: <%= precioTotal %>€</span>
+        <div class="pagar-container">
             <a href="/pedido/pay">PAGAR</a>
-            <% } else {%>
-                <span>Todavía no tienes nigún ingrediente. ¡Añade alguno desde la vista de una
-                    receta!</span>
-                <% } %>
+        </div>
+        <% } else {%>
+            <span>Todavía no tienes nigún ingrediente. ¡Añade alguno desde la vista de una
+                receta!</span>
+            <% } %>
 </div>
 
 <script src="/js/updatePedido.js" defer></script>
