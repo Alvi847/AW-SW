@@ -79,6 +79,14 @@ export function viewRecetas(req, res, next) {
     });
 }
 
+//viene de boton ver favoritos
+export function viewFavoritos (req, res) {
+    let contenido = 'paginas/listaRecetas';
+    const recetas = Receta.recetasConLike(req.session.username)
+    render(req, res, contenido, {
+        recetas
+    });
+}
 // Ver una receta
 export function viewReceta(req, res, next) {
 

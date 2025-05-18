@@ -160,6 +160,7 @@
   transition: background-color 0.3s ease;
 }
 
+
 .ingredientes-botones button:hover {
   background-color: #d4af37;
   color: black;

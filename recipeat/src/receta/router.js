@@ -27,6 +27,9 @@ recetasRouter.get('/listaRecetas'
     , param('dieta', 'dieta inválida').custom((value) => {return value == null || dietas_permitidas.includes(value)})
     , asyncHandler(viewRecetas));
 
+//ruta para ver favoritos (liked by user)
+recetasRouter.get('/favoritos', viewFavoritos);
+
 //Ruta para ver una receta
 recetasRouter.get('/verReceta/:id'
     , param('id', "El id debe ser un número entero").isNumeric()

@@ -33,6 +33,7 @@ export class Receta {
         this.#removeLikeStmt = db.prepare('UPDATE Recetas SET likes = likes - 1 WHERE id = @id');
         //*seleccionar la receta por id (unica)
         this.#getByIdStmt = db.prepare('SELECT * FROM Recetas WHERE id = @id');
+
         //seleccionar favoritos 
         this.#getFavoritosByUserStmt = db.prepare(`
             SELECT r.* FROM Recetas r
@@ -179,6 +180,17 @@ export class Receta {
             recetas.push(receta);
         }
 
+        return recetas;
+    }
+    //Obtener recetas con like de @username 
+    static recetasConLike(username) {
+        return this.#getRecetasByIdsStmt.all({ username });
+    }
+
+    //obtiene recetas de un user
+    static getRecetasFromUser(username){
+        const recetas = this.#getRecetasFromUserStmt.all( {username} );
+        
         return recetas;
     }
 
