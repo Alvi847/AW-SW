@@ -156,7 +156,7 @@ recetasRouter.post('/updateReceta/:id'
             return false;
         }
     }).withMessage("Sólo se permiten imágenes jpg o png")
-    ,    , [
+    ,[
         body('ingredientes_id', 'Añade ingredientes').isArray({min: 1})
             .custom((value, { req }) => {
                     // Aquí comprobamos si los arrays de ids y cantidades tienen la misma longitud, para saber si cada ingrediente tiene su correpondiente cantidad
