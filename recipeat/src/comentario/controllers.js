@@ -4,53 +4,6 @@ import { render } from '../utils/render.js';
 import {errorAjax} from '../middleware/error.js'
 import { logger } from '../logger.js';
 
-// Ver los comentarios
-// ACTUALMENTE EN DESUSO, el middleware viewReceta ya carga los comentarios
-/*export function viewComentarios(req, res) {
-    const id_receta = req.params.id; // Id de la receta del comentario
-    const user = req.session.username;
-
-    let contenido = `pagina/`; // TODO: Poner URL correcta
-    
-    logger.debug("Cargando todos los comentarios de la receta '%i'", id_receta);
-    
-    const comentarios = Comentario.getAllComentarios(id_receta, user);
-
-    res.send(comentarios);
-}*/
-
-// Crear un comentario (mostrar el formulario de creación)
-// NO SE USA
-/*export function createComentario(req, res) {
-    let contenido;
-    const { id } = req.body;
-    const user = req.session.username;
-
-    if (req.session == null || !req.session.login) {
-        contenido = '/receta/verReceta';
-        logger.debug("El usuario no está logueado, no se puede crear un comentario");
-    }
-    else {
-        const id_receta = req.params.id_receta; // Id de la receta del comentario
-
-        contenido = 'paginas/createComentario'; // URL del formulario
-    }
-
-    const receta = Receta.getRecetaById(id, user);
-
-    const comentarios = Comentario.getAllComentarios(id, user);
-
-    let hayComentarios = true;
-    if (comentarios.length == 0)
-        hayComentarios = false;
-
-    render(req, res, contenido, {
-        receta,
-        session: req.session,
-        hayComentarios,
-        comentarios
-    });
-}*/
 
 // Agregar un nuevo comentario
 export function doCreateComentario(req, res, next) {

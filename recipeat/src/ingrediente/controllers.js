@@ -22,7 +22,7 @@ export function doCreateIngrediente(req, res, next) {
             logger.debug("Devuelto código 400 a la petición AJAX");
             return res.status(400).json({ status: 400, errores });
         }
-        return render(req, res, 'paginas/index', { //TODO: CAMBIAR URL
+        return render(req, res, 'usuarios/administrar', {
             datos,
             errores,
         });
@@ -43,7 +43,7 @@ export function doCreateIngrediente(req, res, next) {
         }
 
         // Redirigir al finalizar
-        return res.redirect(`/usuarios/administrar`);  //TODO: CAMBIAR URL
+        return res.redirect(`/usuarios/administrar`);
     }
     catch (e) {
         req.log.error("Error al crear el ingrediente: %s", e.message);
@@ -76,7 +76,7 @@ export function deleteIngrediente(req, res, next) {
             logger.debug("Devuelto código 400 a la petición AJAX");
             return res.status(400).json({ status: 400, errores });
         }
-        return render(req, res, `paginas/index`, { //TODO: CAMBIAR URL
+        return render(req, res, `usuarios/administrar`, {
             datos,
             errores,
         });
@@ -94,7 +94,7 @@ export function deleteIngrediente(req, res, next) {
             return res.status(200).json({ ok: true });
         }
         // Redirigir al finalizar
-        return res.redirect(`/usuarios/administrar`);  //TODO: CAMBIAR URL
+        return res.redirect(`/usuarios/administrar`);
     }
     catch (e) {
         req.log.error("Error al eliminar el ingrediente '%i': %s", id, e.message);
@@ -128,7 +128,7 @@ export function updateIngrediente(req, res, next) {
             return res.status(400).json({ status: 400, errores });
         }
 
-        return render(req, res, `paginas/index`, { //TODO: CAMBIAR URL
+        return render(req, res, `usuarios/administrar`, {
             datos,
             errores,
         });
@@ -191,7 +191,7 @@ export function addIngrediente(req, res, next) {
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
-        return render(req, res, `paginas/index`, { //TODO: CAMBIAR URL
+        return render(req, res, `paginas/index`, {
             datos,
             errores,
         });
@@ -216,5 +216,5 @@ export function addIngrediente(req, res, next) {
     }
 
     // Redirigir al finalizar
-    res.redirect(`paginas/index`);  //TODO: CAMBIAR URL
+    res.redirect(`paginas/index`);
 }

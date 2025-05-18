@@ -12,7 +12,7 @@ export function doCreatePedido(req, res, next) {
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
-        return render(req, res, 'paginas/index', { //TODO: CAMBIAR URL
+        return render(req, res, 'paginas/index', {
             datos,
             errores,
         });
@@ -38,7 +38,7 @@ export function doCreatePedido(req, res, next) {
         req.session.hasPedido = true; //Guardo en la sesión que el usuario tiene un pedido, para el enlace de pedidos en la cabecera
 
         // Redirigir al finalizar
-        return res.redirect(`paginas/index`);  //TODO: CAMBIAR URL
+        return res.redirect(`paginas/index`);
     }
     catch (e) {
         req.log.error(e.message);
@@ -59,7 +59,7 @@ export function deletePedido(req, res, next) {
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
-        return render(req, res, `paginas/index`, { //TODO: CAMBIAR URL
+        return render(req, res, `paginas/index`, {
             datos,
             errores,
         });
@@ -84,7 +84,7 @@ export function deletePedido(req, res, next) {
         logger.info("Pedido de %s borrado con éxito", username);
 
         // Redirigir al finalizar
-        return res.redirect(`paginas/index`);  //TODO: CAMBIAR URL
+        return res.redirect(`paginas/index`);
     }
     catch (e) {
         req.log.error("Error al eliminar el pedido de '%s': %s ", username, e.message);
@@ -150,7 +150,7 @@ export function updatePedido(req, res, next) {
         }
 
         // Redirigir al finalizar
-        return res.redirect(`/pedido/verPedido`);  //TODO: CAMBIAR URL
+        return res.redirect(`/pedido/verPedido`);
     }
     catch (e) {
         logger.error("Error al cambiar la cantidad del ingrediente %i del pedido de %s: %s'", id,  username, e.message);
@@ -214,7 +214,7 @@ export function removeIngrediente(req, res, next){
         }
 
         // Redirigir al finalizar
-        return res.redirect(`/pedido/verPedido`);  //TODO: CAMBIAR URL
+        return res.redirect(`/pedido/verPedido`);
     }
     catch (e) {
         logger.error("Error al eliminar el ingrediente %i del pedido de %s: %s'", id,  username, e.message);
@@ -251,10 +251,11 @@ export function addIngredientes(req, res, next) {
             return res.status(400).json({ status: 400, errores });
         }
 
-        return render(req, res, `paginas/index`, { //TODO: CAMBIAR URL
-            datos,
-            errores,
-        });
+        const err = {};
+        err.statusCode = 400;
+        err.message = "Error al añadir ingredientes, sentimos las molestias";
+        next(err, req, res);
+
     }
 
     const { ingredientes_id, username, ingredientes_cantidad } = matchedData(req);
@@ -293,7 +294,7 @@ export function addIngredientes(req, res, next) {
         }
 
         // Redirigir al finalizar
-        return res.redirect(`paginas/index`);  //TODO: CAMBIAR URL
+        return res.redirect(`recetas/listaRecetas`);
     }
     catch (e) {
         logger.error("Error al añadir los ingredientes al pedido de %s: %s'", username, e.message);
@@ -324,7 +325,7 @@ export function doPagarPedido(req, res, next) {
     if (!result.isEmpty()) {
         const errores = result.mapped();
         const datos = matchedData(req);
-        return render(req, res, 'paginas/pagarPedido', { //TODO: CAMBIAR URL
+        return render(req, res, 'paginas/pagarPedido', {
             datos,
             errores,
         });

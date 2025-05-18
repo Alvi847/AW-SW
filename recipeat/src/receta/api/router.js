@@ -20,6 +20,6 @@ recetasApiRouter.post('/existe'
 recetasApiRouter.get('/buscar'
     , param('q', 'query inválida').trim().notEmpty().matches(/^[\p{L}\s]*$/u).isLength({ min: 1, max: 50 })
     , param('filtro', 'filtro inválido').trim().notEmpty().custom((value) =>{return value === "nombre" || value === "ingrediente"})
-    , asyncHandler(buscarRecetas)); //TODO: validación
+    , asyncHandler(buscarRecetas));
     
 export default recetasApiRouter;

@@ -13,7 +13,7 @@ const ingredientesRouter = express.Router();
 
 // Ruta para crear un ingrediente
 ingredientesRouter.post('/createIngrediente'
-    , autenticado('/') // TODO: CAMBIAR URL
+    , autenticado('/usuarios/login')
     , body('nombre', 'No puede ser vacío').notEmpty()
     , body('nombre', 'Sólo puede contener letras').trim().matches(/^[\p{L}\s]*$/u)
     , body('nombre', 'Máximo 50 caracteres').isLength({min:1, max:50})
@@ -22,18 +22,19 @@ ingredientesRouter.post('/createIngrediente'
     , body('unidad', 'Máximo 15 caracteres').isLength({min:1, max:15}) // Por si se quiere poner la palabra entera, en vez de una abreviación
     , body('precio', 'No puede ser vacío').notEmpty()
     , body('precio', 'Debe ser un número').isNumeric()
+    , tieneRol()
     , asyncHandler(doCreateIngrediente));
 
 // Ruta para eliminar un ingrediente
 ingredientesRouter.post('/removeIngrediente'
-    , autenticado('/') // TODO: CAMBIAR URL
+    , autenticado('/usuarios/login')
     , tieneRol()
     , body('id', 'Id inválido').notEmpty().isNumeric()
     , asyncHandler(deleteIngrediente));
 
 // Ruta para cambiar los datos de un ingrediente
 ingredientesRouter.post('/updateIngrediente'
-    , autenticado('/') // TODO: CAMBIAR URL
+    , autenticado('/usuarios/login')
     , tieneRol()
     , body('id', 'Id inválido').notEmpty().isNumeric()
     , body('nombre', 'No puede ser vacío').notEmpty()
@@ -48,7 +49,7 @@ ingredientesRouter.post('/updateIngrediente'
 
 // Ruta para añadir un ingrediente a una receta
 ingredientesRouter.post('/addIngredienteToReceta'
-    , autenticado('/') // TODO: CAMBIAR URL
+    , autenticado('/usuarios/login')
     , body('nombre', 'No puede ser vacío').notEmpty()
     , body('nombre', 'Sólo puede contener letras').trim().matches(/^[\p{L}\s]*$/u)
     , body('nombre', 'Máximo 50 caracteres').isLength({min:1, max:50})

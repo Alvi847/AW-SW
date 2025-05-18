@@ -13,21 +13,21 @@ const pedidosRouter = express.Router();
 
 // Ruta para crear un pedido
 pedidosRouter.post('/createPedido'
-    , autenticado('/') // TODO: CAMBIAR URL
+    , autenticado('/usuarios/login')
     , body('username', 'No puede ser vacío').notEmpty()
     , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
     , asyncHandler(doCreatePedido));
 
 // Ruta para eliminar un pedido
 pedidosRouter.post('/removePedido'
-    , autenticado('/') // TODO: CAMBIAR URL
+    , autenticado('/usuarios/login')
     , body('username', 'No puede ser vacío').notEmpty()
     , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
     , asyncHandler(deletePedido));
 
 // Ruta para cambiar las cantidades de los ingredientes de un pedido
 pedidosRouter.post('/updatePedido'
-    , autenticado('/')
+    , autenticado('/usuarios/login')
     , body('id', 'Id inválido').notEmpty().isNumeric()
     , body('cantidad', 'No puede ser vacío').notEmpty()
     , body('cantidad', 'Debe ser un número mayor que 0').isNumeric().isFloat({min: 0.01})
@@ -36,13 +36,13 @@ pedidosRouter.post('/updatePedido'
 
 // Ruta para eliminar un ingrediente de un pedido
 pedidosRouter.post('/removeIngrediente'
-    , autenticado('/')
+    , autenticado('/usuarios/login')
     , body('id', 'Id inválido').notEmpty().isNumeric()
     , asyncHandler(removeIngrediente));
 
 // Ruta para añadir un ingrediente a un pedido
 pedidosRouter.post('/addIngredientesToPedido'
-    , autenticado('/') // TODO: CAMBIAR URL
+    , autenticado('/usuarios/login')
     , body('username', 'No puede ser vacío').notEmpty()
     , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
     ,[  // Misma validación que la URL /receta/createReceta
@@ -82,18 +82,18 @@ pedidosRouter.post('/addIngredientesToPedido'
 
 // Ruta para mostrar un formulario para pagar un pedido
 pedidosRouter.get('/pay'
-    , autenticado('/') // TODO: CAMBIAR URL
+    , autenticado('/usuarios/login')
     , asyncHandler(mostrarPagarPedido));
 
 // Ruta para pagar un pedido
 // Me he inventado que el usuario tiene que poner "pagar" para pagar
 pedidosRouter.post('/pay'
-    , autenticado('/') // TODO: CAMBIAR URL
+    , autenticado('/usuarios/login')
     , body('pagar', 'Tienes que escribir "pagar"').custom((value) => {return value === "pagar"})
     , asyncHandler(doPagarPedido));
 
 pedidosRouter.get('/verPedido'
-    , autenticado('/')
+    , autenticado('/usuarios/login')
     , asyncHandler(viewPedido)
 );
 
