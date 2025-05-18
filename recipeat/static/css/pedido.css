@@ -1,0 +1,161 @@
+.miPedido-panel {
+  max-width: 1200px;
+  margin-top: 100px;
+  margin-bottom: 20px;
+  padding: 40px;
+  background: #1c1c1c;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  font-family: 'Montserrat', sans-serif;
+  color: #fff;
+  border: 1px solid #ffffff;
+}
+
+.miPedido-panel h1 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #ffbd3a;
+  text-align: center;
+  border-bottom: 2px solid #333;
+  padding-bottom: 15px;
+}
+
+.miPedido-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+.miPedido-panel th,
+.miPedido-panel td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+.miPedido-panel th {
+  background-color: #292929;
+  color: #f9f9f9;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.miPedido-panel td {
+  color: #ccc;
+}
+
+.miPedido-panel label {
+  color: #ccc;
+  font-size: 14px;
+}
+
+.miPedido-panel td input{
+  display: inline-block;
+  width: 50%;
+}
+
+.miPedido-panel .unidad{
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.miPedido-panel form button {
+  background-color: #dc6a35;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.miPedido-panel form button:hover {
+  background-color: #c85f23;
+}
+
+.pagar-container {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.pagar-container a {
+  display: inline-block;
+  padding-top: 3%;
+  padding-bottom: 3%;
+  border: 1px solid #ccc;
+  background-color: rgb(0, 0, 0);
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  text-align: center;
+  width: 20vw;
+}
+
+.pagar-container a:hover {
+  background-color: #e67e22;
+}
+
+@media (max-width: 1300px) {
+  .miPedido-panel {
+    padding: 20px;
+    margin-top: 100px;
+  }
+
+  .miPedido-panel h1 {
+    font-size: 24px;
+    line-height: 1.2;
+    padding: 10px;
+    word-break: break-word;
+    text-align: center;
+  }
+
+  .miPedido-panel table,
+  .miPedido-panel thead,
+  .miPedido-panel tbody,
+  .miPedido-panel th,
+  .miPedido-panel td,
+  .miPedido-panel tr {
+    display: block;
+    width: 100%;
+  }
+
+  .miPedido-panel thead {
+    display: none;
+  }
+
+  .miPedido-panel tr {
+    margin-bottom: 20px;
+    border: 1px solid #333;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .miPedido-panel td {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #333;
+    position: relative;
+  }
+
+  .miPedido-panel td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #ffbd3a;
+  }
+
+  .miPedido-panel form {
+    flex-direction: column;
+    gap: 6px;
+  }
+}

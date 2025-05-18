@@ -1,3 +1,14 @@
+<%
+/**
+ * Muestra el enlace si el usuario esta registrado, en caso de que no lo este, no se muestra
+ */
+function mostrarEnlace(session){
+	if (session != null && session.login){
+		return `<li><a href="/receta/createReceta">Añadir receta</a></li>`;
+	}
+	return ""; // Por si acaso
+}
+%>
 <footer class="footer">
     <div class="footer-container">
         <div class="footer-section">
@@ -10,8 +21,11 @@
             <ul>
                 <li><a href="/">Inicio</a></li>
                 <li><a href="/contenido/normal">Cómo funciona</a></li>
+                <% if (session.rol === 'A') {%>
                 <li><a href="/contenido/admin">Administrar</a></li>
-                <li><a href="/receta/listaRecetas">Recetas</a></li>
+                <% } %>
+                <li><a href="/receta/listaRecetas">Recetas</a></li>                
+			    <%- mostrarEnlace(session) %>
             </ul>
         </div>
         <div class="footer-section">

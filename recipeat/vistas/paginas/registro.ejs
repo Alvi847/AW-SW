@@ -1,16 +1,16 @@
 <div class="container-logreg">
 	<div class="form">
 
-		<form action="/usuarios/registro" method="POST">
+		<form action="/usuarios/registro" method="POST" enctype="multipart/form-data" name="form-registro-usuario" class="form-registro">
 			<fieldset>
 				<h1>CREAR CUENTA</h1>
 				<% if (locals.error) { %>
 					<p class="error-logreg"><strong><%= locals.error %></strong></p>
 				<% } %>
-				<div><input type="text" name="username" placeholder="Nombre de usuario" required/></div>
-				<div><input type="text" name="nombre" placeholder="Nombre" required/></div>		
-				<div><input type="email" name="email" placeholder="Email" required/></div>    	<!--type = email (no deja hacer mal las cosas)-->
-				<div><input type="password" name="password" placeholder="Contraseña" required/></div>
+				<div><input type="text" name="username" placeholder="Nombre de usuario" required/><span class="error"></span><span class="feedback"></span></div>
+				<div><input type="text" name="nombre" placeholder="Nombre" required/><span class="error"></span><span class="feedback"></span></div>		
+				<div><input type="email" name="email" placeholder="Email" required/><span class="error"></span><span class="feedback"></span></div>    	<!--type = email (no deja hacer mal las cosas)-->
+				<div><input type="password" name="password" placeholder="Contraseña" required/><span class="error"></span><span class="feedback"></span></div>
 				<div><button type="submit">Crear cuenta</button></div>
 				<div class="new-customer">
 					<div class="divider">
@@ -22,3 +22,6 @@
 		</form>
 	</div>
 </div>
+
+<script src="/js/registro.js" defer></script>
+<script src="/js/fetch.js" defer></script>

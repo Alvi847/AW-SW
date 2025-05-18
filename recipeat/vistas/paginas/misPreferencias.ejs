@@ -1,0 +1,51 @@
+<div class="perfil-card-container">
+  <div class="perfil-card">
+    <!-- Menú lateral -->
+    <div class="menu-lateral">
+      <ul>
+        <li><a href="/usuarios/<%= session.username %>/recetas">Mis Recetas</a></li>
+        <li><a href="/usuarios/<%= session.username %>/favoritos">Mis Recetas Favoritas</a></li>
+        <li><a href="/usuarios/<%= session.username %>">Ver Perfil</a></li>
+      </ul>
+    </div>
+
+    <!-- Contenido -->
+    <div class="contenido-perfil">
+      <h2 class="titulo-perfil">Mis preferencias</h2>
+
+      <form class="form-editar" method="POST" action="/usuarios/misPreferencias" style="width: 100%; max-width: 600px;">
+        <div class="form-campo">
+          <label for="gusto">Gusto:</label>
+          <select name="gusto" id="gusto">
+            <option value="">-- TODOS --</option>
+            <option value="dulce" <%=preferencias.gusto==='dulce' ? 'selected' : '' %>>Dulce</option>
+            <option value="salado" <%=preferencias.gusto==='salado' ? 'selected' : '' %>>Salado</option>
+          </select>
+        </div>
+
+        <div class="form-campo">
+          <label for="nivel">Nivel de dificultad:</label>
+          <select name="nivel" id="nivel">
+            <option value="">-- TODOS --</option>
+            <option value="fácil" <%=preferencias.nivel==='fácil' ? 'selected' : '' %>>Fácil</option>
+            <option value="medio" <%=preferencias.nivel==='medio' ? 'selected' : '' %>>Medio</option>
+            <option value="difícil" <%=preferencias.nivel==='difícil' ? 'selected' : '' %>>Difícil</option>
+          </select>
+        </div>
+
+        <div class="form-campo">
+          <label for="dieta">Dieta:</label>
+          <select name="dieta" id="dieta">
+            <option value="">-- TODAS --</option>
+            <option value="vegana" <%=preferencias.dieta==='vegana' ? 'selected' : '' %>>Vegana</option>
+            <option value="sin gluten" <%=preferencias.dieta==='sin gluten' ? 'selected' : '' %>>Sin gluten</option>
+            <option value="carnívora" <%=preferencias.dieta==='carnívora' ? 'selected' : '' %>>Carnívora</option>
+          </select>
+        </div>
+
+        <button type="submit" class="guardar-preferencias">Guardar preferencias</button>
+      </form>
+
+    </div>
+  </div>
+</div>

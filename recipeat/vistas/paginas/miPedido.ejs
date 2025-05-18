@@ -1,0 +1,73 @@
+<div class="miPedido-panel">
+    <h1>Mi pedido</h1>
+    <% if ( arrayIngredientes.length !=0){ %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% arrayIngredientes.forEach(e=> { %>
+                    <tr id="ingrediente-<%= e.ingrediente.id %>">
+                        <td data-label="Nombre">
+                            <%= e.ingrediente.nombre %>
+                        </td>
+                        <td data-label="Cantidad">
+                            <form>
+                                <input type="number" step="0.01" id="ingrediente-<%= e.ingrediente.id %>-cantidad"
+                                    value="<%= e.cantidad %>"><span class="unidad">
+                                    <%= e.ingrediente.unidad %>
+                                </span>
+                                <span class="error"></span><span class="feedback"></span>
+                            </form>
+                        </td>
+                        <td data-label="Precio">
+                            <span id="ingrediente-<%= e.ingrediente.id %>-precio">
+                                <%= e.ingrediente.precio %>€
+                            </span>
+                            <input type="hidden" id="hiddenInput-<%= e.ingrediente.id %>-precio" name="span-precio"
+                                value="<%= e.ingrediente.precio %>">
+                        </td>
+                        <td data-label="Acciones">
+                            <form name="form-update-pedido" action="/pedidos/updatePedido" method="POST">
+                                <input type="hidden" name="id" value="<%= e.ingrediente.id %>">
+                                <button type="submit" name="updatePedidoButton">Actualizar</button>
+                            </form>
+                            <form name="form-remove_ingrediente-pedido" action="/pedidos/removeIngrediente"
+                                method="POST">
+                                <input type="hidden" name="id" value="<%= e.ingrediente.id %>">
+                                <button type="submit" name="removeIngrediente-PedidoButton">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+            <tfoot>
+                <tr class="fila-total">
+                    <td><strong>Total</strong></td>
+                    <td>
+                    </td>
+                    <td>
+                        <span class="precio-total">
+                            <%= precioTotal %>€
+                        </span>
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="pagar-container">
+            <a href="/pedido/pay">PAGAR</a>
+        </div>
+        <% } else {%>
+            <span>Todavía no tienes nigún ingrediente. ¡Añade alguno desde la vista de una
+                receta!</span>
+            <% } %>
+</div>
+
+<script src="/js/updatePedido.js" defer></script>
+<script src="/js/fetch.js" defer></script>

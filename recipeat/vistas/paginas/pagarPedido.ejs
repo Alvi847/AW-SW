@@ -1,0 +1,9 @@
+<div class="pagar-pedido">
+    <form name="form-pagar-pedido" method="POST">
+        <fieldset>
+            <label for="pagar">Introduce la palabra "pagar":</label>
+            <input name="pagar" type="text"><%- helpers.error(errores, 'pagar' ) %><span class="Error"></span>
+                <button type="submit">Enviar</button>
+        </fieldset>
+    </form>
+</div>

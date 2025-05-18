@@ -1,117 +1,467 @@
+@import url('/css/evento.css');
+.perfil-card {
+  min-width: 1100px;
+  min-height: 600px;
+  margin-top: 125px;
+  margin-bottom: 50px;
+  padding: 40px;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  background: #1c1c1c;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  font-family: 'Montserrat', sans-serif;
+  color: #fff;
+  border: 1px solid #ffffff;
+}
 
+.menu-lateral {
+  width: 220px;
+  border-right: 1px solid #333;
+}
+
+.menu-lateral ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-lateral li {
+  margin-bottom: 25px;
+}
+
+.menu-lateral a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 18px;
+  position: relative;
+  padding-bottom: 5px;
+  display: inline-block;
+  transition: color 0.3s;
+}
+
+.menu-lateral a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  height: 2px;
+  background-color: #ffbd3a;
+  transition: width 0.3s ease-in-out;
+}
+
+.menu-lateral a:hover::after {
+  width: 100%;
+}
+
+.menu-lateral a:hover {
+  color: #ffbd3a;
+}
+
+.contenido-perfil {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+}
+
+.titulo-perfil {
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #ffbd3a;
+  text-align: center;
+  width: 100%;
+}
+
+.form-editar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.form-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-campo label {
+  font-size: 16px;
+  color: #ffbd3a;
+}
+
+.form-campo select {
+  padding: 8px 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background-color: #2b2b2b;
+  color: #fff;
+  appearance: none;
+  cursor: pointer;
+}
+
+.form-campo select:focus {
+  outline: none;
+  border-color: #ffbd3a;
+  box-shadow: 0 0 5px rgba(255, 189, 58, 0.5);
+}
+
+button.guardar-preferencias {
+  margin-top: 20px;
+  align-self: center;
+  padding: 8px 20px;
+  font-size: 14px;
+  background-color: #e67e22;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+button.guardar-preferencias:hover {
+  background-color: #e6a500;
+}
+
+.contenido-info {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  align-items: center;
+  width: 100%;
+}
+
+.perfil-foto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.perfil-foto img {
+  width: 270px;
+  height: 270px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #ffbd3a;
+  margin-left: 55px;
+}
+
+.perfil-detalles {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  align-items: flex-start;
+  overflow: visible;
+}
+
+.perfil-detalles h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  margin-left: 25px;
+  color: #ffbd3a;
+}
+
+.perfil-detalles p {
+  font-size: 18px;
+  margin: 0 0 5px 40px;
+  color: #ccc;
+}
+
+.botones-perfil {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  margin-left: 55px;
+}
+
+.editar,
+.logout {
+  padding: 12px 18px;
+  font-size: 16px;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.editar {
+  background-color: #007bff;
+}
+
+.editar:hover {
+  background-color: #0056b3;
+}
+
+.logout {
+  background-color: #dc6a35;
+}
+
+.logout:hover {
+  background-color: #c85f23;
+}
+
+#calendar {
+  background-color: rgb(62, 62, 62);
+  color: rgb(255, 255, 255);
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+  width: 700px;
+  font-family: 'Montserrat', sans-serif;
+  min-height: 600px;
+  overflow-x: auto;
+  margin-left: 10px;
+}
+
+.fc {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.fc-timegrid {
+  width: 100%;
+}
+
+.fc-event {
+  cursor: pointer;
+}
+
+.fc .fc-button {
+  background-color: #ffbd3a;
+  color: black;
+  border: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.fc .fc-button:hover {
+  background-color: #e67e22;
+  color: white;
+}
+
+.fc .fc-toolbar-title {
+  color: #ffbd3a;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+.fc .fc-col-header-cell-cushion,
+.fc .fc-daygrid-day-number {
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+}
+
+.fc .fc-button-primary:disabled {
+  background-color: #0a1723;
+  border-color: var(--fc-button-border-color);
+  color: var(--fc-button-text-color);
+}
+
+.fc-scroller-harness,
+.fc-scroller {
+  overflow: visible !important;
+}
+
+.crear-evento {
+  background-color: #2c2c2c;
+  border: 1px solid #444;
+  padding: 30px;
+  border-radius: 12px;
+  width: 700px;
+  margin-left:9px;
+  color: #fff;
+}
+
+.crear-evento h3 {
+  color: #ffbd3a;
+  margin-bottom: 20px;
+  font-size: 22px;
+  text-align: center;
+}
+
+.crear-evento .form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.crear-evento label {
+  margin-bottom: 8px;
+  font-size: 15px;
+  text-align: left;
+  color: #ddd;
+}
+
+.crear-evento input,
+.crear-evento textarea {
+  margin-bottom: 0px !important;
+  margin-top: 0px !important;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #555;
+  background-color: #1f1f1f;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+}
+
+.crear-evento input:focus,
+.crear-evento textarea:focus {
+  border-color: #ffbd3a;
+  outline: none;
+}
+
+.btn-enviar {
+  margin-top: 10px;
+  background-color: #ffbd3a;
+  color: #000;
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-enviar:hover {
+  background-color: #e67e22;
+}
+
+@media (max-width: 768px) {
   .perfil-card {
-    max-width: 800px; 
-    margin: 100px auto; 
-    padding: 30px;
-    display: flex;
-    flex-direction: row;
-    background: #cccccc;
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
-    font-family: 'Montserrat',sans-serif;
-    gap: 30px;
-    align-items: center; 
-  }
-  
-  /* Centramos todo el contenido de la card */
-  .perfil-card-container {
-    display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    min-height: 100vh; 
+    min-width: unset;
+    padding: 5px;
+    gap: 10px;
   }
-  
-  /* Imagen de perfil */
-  .perfil-foto {
-    flex: 1;
-    display: flex;
+
+  .contenido-perfil {
     align-items: center;
-    justify-content: center;
+    text-align: center;
+    gap: 20px;
   }
-  
+
+  .titulo-perfil {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .contenido-info {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
   .perfil-foto img {
-    width: 180px; 
+    width: 180px;
     height: 180px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 4px solid #007bff;
+    margin-left: 0;
   }
-  
+
   .perfil-detalles {
-    flex: 2;
-    text-align: left;
+    text-align: left !important;
   }
-  
-  .perfil-detalles h1 {
-    font-size: 26px;
-    margin-bottom: 10px;
-    color: #333;
-  }
-  
+
   .perfil-detalles h2 {
-    font-size: 22px;
-    margin-bottom: 10px;
-    color: #007bff;
+    margin-left: 0;
+    font-size: 20px;
   }
-  
+
   .perfil-detalles p {
-    font-size: 18px;
-    margin: 8px 0;
-    color: #555;
+    margin: 0 0 10px 10px;
   }
 
   .botones-perfil {
+    flex-direction: row;
+    align-items: center;
+    margin-left: 20px;
+  }
+
+  .menu-lateral {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #333;
+    margin-bottom: 20px;
+  }
+
+  .menu-lateral ul {
     display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: space-around;
+  }
+
+  .menu-lateral li {
+    margin-bottom: 10px;
+  }
+
+  #calendar {
+    max-width: 360px;
+    min-height: 540px;
+    margin-left: 0;
+    margin-top: 5px;
+  }
+
+  .crear-evento {
+    padding: 20px;
+    max-width: 350px;
+    margin-left: 0;
+    margin-bottom: 15px;
+  }
+
+  .crear-evento h3 {
+    font-size: 20px;
+  }
+
+  .crear-evento label {
+    font-size: 14px;
+  }
+
+  .crear-evento input,
+  .crear-evento textarea {
+    font-size: 14px;
+  }
+
+  .btn-enviar {
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+
+  .menu-lateral ul {
+    margin-top: 15px;
+
+}
+
+ .fc .fc-toolbar {
+    flex-direction: row;
+    align-items: center;
     gap: 10px;
-    margin-top: 15px;
   }
-  
-  /* Botón Editar */
-  .editar {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 12px 18px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: background-color 0.3s;
+
+  .fc .fc-toolbar-title {
+    font-size: 1.1em;
+    text-align: center;
   }
-  
-  .editar:hover {
-    background-color: #0056b3;
+
+  .fc .fc-button {
+    font-size: 10px;
+    padding: 6px 10px;
+    border-radius: 6px;
   }
-  
-  
-  /* Botón de cerrar sesión */
-  .logout {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 12px 18px;
-    font-size: 16px;
-    background-color: #dc6a35;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: background-color 0.3s;
+
+  .fc .fc-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
   }
-  
-  .logout:hover {
-    background-color: #c85f23;
-  }
-  
-  /* moviles*/
-  @media (max-width: 768px) {
-    .perfil-card {
-      flex-direction: column;
-      text-align: center;
-      padding: 20px;
-    }
-  
-    .perfil-foto img {
-      width: 150px;
-      height: 150px;
-    }
-  }
-  
+}

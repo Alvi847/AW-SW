@@ -79,15 +79,20 @@
     margin-left: 30px;
 }
 
+.tipos-usuarios-admin{
+    flex: 1;
+    margin-right: 50px;
+}
+
 /* Estilo para el título de la sección */
-.tipos-usuarios h2 {
+.tipos-usuarios h2, .tipos-usuarios-admin h2 {
     font-size: 23px; /* Tamaño de fuente */
     color: #ffffff; /* Color del texto */
     margin-top: 100px;
     font-family: 'Montserrat', sans-serif;
 }
 
-.tipos-usuarios h3{
+.tipos-usuarios h3, .tipos-usuarios-admin h3{
     
     font-size: 20px; /* Tamaño de fuente */
     margin-top: 20px;
@@ -97,7 +102,7 @@
 }
 
 /* Estilo para la lista */
-.tipos-usuarios ul {
+.tipos-usuarios ul, .tipos-usuarios-admin ul {
     font-family: 'Montserrat',sans-serif;
     margin-top: 20px;
     margin-left: 40px;
@@ -105,7 +110,7 @@
     padding: 0; /* Quitar padding */
 }
 
-.tipos-usuarios li {
+.tipos-usuarios li , .tipos-usuarios-admin li{
     position: relative;
     padding-left: 30px; /* Espacio para el anillo */
     margin-bottom: 10px;
@@ -114,14 +119,14 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-.tipos-usuarios p{
+.tipos-usuarios p, .tipos-usuarios-admin p{
     color: white;
     font-family: 'Montserrat', sans-serif;
     margin-top: 10px;
     margin-left: 30px;
 }
 
-.tipos-usuarios li::before {
+.tipos-usuarios li::before , .tipos-usuarios-admin li::before{
     content: "";
     position: absolute;
     left: 0;
@@ -178,10 +183,18 @@
     display: flex;
     flex-direction: column;
     gap: 20px; /* Espacio entre las imágenes */
-    margin-left: 17px;
+    margin-left: 37px;
 }
 
-.imagenes-verticales img {
+ .imagenes-verticales-1{
+
+    display: flex;
+    flex-direction: column;
+    margin-right: 100px;
+    gap: 20px;
+}
+
+.imagenes-verticales img, .imagenes-verticales-1 img {
     max-width: 400px;
     height: auto;
     border-radius: 8px;
@@ -199,7 +212,7 @@
         align-items: center; /* Centrar horizontalmente */
         gap: 20px; /* Espacio entre elementos */
         padding: 5px 20px;
-        margin: 20px auto;
+        margin: 0px;
     }
 
     .titulo {
@@ -215,47 +228,63 @@
     .menu-anclas {
         flex-direction: column; /* Cambiar a columna */
         gap: 10px; /* Reducir espacio entre enlaces */
-        margin-right: 6px;
+        margin-left: 60px;
+        width: 300px;
     }
 
-    .tipos-usuarios{
-        margin-left: 0;
+    .tipos-usuarios, .tipos-usuarios-admin{
+        padding: 10px;
+        margin-left: 10px;
     }
 
-    .tipos-usuarios h2 {
+
+    .tipos-usuarios h2{
         margin-top: 20px;
-        margin-left: 4px;
+        margin-left: 20px;
         font-size: 16px; /* Reducir tamaño de fuente */
     }
 
-    .tipos-usuarios h3 {
-        font-size: 15px; /* Reducir tamaño de fuente */
-        margin-left: 13px;
+    .tipos-usuarios-admin h2{
+        margin-left: 50px;
+        font-size: 16px;
+        margin-top: 10px;
     }
 
-    .tipos-usuarios li {
-        font-size: 14px; /* Reducir tamaño de fuente de la lista */
+    .tipos-usuarios h3 , .tipos-usuarios-admin h3{
+        font-size: 13px; /* Reducir tamaño de fuente */
+        margin-left: 26px;
     }
 
-    .tipos-usuarios ul{
+    .tipos-usuarios li , .tipos-usuarios-admin li{
+        font-size: 12px; /* Reducir tamaño de fuente de la lista */
+        padding-right: 13px;
+    }
+
+    .tipos-usuarios ul, .tipos-usuarios-admin ul{
         margin-left: 30px;
+        padding: 15px;
     }
 
     .btn-reg {
         font-size: 16px; /* Reducir tamaño de fuente del botón */
-        margin-left: 96px; /* Centrar el botón */
+        margin-left: 111px; /* Centrar el botón */
         margin-top: 20px; /* Ajustar margen superior */
     }
 
-   .imagenes-verticales {
+   .imagenes-verticales{
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
     width: 100%;
+    margin-bottom: 20px;
 }
 
-.imagenes-verticales img {
+ .imagenes-verticales-1 {
+    margin-right: 10px;
+ }
+
+.imagenes-verticales img{
     width: 100%;
     max-width: 350px;
     height: auto;

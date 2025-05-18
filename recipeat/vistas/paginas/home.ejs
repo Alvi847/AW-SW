@@ -1,5 +1,18 @@
 <div class="info">
     <h1>Bienvenido <%=  session.nombre %></h1>
-    <p>Usa el menú de la izquierda para navegar.</p>
+    <p>Usa el menú superior para navegar.</p>
+
+    
 </div>
 
+<% const mensaje = getAndClearFlash(); %>
+<% if (mensaje) { %>
+<dialog id="flashSaludo" open>
+  <p><%= mensaje %></p>
+  <form method="dialog">
+    <button>OK</button>
+  </form>
+</dialog>
+
+<script src="/js/timeout.js"></script>
+<% } %>

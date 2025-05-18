@@ -1,7 +1,7 @@
 import express from 'express';
 import { body } from 'express-validator';
 import { autenticado } from '../middleware/auth.js';
-
+import asyncHandler from 'express-async-handler';
 import {deleteComentario, valorarComentario, doCreateComentario} from './controllers.js';
 
 
@@ -10,24 +10,23 @@ import {deleteComentario, valorarComentario, doCreateComentario} from './control
  */
 const comentariosRouter = express.Router();
 
-
-// La ruta para ver la lista de comentarios NO SE USA
-//comentariosRouter.get('/listaComentarios/:id', viewComentarios);
-
 // Ruta para agregar un comentario
 comentariosRouter.post('/createComentario'
-    , body('id', 'Id inválido').notEmpty()
+    , body('id', 'Id inválido').notEmpty().isNumeric()
     , body('descripcion', 'No puede ser vacío').notEmpty()
+    , body('descripcion', 'Máximo 1500 caracteres').isLength({min: 0, max: 1500})
     , autenticado('/receta/listaRecetas')
-    , doCreateComentario);
+    , asyncHandler(doCreateComentario));
 
 // Ruta para eliminar un comentario
 comentariosRouter.post('/removeComentario'
-    , body('id', 'Id inválido').notEmpty()
+    , body('id', 'Id inválido').notEmpty().isNumeric()
     , autenticado('/receta/listaRecetas')
-    , deleteComentario);
+    , asyncHandler(deleteComentario));
 
 // Ruta para cuando se da like a un comentario
-comentariosRouter.post('/like', valorarComentario);
+comentariosRouter.post('/like'
+    , body('id', 'No puede ser vacío').notEmpty().isNumeric()
+    , asyncHandler(valorarComentario));
 
 export default comentariosRouter;

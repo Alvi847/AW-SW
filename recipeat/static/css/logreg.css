@@ -18,6 +18,13 @@
     align-items: center;
 }
 
+.login{
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 35px;
+    font-family: 'Poppins', sans-serif;
+}
+
 .form h1 {
     font-family: 'Poppins', sans-serif;
     color: white;
@@ -32,15 +39,15 @@ form fieldset {
     border-radius: 12px;
     padding: 30px;  /*relleno*/
     backdrop-filter: blur(10px); /* Efecto de desenfoque */
-    -webkit-backdrop-filter: blur(10px);
     color: white;
     box-shadow: 0 8px 32px rgba(255, 255, 255, 0.12);
-    width: 350px;
     height: 500px;
+    width: 350px;
     margin-bottom: 90px;
 }
 
 form input[type="text"],
+form input[type="number"],
 form input[type="password"],
 form input[type="email"]{
     width: 100%;
@@ -51,6 +58,13 @@ form input[type="email"]{
     border-radius: 6px;
     background-color: rgba(255, 255, 255, 0.2);
     color: white;
+}
+
+/* Para aumentar el tamaño de las flechas, no funciona en firefox */
+input[type="number"]::-webkit-inner-spin-button {
+  width: 20px;
+  height: 20px;
+  margin-left: 4px;
 }
 
 form button {
@@ -68,6 +82,21 @@ form button {
 form button:hover {
     background-color: #f2862e;
 }
+
+.form-registro div {
+  position: relative;
+}
+
+.form-registro span.error,
+.form-registro span.feedback {
+  position: absolute;
+  right: 10px;
+  top: 35%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  pointer-events: none;
+}
+
 
 .new-customer {
     margin-top: 25px;
