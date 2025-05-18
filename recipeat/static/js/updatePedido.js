@@ -21,24 +21,26 @@ function init() {
 }
 
 async function deleteSubmit(e) {
-     e.preventDefault();
-    const formDelete = e.target;
-    try {
-        const formData = new FormData(formDelete);
-        const response = await postData('/pedido/removeIngrediente', formData);
-        eliminarFila(formData);
-    } catch (err) {
-        if (err instanceof ResponseError) {
-            switch (err.response.status) {
-                case 400:
-                    await displayErrores(err.response, formDelete);
-                    break;
-                default:
-                    mostrarError(err.response.status, await err.response.json());
-                    break;
+    e.preventDefault();
+    if (confirm('¿Seguro que quieres eliminar este inrgrediente?')) {
+        const formDelete = e.target;
+        try {
+            const formData = new FormData(formDelete);
+            const response = await postData('/pedido/removeIngrediente', formData);
+            eliminarFila(formData);
+        } catch (err) {
+            if (err instanceof ResponseError) {
+                switch (err.response.status) {
+                    case 400:
+                        await displayErrores(err.response, formDelete);
+                        break;
+                    default:
+                        mostrarError(err.response.status, await err.response.json());
+                        break;
+                }
             }
+            console.error(`Error: `, err);
         }
-        console.error(`Error: `, err);
     }
 }
 
@@ -81,7 +83,7 @@ async function displayErrores(response, formUpdate) {
     }
 }
 
-function eliminarFila(formData){
+function eliminarFila(formData) {
     const id_ingrediente = formData.get("id");
 
     const index_fila_ingrediente = document.querySelector(`tr#ingrediente-${id_ingrediente}`).rowIndex;
@@ -90,7 +92,7 @@ function eliminarFila(formData){
 
     tabla.deleteRow(index_fila_ingrediente);
 
-    if(tabla.rows.length > 1) // Se compara con 1 porque la fila de los nombres de columna cuenta
+    if (tabla.rows.length > 1) // Se compara con 1 porque la fila de los nombres de columna cuenta
         calcularPrecioTotal(); // Si quedan ingredientes calculas el nuevo precio total
     else
         window.location.assign("/pedido/verPedido"); // Si no quedan recargas la página para mostrar el mensaje de sin ingredientes
@@ -113,12 +115,12 @@ async function mostrarConfirmacion(formData, response) {
 
     document.querySelector(`span#ingrediente-${id_ingrediente}-precio`).textContent = `${nuevoPrecio}€`;
 
-        document.querySelector(`input#hiddenInput-${id_ingrediente}-precio`).value = nuevoPrecio;
+    document.querySelector(`input#hiddenInput-${id_ingrediente}-precio`).value = nuevoPrecio;
 
     calcularPrecioTotal();
 }
 
-function calcularPrecioTotal(){
+function calcularPrecioTotal() {
     const spanPrecioTotal = document.querySelector('span.precio-total');
 
     let sumaPrecio = 0;
