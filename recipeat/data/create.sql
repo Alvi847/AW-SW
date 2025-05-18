@@ -50,7 +50,8 @@ CREATE TABLE "Pedidos" (
 	"id"	INTEGER NOT NULL,
 	"usuario"	TEXT NOT NULL UNIQUE,
 	"creacion"	DATE NOT NULL,
-	PRIMARY KEY("id" AUTOINCREMENT)
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("usuario") REFERENCES "Usuarios"("username") ON DELETE CASCADE
 );
 DROP TABLE IF EXISTS "Pedidos_Contiene";
 CREATE TABLE "Pedidos_Contiene" (
