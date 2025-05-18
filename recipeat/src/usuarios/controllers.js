@@ -274,7 +274,7 @@ export async function viewRecetasUser(req, res, next) {
             return res.redirect('/usuarios/login');  // Si no se encuentra el usuario, redirigir al login
         }
 
-        const recetas = await Receta.getRecetasPorUsuario(username);
+    let recetas = Receta.getRecetasPorUsuario(username);
        
 
     //  Strip de etiquetas HTML en la descripción (podria venir enriquecido por CKEditor) 
