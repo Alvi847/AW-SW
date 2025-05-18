@@ -36,6 +36,10 @@
                                 <input type="hidden" name="id" value="<%= e.ingrediente.id %>">
                                 <button type="submit" name="updatePedidoButton">Actualizar</button>
                             </form>
+                            <form name="form-remove_ingrediente-pedido" action="/pedidos/removeIngrediente" method="POST">
+                                <input type="hidden" name="id" value="<%= e.ingrediente.id %>">
+                                <button type="submit" name="removeIngrediente-PedidoButton">Eliminar</button>
+                            </form>
                         </td>
                     </tr>
                     <% }); %>

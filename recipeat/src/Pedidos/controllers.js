@@ -4,6 +4,7 @@ import { Pedido, PedidoContiene } from './Pedidos.js';
 import { logger } from '../logger.js';
 import { RolesEnum } from '../usuarios/Usuario.js';
 import { Ingrediente } from '../ingrediente/Ingrediente.js';
+import { errorAjax } from '../middleware/error.js';
 
 // Agregar un nuevo pedido
 export function doCreatePedido(req, res, next) {
@@ -157,7 +158,71 @@ export function updatePedido(req, res, next) {
         const err = {};
 
         err.statusCode = 500;
-        err.message = "Error al cambiar la cantidade del ingrediente del pedido";
+        err.message = "Error al cambiar la cantidad del ingrediente del pedido";
+
+        if (esAjax)
+            return errorAjax(err, res);
+
+        return next(err, req, res);
+    }
+}
+
+export function removeIngrediente(req, res, next){
+    const requestWith = req.get('X-Requested-With');
+    const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
+    if (esAjax)
+        logger.debug("Petición AJAX recibida para updatePedido()");
+
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        const errores = result.mapped();
+        const datos = matchedData(req);
+
+        if (esAjax) {
+            logger.debug("Devuelto código 400 a la petición AJAX");
+            return res.status(400).json({ status: 400, errores });
+        }
+
+        return render(req, res, `paginas/index`, {
+            datos,
+            errores,
+        });
+    }
+
+    const username = req.session.username;
+
+    if (!Pedido.exists(username)) {
+        const err = {};
+        err.statusCode = 403;
+        err.message = "El usuario no tiene un pedido creado";
+        req.session.hasPedido = true;
+        return next(err, req, res);
+    }
+
+    const { id } = matchedData(req);
+
+    try {
+        const pedido = Pedido.getPedidoByUsername(username);
+
+        const id_pedido = pedido.id;
+
+        PedidoContiene.delete(id, id_pedido);
+
+        if (esAjax) {
+            logger.debug("Devuelto código 200 a la petición AJAX");
+            return res.status(200).json({ ok: true });
+        }
+
+        // Redirigir al finalizar
+        return res.redirect(`/pedido/verPedido`);  //TODO: CAMBIAR URL
+    }
+    catch (e) {
+        logger.error("Error al eliminar el ingrediente %i del pedido de %s: %s'", id,  username, e.message);
+
+        const err = {};
+
+        err.statusCode = 500;
+        err.message = "Error al eliminar el ingrediente del pedido";
 
         if (esAjax)
             return errorAjax(err, res);

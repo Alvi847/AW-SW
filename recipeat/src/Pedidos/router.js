@@ -2,7 +2,7 @@ import express from 'express';
 import { body } from 'express-validator';
 import { autenticado } from '../middleware/auth.js';
 
-import { doCreatePedido, deletePedido, addIngredientes, mostrarPagarPedido, doPagarPedido, viewPedido, updatePedido } from './controllers.js';
+import { doCreatePedido, deletePedido, addIngredientes, mostrarPagarPedido, doPagarPedido, viewPedido, updatePedido, removeIngrediente } from './controllers.js';
 import asyncHandler from 'express-async-handler';
 
 
@@ -25,13 +25,20 @@ pedidosRouter.post('/removePedido'
     , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
     , asyncHandler(deletePedido));
 
-    // Ruta para cambiar las cantidades de los ingredientes de un pedido
+// Ruta para cambiar las cantidades de los ingredientes de un pedido
 pedidosRouter.post('/updatePedido'
     , autenticado('/')
     , body('id', 'Id inválido').notEmpty().isNumeric()
     , body('cantidad', 'No puede ser vacío').notEmpty()
     , body('cantidad', 'Debe ser un número mayor que 0').isNumeric().isFloat({min: 0.01})
     , asyncHandler(updatePedido));
+
+
+// Ruta para eliminar un ingrediente de un pedido
+pedidosRouter.post('/removeIngrediente'
+    , autenticado('/')
+    , body('id', 'Id inválido').notEmpty().isNumeric()
+    , asyncHandler(removeIngrediente));
 
 // Ruta para añadir un ingrediente a un pedido
 pedidosRouter.post('/addIngredientesToPedido'

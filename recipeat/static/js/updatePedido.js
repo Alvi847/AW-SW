@@ -13,6 +13,33 @@ function init() {
         const input_cantidad = document.querySelector(`input#ingrediente-${id_ingrediente}-cantidad`);
         input_cantidad.addEventListener("input", compruebaCantidadIngrediente);
     });
+
+    const formDeleteArray = document.querySelectorAll('form[name="form-remove_ingrediente-pedido"]'); // Esto es un array de formularios, porque hay un formulario de actualización por fila de ingrediente
+    formDeleteArray.forEach((element) => {
+        element.addEventListener("submit", deleteSubmit);
+    });
+}
+
+async function deleteSubmit(e) {
+     e.preventDefault();
+    const formDelete = e.target;
+    try {
+        const formData = new FormData(formDelete);
+        const response = await postData('/pedido/removeIngrediente', formData);
+        eliminarFila(formData);
+    } catch (err) {
+        if (err instanceof ResponseError) {
+            switch (err.response.status) {
+                case 400:
+                    await displayErrores(err.response, formDelete);
+                    break;
+                default:
+                    mostrarError(err.response.status, await err.response.json());
+                    break;
+            }
+        }
+        console.error(`Error: `, err);
+    }
 }
 
 async function updateSubmit(e) {
@@ -52,6 +79,21 @@ async function displayErrores(response, formUpdate) {
             feedback.textContent = error.msg;
         }
     }
+}
+
+function eliminarFila(formData){
+    const id_ingrediente = formData.get("id");
+
+    const index_fila_ingrediente = document.querySelector(`tr#ingrediente-${id_ingrediente}`).rowIndex;
+
+    const tabla = document.querySelector('table');
+
+    tabla.deleteRow(index_fila_ingrediente);
+
+    if(tabla.rows.length > 1) // Se compara con 1 porque la fila de los nombres de columna cuenta
+        calcularPrecioTotal(); // Si quedan ingredientes calculas el nuevo precio total
+    else
+        window.location.assign("/pedido/verPedido"); // Si no quedan recargas la página para mostrar el mensaje de sin ingredientes
 }
 
 function appendData(formData) {
