@@ -7,6 +7,7 @@ import { UPLOAD_PATH } from './router.js';
 import { join } from 'node:path';
 import sanitizeHtml from 'sanitize-html';
 import { errorAjax } from '../middleware/error.js';
+import { Contiene } from '../ingrediente/Ingrediente.js';
 import { logger } from '../logger.js';
 
 
@@ -19,8 +20,6 @@ import { logger } from '../logger.js';
  * 
  */
 import * as fs from 'node:fs/promises';
-import { Contiene } from '../ingrediente/Ingrediente.js';
-import { logger } from '../logger.js';
 
 // Ver las recetas (página de inicio de recetas)
 
@@ -145,14 +144,14 @@ export async function doCreateReceta(req, res, next) {
     }
     const datos = matchedData(req);
 
-const nombre = datos.nombre;
-const gusto = datos.gusto;
-const nivel = datos.nivel;
-const dieta = datos.dieta;
-const ingredientes_id = datos.ingredientes_id;
-const ingredientes_cantidad = datos.ingredientes_cantidad;
-const descripcion = req.body.descripcion;
-const modo_preparacion = req.body.modo_preparacion;
+    const nombre = datos.nombre;
+    const gusto = datos.gusto;
+    const nivel = datos.nivel;
+    const dieta = datos.dieta;
+    const ingredientes_id = datos.ingredientes_id;
+    const ingredientes_cantidad = datos.ingredientes_cantidad;
+    const descripcion = req.body.descripcion;
+    const modo_preparacion = req.body.modo_preparacion;
 
     const imagen = req.file;
 
@@ -162,22 +161,22 @@ const modo_preparacion = req.body.modo_preparacion;
         console.debug("🔍 Contenido original recibido:", req.body.modo_preparacion);
 
 
-       const descripcionSegura = sanitizeHtml(descripcion, {
+        const descripcionSegura = sanitizeHtml(descripcion, {
             allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
             allowedAttributes: {
-            a: ['href', 'name', 'target'],
-             img: ['src', 'alt', 'width', 'height'],
-            '*': ['style']
+                a: ['href', 'name', 'target'],
+                img: ['src', 'alt', 'width', 'height'],
+                '*': ['style']
             }
         });
 
-const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
-  allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
-  allowedAttributes: {
-    img: ['src', 'alt'],
-    '*': ['style']
-  }
-});
+        const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
+            allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
+            allowedAttributes: {
+                img: ['src', 'alt'],
+                '*': ['style']
+            }
+        });
 
         const nuevaReceta = new Receta(nombre, descripcionSegura, modoPreparacionSeguro, null, null, req.session.username, false, imagen.filename, gusto, nivel, dieta);
 
@@ -230,7 +229,7 @@ export function viewUpdateReceta(req, res, next) {
     try {
         const id = req.params.id;
         const receta = Receta.getRecetaById(id); // Obtener la receta por ID
-        
+
         if (req.session.username != receta.user && req.session.rol !== RolesEnum.ADMIN) {
             err.message = "No puedes editar una receta que no es tuya";
             err.statusCode = 403;
@@ -282,7 +281,7 @@ export async function updateReceta(req, res, next) {
     const id = req.params.id;
     const recetaExistente = Receta.getRecetaById(id);
 
-    const { nombre, descripcion, modo_preparacion, gusto, nivel, dieta } = matchedData(req);
+    const { nombre, descripcion, modo_preparacion, gusto, nivel, dieta, ingredientes_id, ingredientes_cantidad } = matchedData(req);
     const imagen = req.file;
     const user = req.session.username;
 
@@ -290,30 +289,30 @@ export async function updateReceta(req, res, next) {
         if (!recetaExistente.user) // En caso de un administrador estar editando una receta que fue colocada sin dueño (las recetas que colocamos al principio), el administrador que la esté editando pasará a ser su dueño
             recetaExistente.user = user;
         recetaExistente.nombre = nombre;
-        
+
         recetaExistente.gusto = gusto || null;
         recetaExistente.nivel = nivel || null;
         recetaExistente.dieta = dieta || null;
         try {
 
             const descripcionSegura = sanitizeHtml(descripcion, {
-            allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
-            allowedAttributes: {
-            a: ['href', 'name', 'target'],
-             img: ['src', 'alt', 'width', 'height'],
-            '*': ['style']
-            }
-        });
+                allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
+                allowedAttributes: {
+                    a: ['href', 'name', 'target'],
+                    img: ['src', 'alt', 'width', 'height'],
+                    '*': ['style']
+                }
+            });
 
-const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
-  allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
-  allowedAttributes: {
-    img: ['src', 'alt'],
-    '*': ['style']
-  }
-});
-        recetaExistente.descripcion =descripcionSegura;
-        recetaExistente.modo_preparacion = modoPreparacionSeguro;
+            const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
+                allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
+                allowedAttributes: {
+                    img: ['src', 'alt'],
+                    '*': ['style']
+                }
+            });
+            recetaExistente.descripcion = descripcionSegura;
+            recetaExistente.modo_preparacion = modoPreparacionSeguro;
             if (recetaExistente.imagen) {
 
                 await fs.unlink(join(UPLOAD_PATH, "/", recetaExistente.imagen)); // Hay que borrar la foto anterior en caso de haber alguna
@@ -323,6 +322,19 @@ const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
             logger.debug("Actualizando receta con id '%i'", id);
 
             Receta.updateReceta(recetaExistente);
+
+            Contiene.deleteAllByReceta(recetaExistente.id); // Se eliminan los ingredientes que tenía la receta
+
+            for (let i = 0; i < ingredientes_id.length; i++) { // Se introducen en la receta los nuevos ingredientes
+                Contiene.insertContiene(ingredientes_id[i], recetaExistente.id, ingredientes_cantidad[i]);
+            }
+
+            logger.info("Receta '%i', editada con éxito por '%s'", id, user);
+
+            if (esAjax) {
+                logger.debug("Devuelto código 200 a la petición AJAX");
+                return res.status(200).json({ ok: true });
+            }
         }
         catch (e) {
             req.log.error(e.message);
@@ -333,17 +345,11 @@ const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
                 return errorAjax(err, res);
             return next(err, req, res);
         }
-        logger.info("Receta '%i', editada con éxito por '%s'", id, user);
-
-        if (esAjax) {
-            logger.debug("Devuelto código 200 a la petición AJAX");
-            return res.status(200).json({ ok: true });
-        }
     }
     else
         logger.error("La receta '%i',no puede ser editada por '%s'", id, user);
 
-    if (esAjax){
+    if (esAjax) {
         err.message = "No tienes permisos para editar la receta"
         err.statusCode = 403;
         return errorAjax(err, res);
@@ -379,7 +385,7 @@ export async function deleteReceta(req, res, next) {
             await fs.unlink(join(UPLOAD_PATH, receta.imagen));  // Se borra la imagen de la receta del disco
             logger.info("Receta '%i' eliminada con exito", id);
         }
-        else if(receta != null){
+        else if (receta != null) {
             err.message = "No puedes editar una receta que no es tuya";
             err.statusCode = 403;
             return next(err, req, res);
