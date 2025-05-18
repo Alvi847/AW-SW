@@ -33,7 +33,7 @@ export async function doLogin(req, res, next) {
     const password = req.body.password;
 
     try {
-        const usuario = Usuario.login(username, password);
+        const usuario = await Usuario.login(username, password);
         req.session.login = true;
         req.session.nombre = usuario.nombre;
         req.session.username = username; // Se tiene que guardar el nombre de usuario en la sesión, porque este es la clave identificativa
