@@ -135,7 +135,17 @@ async function createSubmit(e) {
     const formCreate = e.target;
     try {
         const formData = new FormData(formCreate);
-        const response = await post('/receta/createReceta', formData);
+
+        
+         // Comprobar si es actualización o creación
+        const idReceta = formData.get('id_receta');
+        const isUpdate = idReceta && idReceta.trim() !== '';
+
+        const endpoint = isUpdate
+            ? `/receta/updateReceta/${idReceta}`
+            : `/receta/createReceta`;
+
+        const response = await post(endpoint, formData);
         window.location.assign('/receta/listaRecetas');
     } catch (err) {
         if (err instanceof ResponseError) {

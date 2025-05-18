@@ -1,26 +1,21 @@
+ 
 <div class="create-receta">
-<h1>Actualizar Receta</h1>
-<form action="/receta/updateReceta/<%= receta.id %>" method="POST" enctype="multipart/form-data" name="form-update-receta">
-    <fieldset class="fset-crear">
-        <legend>Editar Receta</legend>
-
-        <% if (locals.error) { %>
-            <p><strong><%= locals.error %></strong></p>
-        <% } %>
-
-        <div class ="nombre">
-            <p class="error"><%- helpers.error(errores, 'nombre') %></p>
-            <input type="text" name="nombre"
-                   value="<%= receta.nombre %>" placeholder="Nombre">
-                   <span class="error"></span><span class="feedback"></span>
+    <h1>CREAR RECETA</h1>
+    <form action="/receta/updateReceta/<%= receta.id %> " method="POST" enctype="multipart/form-data" name="form-create-receta">
+      <fieldset class="fset-crear">
+        <div class="nombre">
+          <label for="nombre">Nombre de receta:</label>
+          <input type="text" name="nombre" id="nombre" placeholder="Nombre de receta" value = "<%= receta.nombre ? receta.nombre : '' %>" >
+          <span class="error"></span><span class="feedback"></span>
         </div>
+
         <div class="descripcion">
-            <p class="error"><%- helpers.error(errores, 'descripcion' ) %></p>
-            <textarea name="descripcion" placeholder="Descripción"><%= receta.descripcion ? receta.descripcion : '' %></textarea>
-            <span class="error"></span><span class="feedback"></span>
-        </div>
+          <label for="descripcion">Descripción:</label>
+          <textarea name="descripcion" id="descripcion" placeholder="Descripción"> <%= receta.descripcion ? receta.descripcion : '' %> </textarea>
+          <span class="error"></span><span class="feedback"></span>
+        </div>	
 
-         <div class="ingredientes-form">
+        <div class="ingredientes-form">
           <label>Ingredientes:</label>
           <div id="lista-ingredientes"></div>
           <div class="ingredientes-botones">
@@ -30,60 +25,52 @@
         </div>
 
         <div class="preparacion">
-            <p class="error"><%- helpers.error(errores, 'modo_preparacion' ) %></p>
-            <textarea name="modo_preparacion" placeholder="Modo de preparación"><%= receta.modo_preparacion ? receta.modo_preparacion : '' %></textarea>
-            <span class="error"></span><span class="feedback"></span>
+          <label for="modo_preparacion">Modo de preparación:</label>
+          <textarea name="modo_preparacion" id="modo_preparacion" placeholder="Modo de preparación"> <%= receta.modo_preparacion ? receta.modo_preparacion : '' %></textarea>
+          <span class="error"></span><span class="feedback"></span>
         </div>
 
-        <!-- GUSTO -->
-        <div class="gusto">
-            <label for="gusto">Gusto:</label>
-            <select name="gusto" id="gusto">
-                <option value="">Selecciona un gusto</option>
-                <option value="dulce" <%=receta.gusto==='dulce' ? 'selected' : '' %>>Dulce</option>
-                <option value="salado" <%=receta.gusto==='salado' ? 'selected' : '' %>>Salado</option>
-                <option value="picante" <%=receta.gusto==='picante' ? 'selected' : '' %>>Picante</option>
-            </select>
-            <p class="error"><%- helpers.error(errores, 'gusto' ) %></p>
-        </div>
-        
-        <!-- NIVEL -->
-        <div class="nivel">
-            <label for="nivel">Nivel:</label>
-            <select name="nivel" id="nivel">
-                <option value="">Selecciona un nivel</option>
-                <option value="fácil" <%=receta.nivel==='fácil' ? 'selected' : '' %>>Fácil</option>
-                <option value="medio" <%=receta.nivel==='medio' ? 'selected' : '' %>>Medio</option>
-                <option value="difícil" <%=receta.nivel==='difícil' ? 'selected' : '' %>>Difícil</option>
-            </select>
-            <p class="error"><%- helpers.error(errores, 'nivel' ) %></p>
-        </div>
-        
-        <!-- DIETA -->
-        <div class="dieta">
-            <label for="dieta">Dieta:</label>
-            <select name="dieta" id="dieta">
-                <option value="">Selecciona una dieta</option>
-                <option value="vegana" <%=receta.dieta==='vegana' ? 'selected' : '' %>>Vegana</option>
-                <option value="vegetariana" <%=receta.dieta==='vegetariana' ? 'selected' : '' %>>Vegetariana</option>
-                <option value="sin gluten" <%=receta.dieta==='sin gluten' ? 'selected' : '' %>>Sin gluten</option>
-            </select>
-            <p class="error"><%- helpers.error(errores, 'dieta' ) %></p>
-        </div>
         <div class="receta-imagen">
-            <label for="imagen">Imagen:</label>
-            <p class="error"><%- helpers.error(errores, 'imagen') %></p>
-            <input type="file" name="imagen" required value="<%= locals.foto ? locals.foto : receta.imagen %>">
-            <span class="error"></span><span class="feedback"></span>
+          <label for="imagen">Imagen:</label>
+          <input type="file" name="imagen" id="imagen">
+          <span class="error"></span><span class="feedback"></span>
         </div>
-            <input type="hidden" name="id_receta" value="<%= receta.id %>">
 
-        <button type="submit">Guardar Cambios</button>
-    </fieldset>
-</form>
-</div>
+        <div class="gusto">
+          <label for="gusto">Gusto:</label>
+          <select name="gusto" id="gusto">
+            <option value="">Seleccione un gusto</option>
+            <option value="dulce">Dulce</option>
+            <option value="salado">Salado</option>
+          </select>
+        </div>
 
+        <div class="nivel">
+          <label for="nivel">Nivel:</label>
+          <select name="nivel" id="nivel">
+            <option value="">Seleccione un nivel</option>
+            <option value="fácil">Fácil</option>
+            <option value="medio">Medio</option>
+            <option value="difícil">Difícil</option>
+          </select>
+        </div>
 
+        <div class="dieta">
+          <label for="dieta">Dieta:</label>
+          <select name="dieta" id="dieta">
+            <option value="">Seleccione una dieta</option>
+            <option value="vegana">Vegana</option>
+            <option value="vegetariana">Vegetariana</option>
+            <option value="sin gluten">Sin gluten</option>
+          </select>
+        </div>
+
+        <input type="hidden" name="id_receta" value="<%= receta.id %>">
+
+        <button type="submit">Subir receta</button>
+      </fieldset>
+    </form>
+  </div>
 
 <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
 
@@ -137,7 +124,7 @@ CKEDITOR.instances.modo_preparacion.config.entities_greek = false;
 
 
 
-<script src="/js/updateReceta.js" defer></script>
+<script src="/js/createReceta.js" defer></script>
 <script src="/js/fetch.js" defer></script>
 <script src="/js/mostrarError.js" defer></script>
 
