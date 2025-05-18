@@ -43,7 +43,7 @@ export class Pedido {
         }
         catch (e) {
             if (this.#insertStmt == null)
-                console.log("insert stmt null");
+                logger.error("insert stmt null");
             throw new ErrorInsertPedido(usuario, { cause: e });
         }
     }

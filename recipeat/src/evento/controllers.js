@@ -1,3 +1,4 @@
+import { logger } from '../logger.js';
 import { Evento } from './Evento.js';
 
 export async function getEventosUsuario(req, res) {
@@ -5,7 +6,7 @@ export async function getEventosUsuario(req, res) {
     const eventos = await Evento.obtenerEventosPorUsuario(req.params.username); // <-- await añadido
     res.json(eventos);
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     res.status(500).json({ error: 'Error al obtener eventos' });
   }
 }
@@ -21,7 +22,7 @@ export async function crearEventoUsuario(req, res) {
     });
     res.json({ ok: true });
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     res.status(500).json({ error: 'Error al crear evento' });
   }
 }
@@ -39,7 +40,7 @@ export async function eliminarEventoUsuario(req, res) {
       res.status(404).json({ error: 'Evento no encontrado o no autorizado' });
     }
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     res.status(500).json({ error: 'Error al eliminar evento' });
   }
 }
@@ -50,7 +51,7 @@ export async function actualizarEventoUsuario(req, res) {
     await Evento.actualizarEvento({ id, titulo, fecha, descripcion, user: req.session.username });
     res.json({ ok: true });
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     res.status(500).json({ error: 'Error al actualizar evento' });
   }
 }

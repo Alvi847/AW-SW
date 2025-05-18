@@ -47,7 +47,7 @@ export class Comentario {
         }
         catch (e) {
             if (this.#insertStmt == null)
-                console.log("insert result null");
+                logger.error("insert result null");
             const id = comentario.id;
             throw new ErrorInsertComentario(id, "Error al insertar el comentario");
         }
@@ -193,11 +193,11 @@ export class Valoracion {
             });
         }
         catch (e) {
-            console.log("Error al crear Valoracion");
+            logger.error("Error al crear Valoracion");
             if (this.#insertValoracionStmt == null)
-                console.log("insert result null");
+                logger.error("insert result null");
             else
-                console.log(this.#insertValoracionStmt);
+                logger.error(this.#insertValoracionStmt);
             throw new ErrorInsertValoracion(id_comentario, { cause: e });
         }
     }

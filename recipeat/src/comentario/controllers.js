@@ -2,6 +2,7 @@ import { validationResult, matchedData } from 'express-validator';
 import { Comentario } from './Comentario.js';
 import { render } from '../utils/render.js';
 import {errorAjax} from '../middleware/error.js'
+import { logger } from '../logger.js';
 
 // Ver los comentarios
 // ACTUALMENTE EN DESUSO, el middleware viewReceta ya carga los comentarios
@@ -11,7 +12,7 @@ import {errorAjax} from '../middleware/error.js'
 
     let contenido = `pagina/`; // TODO: Poner URL correcta
     
-    req.log.debug("Cargando todos los comentarios de la receta '%i'", id_receta);
+    logger.debug("Cargando todos los comentarios de la receta '%i'", id_receta);
     
     const comentarios = Comentario.getAllComentarios(id_receta, user);
 
@@ -27,7 +28,7 @@ import {errorAjax} from '../middleware/error.js'
 
     if (req.session == null || !req.session.login) {
         contenido = '/receta/verReceta';
-        req.log.debug("El usuario no está logueado, no se puede crear un comentario");
+        logger.debug("El usuario no está logueado, no se puede crear un comentario");
     }
     else {
         const id_receta = req.params.id_receta; // Id de la receta del comentario
@@ -58,13 +59,13 @@ export function doCreateComentario(req, res, next) {
     const requestWith = req.get('X-Requested-With');
     const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
     if (esAjax)
-        req.log.debug("Petición AJAX recibida para doCreateComentario()");
+        logger.debug("Petición AJAX recibida para doCreateComentario()");
 
     if (!result.isEmpty()) {
         const errores = result.mapped();
 
         if (esAjax) {
-            req.log.debug("Devuelto código 400 a la petición AJAX");
+            logger.debug("Devuelto código 400 a la petición AJAX");
             return res.status(400).json({ status: 400, errores });
         }
 
@@ -83,7 +84,7 @@ export function doCreateComentario(req, res, next) {
         // Insertar comentario en la base de datos
         Comentario.insertComentario(nuevoComentario);
         if (esAjax) {
-            req.log.debug("Devuelto código 200 a la petición AJAX");
+            logger.debug("Devuelto código 200 a la petición AJAX");
             return res.status(200).json({ ok: true });
         }
     }
@@ -128,7 +129,7 @@ export function deleteComentario(req, res, next) {
 
             if (comentario != null && (user === comentario.user || req.session.rol === "A")) {
                 Comentario.deleteComentario(id); // Elimina el comentario por ID
-                req.log.info("Comentario '%i' eliminado con exito", id);
+                logger.info("Comentario '%i' eliminado con exito", id);
                 res.redirect(`/receta/verReceta/${comentario.id_receta}`); // Ahora redirige a la página de la receta  
             }
             else if (receta != null) {
