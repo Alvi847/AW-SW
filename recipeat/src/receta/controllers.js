@@ -80,7 +80,7 @@ export function viewRecetas(req, res, next) {
 }
 
 //viene de boton ver favoritos
-export function viewFavoritos (req, res) {
+export function viewFavoritos(req, res) {
     let contenido = 'paginas/listaRecetas';
     const recetas = Receta.recetasConLike(req.session.username)
     render(req, res, contenido, {
@@ -476,7 +476,17 @@ export function viewMisRecetas(req, res, next) {
     const user = req.session.username;
 
     try {
-        const recetas = Receta.getRecetasPorUsuario(user);
+        let recetas = Receta.getRecetasPorUsuario(user);
+
+        //  Strip de etiquetas HTML en la descripción (podria venir enriquecido por CKEditor) 
+        const stripTags = (input) =>
+            input.replace(/(<([^>]+)>)/gi, "").replace(/&nbsp;/g, " ").trim();
+
+
+        recetas = recetas.map(r => {
+            r.descripcion = stripTags(r.descripcion);
+            return r;
+        });
         render(req, res, contenido, {
             recetas,
             login: true
