@@ -370,10 +370,15 @@ export async function deleteReceta(req, res, next) {
     try {
         receta = Receta.getRecetaById(id, null);
 
-        if (receta != null && (user === receta.user || req.session.rol === "A")) {
+        if (receta != null && (user === receta.user || req.session.rol === RolesEnum.ADMIN)) {
             Receta.deleteReceta(id); // Elimina la receta por ID
             await fs.unlink(join(UPLOAD_PATH, receta.imagen));  // Se borra la imagen de la receta del disco
             req.log.info("Receta '%i' eliminada con exito", id);
+        }
+        else if(receta != null){
+            err.message = "No puedes editar una receta que no es tuya";
+            err.statusCode = 403;
+            return next(err, req, res);
         }
     }
     catch (e) {

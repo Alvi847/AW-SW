@@ -145,8 +145,11 @@ async function updateSubmit(e) {
                 case 400:
                     await displayErrores(err.response);
                     break;
+                case 401:
+                    window.assign('/usuarios/login'); // Mandar al usuario al formulario de login
+                    break;
                 default:
-                    mostrarError(err.response.status, await err.response.json());
+                    mostrarError(err);
                     break;
             }
         }
