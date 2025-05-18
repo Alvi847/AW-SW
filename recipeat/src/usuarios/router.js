@@ -22,7 +22,7 @@ usuariosRouter.post('/login', autenticado(null, '/usuarios/home')
     , asyncHandler(doLogin));
 usuariosRouter.get('/logout', doLogout);
 
-usuariosRouter.get('/home', autenticado('/usuarios/home'), asyncHandler(viewHome));
+usuariosRouter.get('/home', autenticado('/usuarios/login'), asyncHandler(viewHome));
 usuariosRouter.get('/registro', autenticado(null, '/usuarios/home'), asyncHandler(viewRegistro));
 usuariosRouter.post('/registro', multerFactory.single("imagen")
     , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
@@ -55,8 +55,8 @@ usuariosRouter.post('/registro', multerFactory.single("imagen")
     }).withMessage("Sólo se permiten imágenes jpg o png")
     , asyncHandler(doRegistro));
 
-usuariosRouter.get('/verPerfil', autenticado('/usuarios/home'), asyncHandler(viewPerfil));
-usuariosRouter.get('/updatePerfil', autenticado('/usuarios/home'), asyncHandler(viewUpdatePerfil));
+usuariosRouter.get('/verPerfil', autenticado('/usuarios/login'), asyncHandler(viewPerfil));
+usuariosRouter.get('/updatePerfil', autenticado('/usuarios/login'), asyncHandler(viewUpdatePerfil));
 usuariosRouter.post('/updatePerfil', multerFactory.single("imagen")
     , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
     , body('username', 'No puede ser vacío').trim().notEmpty()
@@ -72,38 +72,38 @@ usuariosRouter.post('/updatePerfil', multerFactory.single("imagen")
 usuariosRouter.post('/removeUsuario'
     , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
     , body('username', 'No puede ser vacío').trim().notEmpty()
-    , autenticado('/usuarios/home')
+    , autenticado('/usuarios/login')
     , tieneRol()
     , asyncHandler(deleteUsuario));
 
-usuariosRouter.get('/administrar', autenticado('/usuarios/home'), tieneRol(), asyncHandler(viewAdministrar));
+usuariosRouter.get('/administrar', autenticado('/usuarios/login'), tieneRol(), asyncHandler(viewAdministrar));
 
 usuariosRouter.post('/cambiarRol'
     , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
     , body('username', 'No puede ser vacío').trim().notEmpty()
-    , autenticado('/usuarios/home')
+    , autenticado('/usuarios/login')
     , tieneRol()
     , asyncHandler(cambiarRolUsuario));
 
-usuariosRouter.get('/misPreferencias', autenticado('/login'), asyncHandler(viewPreferencias));
+usuariosRouter.get('/misPreferencias', autenticado('/usuarios/login'), asyncHandler(viewPreferencias));
 
 usuariosRouter.post('/misPreferencias',
-  autenticado('/login'),
+  autenticado('/usuarios/login'),
   body('gusto').trim().optional({ checkFalsy: true }),
   body('nivel').trim().optional({ checkFalsy: true }),
   body('dieta').trim().optional({ checkFalsy: true }),
   asyncHandler(guardarPreferencias)
 );
 
-usuariosRouter.get('/:username/recetas', autenticado('/usuarios/home')
+usuariosRouter.get('/:username/recetas', autenticado('/usuarios/login')
 , param('username', 'El nombre de usuario no puede ser vacío').trim().notEmpty()
 , param('username', 'El nombre de usuario sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
 , asyncHandler(viewRecetasUser));
-usuariosRouter.get('/:username/favoritos', autenticado('/usuarios/home')
+usuariosRouter.get('/:username/favoritos', autenticado('/usuarios/login')
 , param('username', 'El nombre de usuario no puede ser vacío').trim().notEmpty()
 , param('username', 'El nombre de usuario sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
 , asyncHandler(viewFavoritosUser));
-usuariosRouter.get('/:username', autenticado('/usuarios/home')
+usuariosRouter.get('/:username', autenticado('/usuarios/login')
 , param('username', 'El nombre de usuario no puede ser vacío').trim().notEmpty()
 , param('username', 'El nombre de usuario sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
 , asyncHandler(viewPerfilUser)); //ver perfil de users dinamico
