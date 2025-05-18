@@ -2,7 +2,7 @@
     <div class="admin-panel">
         <h1>Administración de Usuarios</h1>
 
-        <table>
+        <table class="usuarios">
             <thead>
                 <tr>
                     <th>Username</th>
@@ -59,7 +59,7 @@
     </div>
     <div class="admin-panel">
         <h1>Administración de Ingredientes</h1>
-        <table>
+        <table class="ingredientes">
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -74,13 +74,13 @@
                         <td data-label="Nombre">
                             <form>
                                 <input id='ingrediente-<%= i.id %>-nombre' type="text" name="nombre"
-                                    value='<%= i.nombre %>'>€<span class="feedback"></span><span class="error"><%- helpers.error(errores, 'nombre' ) %></span>
+                                    value='<%= i.nombre %>'><span class="feedback"></span><span class="error"><%- helpers.error(errores, 'nombre' ) %></span>
                             </form>
                         </td>
                         <td data-label="Unidad">
                             <form>
                                 <input id='ingrediente-<%= i.id %>-unidad' type="text" name="unidad"
-                                    value='<%= i.unidad %>'>€<span class="feedback"></span><span class="error"><%- helpers.error(errores, 'unidad' ) %></span>
+                                    value='<%= i.unidad %>'><span class="feedback"></span><span class="error"><%- helpers.error(errores, 'unidad' ) %></span>
                             </form>
                         </td>
                         <td data-label="Precio">

@@ -48,7 +48,7 @@
   color: #ccc;
 }
 
-.admin-panel form {
+.admin-panel .usuarios form {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -81,6 +81,25 @@
 .admin-page {
   display: flex;
   gap: 5vw;
+}
+
+.admin-panel .ingredientes td[data-label="Nombre"] input{
+  display: inline-block;
+  width: 80%;
+}
+
+.admin-panel .ingredientes td[data-label="Unidad"] input{
+  display: inline-block;
+  width: 40%;
+}
+
+.admin-panel .ingredientes td[data-label="Precio"] input{
+  display: inline-block;
+  width: 50%;
+}
+
+.admin-panel button{
+  margin-top: 10px;
 }
 
 .form-create-ingrediente {

@@ -48,19 +48,19 @@
   color: #ccc;
 }
 
-.miPedido-panel form {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
 .miPedido-panel label {
   color: #ccc;
   font-size: 14px;
 }
 
-.miPedido-panel input[type="radio"] {
-  margin-right: 6px;
+.miPedido-panel td input{
+  display: inline-block;
+  width: 50%;
+}
+
+.miPedido-panel .unidad{
+  display: inline-block;
+  margin-left: 5px;
 }
 
 .miPedido-panel form button {
@@ -72,6 +72,7 @@
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s ease;
+  margin-top: 10px;
 }
 
 .miPedido-panel form button:hover {
