@@ -1,4 +1,4 @@
-.miPedido-panel {
+.admin-panel {
   max-width: 1200px;
   margin-top: 100px;
   margin-bottom: 20px;
@@ -11,7 +11,7 @@
   border: 1px solid #ffffff;
 }
 
-.miPedido-panel h1 {
+.admin-panel h1 {
   font-size: 32px;
   margin-bottom: 30px;
   color: #ffbd3a;
@@ -20,7 +20,7 @@
   padding-bottom: 15px;
 }
 
-.miPedido-panel table {
+.admin-panel table {
   width: 100%;
   border-collapse: collapse;
   background-color: #1e1e1e;
@@ -29,14 +29,14 @@
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
 }
 
-.miPedido-panel th,
-.miPedido-panel td {
+.admin-panel th,
+.admin-panel td {
   padding: 1rem;
   text-align: left;
   border-bottom: 1px solid #333;
 }
 
-.miPedido-panel th {
+.admin-panel th {
   background-color: #292929;
   color: #f9f9f9;
   font-weight: bold;
@@ -44,26 +44,26 @@
   letter-spacing: 0.05em;
 }
 
-.miPedido-panel td {
+.admin-panel td {
   color: #ccc;
 }
 
-.miPedido-panel form {
+.admin-panel form {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.miPedido-panel label {
+.admin-panel label {
   color: #ccc;
   font-size: 14px;
 }
 
-.miPedido-panel input[type="radio"] {
+.admin-panel input[type="radio"] {
   margin-right: 6px;
 }
 
-.miPedido-panel form button {
+.admin-panel form button {
   background-color: #dc6a35;
   color: white;
   border: none;
@@ -74,66 +74,92 @@
   transition: background-color 0.3s ease;
 }
 
-.miPedido-panel form button:hover {
+.admin-panel form button:hover {
   background-color: #c85f23;
 }
 
-/*.form-update-pedido {
+.admin-page {
+  display: flex;
+  gap: 5vw;
+}
+
+.form-create-ingrediente {
   margin-top: 10px;
-}*/
+}
 
-@media (max-width: 1300px) {
-  .miPedido-panel {
-    padding: 20px;
-    margin-top: 100px;
-  }
-
-  .miPedido-panel h1 {
-    font-size: 24px;
-    line-height: 1.2;
+@media (max-width: 768px) {
+  .admin-page {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
     padding: 10px;
-    word-break: break-word;
-    text-align: center;
   }
 
-  .miPedido-panel table,
-  .miPedido-panel thead,
-  .miPedido-panel tbody,
-  .miPedido-panel th,
-  .miPedido-panel td,
-  .miPedido-panel tr {
+  .admin-panel {
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+  }
+
+  .admin-panel h1 {
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .admin-panel table,
+  .admin-panel thead,
+  .admin-panel tbody,
+  .admin-panel th,
+  .admin-panel td,
+  .admin-panel tr {
     display: block;
     width: 100%;
   }
 
-  .miPedido-panel thead {
+  .admin-panel thead {
     display: none;
   }
 
-  .miPedido-panel tr {
+  .admin-panel tr {
     margin-bottom: 20px;
-    border: 1px solid #333;
-    padding: 10px;
+    background-color: #1e1e1e;
     border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #333;
   }
 
-  .miPedido-panel td {
+  .admin-panel td {
     display: flex;
     justify-content: space-between;
-    padding: 10px;
-    border: none;
+    align-items: center;
+    padding: 10px 0;
     border-bottom: 1px solid #333;
+    color: #ccc;
     position: relative;
   }
 
-  .miPedido-panel td::before {
+  .admin-panel td::before {
     content: attr(data-label);
     font-weight: bold;
     color: #ffbd3a;
+    flex-basis: 50%;
+    text-align: left;
   }
 
-  .miPedido-panel form {
+  .admin-panel form {
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
+  }
+
+  .admin-panel input,
+  .admin-panel button {
+    width: 100%;
+    margin-top: 5px;
+    font-size: 14px;
+  }
+
+  .admin-panel button {
+    padding: 8px 12px;
   }
 }
