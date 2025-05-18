@@ -144,7 +144,7 @@ async function createSubmit(e) {
                     await displayErrores(err.response);
                     break;
                 default:
-                    mostrarError(err.response.status, null);
+                    mostrarError(err);
                     break;
             }
         }
