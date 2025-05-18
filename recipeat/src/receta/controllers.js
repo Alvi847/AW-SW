@@ -286,12 +286,30 @@ export async function updateReceta(req, res, next) {
         if (!recetaExistente.user) // En caso de un administrador estar editando una receta que fue colocada sin dueño (las recetas que colocamos al principio), el administrador que la esté editando pasará a ser su dueño
             recetaExistente.user = user;
         recetaExistente.nombre = nombre;
-        recetaExistente.descripcion = descripcion;
-        recetaExistente.modo_preparacion = modo_preparacion;
+        
         recetaExistente.gusto = gusto || null;
         recetaExistente.nivel = nivel || null;
         recetaExistente.dieta = dieta || null;
         try {
+
+            const descripcionSegura = sanitizeHtml(descripcion, {
+            allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
+            allowedAttributes: {
+            a: ['href', 'name', 'target'],
+             img: ['src', 'alt', 'width', 'height'],
+            '*': ['style']
+            }
+        });
+
+const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
+  allowedTags: ['p', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'img', 'h1', 'h2', 'br'],
+  allowedAttributes: {
+    img: ['src', 'alt'],
+    '*': ['style']
+  }
+});
+        recetaExistente.descripcion =descripcionSegura;
+        recetaExistente.modo_preparacion = modoPreparacionSeguro;
             if (recetaExistente.imagen) {
 
                 await fs.unlink(join(UPLOAD_PATH, "/", recetaExistente.imagen)); // Hay que borrar la foto anterior en caso de haber alguna
