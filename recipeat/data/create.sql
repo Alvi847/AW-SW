@@ -27,7 +27,7 @@ CREATE TABLE "Eventos" (
 	"descripcion"	TEXT,
 	"user"	TEXT NOT NULL,
 	PRIMARY KEY("id" AUTOINCREMENT),
-	FOREIGN KEY("user") REFERENCES "Usuarios"("username")
+	FOREIGN KEY("user") REFERENCES "Usuarios"("username") ON DELETE CASCADE
 );
 DROP TABLE IF EXISTS "Ingredientes";
 CREATE TABLE "Ingredientes" (
