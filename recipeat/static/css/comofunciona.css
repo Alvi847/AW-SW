@@ -212,7 +212,7 @@
         align-items: center; /* Centrar horizontalmente */
         gap: 20px; /* Espacio entre elementos */
         padding: 5px 20px;
-        margin: 20px auto;
+        margin: 0px;
     }
 
     .titulo {
@@ -228,31 +228,41 @@
     .menu-anclas {
         flex-direction: column; /* Cambiar a columna */
         gap: 10px; /* Reducir espacio entre enlaces */
-        margin-right: 6px;
+        margin-left: 60px;
+        width: 300px;
     }
 
-    .tipos-usuarios{
-        margin-left: 0;
+    .tipos-usuarios, .tipos-usuarios-admin{
+        padding: 10px;
+        margin-left: 10px;
     }
 
-    .tipos-usuarios h2 {
+
+    .tipos-usuarios h2{
         margin-top: 20px;
-        margin-left: 4px;
+        margin-left: 20px;
         font-size: 16px; /* Reducir tamaño de fuente */
     }
 
-    .tipos-usuarios h3 {
-        font-size: 15px; /* Reducir tamaño de fuente */
-        margin-left: 13px;
+    .tipos-usuarios-admin h2{
+        margin-left: 50px;
+        font-size: 16px;
+        margin-top: 10px;
     }
 
-    .tipos-usuarios li {
-        font-size: 14px; /* Reducir tamaño de fuente de la lista */
-        padding-right: 3px;
+    .tipos-usuarios h3 , .tipos-usuarios-admin h3{
+        font-size: 13px; /* Reducir tamaño de fuente */
+        margin-left: 26px;
     }
 
-    .tipos-usuarios ul{
+    .tipos-usuarios li , .tipos-usuarios-admin li{
+        font-size: 12px; /* Reducir tamaño de fuente de la lista */
+        padding-right: 13px;
+    }
+
+    .tipos-usuarios ul, .tipos-usuarios-admin ul{
         margin-left: 30px;
+        padding: 15px;
     }
 
     .btn-reg {
@@ -261,15 +271,20 @@
         margin-top: 20px; /* Ajustar margen superior */
     }
 
-   .imagenes-verticales {
+   .imagenes-verticales{
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
     width: 100%;
+    margin-bottom: 20px;
 }
 
-.imagenes-verticales img {
+ .imagenes-verticales-1 {
+    margin-right: 10px;
+ }
+
+.imagenes-verticales img{
     width: 100%;
     max-width: 350px;
     height: auto;
