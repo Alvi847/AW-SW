@@ -15,9 +15,17 @@ const multerFactory = multer({ dest: join(UPLOAD_PATH) });
 
 const recetasRouter = express.Router();
 
+const gustos_permitidos = ['dulce', 'salado'];
+const niveles_permitidos = ['fácil', 'medio', 'difícil'];
+const dietas_permitidas = ['vegana', 'vegetariana', 'sin gluten'];
+
+
 //Ruta para ver la lista de recetas
-recetasRouter.get('/listaRecetas', asyncHandler(viewRecetas));
-//recetasRouter.post('/listaRecetas', autenticado('/receta/listaRecetas'), asyncHandler(viewRecetas));
+recetasRouter.get('/listaRecetas'
+    , param('gusto', 'gusto inválido').custom((value) => {return value == null || gustos_permitidos.includes(value)})
+    , param('nivel', 'nivel inválido').custom((value) => {return value == null || niveles_permitidos.includes(value)})
+    , param('dieta', 'dieta inválida').custom((value) => {return value == null || dietas_permitidas.includes(value)})
+    , asyncHandler(viewRecetas));
 
 //Ruta para ver una receta
 recetasRouter.get('/verReceta/:id'
