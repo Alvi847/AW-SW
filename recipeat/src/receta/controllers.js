@@ -412,10 +412,6 @@ export function viewMisRecetas(req, res, next) {
     let contenido = 'paginas/misRecetas';
     const user = req.session.username;
 
-    if (!user) {
-        return res.redirect('/login');
-    }
-
     try {
         const recetas = Receta.getRecetasPorUsuario(user);
         render(req, res, contenido, {

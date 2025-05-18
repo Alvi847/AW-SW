@@ -113,6 +113,7 @@ recetasRouter.get('/updateReceta/:id'
 recetasRouter.post('/updateReceta/:id'
     , autenticado('/receta/listaRecetas')
     , multerFactory.single("imagen")
+    , param('id', 'id Inválido').notEmpty().isNumeric()
     , body('nombre', 'No puede ser vacío').trim().notEmpty()
     , body('nombre', 'Sólo puede contener letras').trim().matches(/^[\p{L}\s]*$/u)
     , body('nombre', 'Máximo 50 caracteres').trim().isLength({ min: 1, max: 50 })
@@ -161,11 +162,6 @@ recetasRouter.post('/like'
     , autenticado('/receta/listaRecetas')
     , asyncHandler(likeReceta));
 
-recetasRouter.get('/misRecetas', asyncHandler(viewMisRecetas));
-
-
-//recetasRouter.get('/buscar', apiBuscarRecetas);
-
-//recetasRouter.get('/filtrar', filtrarRecetas);
+recetasRouter.get('/misRecetas', autenticado('/usuarios/login'), asyncHandler(viewMisRecetas));
 
 export default recetasRouter;
