@@ -90,7 +90,7 @@
 
 .admin-panel .ingredientes td[data-label="Unidad"] input{
   display: inline-block;
-  width: 40%;
+  width: 60%;
 }
 
 .admin-panel .ingredientes td[data-label="Precio"] input{
