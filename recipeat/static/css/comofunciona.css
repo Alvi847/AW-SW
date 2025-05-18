@@ -178,10 +178,17 @@
     display: flex;
     flex-direction: column;
     gap: 20px; /* Espacio entre las imágenes */
-    margin-left: 17px;
+    margin-left: 37px;
 }
 
-.imagenes-verticales img {
+ .imagenes-verticales-1{
+
+    display: flex;
+    flex-direction: column;
+    margin-right: 100px;
+}
+
+.imagenes-verticales img, .imagenes-verticales-1 img {
     max-width: 400px;
     height: auto;
     border-radius: 8px;
