@@ -66,7 +66,7 @@ CREATE TABLE "Preferencias" (
 	"user"	TEXT NOT NULL,
 	"gusto"	TEXT CHECK("gusto" IN ("dulce", "salado")),
 	"nivel"	TEXT CHECK("nivel" IN ("fácil", "medio", "difícil")),
-	"dieta"	TEXT CHECK("dieta" IN ("vegana", "sin gluten", "carnívora")),
+	"dieta"	TEXT CHECK("dieta" IN ("vegana", "sin gluten", "vegetariana")),
 	PRIMARY KEY("user"),
 	FOREIGN KEY("user") REFERENCES "Usuarios"("username") ON DELETE CASCADE
 );
