@@ -55,7 +55,7 @@ usuariosRouter.post('/registro', multerFactory.single("imagen")
     }).withMessage("Sólo se permiten imágenes jpg o png")
     , asyncHandler(doRegistro));
 
-usuariosRouter.get('/verPerfil', autenticado('/usuarios/login'), asyncHandler(viewPerfil));
+
 usuariosRouter.get('/updatePerfil', autenticado('/usuarios/login'), asyncHandler(viewUpdatePerfil));
 usuariosRouter.post('/updatePerfil', multerFactory.single("imagen")
     , body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i)
