@@ -298,13 +298,16 @@ export class Receta {
         }
 
         if (result.changes === 0) throw new Error(`No se encontró la receta con ID ${receta.id}`);
-        return receta;
     }
 
-    // Método para acceder al update desde fuera
+    /**
+     * Método para actualizar el contenido de una receta desde fuera
+     * @param {Receta} receta 
+     * @throws {Error} Error de acceso a la base de datos
+     */
     static updateReceta(receta) {
         try {
-            return Receta.#update(receta);
+            Receta.#update(receta);
         }
         catch (e) {
             logger.error(e);
