@@ -1,5 +1,4 @@
 import { logger } from "../logger.js";
-import { PedidoContiene } from "../Pedidos/Pedidos.js";
 
 /**
  * Clase de los ingredientes de las recetas, tambien se utiliza en los pedidos de ingredientes
@@ -49,7 +48,7 @@ export class Ingrediente {
         }
         catch (e) {
             if (this.#insertStmt == null)
-                console.log("insert result null");
+                logger.error("insert result null");
             const nombre = ingrediente.nombre;
             throw new ErrorInsertIngrediente(nombre, { cause: e });
         }
@@ -232,7 +231,7 @@ export class Contiene {
         }
         catch (e) {
             if (this.#insertStmt == null)
-                console.log("insert result null");
+                logger.error("insert result null");
             throw new ErrorInsertContiene(id_ingrediente, id_receta, { cause: e });
         }
     }

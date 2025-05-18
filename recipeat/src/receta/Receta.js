@@ -394,11 +394,11 @@ export class Like {
             });
         }
         catch (e) {
-            console.log("Error al crear like");
+            logger.error("Error al crear like");
             if (this.#insertLikeStmt == null)
-                console.log("insert result null");
+                logger.error("insert result null");
             else
-                console.log(this.#insertLikeStmt);
+                logger.error(this.#insertLikeStmt);
             throw new ErrorInsertLike(id_receta, { cause: e });
         }
     }

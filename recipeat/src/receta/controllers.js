@@ -7,6 +7,7 @@ import { UPLOAD_PATH } from './router.js';
 import { join } from 'node:path';
 import sanitizeHtml from 'sanitize-html';
 import { errorAjax } from '../middleware/error.js';
+import { logger } from '../logger.js';
 
 
 /**
@@ -158,7 +159,7 @@ const modo_preparacion = req.body.modo_preparacion;
     // Insertar la receta en la base de datos
     try {
 
-        console.log("🔍 Contenido original recibido:", req.body.modo_preparacion);
+        console.debug("🔍 Contenido original recibido:", req.body.modo_preparacion);
 
 
        const descripcionSegura = sanitizeHtml(descripcion, {
@@ -229,15 +230,18 @@ export function viewUpdateReceta(req, res, next) {
     try {
         const id = req.params.id;
         const receta = Receta.getRecetaById(id); // Obtener la receta por ID
-
+        
         if (req.session.username != receta.user && req.session.rol !== RolesEnum.ADMIN) {
             err.message = "No puedes editar una receta que no es tuya";
             err.statusCode = 403;
             return next(err, req, res);
         }
 
+        const ingredientes = Contiene.getIngredientesByReceta(receta.id);
+
         return render(req, res, 'paginas/updateReceta', {
             receta,
+            ingredientes,
             errores: {},
             datos: {}
         });
@@ -255,7 +259,7 @@ export async function updateReceta(req, res, next) {
     const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
 
     if (esAjax)
-        req.log.debug("Petición AJAX recibida para updateReceta()");
+        logger.debug("Petición AJAX recibida para updateReceta()");
 
     const result = validationResult(req);
     const err = {};
@@ -266,7 +270,7 @@ export async function updateReceta(req, res, next) {
         if (req.file)
             await fs.unlink(req.file.path); // En la actualización también borramos la foto si el usuario ha subido alguna
         if (esAjax) {
-            req.log.debug("Devuelto código 400 a la petición AJAX");
+            logger.debug("Devuelto código 400 a la petición AJAX");
             return res.status(400).json({ status: 400, errores });
         }
         return render(req, res, `paginas/updateReceta`, {
@@ -316,7 +320,7 @@ const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
             }
             recetaExistente.imagen = imagen.filename;
 
-            req.log.debug("Actualizando receta con id '%i'", id);
+            logger.debug("Actualizando receta con id '%i'", id);
 
             Receta.updateReceta(recetaExistente);
         }
@@ -329,10 +333,10 @@ const modoPreparacionSeguro = sanitizeHtml(modo_preparacion, {
                 return errorAjax(err, res);
             return next(err, req, res);
         }
-        req.log.info("Receta '%i', editada con éxito por '%s'", id, user);
+        logger.info("Receta '%i', editada con éxito por '%s'", id, user);
 
         if (esAjax) {
-            req.log.debug("Devuelto código 200 a la petición AJAX");
+            logger.debug("Devuelto código 200 a la petición AJAX");
             return res.status(200).json({ ok: true });
         }
     }
@@ -373,7 +377,7 @@ export async function deleteReceta(req, res, next) {
         if (receta != null && (user === receta.user || req.session.rol === RolesEnum.ADMIN)) {
             Receta.deleteReceta(id); // Elimina la receta por ID
             await fs.unlink(join(UPLOAD_PATH, receta.imagen));  // Se borra la imagen de la receta del disco
-            req.log.info("Receta '%i' eliminada con exito", id);
+            logger.info("Receta '%i' eliminada con exito", id);
         }
         else if(receta != null){
             err.message = "No puedes editar una receta que no es tuya";

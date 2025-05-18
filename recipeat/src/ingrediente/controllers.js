@@ -2,6 +2,7 @@ import { validationResult, matchedData } from 'express-validator';
 import { render } from '../utils/render.js';
 import { Contiene, Ingrediente } from './Ingrediente.js';
 import { errorAjax } from '../middleware/error.js'
+import { logger } from '../logger.js';
 
 // Agregar un nuevo ingrediente
 export function doCreateIngrediente(req, res, next) {
@@ -9,7 +10,7 @@ export function doCreateIngrediente(req, res, next) {
     const requestWith = req.get('X-Requested-With');
     const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
     if (esAjax)
-        req.log.debug("Petición AJAX recibida para doCreateIngrediente()");
+        logger.debug("Petición AJAX recibida para doCreateIngrediente()");
 
 
     const result = validationResult(req);
@@ -18,7 +19,7 @@ export function doCreateIngrediente(req, res, next) {
         const datos = matchedData(req);
 
         if (esAjax) {
-            req.log.debug("Devuelto código 400 a la petición AJAX");
+            logger.debug("Devuelto código 400 a la petición AJAX");
             return res.status(400).json({ status: 400, errores });
         }
         return render(req, res, 'paginas/index', { //TODO: CAMBIAR URL
@@ -34,10 +35,10 @@ export function doCreateIngrediente(req, res, next) {
     try {
         Ingrediente.insertIngrediente(ingrediente);
 
-        req.log.info("Ingrediente '%i' registrado (Precio/unidad: %f/%s)", nombre, precio, unidad);
+        logger.info("Ingrediente '%i' registrado (Precio/unidad: %f/%s)", nombre, precio, unidad);
 
         if (esAjax) {
-            req.log.debug("Devuelto código 200 a la petición AJAX");
+            logger.debug("Devuelto código 200 a la petición AJAX");
             return res.status(200).json({ ok: true });
         }
 
@@ -64,7 +65,7 @@ export function deleteIngrediente(req, res, next) {
     const requestWith = req.get('X-Requested-With');
     const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
     if (esAjax)
-        req.log.debug("Petición AJAX recibida para deleteIngrediente()");
+        logger.debug("Petición AJAX recibida para deleteIngrediente()");
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -72,7 +73,7 @@ export function deleteIngrediente(req, res, next) {
         const datos = matchedData(req);
 
         if (esAjax) {
-            req.log.debug("Devuelto código 400 a la petición AJAX");
+            logger.debug("Devuelto código 400 a la petición AJAX");
             return res.status(400).json({ status: 400, errores });
         }
         return render(req, res, `paginas/index`, { //TODO: CAMBIAR URL
@@ -86,10 +87,10 @@ export function deleteIngrediente(req, res, next) {
     try {
         Ingrediente.deleteIngrediente(Number(id));
 
-        req.log.info("Se ha borrado el ingrediente con id: %i", id);
+        logger.info("Se ha borrado el ingrediente con id: %i", id);
 
         if (esAjax) {
-            req.log.debug("Devuelto código 200 a la petición AJAX");
+            logger.debug("Devuelto código 200 a la petición AJAX");
             return res.status(200).json({ ok: true });
         }
         // Redirigir al finalizar
@@ -115,7 +116,7 @@ export function updateIngrediente(req, res, next) {
     const requestWith = req.get('X-Requested-With');
     const esAjax = requestWith != undefined && ['xmlhttprequest', 'fetch'].includes(requestWith.toLowerCase());
     if (esAjax)
-        req.log.debug("Petición AJAX recibida para updateIngrediente()");
+        logger.debug("Petición AJAX recibida para updateIngrediente()");
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -123,7 +124,7 @@ export function updateIngrediente(req, res, next) {
         const datos = matchedData(req);
 
         if (esAjax) {
-            req.log.debug("Devuelto código 400 a la petición AJAX");
+            logger.debug("Devuelto código 400 a la petición AJAX");
             return res.status(400).json({ status: 400, errores });
         }
 
@@ -160,11 +161,11 @@ export function updateIngrediente(req, res, next) {
 
         if (changed.length !== 0) { // Si no ha habido cambios se evita hacer este acceso a la base de datos
             Ingrediente.cambiaIngrediente(ingredienteExistente);
-            req.log.info("Ingrediente %i, con nombre '%s', actualizado con éxito (precio: %i, unidad: %s)", id, nombre, precio, unidad);
+            logger.info("Ingrediente %i, con nombre '%s', actualizado con éxito (precio: %i, unidad: %s)", id, nombre, precio, unidad);
         }
 
         if (esAjax) {
-            req.log.debug("Devuelto código 200 a la petición AJAX");
+            logger.debug("Devuelto código 200 a la petición AJAX");
             return res.status(200).json({ ok: true, changed });
         }
 
