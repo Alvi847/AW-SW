@@ -72,7 +72,7 @@ recetasRouter.post('/createReceta'
                 return Number.isFinite(Number(value)); // Si no son arrays, entonces miramos si son enteros
             }),
         body('ingredientes_id.*') // Comprobamos que cada ingrediente sea un número válido
-            .isInt({min: 1}).custom((value) => {console.log("Ingrediente: ", value); return true;}).withMessage('Cada ingrediente debe ser un número natural')
+            .isInt({min: 1}).withMessage('Cada ingrediente debe ser un número natural')
     ]
     , [
         body('ingredientes_cantidad', 'Añade cantidades correctas a cada ingrediente').isArray({ min: 1 }),
