@@ -326,8 +326,12 @@ export async function updateReceta(req, res, next) {
             recetaExistente.descripcion = descripcionSegura;
             recetaExistente.modo_preparacion = modoPreparacionSeguro;
             if (recetaExistente.imagen) {
-
-                await fs.unlink(join(UPLOAD_PATH, "/", recetaExistente.imagen)); // Hay que borrar la foto anterior en caso de haber alguna
+                try{
+                    await fs.unlink(join(UPLOAD_PATH, "/", recetaExistente.imagen)); // Hay que borrar la foto anterior en caso de haber alguna
+                }
+                catch(e){
+                    logger.error('No se puedo borrar la imagen anterior', e.cause);
+                }
             }
             recetaExistente.imagen = imagen.filename;
 
